@@ -109,9 +109,11 @@
     <Compile Include="ProductPicture.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Respons.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\CustomerService.cs" />
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>

@@ -8,12 +8,12 @@ using System.Web;
 
 namespace DataService.Repository
 {
-    public interface IRepository
-    {
+    //public interface IRepository
+    //{
 
-    }
+    //}
 
-    public interface IRepository<TEntity> : IRepository
+    public interface IRepository<TEntity> //: IRepository
         where TEntity : class
     {
         IQueryable<TEntity> Get();

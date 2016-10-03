@@ -42,16 +42,23 @@ namespace DataService.Service
     {
         public BaseService()
         {
-
+            dbContext = new EFPEntities();
+            /* prevent circular reference */
+            dbContext.Configuration.ProxyCreationEnabled = false;
+            /*****************************************/
+            unitOfWork = new UnitOfWork(dbContext);            
+            /* repository will be new in concrete service*/
         }
+        public EFPEntities dbContext { get; set; }
         public IRepository<TEntity> repository { get; set; }
         public IUnitOfWork unitOfWork { get; set; }
 
-        public BaseService(IUnitOfWork unitOfWork, IRepository<TEntity> repository)
-        {
-            this.repository = repository;
-            this.unitOfWork = unitOfWork;
-        }
+        /** replace constructor*/
+        //public BaseService(IUnitOfWork unitOfWork, IRepository<TEntity> repository)
+        //{
+        //    this.repository = repository;
+        //    this.unitOfWork = unitOfWork;
+        //}
 
         public virtual void Create(TEntity entity)
         {

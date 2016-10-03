@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using DataService.Service;
 namespace ShopManager.Controllers
 {
     public class HomeController : Controller
@@ -11,6 +11,14 @@ namespace ShopManager.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+
+        public ActionResult Test(string id)
+        {
+            CustomerService service = new CustomerService();
+            var data = service.Get(id);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult About()
