@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductPage", "ProductPage\ProductPage.csproj", "{B2BE14EB-6EB8-4A47-B0EF-BB592FAAE572}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BE55F63-1CB8-400B-8B6B-BEF8A3B4F21D} = {8BE55F63-1CB8-400B-8B6B-BEF8A3B4F21D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopManager", "ShopManager\ShopManager.csproj", "{EDE22D8F-8417-45A7-A094-CAEE207E394F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BE55F63-1CB8-400B-8B6B-BEF8A3B4F21D} = {8BE55F63-1CB8-400B-8B6B-BEF8A3B4F21D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{8BE55F63-1CB8-400B-8B6B-BEF8A3B4F21D}"
 EndProject
