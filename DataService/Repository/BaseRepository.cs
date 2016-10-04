@@ -8,32 +8,42 @@ using System.Web;
 
 namespace DataService.Repository
 {
-    //public interface IRepository
-    //{
-
-    //}
-
-    public interface IRepository<TEntity> //: IRepository
-        where TEntity : class
+    public interface IRepository<TEntity>
     {
-        IQueryable<TEntity> Get();
-
-        IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
-
-        TEntity Get(object key);
-
-        Task<TEntity> GetAsync(object key);
-
-        void Create(TEntity entity);
-
-        void Update(TEntity entity);
+        IEnumerable<TEntity> List { get; }
+        bool Create(TEntity entity);
+        bool Delete(Object key);
+        bool Update(TEntity entity);
+        TEntity FindByKey(Object Key);
     }
-
-    public abstract class BaseRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class
+    public abstract class BaseRepository<TEntity>: IRepository<TEntity>
+        where TEntity:class
     {
-        private EFPEntities entites { get; set; }
-        private DbSet<TEntity> dbSet { get; set; }
+        protected EFPEntities entites { get; set; }
+        protected DbSet<TEntity> dbSet { get; set; }
+
+        public IEnumerable<TEntity> List
+        {
+            get
+            {
+                try
+                {
+                    return this.dbSet;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        public BaseRepository()
+        {
+            EFPEntities dbContext = new EFPEntities();
+            dbContext.Configuration.ProxyCreationEnabled = false;
+            this.entites = dbContext;
+            this.dbSet = dbContext.Set<TEntity>();
+        }
 
         public BaseRepository(EFPEntities dbContext)
         {
@@ -41,34 +51,55 @@ namespace DataService.Repository
             this.dbSet = dbContext.Set<TEntity>();
         }
 
-        public void Create(TEntity entity)
+        public bool Create(TEntity entity)
         {
-            dbSet.Add(entity);
+            try
+            {
+                dbSet.Add(entity);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public IQueryable<TEntity> Get()
+        public bool Delete(object key)
         {
-            return this.dbSet;
+            try
+            {
+                dbSet.Remove(FindByKey(key));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public TEntity Get(object key)
+        public bool Update(TEntity entity)
         {
-            return this.dbSet.Find(key);
+            try
+            {
+                this.entites.Entry(entity).State = EntityState.Modified;                
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
+        public TEntity FindByKey(object Key)
         {
-            return this.dbSet.Where(predicate);
-        }
-
-        public void Update(TEntity entity)
-        {
-            this.entites.Entry(entity).State = EntityState.Modified;
-        }
-
-        public async Task<TEntity> GetAsync(object key)
-        {
-            return await this.dbSet.FindAsync(key);
+            try
+            {
+                return dbSet.Find(Key);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

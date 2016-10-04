@@ -14,12 +14,7 @@ namespace ProductPage.Controllers
             return View();
         }
 
-        public ActionResult Test(string id)
-        {
-            CustomerService service = new CustomerService();
-            var data = service.Get(id);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        
 
         public ActionResult About()
         {

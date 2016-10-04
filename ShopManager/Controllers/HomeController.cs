@@ -16,8 +16,8 @@ namespace ShopManager.Controllers
 
         public ActionResult Test(string id)
         {
-            CustomerService service = new CustomerService();
-            var data = service.Get(id);
+            CategoryService service = new CategoryService();
+            var data = service.CategoryByShop(id);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 

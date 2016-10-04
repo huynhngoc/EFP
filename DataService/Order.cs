@@ -28,6 +28,7 @@ namespace DataService
         public string Status { get; set; }
         public string ShippingAddress { get; set; }
         public string Receiver { get; set; }
+        public string UserNote { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
