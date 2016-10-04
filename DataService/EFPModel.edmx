@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EFPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EFPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -61,9 +61,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="128" />
           <Property Name="ParentId" Type="int" />
+          <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="Comments">
           <Key>
@@ -82,6 +83,7 @@
           </Key>
           <Property Name="CustomerId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="Phone" Type="nvarchar" MaxLength="11" />
           <Property Name="Email" Type="nvarchar" MaxLength="254" />
@@ -158,6 +160,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserNote" Type="nvarchar" MaxLength="500" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="DateModified" Type="datetime" Nullable="false" />
           <Property Name="CustomerId" Type="nvarchar" MaxLength="128" Nullable="false" />
@@ -573,8 +576,7 @@
             <End Role="Shops" EntitySet="Shops" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EFPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -640,6 +642,7 @@
           <NavigationProperty Name="Category1" Relationship="Self.FK_Categories_Categories" FromRole="Categories1" ToRole="Categories" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_Categories_Shops" FromRole="Categories" ToRole="Shops" />
           <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Categories" FromRole="Categories" ToRole="MasterProducts" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -666,6 +669,7 @@
           <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_Customers_Shops" FromRole="Customers" ToRole="Shops" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DetailedProduct">
           <Key>
@@ -759,6 +763,7 @@
           <NavigationProperty Name="Customer" Relationship="Self.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders" FromRole="Orders" ToRole="OrderDetails" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_Orders_Shops" FromRole="Orders" ToRole="Shops" />
+          <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductPicture">
           <Key>
@@ -1205,6 +1210,7 @@
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="EFPModel.Category">
               <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1227,6 +1233,7 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="EFPModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
@@ -1309,6 +1316,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="EFPModel.Order">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="UserNote" ColumnName="UserNote" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
