@@ -7,7 +7,7 @@ using DataService.Repository;
 
 namespace DataService.Service
 {
-    public class CategoryService//: BaseService<Category>
+    public class CategoryService
     {
         CategoryRepository repository = new CategoryRepository();
         public CategoryService()

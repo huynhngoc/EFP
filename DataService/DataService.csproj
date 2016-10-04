@@ -111,11 +111,13 @@
     </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CategoryRepository.cs" />
+    <Compile Include="Repository\MasterProductRepository.cs" />
     <Compile Include="Respons.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\CategoryService.cs" />
+    <Compile Include="Service\MasterProductService.cs" />
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
