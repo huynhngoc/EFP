@@ -19,9 +19,9 @@ namespace DataService.Service
             return repository.GetMasterProductByShopId(shopId).ToList();
         }
 
-        public List<MasterProduct> GetMasterProductByCategory(int cateId)
+        public List<MasterProduct> GetMasterProductByCategory(int cateId, string shopId)
         {
-            return repository.GetMasterProductByCategory(cateId).ToList();
+            return repository.GetMasterProductByCategory(cateId, shopId).ToList();
         }
     }
 }
