@@ -97,6 +97,7 @@
     <Compile Include="Intent.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="JqueryDataTable\JQueryDataTableParamModel.cs" />
     <Compile Include="MasterProduct.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>

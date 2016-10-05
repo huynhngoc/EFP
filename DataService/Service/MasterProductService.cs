@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataService.Repository;
+using DataService.JqueryDataTable;
 
 namespace DataService.Service
 {
@@ -22,6 +23,11 @@ namespace DataService.Service
         public List<MasterProduct> GetMasterProductByCategory(int cateId, string shopId)
         {
             return repository.GetMasterProductByCategory(cateId, shopId).ToList();
+        }
+
+        public IEnumerable<MasterProduct> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        {
+            return null;
         }
     }
 }
