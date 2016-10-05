@@ -14,11 +14,11 @@ namespace DataService.Repository
             return dbSet.Where(q => q.ShopId == shopId);
         }
 
-        public IEnumerable<MasterProduct> GetMasterProductByCategory(int cateId, string shopId)
+        public IEnumerable<MasterProduct> GetMasterProductByCategory(int cateId)
         {
             IEnumerable<int> query = from c in entites.Categories where c.ParentId == cateId select c.Id;
             Debug.WriteLine(query.ToArray());
-            var data = dbSet.Where(q => (q.CategoryId == cateId || query.Contains(q.CategoryId.Value)) && q.ShopId == shopId);            
+            var data = dbSet.Where(q => q.CategoryId == cateId || query.Contains(q.CategoryId.Value));            
             
             return data;        
         }

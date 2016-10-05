@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataService.Repository;
-using DataService.ViewModel;
 
 namespace DataService.Service
 {
@@ -18,12 +17,7 @@ namespace DataService.Service
         {
             return repository.GetCategoryByShopId(shopId).ToList();
         }
-
-        public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
-        {
-            return repository.GetCategoryAndParentByShopId(shopId);
-        }
-
+        
 
     }
 }
