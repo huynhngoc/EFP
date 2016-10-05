@@ -33,7 +33,6 @@
         <AssociationConnector Association="EFPModel.FK_Orders_Customers" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_DetailedProducts_MasterProducts" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_OrderDetails_DetailedProducts" ManuallyRouted="false" />
-        <AssociationConnector Association="EFPModel.FK_ProductPictures_DetailedProducts" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Entities_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Responses_Intents" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_MasterProducts_Shops" ManuallyRouted="false" />
@@ -42,6 +41,8 @@
         <AssociationConnector Association="EFPModel.FK_Orders_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Responses_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="EFPModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EFPModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

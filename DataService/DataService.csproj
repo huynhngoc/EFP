@@ -73,6 +73,9 @@
     <Compile Include="Customer.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DetailedProduct.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -119,6 +122,9 @@
     <Compile Include="Service\CategoryService.cs" />
     <Compile Include="Service\MasterProductService.cs" />
     <Compile Include="Shop.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CustomerViewModel.cs" />

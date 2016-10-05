@@ -41,5 +41,7 @@ namespace DataService
         public virtual DbSet<ProductPicture> ProductPictures { get; set; }
         public virtual DbSet<Respons> Responses { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

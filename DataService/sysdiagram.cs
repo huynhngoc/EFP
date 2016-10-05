@@ -12,12 +12,12 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductPicture
+    public partial class sysdiagram
     {
-        public int MasterId { get; set; }
-        public string Urls { get; set; }
-        public int Id { get; set; }
-    
-        public virtual MasterProduct MasterProduct { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

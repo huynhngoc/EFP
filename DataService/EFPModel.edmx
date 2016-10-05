@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="EFPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -170,11 +180,10 @@
         </EntityType>
         <EntityType Name="ProductPictures">
           <Key>
-            <PropertyRef Name="MasterId" />
-            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MasterId" Type="int" Nullable="false" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Urls" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Responses">
@@ -196,6 +205,16 @@
           <Property Name="BannerImg" Type="nvarchar" MaxLength="1000" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_Categories_Categories">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -409,18 +428,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductPictures_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProducts" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPictures" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ProductPictures_MasterProducts">
           <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
           <End Role="ProductPictures" Type="Self.ProductPictures" Multiplicity="*" />
@@ -470,6 +477,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="EFPModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
@@ -487,6 +495,7 @@
           <EntitySet Name="ProductPictures" EntityType="Self.ProductPictures" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Responses" EntityType="Self.Responses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Categories1" EntitySet="Categories" />
@@ -554,10 +563,6 @@
           <AssociationSet Name="FK_Orders_Shops" Association="Self.FK_Orders_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_DetailedProducts" Association="Self.FK_ProductPictures_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="Self.FK_ProductPictures_MasterProducts">
             <End Role="MasterProducts" EntitySet="MasterProducts" />
@@ -689,7 +694,6 @@
           <Property Name="Attr7" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MasterProduct" Relationship="Self.FK_DetailedProducts_MasterProducts" FromRole="DetailedProducts" ToRole="MasterProducts" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_DetailedProducts" FromRole="DetailedProducts" ToRole="OrderDetails" />
-          <NavigationProperty Name="ProductPictures" Relationship="Self.FK_ProductPictures_DetailedProducts" FromRole="DetailedProducts" ToRole="ProductPictures" />
         </EntityType>
         <EntityType Name="Entity">
           <Key>
@@ -768,13 +772,12 @@
         <EntityType Name="ProductPicture">
           <Key>
             <PropertyRef Name="MasterId" />
-            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="MasterId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Urls" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="DetailedProduct" Relationship="Self.FK_ProductPictures_DetailedProducts" FromRole="ProductPictures" ToRole="DetailedProducts" />
           <NavigationProperty Name="MasterProduct" Relationship="Self.FK_ProductPictures_MasterProducts" FromRole="ProductPictures" ToRole="MasterProducts" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="Respons">
           <Key>
@@ -954,18 +957,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductPictures_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProduct" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPicture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Entities_Shops">
           <End Role="Shops" Type="Self.Shop" Multiplicity="0..1" />
           <End Role="Entities" Type="Self.Entity" Multiplicity="*" />
@@ -1119,10 +1110,6 @@
             <End Role="DetailedProducts" EntitySet="DetailedProducts" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_DetailedProducts" Association="Self.FK_ProductPictures_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
-          </AssociationSet>
           <AssociationSet Name="FK_Entities_Shops" Association="Self.FK_Entities_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Entities" EntitySet="Entities" />
@@ -1155,7 +1142,29 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="C__MigrationHistory" EntityType="EFPModel.C__MigrationHistory" />
+          <EntitySet Name="sysdiagrams" EntityType="EFPModel.sysdiagram" />
         </EntityContainer>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1331,8 +1340,8 @@
           <EntitySetMapping Name="ProductPictures">
             <EntityTypeMapping TypeName="EFPModel.ProductPicture">
               <MappingFragment StoreEntitySet="ProductPictures">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="MasterId" ColumnName="MasterId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Urls" ColumnName="Urls" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1367,6 +1376,27 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="EFPModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="EFPModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

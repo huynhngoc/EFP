@@ -12,12 +12,11 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductPicture
+    public partial class C__MigrationHistory
     {
-        public int MasterId { get; set; }
-        public string Urls { get; set; }
-        public int Id { get; set; }
-    
-        public virtual MasterProduct MasterProduct { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }
