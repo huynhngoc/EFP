@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DataService.JqueryDataTable;
 using DataService.Service;
+using System.Threading.Tasks;
+using System.Data.Entity;
+
 namespace ShopManager.Controllers
 {
     public class HomeController : Controller
@@ -20,6 +24,8 @@ namespace ShopManager.Controllers
             var data = service.CategoryByShop(id);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+        
 
         public ActionResult About()
         {
