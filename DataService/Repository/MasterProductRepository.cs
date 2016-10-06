@@ -9,7 +9,7 @@ namespace DataService.Repository
 {
     public class MasterProductRepository: BaseRepository<MasterProduct>
     {        
-        public IEnumerable<MasterProduct> GetMasterProductByShopId(string shopId)
+        public IQueryable<MasterProduct> GetMasterProductByShopId(string shopId)
         {
             return dbSet.Where(q => q.ShopId == shopId);
         }

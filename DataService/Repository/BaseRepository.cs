@@ -15,6 +15,7 @@ namespace DataService.Repository
         bool Delete(Object key);
         bool Update(TEntity entity);
         TEntity FindByKey(Object Key);
+        Task<TEntity> GetAsync(object key);
     }
     public abstract class BaseRepository<TEntity>: IRepository<TEntity>
         where TEntity:class
@@ -100,6 +101,11 @@ namespace DataService.Repository
             {
                 return null;
             }
+        }
+
+        public async Task<TEntity> GetAsync(object key)
+        {
+            return await this.dbSet.FindAsync(key);
         }
     }
 }

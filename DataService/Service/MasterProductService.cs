@@ -15,9 +15,14 @@ namespace DataService.Service
         {                        
         }
 
-        public List<MasterProduct> GetAllMasterProductByShopId(string shopId)
+        //public List<MasterProduct> GetAllMasterProductByShopId(string shopId)
+        //{
+        //    return repository.GetMasterProductByShopId(shopId).ToList();
+        //}
+
+        public IQueryable<MasterProduct> GetAllMasterProductByShopId(string shopId)
         {
-            return repository.GetMasterProductByShopId(shopId).ToList();
+            return repository.GetMasterProductByShopId(shopId);
         }
 
         public List<MasterProduct> GetMasterProductByCategory(int cateId, string shopId)
@@ -25,9 +30,41 @@ namespace DataService.Service
             return repository.GetMasterProductByCategory(cateId, shopId).ToList();
         }
 
-        public IEnumerable<MasterProduct> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
-        {
-            return null;
-        }
+        //public async Task<> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        //{
+        //    var masterProducts = repository.GetMasterProductByShopId(shopId);
+        //    var count = param.iDisplayStart + 1;
+        //    try
+        //    {
+        //        var rs = (await masterProducts.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+        //                    (!string.IsNullOrEmpty(param.sSearch)
+        //                    && q.Name.ToLower().Contains(param.sSearch.ToLower())))
+        //                    .OrderByDescending(q => q.Name)
+        //                    .Skip(param.iDisplayStart)
+        //                    .Take(param.iDisplayLength)
+        //                    .ToListAsync())
+        //                    .Select(q => new IConvertible[] {
+        //                        count++,
+        //                        q.Name,
+        //                        q.Description,
+        //                        q.Status,
+        //                        q.Id
+        //                    });
+        //        var totalRecords = rs.Count();
+
+        //        return Json(new
+        //        {
+        //            sEcho = param.sEcho,
+        //            iTotalRecords = totalRecords,
+        //            iTotalDisplayRecords = totalRecords,
+        //            aaData = rs
+        //        }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch
+        //    {
+        //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        //    }            
+
+        //}
     }
 }
