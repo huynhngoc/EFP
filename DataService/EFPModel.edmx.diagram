@@ -33,7 +33,6 @@
         <AssociationConnector Association="EFPModel.FK_Orders_Customers" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_DetailedProducts_MasterProducts" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_OrderDetails_DetailedProducts" ManuallyRouted="false" />
-        <AssociationConnector Association="EFPModel.FK_ProductPictures_DetailedProducts" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Entities_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Responses_Intents" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_MasterProducts_Shops" ManuallyRouted="false" />

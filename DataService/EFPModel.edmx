@@ -94,8 +94,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Price" Type="money" Nullable="false" />
-          <Property Name="PromotionPrice" Type="money" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="PromotionPrice" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Status" Type="bit" Nullable="false" />
           <Property Name="MasterId" Type="int" Nullable="false" />
           <Property Name="Attr1" Type="nvarchar" MaxLength="200" />
@@ -143,6 +143,8 @@
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="DateModified" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="promotionPrice" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -170,11 +172,10 @@
         </EntityType>
         <EntityType Name="ProductPictures">
           <Key>
-            <PropertyRef Name="MasterId" />
-            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MasterId" Type="int" Nullable="false" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Urls" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Responses">
@@ -409,18 +410,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductPictures_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProducts" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPictures" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ProductPictures_MasterProducts">
           <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
           <End Role="ProductPictures" Type="Self.ProductPictures" Multiplicity="*" />
@@ -555,10 +544,6 @@
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_DetailedProducts" Association="Self.FK_ProductPictures_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
-          </AssociationSet>
           <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="Self.FK_ProductPictures_MasterProducts">
             <End Role="MasterProducts" EntitySet="MasterProducts" />
             <End Role="ProductPictures" EntitySet="ProductPictures" />
@@ -676,8 +661,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="PromotionPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="PromotionPrice" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="Status" Type="Boolean" Nullable="false" />
           <Property Name="MasterId" Type="Int32" Nullable="false" />
           <Property Name="Attr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -689,7 +674,6 @@
           <Property Name="Attr7" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MasterProduct" Relationship="Self.FK_DetailedProducts_MasterProducts" FromRole="DetailedProducts" ToRole="MasterProducts" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_DetailedProducts" FromRole="DetailedProducts" ToRole="OrderDetails" />
-          <NavigationProperty Name="ProductPictures" Relationship="Self.FK_ProductPictures_DetailedProducts" FromRole="DetailedProducts" ToRole="ProductPictures" />
         </EntityType>
         <EntityType Name="Entity">
           <Key>
@@ -735,6 +719,8 @@
           <NavigationProperty Name="DetailedProducts" Relationship="Self.FK_DetailedProducts_MasterProducts" FromRole="MasterProducts" ToRole="DetailedProducts" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_MasterProducts_Shops" FromRole="MasterProducts" ToRole="Shops" />
           <NavigationProperty Name="ProductPictures" Relationship="Self.FK_ProductPictures_MasterProducts" FromRole="MasterProducts" ToRole="ProductPictures" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="promotionPrice" Type="Decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -768,13 +754,12 @@
         <EntityType Name="ProductPicture">
           <Key>
             <PropertyRef Name="MasterId" />
-            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="MasterId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Urls" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="DetailedProduct" Relationship="Self.FK_ProductPictures_DetailedProducts" FromRole="ProductPictures" ToRole="DetailedProducts" />
           <NavigationProperty Name="MasterProduct" Relationship="Self.FK_ProductPictures_MasterProducts" FromRole="ProductPictures" ToRole="MasterProducts" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="Respons">
           <Key>
@@ -954,18 +939,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductPictures_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProduct" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPicture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Entities_Shops">
           <End Role="Shops" Type="Self.Shop" Multiplicity="0..1" />
           <End Role="Entities" Type="Self.Entity" Multiplicity="*" />
@@ -1118,10 +1091,6 @@
           <AssociationSet Name="FK_OrderDetails_DetailedProducts" Association="Self.FK_OrderDetails_DetailedProducts">
             <End Role="DetailedProducts" EntitySet="DetailedProducts" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_DetailedProducts" Association="Self.FK_ProductPictures_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
           </AssociationSet>
           <AssociationSet Name="FK_Entities_Shops" Association="Self.FK_Entities_Shops">
             <End Role="Shops" EntitySet="Shops" />
@@ -1284,6 +1253,8 @@
           <EntitySetMapping Name="MasterProducts">
             <EntityTypeMapping TypeName="EFPModel.MasterProduct">
               <MappingFragment StoreEntitySet="MasterProducts">
+                <ScalarProperty Name="promotionPrice" ColumnName="promotionPrice" />
+                <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1331,8 +1302,8 @@
           <EntitySetMapping Name="ProductPictures">
             <EntityTypeMapping TypeName="EFPModel.ProductPicture">
               <MappingFragment StoreEntitySet="ProductPictures">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="MasterId" ColumnName="MasterId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Urls" ColumnName="Urls" />
               </MappingFragment>
             </EntityTypeMapping>

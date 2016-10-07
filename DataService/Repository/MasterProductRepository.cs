@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataService.ViewModel;
+using DataService.JqueryDataTable;
 
 namespace DataService.Repository
 {
@@ -23,5 +25,17 @@ namespace DataService.Repository
             return data;        
         }
 
+        public IQueryable<MasterProductViewModel> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        {
+            var count = param.iDisplayStart + 1;
+            var rs = GetMasterProductByShopId(shopId);
+            var search = param.sSearch;
+            rs = rs.Where(q => q.Name.ToLower().Contains(param.sSearch.ToLower()));
+            switch (param.iSortCol_0)
+            {
+              
+            }
+            return null;
+        }
     }
 }

@@ -18,11 +18,10 @@ namespace DataService
         public DetailedProduct()
         {
             this.OrderDetails = new HashSet<OrderDetail>();
-            this.ProductPictures = new HashSet<ProductPicture>();
         }
     
         public int Id { get; set; }
-        public decimal Price { get; set; }
+        public Nullable<decimal> Price { get; set; }
         public Nullable<decimal> PromotionPrice { get; set; }
         public bool Status { get; set; }
         public int MasterId { get; set; }
@@ -37,7 +36,5 @@ namespace DataService
         public virtual MasterProduct MasterProduct { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductPicture> ProductPictures { get; set; }
     }
 }

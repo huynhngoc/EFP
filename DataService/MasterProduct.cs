@@ -36,6 +36,8 @@ namespace DataService
         public System.DateTime DateCreated { get; set; }
         public System.DateTime DateModified { get; set; }
         public bool Status { get; set; }
+        public Nullable<decimal> price { get; set; }
+        public Nullable<decimal> promotionPrice { get; set; }
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

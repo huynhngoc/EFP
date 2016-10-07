@@ -46,20 +46,32 @@
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
     <!-- content here -->
     <!-- grid here -->
-    <div class="">
-        <div class="">
-            <div class="ibox">
-                <div class="ibox-content">                    
-                    <table class="table table-bordered table-hover product-master">
-                        <thead>
-                            <th>Id</th>
-                            <th>Tên</th>
-                            <th>Phân loại</th>
-                            <th>Mô tả</th>
-                            <th>Trạng thái</th>
-                            <th>#</th>
-                        </thead>
-                    </table>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Nhóm các sản phẩm</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>                                                                        
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">                        
+                        <table class="table table-bordered table-hover product-master">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Tên</th>
+                                    <th>Phân loại</th>
+                                    <th>Mô tả</th>
+                                    <th>Trạng thái</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,12 +79,12 @@
         <!-- end grid -->
         <!-- grid here -->
 
-        <div class="">
-            <div class="ibox">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <input type="text" class="form-control input-sm m-b-xs" id="detailed_filter"
                            placeholder="Tìm kiếm">
-                    <table id="t1" class="footable table table-stripped product-detail" data-page-size="15" data-filter=#detailed_filter>
+                    @*<table id="t1" class="footable table table-stripped product-detail" data-page-size="15" data-filter=#detailed_filter>
                         <thead>
                             <tr>
                                 <th>Đặc điểm</th>
@@ -249,12 +261,12 @@
                                 </td>
                             </tr>
                         </tfoot>
-                    </table>
+                    </table>*@
                 </div>
             </div>
         </div>
-        <!-- end grid --
-
+        <!-- end grid -->
+    </div>
         <!-- modal -->
         <div class="modal inmodal" id="viewProductModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -441,7 +453,7 @@
         </div>
         <!-- end modal -->
 
-    </div>
+</div>
 
     <!--end content-->
     @section CustomJS {    
@@ -464,20 +476,63 @@
     @Scripts.Render("~/Image-cropper-JS")
     <script>
         var s;
-        $(document).ready(function() {            
-            var productTable = $(".product-master").DataTable({
+        var table;
+        var currentChildren;
+        $(document).ready(function () {
+            var languageConfig = {
+                "oPaginate": {
+                    "sNext": "Tiếp"
+                    , "sLast": "Cuối"
+                    , "sPrevious": "Trước"
+                    , "sFirst": "Đầu"
+                }
+                        , "sInfo": "Kết quả từ _START_ đến _END_ trong số _TOTAL_"
+                        , "sInfoThousands": "."
+                        , "sLoadingRecords": "Đang tải ..."
+                        , "sProcessing": "Đang xử lý ..."
+                        , "sSearch": "Tìm kiếm:"
+                        , "sZeroRecords": "Không tìm thấy kết quả"
+            }
+            var productTable;
+            //$(window).on("resize",function () {
+            //    $(".product-master").resize();
+            //});
+            $('.dataTables-example').DataTable({
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy' },
+                    { extend: 'csv' },
+                    { extend: 'excel', title: 'ExampleFile' },
+                    { extend: 'pdf', title: 'ExampleFile' },
+
+                    {
+                        extend: 'print',
+                        customize: function (win) {
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                        }
+                    }
+                ]
+
+            });
+
+            productTable = $(".product-master").dataTable({
                 "bProcessing": true
                 , "bServerSide": true
                 , "sAjaxSource": "http://localhost:26638/Product/GetMasterProduct"
                 , "fnServerParams": function (aoData) {
                     aoData.push({ "name": "shopId", "value": "1" });
                 }
-                , "aoColumnDefs": [                        
+                , "aoColumnDefs": [
                         { "bVisible": false, "aTargets": [0], "mData": "0" }
                         , { "aTargets": [1], "mData": "1" }
                         , { "aTargets": [2], "mData": "2" }
                         , { "aTargets": [3], "mData": "3" }
-                        , {                            
+                        , {
                             "bSortable": false
                             , "aTargets": [-1]
                             , "sDefaultContent": '<div class="btn-group"><button class="btn-white btn btn-xs"data-toggle="modal" data-target="#viewProductModal">Sửa</button><button class="btn-white btn btn-xs">Xóa</button></div>'
@@ -485,7 +540,7 @@
                         }
                         , {
                             "mData": function (source) {
-                                console.log(source);                                
+                                //console.log(source);
                                 var status = source[4];
                                 if (status == true) {
                                     return '<span class="label label-primary">Bình thường</span>';
@@ -496,17 +551,71 @@
                             , "aTargets": [4]
                         }
                 ]
+                , "oLanguage": languageConfig
+                , "iDisplayLength": 25
+                //, "aLengthMenu": [5, 10, 25]
+                , "bLengthChange": false
             });
-
-            /* setting show detailed product*/
-            $('.product-detail').hide();
+            table = productTable;            
+            /* setting show detailed product*/            
             $('.product-master').on('click', 'tr', function(evt){                
-                var id = productTable.row($(this)).data()[0];
+                //var id = productTable.DataTable().row($(this)).data()[4];
+                var id = productTable.fnGetData($(this))[5];
                 console.log(id);
                 $('.product-detail').hide();
-                $(id).show();                
+                //$(id).show();
+                //$(currentChildren).remove();
+                $('.product-info').remove();
+                if (productTable.fnIsOpen(this)) {
+                    productTable.fnClose(this);
+                } else {
+                    productTable.fnOpen(this, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"></table></div>'
+                                    , "product-info");
+                    currentChildren = $(".product-detail").dataTable({
+                        "bProcessing": true
+                    , "bServerSide": true
+                    , "sAjaxSource": "http://localhost:26638/Product/GetDetailedProduct"
+                    , "fnServerParams": function (aoData) {
+                        aoData.push({ "name": "shopId", "value": "1" });
+                        console.log(id);
+                        aoData.push({ "name": "masterId", "value": "2" });
+                    }
+                    , "aoColumnDefs": [
+                            { "bVisible": false, "aTargets": [0], "mData": "4" }
+                            , { "aTargets": [1], "mData": "1" }
+                            , { "aTargets": [2], "mData": "2" }
+                            , { "aTargets": [3], "mData": "3" }
+                            , {
+                                "bSortable": false
+                                , "aTargets": [-1]
+                                , "sDefaultContent": '<div class="btn-group"><button class="btn-white btn btn-xs"data-toggle="modal" data-target="#viewProductModal">Sửa</button><button class="btn-white btn btn-xs">Xóa</button></div>'
+                                , "mData": "null"
+                            }
+                            , {
+                                "mData": function (source) {
+                                    //console.log(source);
+                                    var status = source[4];
+                                    if (status == true) {
+                                        return '<span class="label label-primary">Bình thường</span>';
+                                    } else {
+                                        return '<span class="label label-danger">Ngưng bán</span>';
+                                    }
+                                }
+                                , "aTargets": [4]
+                            }
+                    ]
+                    , "oLanguage": languageConfig
+                    , "iDisplayLength": 5                                    
+                    , "bLengthChange": false
+
+                    });
+                    
+
+                    
+                }
             });
 
+            
             /* set description input */
             $(".summernote").summernote({
                 //toolbar:["style",["bold", "italic", "underline", "clear"]]

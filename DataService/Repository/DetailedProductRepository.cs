@@ -16,5 +16,12 @@ namespace DataService.Repository
         {
             return dbSet.Where(q => q.MasterId == masterId && q.MasterProduct.ShopId == shopId);
         }
+
+        public IQueryable<DetailedProduct> GetDetailedProduct(int masterId, string shopId)
+        {
+            return dbSet.Where(q => q.MasterId == masterId && q.MasterProduct.ShopId == shopId);
+        }
+
+        
     }
 }
