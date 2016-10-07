@@ -7,6 +7,8 @@ using DataService.JqueryDataTable;
 using DataService.Service;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace ShopManager.Controllers
 {
@@ -18,48 +20,76 @@ namespace ShopManager.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        //public async Task<JsonResult> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        //{
+        //    //string shopId = "1";
+        //    MasterProductService service = new MasterProductService();
+        //    var masterProducts = service.GetAllMasterProductByShopId(shopId);
+        //    var count = param.iDisplayStart + 1;
+        //    try
+        //    {
+        //        var rs = (await masterProducts.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+        //                        (!string.IsNullOrEmpty(param.sSearch)
+        //                        && q.Name.ToLower().Contains(param.sSearch.ToLower())
+        //                        )
+        //                    )
+        //                    .OrderByDescending(q => q.Name)
+        //                    .Skip(param.iDisplayStart)
+        //                    .Take(param.iDisplayLength)
+        //                    .ToListAsync())
+        //                    .Select(q => new IConvertible[] {
+        //                        count++,
+        //                        q.Name,
+        //                        q.Category == null ? null : q.Category.Name,
+        //                        q.Description,
+        //                        q.Status,
+        //                        q.Id
+        //                    });
+        //        var totalRecords = rs.Count();
+
+        //        return Json(new
+        //        {
+        //            sEcho = param.sEcho,
+        //            iTotalRecords = totalRecords,
+        //            iTotalDisplayRecords = totalRecords,
+        //            aaData = rs
+        //        }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch
+        //    {
+        //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        //    }
+
+        //}
+
+        public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId)
         {
-            //string shopId = "1";
-            MasterProductService service = new MasterProductService();
-            var masterProducts = service.GetAllMasterProductByShopId(shopId);
+            MasterProductService service = new MasterProductService();            
             var count = param.iDisplayStart + 1;
             try
             {
-                var rs = (await masterProducts.Where(q => string.IsNullOrEmpty(param.sSearch) ||
-                                (!string.IsNullOrEmpty(param.sSearch)
-                                && q.Name.ToLower().Contains(param.sSearch.ToLower())
-                                )
-                            )
-                            .OrderByDescending(q => q.Name)
-                            .Skip(param.iDisplayStart)
-                            .Take(param.iDisplayLength)
-                            .ToListAsync())
-                            .Select(q => new IConvertible[] {
-                                count++,
-                                q.Name,
-                                q.Category == null ? null : q.Category.Name,
-                                q.Description,
-                                q.Status,
-                                q.Id
-                            });
-                var totalRecords = rs.Count();
-
+                var masterProducts = service.GetMasterProduct(param, shopId);
+                Debug.WriteLine("----x " + masterProducts.Count());                
+                
+                var totalRecords = masterProducts.Count();
+                var data = masterProducts.Skip(param.iDisplayStart)
+                    .Take(param.iDisplayLength);
+                var displayRecords = data.Count();
+                Debug.WriteLine("-----l ");
                 return Json(new
                 {
                     sEcho = param.sEcho,
                     iTotalRecords = totalRecords,
-                    iTotalDisplayRecords = totalRecords,
-                    aaData = rs
+                    iTotalDisplayRecords = displayRecords,
+                    aaData = data
                 }, JsonRequestBehavior.AllowGet);
             }
-            catch
+            catch(Exception e)
             {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-            }
-
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }            
         }
-
         public JsonResult GetDetailedProduct(JQueryDataTableParamModel param, string shopId, int masterId)
         {
             //string shopId = "1";

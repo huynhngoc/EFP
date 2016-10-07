@@ -11,13 +11,13 @@ namespace DataService.ViewModel
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string[] Category { get; set; }
-        public string[] Attr { get; set; }
+        public List<string> Category { get; set; }
+        public List<string> Attr { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public bool Status { get; set; }
-        public decimal price { get; set; }
-        public decimal promotion { get; set; }
+        public decimal Price { get; set; }
+        public decimal Promotion { get; set; }
         
     }
 }

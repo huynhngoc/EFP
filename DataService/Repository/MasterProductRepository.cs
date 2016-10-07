@@ -28,14 +28,37 @@ namespace DataService.Repository
         public IQueryable<MasterProductViewModel> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
         {
             var count = param.iDisplayStart + 1;
-            var rs = GetMasterProductByShopId(shopId);
+            var rs = dbSet.Where(q => q.ShopId == shopId);            
             var search = param.sSearch;
-            rs = rs.Where(q => q.Name.ToLower().Contains(param.sSearch.ToLower()));
-            switch (param.iSortCol_0)
+            rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+                                (!string.IsNullOrEmpty(param.sSearch)
+                                && q.Name.ToLower().Contains(param.sSearch.ToLower())))
+                .OrderBy(q => q.Name);
+            Debug.WriteLine("---------rs " + rs.Count());
+            var data = rs.Select(q => new MasterProductViewModel()
             {
-              
-            }
-            return null;
+                Id = q.Id,
+                Name = q.Name,
+                Category = (new List<string> { q.CategoryId.ToString()
+                                             , q.Category.Name//.ToString() 
+                }),
+                Description = q.Description,
+                Attr = (new List<string>  {q.Attr1//.ToString()
+                                , q.Attr2//.ToString()
+                                , q.Attr3//.ToString()
+                                , q.Attr4//.ToString()
+                                , q.Attr5//.ToString()
+                                , q.Attr6//.ToString()
+                                , q.Attr7//.ToString() 
+                }),
+                Status = q.Status,
+                DateCreated = q.DateCreated,
+                DateModified = q.DateModified,
+                Price = (decimal)(q.Price == null ? 0 : q.Price),
+                Promotion = (decimal)(q.PromotionPrice == null ? 0 : q.Price)
+            });
+            Debug.WriteLine("---------data " + data.Count());            
+            return data;            
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataService.Repository;
 using DataService.JqueryDataTable;
+using DataService.ViewModel;
 
 namespace DataService.Service
 {
@@ -66,5 +67,11 @@ namespace DataService.Service
         //    }            
 
         //}
+
+        public IQueryable<MasterProductViewModel> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        {
+            var rs = repository.GetMasterProduct(param, shopId);            
+            return rs;
+        }
     }
 }

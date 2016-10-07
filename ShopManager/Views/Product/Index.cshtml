@@ -23,34 +23,15 @@
     @Styles.Render("~/Image-cropper-CSS")
 }
 
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-10">
-        <h2>Sản phẩm</h2>
-        <ol class="breadcrumb">
-            <li>
-                <a href="index.html">Trang chủ</a>
-            </li>
-            <li>
-                <a>Bán hàng</a>
-            </li>
-            <li class="active">
-                <strong>Sản phẩm</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-lg-2">
 
-    </div>
-</div>
 
-<div class="wrapper wrapper-content animated fadeInRight ecommerce">
     <!-- content here -->
     <!-- grid here -->
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Nhóm các sản phẩm</h5>
+                    @*<h5>Nhóm các sản phẩm</h5>*@
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -61,8 +42,9 @@
                     <div class="table-responsive">                        
                         <table class="table table-bordered table-hover product-master">
                             <thead>
-                                <tr>
+                                <tr>                                    
                                     <th>Id</th>
+                                    <th><input type='checkbox'></th>
                                     <th>Tên</th>
                                     <th>Phân loại</th>
                                     <th>Mô tả</th>
@@ -453,7 +435,7 @@
         </div>
         <!-- end modal -->
 
-</div>
+
 
     <!--end content-->
     @section CustomJS {    
@@ -528,10 +510,16 @@
                     aoData.push({ "name": "shopId", "value": "1" });
                 }
                 , "aoColumnDefs": [
-                        { "bVisible": false, "aTargets": [0], "mData": "0" }
-                        , { "aTargets": [1], "mData": "1" }
-                        , { "aTargets": [2], "mData": "2" }
-                        , { "aTargets": [3], "mData": "3" }
+                          { "bSortable": false
+                            , "aTargets": [1]
+                            , "mData": "null"
+                            , "sDefaultContent": "<input type='checkbox'>"
+                            //, "sTitle": "<input type='checkbox'>"
+                          }
+                        , { "bVisible": false, "aTargets": [0], "mData": "Id" }
+                        , { "aTargets": [2], "mData": "Name" }
+                        , { "aTargets": [3], "mData": "Category[1]" }
+                        , { "aTargets": [4], "mData": "Description" }
                         , {
                             "bSortable": false
                             , "aTargets": [-1]
@@ -541,14 +529,14 @@
                         , {
                             "mData": function (source) {
                                 //console.log(source);
-                                var status = source[4];
+                                var status = source.Status;
                                 if (status == true) {
                                     return '<span class="label label-primary">Bình thường</span>';
                                 } else {
                                     return '<span class="label label-danger">Ngưng bán</span>';
                                 }
                             }
-                            , "aTargets": [4]
+                            , "aTargets": [5]
                         }
                 ]
                 , "oLanguage": languageConfig
@@ -560,7 +548,7 @@
             /* setting show detailed product*/            
             $('.product-master').on('click', 'tr', function(evt){                
                 //var id = productTable.DataTable().row($(this)).data()[4];
-                var id = productTable.fnGetData($(this))[5];
+                var id = productTable.fnGetData($(this)).Id;
                 console.log(id);
                 $('.product-detail').hide();
                 //$(id).show();
@@ -581,10 +569,10 @@
                         aoData.push({ "name": "masterId", "value": "2" });
                     }
                     , "aoColumnDefs": [
-                            { "bVisible": false, "aTargets": [0], "mData": "4" }
-                            , { "aTargets": [1], "mData": "1" }
-                            , { "aTargets": [2], "mData": "2" }
-                            , { "aTargets": [3], "mData": "3" }
+                            { "bVisible": false, "aTargets": [0], "mData": "Id" }
+                            , { "aTargets": [1], "mData": "Name" }
+                            , { "aTargets": [2], "mData": "Category[1]" }
+                            , { "aTargets": [3], "mData": "Description" }
                             , {
                                 "bSortable": false
                                 , "aTargets": [-1]
@@ -594,7 +582,7 @@
                             , {
                                 "mData": function (source) {
                                     //console.log(source);
-                                    var status = source[4];
+                                    var status = source.Status;
                                     if (status == true) {
                                         return '<span class="label label-primary">Bình thường</span>';
                                     } else {

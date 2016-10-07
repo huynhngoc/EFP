@@ -20,7 +20,7 @@ namespace DataService
         public int Quantity { get; set; }
         public decimal Price { get; set; }
     
-        public virtual DetailedProduct DetailedProduct { get; set; }
         public virtual Order Order { get; set; }
+        public virtual DetailedProduct DetailedProduct { get; set; }
     }
 }
