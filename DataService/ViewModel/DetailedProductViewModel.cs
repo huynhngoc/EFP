@@ -13,7 +13,7 @@ namespace DataService.ViewModel
         public Nullable<decimal> PromotionPrice { get; set; }
         public bool Status { get; set; }
         public int MasterId { get; set; }
-        public List<string> Attr { get; set; }
+        public string Properties { get; set; }
         
     }
 }

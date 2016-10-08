@@ -507,7 +507,7 @@
                 , "bServerSide": true
                 , "sAjaxSource": "../Product/GetMasterProduct"
                 , "fnServerParams": function (aoData) {
-                    aoData.push({ "name": "shopId", "value": "1" });
+                    aoData.push({ "name": "shopId", "value": "2" });
                 }
                 , "fnInitComplete": function (oSettings, json) {
                     $(".product-master").removeAttr("style");
@@ -557,47 +557,57 @@
                 var clickedRow = $(this).closest("tr");
                 var id = productTable.fnGetData($(clickedRow)).Id;
                 console.log(id);
-                $('.product-detail').hide();
+                //$('.product-detail').hide();
                 //$(id).show();
                 //$(currentChildren).remove();
                 $('.product-info').remove();
                 if (productTable.fnIsOpen(clickedRow)) {
                     productTable.fnClose(clickedRow);
                 } else {
-                    productTable.fnOpen(clickedRow, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"></table></div>'
+                    productTable.fnOpen(clickedRow, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"><thead><tr><th></th><th></th><th>Đặc điểm</th><th>Giá riêng</th><th>Giá khuyến mãi</th><th>Tình trạng</th><th>#</th></tr></thead></table></div>'
                                     , "product-info");
                     currentChildren = $(".product-detail").dataTable({
                         "bProcessing": true
                     , "bServerSide": true
                     , "sAjaxSource": "http://localhost:26638/Product/GetDetailedProduct"
-                    , "fnServerParams": function (aoData) {
-                        aoData.push({ "name": "shopId", "value": "1" });
-                        console.log(id);
-                        aoData.push({ "name": "masterId", "value": "2" });
+                    , "fnServerParams": function (aoData) {                        
+                        aoData.push({ "name": "masterId", "value": id });
                     }
-                    , "aoColumnDefs": [
-                            { "bVisible": false, "aTargets": [0], "mData": "Id" }
-                            , { "aTargets": [1], "mData": "Name" }
-                            , { "aTargets": [2], "mData": "Category[1]" }
-                            , { "aTargets": [3], "mData": "Description" }
+                    , "aoColumnDefs": [                        
+                              { "bVisible": false, "aTargets": [0], "mData": "Id" }
                             , {
                                 "bSortable": false
-                                , "aTargets": [-1]
-                                , "sDefaultContent": '<div class="btn-group"><button class="btn-white btn btn-xs"data-toggle="modal" data-target="#viewProductModal">Sửa</button><button class="btn-white btn btn-xs">Xóa</button></div>'
+                                , "aTargets": [1]
                                 , "mData": "null"
+                                , "sDefaultContent": "<input type='checkbox'>"                                
+                              }
+                            , {
+                                "aTargets": [2]
+                                , "mData": "Properties"
                             }
+                            , { "aTargets": [3], "mData": "Price"                                
+                            }
+                            , {
+                                "aTargets": [4], "mData": "PromotionPrice"                                
+                              }
                             , {
                                 "mData": function (source) {
                                     //console.log(source);
                                     var status = source.Status;
                                     if (status == true) {
-                                        return '<span class="label label-primary">Bình thường</span>';
+                                        return '<span class="label label-primary">Còn hàng</span>';
                                     } else {
-                                        return '<span class="label label-danger">Ngưng bán</span>';
+                                        return '<span class="label label-danger">Hết hàng</span>';
                                     }
                                 }
-                                , "aTargets": [4]
+                                , "aTargets": [5]                                
                             }
+                            , {
+                                "bSortable": false
+                                , "aTargets": [-1]
+                                , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
+                                , "mData": "null"
+                            }                            
                     ]
                     , "oLanguage": languageConfig
                     , "iDisplayLength": 5                                    

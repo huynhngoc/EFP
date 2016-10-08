@@ -35,6 +35,7 @@ namespace DataService.Repository
                                 && q.Name.ToLower().Contains(param.sSearch.ToLower())))
                 .OrderBy(q => q.Name);
             Debug.WriteLine("---------rs " + rs.Count());
+            //if (rs.Count() == 0) return null;
             var data = rs.Select(q => new MasterProductViewModel()
             {
                 Id = q.Id,
@@ -54,7 +55,7 @@ namespace DataService.Repository
                 Status = q.Status,
                 DateCreated = q.DateCreated,
                 DateModified = q.DateModified,
-                Price = (decimal)(q.Price == null ? 0 : q.Price),
+                Price = (decimal)(q.Price),
                 Promotion = (decimal?)(q.Price)
             });
             Debug.WriteLine("---------data " + data.Count());            

@@ -36,7 +36,7 @@ namespace DataService
         public System.DateTime DateCreated { get; set; }
         public System.DateTime DateModified { get; set; }
         public bool Status { get; set; }
-        public Nullable<decimal> Price { get; set; }
+        public decimal Price { get; set; }
         public Nullable<decimal> PromotionPrice { get; set; }
     
         public virtual Category Category { get; set; }

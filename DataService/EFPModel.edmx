@@ -143,7 +143,7 @@
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="DateModified" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="bit" Nullable="false" />
-          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="PromotionPrice" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="OrderDetails">
@@ -154,7 +154,7 @@
           <Property Name="OrderId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
-          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -197,6 +197,16 @@
           <Property Name="BannerImg" Type="nvarchar" MaxLength="1000" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_Categories_Categories">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -476,6 +486,7 @@
           <EntitySet Name="ProductPictures" EntityType="Self.ProductPictures" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Responses" EntityType="Self.Responses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Categories1" EntitySet="Categories" />
@@ -565,23 +576,122 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EFPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="EFPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="EFPModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="EFPModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="EFPModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="EFPModel.AspNetUser" />
+          <EntitySet Name="Categories" EntityType="EFPModel.Category" />
+          <EntitySet Name="Comments" EntityType="EFPModel.Comment" />
+          <EntitySet Name="Customers" EntityType="EFPModel.Customer" />
+          <EntitySet Name="DetailedProducts" EntityType="EFPModel.DetailedProduct" />
+          <EntitySet Name="Entities" EntityType="EFPModel.Entity" />
+          <EntitySet Name="Intents" EntityType="EFPModel.Intent" />
+          <EntitySet Name="MasterProducts" EntityType="EFPModel.MasterProduct" />
+          <EntitySet Name="OrderDetails" EntityType="EFPModel.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="EFPModel.Order" />
+          <EntitySet Name="ProductPictures" EntityType="EFPModel.ProductPicture" />
+          <EntitySet Name="Responses" EntityType="EFPModel.Respons" />
+          <EntitySet Name="Shops" EntityType="EFPModel.Shop" />
+          <EntitySet Name="sysdiagrams" EntityType="EFPModel.sysdiagram" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="EFPModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="EFPModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shops_AspNetUsers" Association="EFPModel.FK_Shops_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Shop" EntitySet="Shops" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Categories" Association="EFPModel.FK_Categories_Categories">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Category1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Shops" Association="EFPModel.FK_Categories_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterProducts_Categories" Association="EFPModel.FK_MasterProducts_Categories">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="MasterProduct" EntitySet="MasterProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Intents" Association="EFPModel.FK_Comments_Intents">
+            <End Role="Intent" EntitySet="Intents" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Shops" Association="EFPModel.FK_Comments_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_Shops" Association="EFPModel.FK_Customers_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="EFPModel.FK_Orders_Customers">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailedProducts_MasterProducts" Association="EFPModel.FK_DetailedProducts_MasterProducts">
+            <End Role="MasterProduct" EntitySet="MasterProducts" />
+            <End Role="DetailedProduct" EntitySet="DetailedProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_DetailedProducts" Association="EFPModel.FK_OrderDetails_DetailedProducts">
+            <End Role="DetailedProduct" EntitySet="DetailedProducts" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entities_Shops" Association="EFPModel.FK_Entities_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Entity" EntitySet="Entities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responses_Intents" Association="EFPModel.FK_Responses_Intents">
+            <End Role="Intent" EntitySet="Intents" />
+            <End Role="Respons" EntitySet="Responses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterProducts_Shops" Association="EFPModel.FK_MasterProducts_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="MasterProduct" EntitySet="MasterProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="EFPModel.FK_ProductPictures_MasterProducts">
+            <End Role="MasterProduct" EntitySet="MasterProducts" />
+            <End Role="ProductPicture" EntitySet="ProductPictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="EFPModel.FK_OrderDetails_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Shops" Association="EFPModel.FK_Orders_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responses_Shops" Association="EFPModel.FK_Responses_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Respons" EntitySet="Responses" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="EFPModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="EFPModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
         </EntityType>
         <EntityType Name="AspNetUserClaim">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+          <NavigationProperty Name="AspNetUser" Relationship="EFPModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
         </EntityType>
         <EntityType Name="AspNetUserLogin">
           <Key>
@@ -589,16 +699,16 @@
             <PropertyRef Name="ProviderKey" />
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="EFPModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
         </EntityType>
         <EntityType Name="AspNetUser">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
           <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -609,407 +719,53 @@
           <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" />
-          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
-          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-          <NavigationProperty Name="Shops" Relationship="Self.FK_Shops_AspNetUsers" FromRole="AspNetUsers" ToRole="Shops" />
-          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="EFPModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="EFPModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="Shops" Relationship="EFPModel.FK_Shops_AspNetUsers" FromRole="AspNetUser" ToRole="Shop" />
+          <NavigationProperty Name="AspNetRoles" Relationship="EFPModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="ParentId" Type="Int32" />
-          <NavigationProperty Name="Categories1" Relationship="Self.FK_Categories_Categories" FromRole="Categories" ToRole="Categories1" />
-          <NavigationProperty Name="Category1" Relationship="Self.FK_Categories_Categories" FromRole="Categories1" ToRole="Categories" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Categories_Shops" FromRole="Categories" ToRole="Shops" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Categories1" Relationship="EFPModel.FK_Categories_Categories" FromRole="Category" ToRole="Category1" />
+          <NavigationProperty Name="Category1" Relationship="EFPModel.FK_Categories_Categories" FromRole="Category1" ToRole="Category" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Categories_Shops" FromRole="Category" ToRole="Shop" />
           <NavigationProperty Name="MasterProducts" Relationship="EFPModel.FK_MasterProducts_Categories" FromRole="Category" ToRole="MasterProduct" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FbUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FbUserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="IntentId" Type="Int32" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Intent" Relationship="Self.FK_Comments_Intents" FromRole="Comments" ToRole="Intents" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Comments_Shops" FromRole="Comments" ToRole="Shops" />
+          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Comments_Intents" FromRole="Comment" ToRole="Intent" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Comments_Shops" FromRole="Comment" ToRole="Shop" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="CustomerId" />
           </Key>
-          <Property Name="CustomerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Customers_Shops" FromRole="Customers" ToRole="Shops" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Customers_Shops" FromRole="Customer" ToRole="Shop" />
+          <NavigationProperty Name="Orders" Relationship="EFPModel.FK_Orders_Customers" FromRole="Customer" ToRole="Order" />
         </EntityType>
-        <EntityType Name="Entity">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EntityName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="isDynamic" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Entities_Shops" FromRole="Entities" ToRole="Shops" />
-        </EntityType>
-        <EntityType Name="Intent">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IntentName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Intents" FromRole="Intents" ToRole="Comments" />
-          <NavigationProperty Name="Responses" Relationship="Self.FK_Responses_Intents" FromRole="Intents" ToRole="Responses" />
-        </EntityType>
-        <EntityType Name="OrderDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetails_Orders" FromRole="OrderDetails" ToRole="Orders" />
-          <NavigationProperty Name="DetailedProduct" Relationship="EFPModel.FK_OrderDetails_DetailedProducts" FromRole="OrderDetail" ToRole="DetailedProduct" />
-        </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CustomerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ShippingAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Receiver" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders" FromRole="Orders" ToRole="OrderDetails" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Orders_Shops" FromRole="Orders" ToRole="Shops" />
-          <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Respons">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IntentId" Type="Int32" Nullable="false" />
-          <Property Name="RespondContent" Type="String" MaxLength="420" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Intent" Relationship="Self.FK_Responses_Intents" FromRole="Responses" ToRole="Intents" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Responses_Shops" FromRole="Responses" ToRole="Shops" />
-        </EntityType>
-        <EntityType Name="Shop">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FbToken" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BannerImg" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Shops_AspNetUsers" FromRole="Shops" ToRole="AspNetUsers" />
-          <NavigationProperty Name="Categories" Relationship="Self.FK_Categories_Shops" FromRole="Shops" ToRole="Categories" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Shops" FromRole="Shops" ToRole="Comments" />
-          <NavigationProperty Name="Customers" Relationship="Self.FK_Customers_Shops" FromRole="Shops" ToRole="Customers" />
-          <NavigationProperty Name="Entities" Relationship="Self.FK_Entities_Shops" FromRole="Shops" ToRole="Entities" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Shops" FromRole="Shops" ToRole="Orders" />
-          <NavigationProperty Name="Responses" Relationship="Self.FK_Responses_Shops" FromRole="Shops" ToRole="Responses" />
-          <NavigationProperty Name="MasterProducts" Relationship="EFPModel.FK_MasterProducts_Shops" FromRole="Shop" ToRole="MasterProduct" />
-        </EntityType>
-        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AspNetUserClaims">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AspNetUserLogins">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Shops_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
-          <End Role="Shops" Type="Self.Shop" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Shops">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Categories_Categories">
-          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
-          <End Role="Categories1" Type="Self.Category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categories">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Categories1">
-              <PropertyRef Name="ParentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Categories_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="Categories" Type="Self.Category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Categories">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comments_Intents">
-          <End Role="Intents" Type="Self.Intent" Multiplicity="1" />
-          <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Intents">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comments">
-              <PropertyRef Name="IntentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comments_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comments">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Customers_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="Customers" Type="Self.Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customers">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_Customers">
-          <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="CustomerId" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Entities_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="0..1" />
-          <End Role="Entities" Type="Self.Entity" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Entities">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Responses_Intents">
-          <End Role="Intents" Type="Self.Intent" Multiplicity="1" />
-          <End Role="Responses" Type="Self.Respons" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Intents">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Responses">
-              <PropertyRef Name="IntentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderDetails_Orders">
-          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Orders">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Responses_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="Responses" Type="Self.Respons" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Responses">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="AspNetUserRoles">
-          <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
-        </Association>
-        <EntityContainer Name="EFPEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
-          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
-          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
-          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-          <EntitySet Name="Categories" EntityType="Self.Category" />
-          <EntitySet Name="Comments" EntityType="Self.Comment" />
-          <EntitySet Name="Customers" EntityType="Self.Customer" />
-          <EntitySet Name="Entities" EntityType="Self.Entity" />
-          <EntitySet Name="Intents" EntityType="Self.Intent" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
-          <EntitySet Name="Orders" EntityType="Self.Order" />
-          <EntitySet Name="Responses" EntityType="Self.Respons" />
-          <EntitySet Name="Shops" EntityType="Self.Shop" />
-          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Shops_AspNetUsers" Association="Self.FK_Shops_AspNetUsers">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Shops" EntitySet="Shops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
-            <End Role="Categories" EntitySet="Categories" />
-            <End Role="Categories1" EntitySet="Categories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Categories_Shops" Association="Self.FK_Categories_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Categories" EntitySet="Categories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comments_Intents" Association="Self.FK_Comments_Intents">
-            <End Role="Intents" EntitySet="Intents" />
-            <End Role="Comments" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comments_Shops" Association="Self.FK_Comments_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Comments" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Customers_Shops" Association="Self.FK_Customers_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Customers" EntitySet="Customers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Entities_Shops" Association="Self.FK_Entities_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Entities" EntitySet="Entities" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Responses_Intents" Association="Self.FK_Responses_Intents">
-            <End Role="Intents" EntitySet="Intents" />
-            <End Role="Responses" EntitySet="Responses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
-            <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Shops" Association="Self.FK_Orders_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Responses_Shops" Association="Self.FK_Responses_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Responses" EntitySet="Responses" />
-          </AssociationSet>
-          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
-          <EntitySet Name="DetailedProducts" EntityType="EFPModel.DetailedProduct" />
-          <EntitySet Name="MasterProducts" EntityType="EFPModel.MasterProduct" />
-          <EntitySet Name="ProductPictures" EntityType="EFPModel.ProductPicture" />
-          <AssociationSet Name="FK_MasterProducts_Categories" Association="EFPModel.FK_MasterProducts_Categories">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="MasterProduct" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DetailedProducts_MasterProducts" Association="EFPModel.FK_DetailedProducts_MasterProducts">
-            <End Role="MasterProduct" EntitySet="MasterProducts" />
-            <End Role="DetailedProduct" EntitySet="DetailedProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_DetailedProducts" Association="EFPModel.FK_OrderDetails_DetailedProducts">
-            <End Role="DetailedProduct" EntitySet="DetailedProducts" />
-            <End Role="OrderDetail" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Shops" Association="EFPModel.FK_MasterProducts_Shops">
-            <End Role="Shop" EntitySet="Shops" />
-            <End Role="MasterProduct" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="EFPModel.FK_ProductPictures_MasterProducts">
-            <End Role="MasterProduct" EntitySet="MasterProducts" />
-            <End Role="ProductPicture" EntitySet="ProductPictures" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="DetailedProduct">
           <Key>
             <PropertyRef Name="Id" />
@@ -1028,6 +784,27 @@
           <Property Name="Attr7" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MasterProduct" Relationship="EFPModel.FK_DetailedProducts_MasterProducts" FromRole="DetailedProduct" ToRole="MasterProduct" />
           <NavigationProperty Name="OrderDetails" Relationship="EFPModel.FK_OrderDetails_DetailedProducts" FromRole="DetailedProduct" ToRole="OrderDetail" />
+        </EntityType>
+        <EntityType Name="Entity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EntityName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="isDynamic" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Entities_Shops" FromRole="Entity" ToRole="Shop" />
+        </EntityType>
+        <EntityType Name="Intent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IntentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Intents" FromRole="Intent" ToRole="Comment" />
+          <NavigationProperty Name="Responses" Relationship="EFPModel.FK_Responses_Intents" FromRole="Intent" ToRole="Respons" />
         </EntityType>
         <EntityType Name="MasterProduct">
           <Key>
@@ -1048,12 +825,41 @@
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Boolean" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
           <Property Name="PromotionPrice" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Category" Relationship="EFPModel.FK_MasterProducts_Categories" FromRole="MasterProduct" ToRole="Category" />
           <NavigationProperty Name="DetailedProducts" Relationship="EFPModel.FK_DetailedProducts_MasterProducts" FromRole="MasterProduct" ToRole="DetailedProduct" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_MasterProducts_Shops" FromRole="MasterProduct" ToRole="Shop" />
           <NavigationProperty Name="ProductPictures" Relationship="EFPModel.FK_ProductPictures_MasterProducts" FromRole="MasterProduct" ToRole="ProductPicture" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="DetailedProduct" Relationship="EFPModel.FK_OrderDetails_DetailedProducts" FromRole="OrderDetail" ToRole="DetailedProduct" />
+          <NavigationProperty Name="Order" Relationship="EFPModel.FK_OrderDetails_Orders" FromRole="OrderDetail" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Receiver" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="EFPModel.FK_Orders_Customers" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="OrderDetails" Relationship="EFPModel.FK_OrderDetails_Orders" FromRole="Order" ToRole="OrderDetail" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Orders_Shops" FromRole="Order" ToRole="Shop" />
         </EntityType>
         <EntityType Name="ProductPicture">
           <Key>
@@ -1064,6 +870,110 @@
           <Property Name="Urls" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MasterProduct" Relationship="EFPModel.FK_ProductPictures_MasterProducts" FromRole="ProductPicture" ToRole="MasterProduct" />
         </EntityType>
+        <EntityType Name="Respons">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="IntentId" Type="Int32" Nullable="false" />
+          <Property Name="RespondContent" Type="String" Nullable="false" MaxLength="420" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Responses_Intents" FromRole="Respons" ToRole="Intent" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Responses_Shops" FromRole="Respons" ToRole="Shop" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ShopName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FbToken" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="BannerImg" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="EFPModel.FK_Shops_AspNetUsers" FromRole="Shop" ToRole="AspNetUser" />
+          <NavigationProperty Name="Categories" Relationship="EFPModel.FK_Categories_Shops" FromRole="Shop" ToRole="Category" />
+          <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Shops" FromRole="Shop" ToRole="Comment" />
+          <NavigationProperty Name="Customers" Relationship="EFPModel.FK_Customers_Shops" FromRole="Shop" ToRole="Customer" />
+          <NavigationProperty Name="Entities" Relationship="EFPModel.FK_Entities_Shops" FromRole="Shop" ToRole="Entity" />
+          <NavigationProperty Name="MasterProducts" Relationship="EFPModel.FK_MasterProducts_Shops" FromRole="Shop" ToRole="MasterProduct" />
+          <NavigationProperty Name="Orders" Relationship="EFPModel.FK_Orders_Shops" FromRole="Shop" ToRole="Order" />
+          <NavigationProperty Name="Responses" Relationship="EFPModel.FK_Responses_Shops" FromRole="Shop" ToRole="Respons" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="EFPModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="EFPModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="EFPModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="EFPModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shops_AspNetUsers">
+          <End Type="EFPModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Shop">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Categories">
+          <End Type="EFPModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="EFPModel.Category" Role="Category1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Category1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.Category" Role="Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MasterProducts_Categories">
           <End Type="EFPModel.Category" Role="Category" Multiplicity="0..1" />
           <End Type="EFPModel.MasterProduct" Role="MasterProduct" Multiplicity="*" />
@@ -1073,6 +983,54 @@
             </Principal>
             <Dependent Role="MasterProduct">
               <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Intents">
+          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
+          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Intent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Type="EFPModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="EFPModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1100,6 +1058,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Entities_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="0..1" />
+          <End Type="EFPModel.Entity" Role="Entity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Entity">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responses_Intents">
+          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
+          <End Type="EFPModel.Respons" Role="Respons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Intent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Respons">
+              <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MasterProducts_Shops">
           <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
           <End Type="EFPModel.MasterProduct" Role="MasterProduct" Multiplicity="*" />
@@ -1124,7 +1106,47 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Type="EFPModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="EFPModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responses_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.Respons" Role="Respons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Respons">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="EFPModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="EFPModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1133,160 +1155,84 @@
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="EFPModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUserClaims">
             <EntityTypeMapping TypeName="EFPModel.AspNetUserClaim">
               <MappingFragment StoreEntitySet="AspNetUserClaims">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
                 <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUserLogins">
             <EntityTypeMapping TypeName="EFPModel.AspNetUserLogin">
               <MappingFragment StoreEntitySet="AspNetUserLogins">
-                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
-                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="EFPModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="EFPModel.Category">
               <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="EFPModel.Comment">
               <MappingFragment StoreEntitySet="Comments">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="FbUserId" ColumnName="FbUserId" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="IntentId" ColumnName="IntentId" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IntentId" ColumnName="IntentId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="FbUserId" ColumnName="FbUserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="EFPModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Entities">
-            <EntityTypeMapping TypeName="EFPModel.Entity">
-              <MappingFragment StoreEntitySet="Entities">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="isDynamic" ColumnName="isDynamic" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Intents">
-            <EntityTypeMapping TypeName="EFPModel.Intent">
-              <MappingFragment StoreEntitySet="Intents">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IntentName" ColumnName="IntentName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="EFPModel.OrderDetail">
-              <MappingFragment StoreEntitySet="OrderDetails">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="EFPModel.Order">
-              <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="UserNote" ColumnName="UserNote" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
-                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Responses">
-            <EntityTypeMapping TypeName="EFPModel.Respons">
-              <MappingFragment StoreEntitySet="Responses">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="IntentId" ColumnName="IntentId" />
-                <ScalarProperty Name="RespondContent" ColumnName="RespondContent" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Shops">
-            <EntityTypeMapping TypeName="EFPModel.Shop">
-              <MappingFragment StoreEntitySet="Shops">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="FbToken" ColumnName="FbToken" />
-                <ScalarProperty Name="BannerImg" ColumnName="BannerImg" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="AspNetUserRoles" TypeName="EFPModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-            <EndProperty Name="AspNetRoles">
-              <ScalarProperty Name="Id" ColumnName="RoleId" />
-            </EndProperty>
-            <EndProperty Name="AspNetUsers">
-              <ScalarProperty Name="Id" ColumnName="UserId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="DetailedProducts">
             <EntityTypeMapping TypeName="EFPModel.DetailedProduct">
               <MappingFragment StoreEntitySet="DetailedProducts">
@@ -1301,6 +1247,26 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Entities">
+            <EntityTypeMapping TypeName="EFPModel.Entity">
+              <MappingFragment StoreEntitySet="Entities">
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="isDynamic" ColumnName="isDynamic" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Intents">
+            <EntityTypeMapping TypeName="EFPModel.Intent">
+              <MappingFragment StoreEntitySet="Intents">
+                <ScalarProperty Name="IntentName" ColumnName="IntentName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1328,6 +1294,32 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="EFPModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="EFPModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="UserNote" ColumnName="UserNote" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ProductPictures">
             <EntityTypeMapping TypeName="EFPModel.ProductPicture">
               <MappingFragment StoreEntitySet="ProductPictures">
@@ -1337,6 +1329,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Responses">
+            <EntityTypeMapping TypeName="EFPModel.Respons">
+              <MappingFragment StoreEntitySet="Responses">
+                <ScalarProperty Name="RespondContent" ColumnName="RespondContent" />
+                <ScalarProperty Name="IntentId" ColumnName="IntentId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shops">
+            <EntityTypeMapping TypeName="EFPModel.Shop">
+              <MappingFragment StoreEntitySet="Shops">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="BannerImg" ColumnName="BannerImg" />
+                <ScalarProperty Name="FbToken" ColumnName="FbToken" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="EFPModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="EFPModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

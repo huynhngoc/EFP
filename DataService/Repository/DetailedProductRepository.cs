@@ -27,30 +27,39 @@ namespace DataService.Repository
 
         public IQueryable<DetailedProductViewModel> GetDetailedProduct(JQueryDataTableParamModel param, int masterId)
         {
-            var rs = GetDetailedProduct(masterId);
-            var search = param.sSearch;
-            rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
-                                (!string.IsNullOrEmpty(param.sSearch)
-                                && q.Attr1.ToLower().Contains(param.sSearch.ToLower())))
-                .OrderBy(q => q.Id);
-            Debug.WriteLine("---------rs " + rs.Count());
-            var data = rs.Select(q => new DetailedProductViewModel()
+            try
             {
-                Id = q.Id,                                                
-                Attr = (new List<string>  {q.MasterProduct.Attr1 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr1)
-                                , q.MasterProduct.Attr2 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr2)
-                                , q.MasterProduct.Attr3 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr3)//.ToString()
-                                , q.MasterProduct.Attr4 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr4)//.ToString()
-                                , q.MasterProduct.Attr5 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr5)//.ToString()
-                                , q.MasterProduct.Attr6 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr6)//.ToString()
-                                , q.MasterProduct.Attr7 ==null ? null : (q.MasterProduct.Attr1 + " " + q.Attr7)//.ToString() 
-                }),
-                Status = q.Status,                
-                Price = (decimal?)(q.Price),
-                PromotionPrice = (decimal?)(q.Price)
-            });
-            Debug.WriteLine("---------data " + data.Count());
-            return data;                    
+                entites.Configuration.ProxyCreationEnabled = true;
+                var rs = dbSet.Where(q => q.MasterId == masterId);
+                var search = param.sSearch;
+                rs = rs
+                    .Where(q => string.IsNullOrEmpty(param.sSearch))
+                    .OrderBy(q => q.Id);
+                Debug.WriteLine("---------rs " + rs.Count());
+                var data = rs.Select(q => new DetailedProductViewModel()
+                {
+                    Id = q.Id,
+                    Properties = (q.MasterProduct.Attr1 == null ? "" : (q.MasterProduct.Attr1 + " " + q.Attr1.ToString()))
+                                    + (q.MasterProduct.Attr2 == null ? "" : (", " + q.MasterProduct.Attr2 + " " + q.Attr2.ToString()))
+                                    + (q.MasterProduct.Attr3 == null ? "" : (", " + q.MasterProduct.Attr3 + " " + q.Attr3.ToString()))
+                                    + (q.MasterProduct.Attr4 == null ? "" : (", " + q.MasterProduct.Attr4 + " " + q.Attr4.ToString()))
+                                    + (q.MasterProduct.Attr5 == null ? "" : (", " + q.MasterProduct.Attr5 + " " + q.Attr5.ToString()))
+                                    + (q.MasterProduct.Attr6 == null ? "" : (", " + q.MasterProduct.Attr6 + " " + q.Attr6.ToString()))
+                                    + (q.MasterProduct.Attr7 == null ? "" : (", " + q.MasterProduct.Attr7 + " " + q.Attr7.ToString()))
+                    ,
+                    Status = q.Status,
+                    MasterId = q.MasterId,
+                    Price = (decimal?)(q.Price),
+                    PromotionPrice = (decimal?)(q.Price)
+                });
+                Debug.WriteLine("---------data " + data.Count());
+                //entites.Configuration.ProxyCreationEnabled = true;
+                return data;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

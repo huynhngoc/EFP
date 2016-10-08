@@ -21,9 +21,9 @@ namespace DataService
             this.Comments = new HashSet<Comment>();
             this.Customers = new HashSet<Customer>();
             this.Entities = new HashSet<Entity>();
+            this.MasterProducts = new HashSet<MasterProduct>();
             this.Orders = new HashSet<Order>();
             this.Responses = new HashSet<Respons>();
-            this.MasterProducts = new HashSet<MasterProduct>();
         }
     
         public string Id { get; set; }
@@ -43,10 +43,10 @@ namespace DataService
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Entity> Entities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterProduct> MasterProducts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Respons> Responses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MasterProduct> MasterProducts { get; set; }
     }
 }
