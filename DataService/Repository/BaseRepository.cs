@@ -41,7 +41,8 @@ namespace DataService.Repository
         public BaseRepository()
         {
             EFPEntities dbContext = new EFPEntities();
-            dbContext.Configuration.ProxyCreationEnabled = false;            
+            dbContext.Configuration.ProxyCreationEnabled = false;
+            dbContext.Configuration.LazyLoadingEnabled = true;
             this.entites = dbContext;
             this.dbSet = dbContext.Set<TEntity>();
         }

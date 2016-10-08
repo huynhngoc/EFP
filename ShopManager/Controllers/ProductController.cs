@@ -71,15 +71,17 @@ namespace ShopManager.Controllers
             }
             catch(Exception e)
             {
-                var data = new string[0];
                 Debug.WriteLine(e.Message);
-                return Json(new
-                {
-                    sEcho = param.sEcho,
-                    iTotalRecords = 0,
-                    iTotalDisplayRecords = 0,
-                    aaData = data
-                }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+                //var data = new string[0];
+                //Debug.WriteLine(e.Message);
+                //return Json(new
+                //{
+                //    sEcho = param.sEcho,
+                //    iTotalRecords = 0,
+                //    iTotalDisplayRecords = 0,
+                //    aaData = data
+                //}, JsonRequestBehavior.AllowGet);
             }
 
         }

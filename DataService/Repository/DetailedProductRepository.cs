@@ -29,7 +29,7 @@ namespace DataService.Repository
         {
             try
             {
-                entites.Configuration.ProxyCreationEnabled = true;
+                //entites.Configuration.ProxyCreationEnabled = true;
                 var rs = dbSet.Where(q => q.MasterId == masterId);
                 var search = param.sSearch;
                 rs = rs
