@@ -505,9 +505,14 @@
             productTable = $(".product-master").dataTable({
                 "bProcessing": true
                 , "bServerSide": true
-                , "sAjaxSource": "http://localhost:26638/Product/GetMasterProduct"
+                , "sAjaxSource": "../Product/GetMasterProduct"
                 , "fnServerParams": function (aoData) {
                     aoData.push({ "name": "shopId", "value": "1" });
+                }
+                , "fnInitComplete": function (oSettings, json) {
+                    $(".product-master").removeAttr("style");
+                    $(".product-master thead tr").addClass("info");
+                    //$(".product-master tbody tr").addClass("success");
                 }
                 , "aoColumnDefs": [
                           { "bSortable": false
@@ -523,7 +528,7 @@
                         , {
                             "bSortable": false
                             , "aTargets": [-1]
-                            , "sDefaultContent": '<div class="btn-group"><button class="btn-white btn btn-xs"data-toggle="modal" data-target="#viewProductModal">Sửa</button><button class="btn-white btn btn-xs">Xóa</button></div>'
+                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button><button class="btn btn-info view-detail" title="Xem nhanh" type="button"><i class="fa fa-arrows-v"></i></button></div>'
                             , "mData": "null"
                         }
                         , {
@@ -543,21 +548,23 @@
                 , "iDisplayLength": 25
                 //, "aLengthMenu": [5, 10, 25]
                 , "bLengthChange": false
-            });
+            });            
+            
             table = productTable;            
             /* setting show detailed product*/            
-            $('.product-master').on('click', 'tr', function(evt){                
+            $('.product-master').on('click', '.view-detail', function (evt) {
                 //var id = productTable.DataTable().row($(this)).data()[4];
-                var id = productTable.fnGetData($(this)).Id;
+                var clickedRow = $(this).closest("tr");
+                var id = productTable.fnGetData($(clickedRow)).Id;
                 console.log(id);
                 $('.product-detail').hide();
                 //$(id).show();
                 //$(currentChildren).remove();
                 $('.product-info').remove();
-                if (productTable.fnIsOpen(this)) {
-                    productTable.fnClose(this);
+                if (productTable.fnIsOpen(clickedRow)) {
+                    productTable.fnClose(clickedRow);
                 } else {
-                    productTable.fnOpen(this, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"></table></div>'
+                    productTable.fnOpen(clickedRow, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"></table></div>'
                                     , "product-info");
                     currentChildren = $(".product-detail").dataTable({
                         "bProcessing": true

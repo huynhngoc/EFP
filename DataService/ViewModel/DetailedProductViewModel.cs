@@ -8,6 +8,12 @@ namespace DataService.ViewModel
 {
     public class DetailedProductViewModel
     {
-
+        public int Id { get; set; }
+        public Nullable<decimal> Price { get; set; }
+        public Nullable<decimal> PromotionPrice { get; set; }
+        public bool Status { get; set; }
+        public int MasterId { get; set; }
+        public List<string> Attr { get; set; }
+        
     }
 }

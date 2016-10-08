@@ -55,7 +55,7 @@ namespace DataService.Repository
                 DateCreated = q.DateCreated,
                 DateModified = q.DateModified,
                 Price = (decimal)(q.Price == null ? 0 : q.Price),
-                Promotion = (decimal)(q.PromotionPrice == null ? 0 : q.Price)
+                Promotion = (decimal?)(q.Price)
             });
             Debug.WriteLine("---------data " + data.Count());            
             return data;            
