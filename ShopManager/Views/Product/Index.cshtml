@@ -513,6 +513,9 @@
                     $(".product-master").removeAttr("style");
                     $(".product-master thead tr").addClass("info");
                     //$(".product-master tbody tr").addClass("success");
+                    //productTable.DataTable({
+                        
+                    //});
                 }
                 , "aoColumnDefs": [
                           { "bSortable": false
@@ -548,8 +551,17 @@
                 , "iDisplayLength": 25
                 //, "aLengthMenu": [5, 10, 25]
                 , "bLengthChange": false
+                , 'sDom': 'l<"toolbar"f>rtip'//'<"H"lf"toolbar"r>t<"F"ip>'//'<"toolbar">lTfgitp' //frtip'//'<"html5buttons"B>lTfgitp'                
+            
             });            
             
+            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4"><button class="btn btn-primary">Thêm</button></div>');
+            $("div.toolbar .dataTables_filter").addClass("col-sm-8 col-lg-8");
+            $("div.toolbar .dataTables_filter").append('<div data-toggle="buttons-checkbox" class="btn-group">'
+                            + '<button class="btn btn-primary btn-outline active" type="button" >Tên</button>'
+                            + '<button class="btn btn-primary btn-outline" type="button" aria-pressed="false">Phân loại</button>'
+                            + '<button class="btn btn-primary btn-outline" type="button" aria-pressed="false">Mô tả</button>'
+                        +'</div>');
             table = productTable;            
             /* setting show detailed product*/            
             $('.product-master').on('click', '.view-detail', function (evt) {
@@ -605,7 +617,7 @@
                             , {
                                 "bSortable": false
                                 , "aTargets": [-1]
-                                , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
+                                , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewDetailModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
                                 , "mData": "null"
                             }                            
                     ]
