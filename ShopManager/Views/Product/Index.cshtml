@@ -21,6 +21,9 @@
 
     <!-- croper -->
     @Styles.Render("~/Image-cropper-CSS")
+
+    <!-- dropzone -->
+    @Styles.Render("~/DropZone-CSS")
 }
 
 
@@ -58,196 +61,7 @@
             </div>
         </div>
 
-        <!-- end grid -->
-        <!-- grid here -->
-
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <input type="text" class="form-control input-sm m-b-xs" id="detailed_filter"
-                           placeholder="Tìm kiếm">
-                    @*<table id="t1" class="footable table table-stripped product-detail" data-page-size="15" data-filter=#detailed_filter>
-                        <thead>
-                            <tr>
-                                <th>Đặc điểm</th>
-                                <th>Giá</th>
-                                <th>Trạng thái</th>
-                                <th class="text-right" data-sort-ignore="true">#</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Màu xanh đen, size 32</td>
-                                <td>240000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu xanh đen, size 34</td>
-                                <td>240000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu xanh đen, size 36</td>
-                                <td>240000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu đỏ, size 32</td>
-                                <td>240000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu đỏ, size 38</td>
-                                <td>240000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6">
-                                    <ul class="pagination pull-right"></ul>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <table id="t2" class="footable table table-stripped product-detail" data-page-size="15" data-filter=#detailed_filter>
-                        <thead>
-                            <tr>
-                                <th>Đặc điểm</th>
-                                <th>Giá</th>
-                                <th>Trạng thái</th>
-                                <th class="text-right" data-sort-ignore="true">#</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Màu xanh đen, size 32</td>
-                                <td>280000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu xanh đen, size 34</td>
-                                <td>280000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu xanh đen, size 36</td>
-                                <td>280000 đồng</td>
-                                <td><span class="label label-danger">Hết hàng</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu đỏ, size 32</td>
-                                <td>280000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Màu đỏ, size 38</td>
-                                <td>280000 đồng</td>
-                                <td><span class="label label-primary">Bình thường</span></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn-white btn btn-xs"
-                                                data-toggle="modal" data-target="#viewDetailModal">
-                                            Sửa
-                                        </button>
-                                        <button class="btn-white btn btn-xs">Xóa</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6">
-                                    <ul class="pagination pull-right"></ul>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>*@
-                </div>
-            </div>
-        </div>
-        <!-- end grid -->
+        <!-- end grid -->        
     </div>
         <!-- modal -->
         <div class="modal inmodal" id="viewProductModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -255,53 +69,67 @@
                 <div class="modal-content animated bounceInRight">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Thông tin sản phẩm</h4>
-                        <small class="font-bold">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+                        <h4 class="modal-title">Thông tin sản phẩm</h4>                        
                     </div>
                     <div class="modal-body">
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1"> Thông tin chung</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-2"> Hình ảnh</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-2">Đặc điểm</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-3"> Hình ảnh</a></li>
                             </ul>
-                            <div class="tab-content">
-                                <div id="tab-1" class="tab-pane active">
-                                    <div class="panel-body">
-                                        <fieldset class="form-horizontal">
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">Tên:</label>
-                                                <div class="col-sm-10"><input type="text" class="form-control" placeholder="Tên sản phẩm"></div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">Phân loại:</label>
-                                                <div class="col-sm-10">
-                                                    <select class="form-control">
-                                                        <option></option>
-                                                        <option value="0">Bahamas</option>
-                                                        <option value="1">Bahrain</option>
-                                                        <option value="2">Bangladesh</option>
-                                                        <option value="3">Barbados</option>
-                                                        <option value="4">Belarus</option>
-                                                        <option value="5">Belgium</option>
-                                                        <option value="6">Belize</option>
-                                                        <option value="7">Benin</option>
-                                                    </select>
+                            <div class="tab-content">                               
+                                    <div id="tab-1" class="tab-pane active">
+                                        <div class="panel-body">
+                                            <fieldset class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Tên:</label>
+                                                    <div class="col-sm-10"><input type="text" class="form-control" placeholder="Tên sản phẩm"></div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">Mô tả:</label>
-                                                <div class="col-sm-10">
-                                                    <div class="summernote" id="#summernote">
-                                                        <h3>Giày viết ở đây</h3>
-                                                        dummy text of the printing and typesetting industry. <strong>Lorem Ipsum has been the industry's</strong> standard dummy text ever since the 1500s,
-                                                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-                                                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-                                                        typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with
-                                                        <br />
-
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Phân loại:</label>
+                                                    <div class="col-sm-10">
+                                                        <select class="form-control">
+                                                            <option></option>
+                                                            <option value="0">Bahamas</option>
+                                                            <option value="1">Bahrain</option>
+                                                            <option value="2">Bangladesh</option>
+                                                            <option value="3">Barbados</option>
+                                                            <option value="4">Belarus</option>
+                                                            <option value="5">Belgium</option>
+                                                            <option value="6">Belize</option>
+                                                            <option value="7">Benin</option>
+                                                        </select>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Mô tả:</label>
+                                                    <div class="col-sm-10">
+                                                        <div class="summernote" id="#summernote">
+                                                            <h3>Giày viết ở đây</h3>
+                                                            dummy text of the printing and typesetting industry. <strong>Lorem Ipsum has been the industry's</strong> standard dummy text ever since the 1500s,
+                                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
+                                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
+                                                            typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with
+                                                            <br />
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Tình trạng:</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="checkbox" class="js-switch" id="masterProStatus" checked />
+                                                        <span class="label label-primary" id="masterStatusOn">Bình thường</span>
+                                                        <span class="label label-danger" id="masterStatusOff" style="display:none">Ngưng bán</span>
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div id="tab-2" class="tab-pane">
+                                        <div class="panel-body">
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Đặc điểm:</label>
                                                 <div class="col-sm-10 input-group">
@@ -314,72 +142,29 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">Tình trạng:</label>
-                                                <div class="col-sm-10">
-                                                    <input type="checkbox" class="js-switch" id="masterProStatus" checked />
-                                                    <span class="label label-primary" id="masterStatusOn">Bình thường</span>
-                                                    <span class="label label-danger" id="masterStatusOff" style="display:none">Ngưng bán</span>
-                                                </div>
-                                            </div>
-
-                                        </fieldset>
-                                    </div>
-                                </div>
-                                <div id="tab-2" class="tab-pane active">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="product-images">
-                                                    <div>
-                                                        <div class="image-imitation">
-                                                            [IMAGE 1]
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="image-imitation">
-                                                            [IMAGE 2]
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="image-imitation">
-                                                            [IMAGE 3]
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="image-crop">
-                                                            <img src="img/p3.jpg">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <h4>Xem trước</h4>
-                                                        <div class="img-preview img-preview-sm"></div>
-                                                        <div class="btn-group">
-                                                            <label title="Upload image file" for="inputImage" class="btn btn-primary">
-                                                                <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
-                                                                Upload new image
-                                                            </label>
-                                                            <label title="Donload image" id="download" class="btn btn-primary">Download</label>
-                                                        </div>
-
-                                                        <div class="btn-group">
-                                                            <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
-                                                            <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
-                                                            <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
-                                                            <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
-                                                            <button class="btn btn-warning" id="setDrag" type="button">New crop</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
-
                                     </div>
-                                </div>
+                                    <div id="tab-3" class="tab-pane">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="product-images">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="col-md-6">
+                                                        <form id="dropzone" class="dropzone" action="#">
+                                                            <div class="dropzone-previews"></div>
+                                                            @*<button type="submit" class="btn btn-primary pull-right">Submit this form!</button>*@
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -454,8 +239,9 @@
     <!-- slick carousel-->
     @Scripts.Render("~/slick-carousel-JS")
 
-    <!-- Image cropper -->
-    @Scripts.Render("~/Image-cropper-JS")
+    <!-- Dropzone-->
+    @Scripts.Render("~/DropZone-JS")
+
     <script>
         var s;
         var table;
@@ -475,32 +261,7 @@
                         , "sSearch": "Tìm kiếm:"
                         , "sZeroRecords": "Không tìm thấy kết quả"
             }
-            var productTable;
-            //$(window).on("resize",function () {
-            //    $(".product-master").resize();
-            //});
-            $('.dataTables-example').DataTable({
-                dom: '<"html5buttons"B>lTfgitp',
-                buttons: [
-                    { extend: 'copy' },
-                    { extend: 'csv' },
-                    { extend: 'excel', title: 'ExampleFile' },
-                    { extend: 'pdf', title: 'ExampleFile' },
-
-                    {
-                        extend: 'print',
-                        customize: function (win) {
-                            $(win.document.body).addClass('white-bg');
-                            $(win.document.body).css('font-size', '10px');
-
-                            $(win.document.body).find('table')
-                                    .addClass('compact')
-                                    .css('font-size', 'inherit');
-                        }
-                    }
-                ]
-
-            });
+            var productTable;                        
 
             productTable = $(".product-master").dataTable({
                 "bProcessing": true
@@ -555,7 +316,17 @@
             
             });            
             
-            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4"><button class="btn btn-primary">Thêm</button></div>');
+            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary">Thêm</button></div>');
+            $(".toolbar div.option-group").append('<div class="btn-group">'
+                            + '<button data-toggle="dropdown" class="btn btn-primary btn-outline btn-sm dropdown-toggle" aria-expanded="false">Đã chọn <span class="selected-nummer">0</span> sản phẩm<span class="caret"></span></button>'
+                            +'<ul class="dropdown-menu">'
+                              //+'<li><a href="#"></a></li>'
+                            +'<li><a href="#" >Chuyển trạng thái bình thường</a></li>'
+                            +'<li><a href="#">Chuyển trạng thái hết hàng</a></li>'
+                            +'<li class="divider"></li>'
+                            +'<li><a href="#">Xóa</a></li>'
+                            +'</ul>'
+                        +'</div>');
             $("div.toolbar .dataTables_filter").addClass("col-sm-8 col-lg-8");
             $("div.toolbar .dataTables_filter").append('<div data-toggle="buttons-checkbox" class="btn-group">'
                             + '<button class="btn btn-primary btn-outline active" type="button" >Tên</button>'
@@ -658,6 +429,13 @@
                 }
             });
 
+            $("#viewProductModal").on("opened", function () {
+                /* image carousel*/
+                $('.product-images').slick({
+                    dots: true
+                });                
+            });
+
             $("#detailProStatus").on("change", function(){
                 if ($("#detailProStatus").is(":checked")){
                     $("#detailStatusOn").show();
@@ -668,71 +446,37 @@
                 }
             });
 
-            /* image carousel*/
+            ///* image carousel*/
             $('.product-images').slick({
                 dots: true
             });
 
-            /* image cropper*/
-            var $image = $(".image-crop > img")
-            $($image).cropper({
-                aspectRatio: 1.618,
-                preview: ".img-preview",
-                done: function(data) {
-                    // Output the result data for cropping image.
+            /* dropzone*/
+            Dropzone.options.dropzone = {
+
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                maxFiles: 100,
+
+                // Dropzone settings
+                init: function () {
+                    var myDropzone = this;
+
+                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        myDropzone.processQueue();
+                    });
+                    this.on("sendingmultiple", function () {
+                    });
+                    this.on("successmultiple", function (files, response) {
+                    });
+                    this.on("errormultiple", function (files, response) {
+                    });
                 }
-            });
 
-            var $inputImage = $("#inputImage");
-            if (window.FileReader) {
-                $inputImage.change(function() {
-                    var fileReader = new FileReader(),
-                            files = this.files,
-                            file;
-
-                    if (!files.length) {
-                        return;
-                    }
-
-                    file = files[0];
-
-                    if (/^image\/\w+$/.test(file.type)) {
-                        fileReader.readAsDataURL(file);
-                        fileReader.onload = function () {
-                            $inputImage.val("");
-                            $image.cropper("reset", true).cropper("replace", this.result);
-                        };
-                    } else {
-                        showMessage("Please choose an image file.");
-                    }
-                });
-            } else {
-                $inputImage.addClass("hide");
             }
-
-            $("#download").click(function() {
-                window.open($image.cropper("getDataURL"));
-            });
-
-            $("#zoomIn").click(function() {
-                $image.cropper("zoom", 0.1);
-            });
-
-            $("#zoomOut").click(function() {
-                $image.cropper("zoom", -0.1);
-            });
-
-            $("#rotateLeft").click(function() {
-                $image.cropper("rotate", 45);
-            });
-
-            $("#rotateRight").click(function() {
-                $image.cropper("rotate", -45);
-            });
-
-            $("#setDrag").click(function() {
-                $image.cropper("setDragMode", "crop");
-            });
 
         });
 

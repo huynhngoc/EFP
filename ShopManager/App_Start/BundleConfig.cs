@@ -118,6 +118,17 @@ namespace ShopManager
             //Image cropper JS
             bundles.Add(new ScriptBundle("~/Image-cropper-JS").Include(
                 "~/Content/js/plugins/cropper/cropper.min.js" ));
+            //Dropzone CSS
+            bundles.Add(new StyleBundle("~/DropZone-CSS").Include(
+                "~/Content/css/plugins/dropzone/basic.css",
+                "~/Content/css/plugins/dropzone/dropzone.css"));
+            //Dropzone JS
+            bundles.Add(new ScriptBundle("~/DropZone-JS").Include(
+                "~/Content/js/plugins/dropzone/dropzone.js"));
+            //nestable js
+            bundles.Add(new ScriptBundle("~/Nestable-JS").Include(
+                "~/Content/js/plugins/nestable/jquery.nestable.js"));
+
         }
 
     }

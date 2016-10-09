@@ -14,6 +14,17 @@ namespace DataService.Repository
             return dbSet.Where(q => q.ShopId == shopId);
         }
 
+        public IEnumerable<CategoryViewModel> GetCategory(string shopId)
+        {
+            return dbSet.Where(q=> q.ShopId ==shopId).Select(q=> new CategoryViewModel()
+            {
+                Id=q.Id,
+                Name=q.Name,
+                Description=q.Description,
+                ParentId=q.ParentId                
+            });
+        }
+
         public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
         {
             List<CategoryParentViewModel> list = new List<CategoryParentViewModel>();

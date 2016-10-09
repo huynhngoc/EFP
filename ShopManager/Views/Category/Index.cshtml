@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section CustomCSS { 
+    @Styles.Render("~/Toastr-style") 
+}
+<div class="ibox-content">
+    <div id="nestable-menu">
+        <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Expand All</button>
+        <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Collapse All</button>
+    </div>
+
+    <div class="dd" id="nestable2">
+        <ol class="dd-list">
+            <li class="dd-item dd-nodrag" data-id="1">
+                <div class="dd-handle dd-nodrag ">
+                    <span class="pull-right"></span>
+                    Cras ornare tristique.
+                </div>
+                <ol class="dd-list">
+                    <li class="dd-item dd-nodrag" data-id="2">
+                        <div class="dd-handle">
+                            <span class="pull-right"> 12:00 pm </span>
+                            <span class="label label-info dd-nodrag"><i class="fa fa-cog"></i></span> Vivamus vestibulum nulla nec ante.
+                        </div>
+                    </li>
+                    <li class="dd-item" data-id="3">
+                        <div class="dd-handle">
+                            <span class="pull-right"> 11:00 pm </span>
+                            <span class="label label-info"><i class="fa fa-bolt"></i></span> Nunc dignissim risus id metus.
+                        </div>
+                    </li>
+                    <li class="dd-item" data-id="4">
+                        <div class="dd-handle">
+                            <span class="pull-right"> 11:00 pm </span>
+                            <span class="label label-info"><i class="fa fa-laptop"></i></span> Vestibulum commodo
+                        </div>
+                    </li>
+                </ol>
+            </li>
+
+            <li class="dd-item" data-id="5">
+                <div class="dd-handle">
+                    <span class="label label-warning"><i class="fa fa-users"></i></span> Integer vitae libero.
+                </div>
+                <ol class="dd-list">
+                    <li class="dd-item" data-id="6">
+                        <div class="dd-handle">
+                            <span class="pull-right"> 15:00 pm </span>
+                            <span class="label label-warning"><i class="fa fa-users"></i></span> Nam convallis pellentesque nisl.
+                        </div>
+                    </li>
+                    <li class="dd-item" data-id="7">
+                        <div class="dd-handle">
+                            <span class="pull-right"> 16:00 pm </span>
+                            <span class="label label-warning"><i class="fa fa-bomb"></i></span> Vivamus molestie gravida turpis
+                        </div>
+                    </li>
+                    <li class="dd-item" data-id="8">
+                        <div class="dd-handle">
+                            <span class="pull-right"> 21:00 pm </span>
+                            <span class="label label-warning"><i class="fa fa-child"></i></span> Ut aliquam sollicitudin leo.
+                        </div>
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+
+</div>
+
+
+@section CustomJS {    
+    @Scripts.Render("~/Nestable-JS") 
+    <script>
+        $(document).ready(function () {           
+
+            $('#nestable2').nestable({
+                group: 1,
+                handleClass: "d"
+            }
+            );//.on('change', updateOutput);
+
+            $('#nestable-menu').on('click', function (e) {
+                var target = $(e.target),
+                        action = target.data('action');
+                if (action === 'expand-all') {
+                    $('.dd').nestable('expandAll');
+                }
+                if (action === 'collapse-all') {
+                    $('.dd').nestable('collapseAll');
+                }
+            });
+
+        });
+    </script>
+}

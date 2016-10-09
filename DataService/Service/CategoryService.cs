@@ -24,6 +24,9 @@ namespace DataService.Service
             return repository.GetCategoryAndParentByShopId(shopId);
         }
 
-
+        public List<CategoryViewModel> GetAllCategory(string shopId)
+        {
+            return repository.GetCategory(shopId).ToList();
+        }
     }
 }
