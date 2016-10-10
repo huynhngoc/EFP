@@ -40,7 +40,8 @@ namespace DataService.Repository
         public BaseRepository()
         {
             EFPEntities dbContext = new EFPEntities();
-            dbContext.Configuration.ProxyCreationEnabled = false;            
+            dbContext.Configuration.ProxyCreationEnabled = false;
+            dbContext.Configuration.LazyLoadingEnabled = true;
             this.entites = dbContext;
             this.dbSet = dbContext.Set<TEntity>();
         }
@@ -81,7 +82,8 @@ namespace DataService.Repository
         {
             try
             {
-                this.entites.Entry(entity).State = EntityState.Modified;                
+                this.entites.Entry(entity).State = EntityState.Modified;
+                this.entites.SaveChanges();
                 return true;
             }
             catch
