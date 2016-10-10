@@ -20,5 +20,11 @@ namespace ShopManager.Controllers
             CategoryService service = new CategoryService();
             return Json(service.GetAllCategory(shopId), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult Edit(int id, string name, string description)
+        {
+            CategoryService service = new CategoryService();
+            return Json(service.EditCategory(id, name, description), JsonRequestBehavior.AllowGet);
+        }
     }
 }

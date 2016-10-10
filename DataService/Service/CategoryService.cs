@@ -28,5 +28,13 @@ namespace DataService.Service
         {
             return repository.GetCategory(shopId).ToList();
         }
+
+        public bool EditCategory(int id, string name, string description)
+        {
+            Category c = repository.FindByKey(id);
+            c.Name = name;
+            c.Description = description;
+            return repository.Update(c);
+        }
     }
 }

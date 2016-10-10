@@ -3,85 +3,223 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section CustomCSS { 
-    @Styles.Render("~/Toastr-style") 
+@section CustomCSS {
+    @Styles.Render("~/Toastr-style")
+    <style>
+        .dd-handle span.pull-right {
+            margin-top: -3px;
+        }
+    </style>
 }
 <div class="ibox-content">
     <div id="nestable-menu">
         <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Expand All</button>
         <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Collapse All</button>
-    </div>
-
+        <button type="button" class="btn btn-primary pull-right add-base-button">Thêm</button>
+    </div>    
+   
     <div class="dd" id="nestable2">
         <ol class="dd-list">
-            <li class="dd-item dd-nodrag" data-id="1">
-                <div class="dd-handle dd-nodrag ">
-                    <span class="pull-right"></span>
-                    Cras ornare tristique.
-                </div>
-                <ol class="dd-list">
-                    <li class="dd-item dd-nodrag" data-id="2">
-                        <div class="dd-handle">
-                            <span class="pull-right"> 12:00 pm </span>
-                            <span class="label label-info dd-nodrag"><i class="fa fa-cog"></i></span> Vivamus vestibulum nulla nec ante.
-                        </div>
-                    </li>
-                    <li class="dd-item" data-id="3">
-                        <div class="dd-handle">
-                            <span class="pull-right"> 11:00 pm </span>
-                            <span class="label label-info"><i class="fa fa-bolt"></i></span> Nunc dignissim risus id metus.
-                        </div>
-                    </li>
-                    <li class="dd-item" data-id="4">
-                        <div class="dd-handle">
-                            <span class="pull-right"> 11:00 pm </span>
-                            <span class="label label-info"><i class="fa fa-laptop"></i></span> Vestibulum commodo
-                        </div>
-                    </li>
-                </ol>
-            </li>
-
-            <li class="dd-item" data-id="5">
-                <div class="dd-handle">
-                    <span class="label label-warning"><i class="fa fa-users"></i></span> Integer vitae libero.
-                </div>
-                <ol class="dd-list">
-                    <li class="dd-item" data-id="6">
-                        <div class="dd-handle">
-                            <span class="pull-right"> 15:00 pm </span>
-                            <span class="label label-warning"><i class="fa fa-users"></i></span> Nam convallis pellentesque nisl.
-                        </div>
-                    </li>
-                    <li class="dd-item" data-id="7">
-                        <div class="dd-handle">
-                            <span class="pull-right"> 16:00 pm </span>
-                            <span class="label label-warning"><i class="fa fa-bomb"></i></span> Vivamus molestie gravida turpis
-                        </div>
-                    </li>
-                    <li class="dd-item" data-id="8">
-                        <div class="dd-handle">
-                            <span class="pull-right"> 21:00 pm </span>
-                            <span class="label label-warning"><i class="fa fa-child"></i></span> Ut aliquam sollicitudin leo.
-                        </div>
-                    </li>
-                </ol>
-            </li>
         </ol>
     </div>
-
 </div>
 
+<!--modal -->
+<div class="modal inmodal" id="categoryModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Thêm loại sản phẩm</h4>                
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form id="addForm">
+                        <fieldset class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tên:</label>
+                                <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Mô tả:</label>
+                                <div class="col-sm-10"><textarea type="text" name="description" class="form-control" placeholder="Mô tả"></textarea></div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
 
-@section CustomJS {    
-    @Scripts.Render("~/Nestable-JS") 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal-->
+<div class="modal inmodal" id="categoryEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Sửa loại sản phẩm</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form id="editForm">
+                        <fieldset class="form-horizontal">
+                            <input type="hidden" name="id" />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tên:</label>
+                                <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Mô tả:</label>
+                                <div class="col-sm-10"><textarea type="text" name="description" class="form-control" placeholder="Mô tả"></textarea></div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" onclick="saveChangeCate()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section CustomJS {
+    @Scripts.Render("~/Nestable-JS")
     <script>
-        $(document).ready(function () {           
 
-            $('#nestable2').nestable({
-                group: 1,
-                handleClass: "d"
+        function saveChangeCate() {
+            var form = $('#categoryEditModal form');
+            var id = $(form).find("input[name='id']").val();
+            var name = $(form).find("input[name='name']").val();
+            var desc = $(form).find("textarea[name='description']").val();
+            $.ajax({
+                url: '../Category/Edit',
+                type: 'POST',
+                data: {
+                    'id': id,
+                    'name': name,
+                    'description': desc
+                },
+                //contentType: 'application/json; charset=utf-8',
+                success: function (data, textStatus, xhr) {
+                    alert(data);
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+        function editForm(id, name, desc) {
+            var form = $('#categoryEditModal form');
+            $(form).find("input[name='id']").val(id);
+            $(form).find("input[name='name']").val(name);
+            $(form).find("textarea[name='description']").val(desc);
+        }
+
+
+        function initButtons() {
+            $('.add-button').on('click', function () {
+                console.log('add new cate');
+                document.getElementById('addForm').reset();
+                var id = $(this).closest('div').id;
+                $('#categoryModal').modal("show");
+            });
+
+            $('.edit-button').on('click', function () {
+                console.log('add new cate');
+                document.getElementById('addForm').reset();                
+                var id = $(this).closest('div').attr("id");
+                console.log(id);
+                var name = $(this).closest('div').find(".name").text();
+                var desc = $(this).closest('div').find(".desc").text();
+                editForm(id, name, desc);
+                $('#categoryEditModal').modal("show");
+            });
+
+            $('.delete-button').on('click', function () {
+                console.log('add new cate');
+                document.getElementById('addForm').reset();
+                var id = $(this).closest('div').id;
+                $('#categoryModal').modal("show");
+            });
+
+        }
+
+
+        function addToNode(node, data) {
+            var id = "#" + node;
+            var nodeDiv = document.getElementById(node);            
+            var ol = $(nodeDiv).children('ol');
+            console.log("before");
+            console.log($(ol));
+            if (ol == null || ol == 'undefined' || ol.length == 0) {
+                console.log("if 1");
+                ol = $(nodeDiv).parent('li').children('ol');
+                if (ol == null || ol == 'undefined' || ol.length == 0) {
+                    $(nodeDiv).parent('li').append('<ol class="dd-list"></ol');
+                    ol = $(nodeDiv).parent('li').children('ol');
+                    console.log("if 2");
+                }                
             }
-            );//.on('change', updateOutput);
+            console.log(ol);
+            var appendHTML = '<li class="dd-item " >'
+                + '<div class="dd-handle"'+'id="'+data.Id+'">'
+                    + '<span class="pull-right ">'
+                      + '<button class="btn btn-success btn-sm edit-button"><i class="fa fa-edit"></i></button>'
+                        + '<button class="btn btn-danger btn-sm delete-button"><i class="fa fa-trash"></i></button> ';
+            if (node == "nestable2") {
+                appendHTML = appendHTML + '<button class="btn btn-primary btn-sm add-button">Thêm</button>';
+            }
+            appendHTML = appendHTML + '</span>'
+                    + '<span class="name">'+data.Name+'</span>'
+                    +'&emsp;<cite class="desc">'+data.Description+'</cite>'
+                + '</div>'
+
+            +'</li>'
+            $(ol).append(appendHTML);
+        }
+        function addToList(data) {
+            if (data.ParentId == null) {
+                addToNode("nestable2", data);
+            } else {
+                addToNode(data.ParentId, data);
+            }
+        }
+
+        function initCategoryList(){
+            $.ajax({
+                url: '../Category/All',
+                type: 'POST',
+                data: {
+                    'shopId': "1",
+                },
+                //contentType: 'application/json; charset=utf-8',
+                success: function (data, textStatus, xhr) {
+                    for (var i = 0; i < data.length; i++) {
+                        addToList(data[i]);                            
+                    }
+                    $('#nestable2').nestable({
+                        group: 1,
+                        handleClass: "d"
+                    });
+                    initButtons();    
+
+                },
+                error: function () {
+                }
+            });
+        }
+        $(document).ready(function () {
+            initCategoryList();            
 
             $('#nestable-menu').on('click', function (e) {
                 var target = $(e.target),
@@ -92,8 +230,13 @@
                 if (action === 'collapse-all') {
                     $('.dd').nestable('collapseAll');
                 }
-            });
+            });            
 
+            $('.add-base-button').on('click', function () {
+                console.log('add new cate');
+                document.getElementById('addForm').reset();                
+                $('#categoryModal').modal("show");
+            });
         });
     </script>
 }

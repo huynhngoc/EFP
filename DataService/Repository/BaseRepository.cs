@@ -83,7 +83,8 @@ namespace DataService.Repository
         {
             try
             {
-                this.entites.Entry(entity).State = EntityState.Modified;                
+                this.entites.Entry(entity).State = EntityState.Modified;
+                this.entites.SaveChanges();            
                 return true;
             }
             catch

@@ -23,7 +23,7 @@ namespace DataService.Repository
                 Description=q.Description,
                 ParentId=q.ParentId                
             });
-        }
+        }        
 
         public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
         {
