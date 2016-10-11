@@ -36,5 +36,40 @@ namespace DataService.Service
             c.Description = description;
             return repository.Update(c);
         }
+
+        public bool DeleteCategory(int id)
+        {
+            Category c = repository.FindByKey(id);
+            if (c == null)
+            {
+                return false;
+            }
+            if (c.Products == null || c.Categories1 == null || c.Categories1.Count() == 0 || c.Products.Count() == 0)
+            {                
+                return repository.Delete(id); 
+            }
+            else
+            {
+                return false;
+            }            
+        }
+
+        public bool CheckDelete(int id)
+        {
+            return repository.CheckDelete(id);
+            
+        }
+
+        public int AddNewCategory(string name, string description, int? parentId, string shopId)
+        {
+            Category c = new Category
+            {
+                Name = name,
+                Description = description,
+                ParentId = parentId,
+                ShopId = shopId
+            };
+            return repository.AddNewCategory(c);
+        }
     }
 }

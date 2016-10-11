@@ -18,6 +18,6 @@ namespace DataService
         public int MasterId { get; set; }
         public string Urls { get; set; }
     
-        public virtual MasterProduct MasterProduct { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

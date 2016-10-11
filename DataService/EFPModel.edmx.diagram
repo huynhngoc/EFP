@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9df6d80736144b2893ef62203f52eb4a" Name="Diagram1">
+      <Diagram DiagramId="9df6d80736144b2893ef62203f52eb4a" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="EFPModel.AspNetRole" Width="1.5" PointX="0.75" PointY="13.75" />
         <EntityTypeShape EntityType="EFPModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="9.75" />
         <EntityTypeShape EntityType="EFPModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="7.25" />
@@ -12,10 +12,8 @@
         <EntityTypeShape EntityType="EFPModel.Category" Width="1.5" PointX="7.5" PointY="22" />
         <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="7.5" PointY="11.875" />
         <EntityTypeShape EntityType="EFPModel.Customer" Width="1.5" PointX="7.5" PointY="18.5" />
-        <EntityTypeShape EntityType="EFPModel.DetailedProduct" Width="1.5" PointX="15" PointY="19.5" />
         <EntityTypeShape EntityType="EFPModel.Entity" Width="1.5" PointX="7.5" PointY="15.375" />
         <EntityTypeShape EntityType="EFPModel.Intent" Width="1.5" PointX="5.25" PointY="4.25" />
-        <EntityTypeShape EntityType="EFPModel.MasterProduct" Width="1.5" PointX="12.75" PointY="17.5" />
         <EntityTypeShape EntityType="EFPModel.OrderDetail" Width="1.5" PointX="17.25" PointY="20.125" />
         <EntityTypeShape EntityType="EFPModel.Order" Width="1.5" PointX="9.75" PointY="19.625" />
         <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="15" PointY="16.875" />
@@ -27,21 +25,24 @@
         <AssociationConnector Association="EFPModel.FK_Shops_AspNetUsers" />
         <AssociationConnector Association="EFPModel.FK_Categories_Categories" />
         <AssociationConnector Association="EFPModel.FK_Categories_Shops" />
-        <AssociationConnector Association="EFPModel.FK_MasterProducts_Categories" />
         <AssociationConnector Association="EFPModel.FK_Comments_Intents" />
         <AssociationConnector Association="EFPModel.FK_Comments_Shops" />
         <AssociationConnector Association="EFPModel.FK_Customers_Shops" />
         <AssociationConnector Association="EFPModel.FK_Orders_Customers" />
-        <AssociationConnector Association="EFPModel.FK_DetailedProducts_MasterProducts" />
-        <AssociationConnector Association="EFPModel.FK_OrderDetails_DetailedProducts" />
         <AssociationConnector Association="EFPModel.FK_Entities_Shops" />
         <AssociationConnector Association="EFPModel.FK_Responses_Intents" />
-        <AssociationConnector Association="EFPModel.FK_MasterProducts_Shops" />
-        <AssociationConnector Association="EFPModel.FK_ProductPictures_MasterProducts" />
         <AssociationConnector Association="EFPModel.FK_OrderDetails_Orders" />
         <AssociationConnector Association="EFPModel.FK_Orders_Shops" />
         <AssociationConnector Association="EFPModel.FK_Responses_Shops" />
         <AssociationConnector Association="EFPModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="EFPModel.Product" Width="1.5" PointX="12.75" PointY="13.5" />
+        <EntityTypeShape EntityType="EFPModel.TemplateProduct" Width="1.5" PointX="7.5" PointY="7.75" />
+        <AssociationConnector Association="EFPModel.FK_MasterProducts_Categories" />
+        <AssociationConnector Association="EFPModel.FK_OrderDetails_MasterProducts" />
+        <AssociationConnector Association="EFPModel.FK_ProductPictures_MasterProducts" />
+        <AssociationConnector Association="EFPModel.FK_MasterProducts_Shops" />
+        <AssociationConnector Association="EFPModel.FK_MasterProducts_TemplateProduct" />
+        <AssociationConnector Association="EFPModel.FK_TemplateProduct_Shops" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -9,31 +9,31 @@ using DataService.ViewModel;
 
 namespace DataService.Service
 {
-    public class MasterProductService
+    public class ProductService
     {
-        MasterProductRepository repository = new MasterProductRepository();
-        public MasterProductService()
+        ProductRepository repository = new ProductRepository();
+        public ProductService()
         {                        
         }
 
         //public List<MasterProduct> GetAllMasterProductByShopId(string shopId)
         //{
-        //    return repository.GetMasterProductByShopId(shopId).ToList();
+        //    return repository.GetProductByShopId(shopId).ToList();
         //}
 
-        public IQueryable<MasterProduct> GetAllMasterProductByShopId(string shopId)
+        public IQueryable<Product> GetAllMasterProductByShopId(string shopId)
         {
-            return repository.GetMasterProductByShopId(shopId);
+            return repository.GetProductByShopId(shopId);
         }
 
-        public List<MasterProduct> GetMasterProductByCategory(int cateId, string shopId)
+        public List<Product> GetProductByCategory(int cateId, string shopId)
         {
-            return repository.GetMasterProductByCategory(cateId, shopId).ToList();
+            return repository.GetProductByCategory(cateId, shopId).ToList();
         }
 
-        //public async Task<> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        //public async Task<> GetProduct(JQueryDataTableParamModel param, string shopId)
         //{
-        //    var masterProducts = repository.GetMasterProductByShopId(shopId);
+        //    var masterProducts = repository.GetProductByShopId(shopId);
         //    var count = param.iDisplayStart + 1;
         //    try
         //    {
@@ -68,9 +68,9 @@ namespace DataService.Service
 
         //}
 
-        public IQueryable<MasterProductViewModel> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId)
         {
-            var rs = repository.GetMasterProduct(param, shopId);            
+            var rs = repository.GetProduct(param, shopId);            
             return rs;
         }
     }

@@ -5,6 +5,7 @@
 }
 @section CustomCSS {
     @Styles.Render("~/Toastr-style")
+    @Styles.Render("~/SweetAlert-CSS")
     <style>
         .dd-handle span.pull-right {
             margin-top: -3px;
@@ -12,7 +13,7 @@
     </style>
 }
 <div class="ibox-content">
-    <div id="nestable-menu">
+    <div class="nestable-menu">
         <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Expand All</button>
         <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Collapse All</button>
         <button type="button" class="btn btn-primary pull-right add-base-button">Thêm</button>
@@ -22,6 +23,12 @@
         <ol class="dd-list">
         </ol>
     </div>
+
+    <div class="nestable-menu">
+        <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Expand All</button>
+        <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Collapse All</button>
+        <button type="button" class="btn btn-primary pull-right add-base-button">Thêm</button>
+    </div>    
 </div>
 
 <!--modal -->
@@ -35,10 +42,11 @@
             <div class="modal-body">
                 <div class="panel-body">
                     <form id="addForm">
+                        <input type="hidden" name="parentId" />
                         <fieldset class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Tên:</label>
-                                <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
+                                <div class="col-sm-10"><input required type="text" name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Mô tả:</label>
@@ -51,7 +59,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-primary">Lưu</button>
+                <button type="button" onclick="addCate()" class="btn btn-primary">Lưu</button>
             </div>
         </div>
     </div>
@@ -71,7 +79,7 @@
                             <input type="hidden" name="id" />
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Tên:</label>
-                                <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
+                                <div class="col-sm-10"><input type="text" required name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Mô tả:</label>
@@ -92,10 +100,72 @@
 
 @section CustomJS {
     @Scripts.Render("~/Nestable-JS")
+    @Scripts.Render("~/SweetAlert-JS")
     <script>
+        /*public param*/
+        var initNestableFinished = false;
+        function addCate() {
+            var form = $('#categoryModal form');
+            var id = $(form).find("input[name='parentId']").val();
+            var name = $(form).find("input[name='name']").val();
+            var desc = $(form).find("textarea[name='description']").val();
+            var parentId = "";
+            if (isNaN(id) == false) {
+                parentId = id;
+            } else {
+                id = "nestable2"
+            }
+            $.ajax({
+                url: '../Category/Add',
+                type: 'POST',
+                data: {                    
+                    'name': name,
+                    'description': desc,
+                    'parentId': id
+                },
+                //contentType: 'application/json; charset=utf-8',
+                success: function (data, textStatus, xhr) {
+                    console.log(data);
+                    if (data != 0) {
+                        addToNode(id, {
+                            Id: data,
+                            Name: name,
+                            Description: desc
+                        });
+                        initButtons();
+                        $("#categoryModal").modal("hide");
+                        swal({
+                            title: "Thành công",
+                            animation: "slide-from-top",
+                            //text: "I will close in 2 seconds.",
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        swal({
+                            title: "Cảnh báo",
+                            animation: "slide-from-top",
+                            text: "Bạn không thêm được loại sản phẩm",
+                            type: "warning",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }                        
+                    
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+        }
 
-        function saveChangeCate() {
+        function saveChangeCate() {            
             var form = $('#categoryEditModal form');
+            //$(form).validate();
+            //if (!$(form).valid()) {
+            //    return;
+            //}
             var id = $(form).find("input[name='id']").val();
             var name = $(form).find("input[name='name']").val();
             var desc = $(form).find("textarea[name='description']").val();
@@ -109,11 +179,21 @@
                 },
                 //contentType: 'application/json; charset=utf-8',
                 success: function (data, textStatus, xhr) {
-                    alert(data);
-
+                    console.log(data);
+                    $("#" + id).find("span.name").text(name);
+                    $("#" + id).find("cite.desc").text(desc);
+                    $("#categoryEditModal").modal("hide");
+                    swal({
+                        title: "Thành công",
+                        animation: "slide-from-top",
+                        //text: "I will close in 2 seconds.",
+                        type: "success",
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
                 },
                 error: function () {
-                    alert("error");
+                    console.log("error");
                 }
             });
         }
@@ -125,17 +205,29 @@
             $(form).find("textarea[name='description']").val(desc);
         }
 
+        function addForm(id, name, desc) {
+            var form = $('#categoryModal form');
+            console.log("pareent id "+id);
+            $(form).find("input[name='parentId']").val(id);
+            //$(form).find("input[name='name']").val(name);
+            //$(form).find("textarea[name='description']").val(desc);
+        }
+
 
         function initButtons() {
             $('.add-button').on('click', function () {
                 console.log('add new cate');
                 document.getElementById('addForm').reset();
-                var id = $(this).closest('div').id;
+                var id = $(this).closest('div').attr("id");
+                console.log(id);                
+                var name = $(this).closest('div').find(".name").text();
+                var desc = $(this).closest('div').find(".desc").text();
+                addForm(id, name, desc);
                 $('#categoryModal').modal("show");
             });
 
             $('.edit-button').on('click', function () {
-                console.log('add new cate');
+                console.log('edit cate');
                 document.getElementById('addForm').reset();                
                 var id = $(this).closest('div').attr("id");
                 console.log(id);
@@ -146,10 +238,68 @@
             });
 
             $('.delete-button').on('click', function () {
-                console.log('add new cate');
-                document.getElementById('addForm').reset();
-                var id = $(this).closest('div').id;
-                $('#categoryModal').modal("show");
+                console.log('delete new cate');                
+                var id = $(this).closest('div').attr("id");
+                $.ajax({
+                    url: '../Category/CheckDelete',
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    //contentType: 'application/json; charset=utf-8',
+                    success: function (data, textStatus, xhr) {
+                        if (data == false) {
+                            swal("Cảnh báo!", "Có sản phẩm thuộc loại này. Bạn không thể xóa được", "warning")
+                        }
+                        else {
+                            swal({
+                                title: "Xác nhận"
+                    , text: "Bạn có chắc chắn muốn xóa"
+                    , type: "warning"
+                    , showCancelButton: true
+                    , closeOnConfirm: true
+                    , showLoaderOnConfirm: true,
+                            }, function () {
+                                $.ajax({
+                                    url: '../Category/Delete',
+                                    type: 'POST',
+                                    data: {
+                                        'id': id
+                                    },
+                                    //contentType: 'application/json; charset=utf-8',
+                                    success: function (data, textStatus, xhr) {
+                                        if (data == false) {
+                                            swal("Cảnh báo!", "Có sản phẩm thuộc loại này. Bạn không thể xóa được", "warning")
+                                        }                                        
+
+                                        swal({
+                                            title: "Xóa thành công!"
+                                            //, text: "I will close in 2 seconds."
+                                            , timer: 2000
+                                            , type: "success"
+                                            , showConfirmButton: false
+                                        });
+                                        $("#" + id).closest("li").remove();
+                                    },
+                                    error: function () {
+                                        console.log("error");
+                                        swal({
+                                            title: "Không thể xóa được!"
+                                            //, text: "I will close in 2 seconds."
+                                            , timer: 2000
+                                            , type: "warning"
+                                            , showConfirmButton: false
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+                
             });
 
         }
@@ -170,21 +320,29 @@
                     console.log("if 2");
                 }                
             }
+            var btn = $(nodeDiv).parent('li').children('button');
+            console.log($(btn));
+            console.log(initNestableFinished);
+            if (node != "nestable2" && initNestableFinished == true &&
+                (btn == null || btn == 'undefined' || btn.length ==0)) {                
+                $($(nodeDiv).parent('li')).prepend(
+                    '<button data-action="collapse" type="button" style="display: block;">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>'
+                    );
+            }
             console.log(ol);
-            var appendHTML = '<li class="dd-item " >'
-                + '<div class="dd-handle"'+'id="'+data.Id+'">'
-                    + '<span class="pull-right ">'
-                      + '<button class="btn btn-success btn-sm edit-button"><i class="fa fa-edit"></i></button>'
-                        + '<button class="btn btn-danger btn-sm delete-button"><i class="fa fa-trash"></i></button> ';
-            if (node == "nestable2") {
-                appendHTML = appendHTML + '<button class="btn btn-primary btn-sm add-button">Thêm</button>';
+            var appendHTML = '<li class="dd-item " >'                                    
+                            + '<div class="dd-handle"' + 'id="' + data.Id + '">'
+                            + '<span class="pull-right ">'
+                                + '<button class="btn btn-success btn-sm edit-button"><i class="fa fa-edit"></i></button>'
+                                + '<button class="btn btn-danger btn-sm delete-button"><i class="fa fa-trash"></i></button> ';
+            if (node == "nestable2" ) {
+                appendHTML = appendHTML + '<button class="btn btn-primary btn-sm add-button">Thêm</button>';                
             }
             appendHTML = appendHTML + '</span>'
-                    + '<span class="name">'+data.Name+'</span>'
-                    +'&emsp;<cite class="desc">'+data.Description+'</cite>'
-                + '</div>'
-
-            +'</li>'
+                            + '<span class="name">'+data.Name+'</span>'
+                            +'&emsp;<cite class="desc">'+data.Description+'</cite>'
+                        + '</div>'
+                    +'</li>'
             $(ol).append(appendHTML);
         }
         function addToList(data) {
@@ -212,7 +370,7 @@
                         handleClass: "d"
                     });
                     initButtons();    
-
+                    initNestableFinished = true;
                 },
                 error: function () {
                 }
@@ -221,7 +379,7 @@
         $(document).ready(function () {
             initCategoryList();            
 
-            $('#nestable-menu').on('click', function (e) {
+            $('.nestable-menu').on('click', function (e) {
                 var target = $(e.target),
                         action = target.data('action');
                 if (action === 'expand-all') {
@@ -234,8 +392,16 @@
 
             $('.add-base-button').on('click', function () {
                 console.log('add new cate');
-                document.getElementById('addForm').reset();                
+                document.getElementById('addForm').reset();
+                addForm("nestable2", "", "");
                 $('#categoryModal').modal("show");
+            })
+
+            $("form").on("submit", function (event, target) {
+                event.preventDefault();
+                $(this).validate();//find("input[name='name']").val();
+                
+                return false;
             });
         });
     </script>

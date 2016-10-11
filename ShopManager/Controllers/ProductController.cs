@@ -22,10 +22,10 @@ namespace ShopManager.Controllers
 
         public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId)
         {
-            MasterProductService service = new MasterProductService();                        
+            ProductService service = new ProductService();                        
             try
             {
-                var masterProducts = service.GetMasterProduct(param, shopId);
+                var masterProducts = service.GetProduct(param, shopId);
                 Debug.WriteLine("----x " + masterProducts.Count());                
                 
                 var totalRecords = masterProducts.Count();
@@ -47,46 +47,46 @@ namespace ShopManager.Controllers
                 return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
             }            
         }
-        public JsonResult GetDetailedProduct(JQueryDataTableParamModel param, int masterId)
-        {
-            //string shopId = "1";
-            DetailedProductService service = new DetailedProductService();                        
-            try
-            {
-                var detailedProducts = service.GetDetailedProduct(param, masterId);
-                Debug.WriteLine("----x " + detailedProducts.Count());                
+        //public JsonResult GetDetailedProduct(JQueryDataTableParamModel param, int masterId)
+        //{
+        //    //string shopId = "1";
+        //    DetailedProductService service = new DetailedProductService();                        
+        //    try
+        //    {
+        //        var detailedProducts = service.GetDetailedProduct(param, masterId);
+        //        Debug.WriteLine("----x " + detailedProducts.Count());                
                 
-                var totalRecords = detailedProducts.Count();
-                var data = detailedProducts.Skip(param.iDisplayStart)
-                    .Take(param.iDisplayLength);
-                var displayRecords = data.Count();
-                Debug.WriteLine("-----l ");
-                return Json(new
-                {
-                    sEcho = param.sEcho,
-                    iTotalRecords = totalRecords,
-                    iTotalDisplayRecords = displayRecords,
-                    aaData = data
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
-                //var data = new string[0];
-                //Debug.WriteLine(e.Message);
-                //return Json(new
-                //{
-                //    sEcho = param.sEcho,
-                //    iTotalRecords = 0,
-                //    iTotalDisplayRecords = 0,
-                //    aaData = data
-                //}, JsonRequestBehavior.AllowGet);
-            }
+        //        var totalRecords = detailedProducts.Count();
+        //        var data = detailedProducts.Skip(param.iDisplayStart)
+        //            .Take(param.iDisplayLength);
+        //        var displayRecords = data.Count();
+        //        Debug.WriteLine("-----l ");
+        //        return Json(new
+        //        {
+        //            sEcho = param.sEcho,
+        //            iTotalRecords = totalRecords,
+        //            iTotalDisplayRecords = displayRecords,
+        //            aaData = data
+        //        }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        Debug.WriteLine(e.Message);
+        //        return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+        //        //var data = new string[0];
+        //        //Debug.WriteLine(e.Message);
+        //        //return Json(new
+        //        //{
+        //        //    sEcho = param.sEcho,
+        //        //    iTotalRecords = 0,
+        //        //    iTotalDisplayRecords = 0,
+        //        //    aaData = data
+        //        //}, JsonRequestBehavior.AllowGet);
+        //    }
 
-        }
+        //}
 
-        //public ActionResult GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        //public ActionResult GetProduct(JQueryDataTableParamModel param, string shopId)
         //{
         //    MasterProductService service = new MasterProductService();
         //    var masterProducts = service.GetAllMasterProductByShopId(shopId);

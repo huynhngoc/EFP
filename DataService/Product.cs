@@ -12,19 +12,19 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class DetailedProduct
+    public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DetailedProduct()
+        public Product()
         {
             this.OrderDetails = new HashSet<OrderDetail>();
+            this.ProductPictures = new HashSet<ProductPicture>();
         }
     
         public int Id { get; set; }
-        public Nullable<decimal> Price { get; set; }
-        public Nullable<decimal> PromotionPrice { get; set; }
-        public bool Status { get; set; }
-        public int MasterId { get; set; }
+        public string ShopId { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> CategoryId { get; set; }
         public string Attr1 { get; set; }
         public string Attr2 { get; set; }
         public string Attr3 { get; set; }
@@ -32,9 +32,21 @@ namespace DataService
         public string Attr5 { get; set; }
         public string Attr6 { get; set; }
         public string Attr7 { get; set; }
+        public string Description { get; set; }
+        public System.DateTime DateCreated { get; set; }
+        public System.DateTime DateModified { get; set; }
+        public bool Status { get; set; }
+        public Nullable<bool> IsInStock { get; set; }
+        public decimal Price { get; set; }
+        public Nullable<decimal> PromotionPrice { get; set; }
+        public Nullable<int> TemplateId { get; set; }
     
-        public virtual MasterProduct MasterProduct { get; set; }
+        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductPicture> ProductPictures { get; set; }
+        public virtual Shop Shop { get; set; }
+        public virtual TemplateProduct TemplateProduct { get; set; }
     }
 }

@@ -58,6 +58,7 @@ namespace DataService.Repository
             try
             {
                 dbSet.Add(entity);
+                entites.SaveChanges();
                 return true;
             }
             catch
@@ -70,7 +71,8 @@ namespace DataService.Repository
         {
             try
             {
-                dbSet.Remove(FindByKey(key));
+                dbSet.Remove(FindByKey(key));                
+                entites.SaveChanges();
                 return true;
             }
             catch

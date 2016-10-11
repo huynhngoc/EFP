@@ -23,7 +23,26 @@ namespace DataService.Repository
                 Description=q.Description,
                 ParentId=q.ParentId                
             });
-        }        
+        }      
+        
+        public bool CheckDelete(int id)
+        {
+            try
+            {
+                entites.Configuration.ProxyCreationEnabled = true;
+                var c = dbSet.Where(q => q.Id == id).Single();
+                if (c == null|| (c.Categories1 !=null && c.Categories1.Count() != 0) || (c.Products != null && c.Products.Count() != 0))
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
 
         public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
         {
@@ -80,6 +99,20 @@ namespace DataService.Repository
             }
 
             return children;
+        }
+
+        public int AddNewCategory(Category c)
+        {
+            try
+            {
+                var cate = dbSet.Add(c);
+                entites.SaveChanges();
+                return cate.Id;
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

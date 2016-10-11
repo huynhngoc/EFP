@@ -128,7 +128,12 @@ namespace ShopManager
             //nestable js
             bundles.Add(new ScriptBundle("~/Nestable-JS").Include(
                 "~/Content/js/plugins/nestable/jquery.nestable.js"));
-
+            //sweetalert CSS
+            bundles.Add(new StyleBundle("~/SweetAlert-CSS").Include(
+                "~/Content/css/plugins/sweetalert/sweetalert.css"));
+            //sweetalert JS
+            bundles.Add(new ScriptBundle("~/SweetAlert-JS").Include(
+                "~/Content/js/plugins/sweetalert/sweetalert.min.js"));
         }
 
     }

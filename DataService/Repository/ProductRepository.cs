@@ -9,14 +9,14 @@ using DataService.JqueryDataTable;
 
 namespace DataService.Repository
 {
-    public class MasterProductRepository: BaseRepository<MasterProduct>
+    public class ProductRepository: BaseRepository<Product>
     {        
-        public IQueryable<MasterProduct> GetMasterProductByShopId(string shopId)
+        public IQueryable<Product> GetProductByShopId(string shopId)
         {
             return dbSet.Where(q => q.ShopId == shopId);
         }
 
-        public IEnumerable<MasterProduct> GetMasterProductByCategory(int cateId, string shopId)
+        public IEnumerable<Product> GetProductByCategory(int cateId, string shopId)
         {
             IEnumerable<int> query = from c in entites.Categories where c.ParentId == cateId select c.Id;
             Debug.WriteLine(query.ToArray());
@@ -25,7 +25,7 @@ namespace DataService.Repository
             return data;        
         }
 
-        public IQueryable<MasterProductViewModel> GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId)
         {
             var count = param.iDisplayStart + 1;
             var rs = dbSet.Where(q => q.ShopId == shopId);            
@@ -36,7 +36,7 @@ namespace DataService.Repository
                 .OrderBy(q => q.Name);
             Debug.WriteLine("---------rs " + rs.Count());
             //if (rs.Count() == 0) return null;
-            var data = rs.Select(q => new MasterProductViewModel()
+            var data = rs.Select(q => new ProductViewModel()
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -44,14 +44,14 @@ namespace DataService.Repository
                                              , q.Category.Name//.ToString() 
                 }),
                 Description = q.Description,
-                Attr = (new List<string>  {q.Attr1//.ToString()
-                                , q.Attr2//.ToString()
-                                , q.Attr3//.ToString()
-                                , q.Attr4//.ToString()
-                                , q.Attr5//.ToString()
-                                , q.Attr6//.ToString()
-                                , q.Attr7//.ToString() 
-                }),
+                //Attr = (new List<string>  {q.Attr1//.ToString()
+                //                , q.Attr2//.ToString()
+                //                , q.Attr3//.ToString()
+                //                , q.Attr4//.ToString()
+                //                , q.Attr5//.ToString()
+                //                , q.Attr6//.ToString()
+                //                , q.Attr7//.ToString() 
+                //}),
                 Status = q.Status,
                 DateCreated = q.DateCreated,
                 DateModified = q.DateModified,
