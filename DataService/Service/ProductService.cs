@@ -68,9 +68,9 @@ namespace DataService.Service
 
         //}
 
-        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId)
+        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
-            var rs = repository.GetProduct(param, shopId);            
+            var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);            
             return rs;
         }
     }

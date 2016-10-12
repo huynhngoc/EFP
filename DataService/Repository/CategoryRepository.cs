@@ -24,7 +24,26 @@ namespace DataService.Repository
                 ParentId=q.ParentId                
             });
         }      
-        
+
+        public IEnumerable<CategoryViewModel> GetParentCategory(string shopId)
+        {
+            return dbSet.Where(q => q.ParentId == null).Select(q => new CategoryViewModel()
+            {
+                Id = q.Id, Name = q.Name, Description = q.Description, ParentId = q.ParentId
+            });
+        }
+
+        public IEnumerable<CategoryViewModel> GetCategoryByParent(int parentId)
+        {
+            return dbSet.Where(q => q.ParentId == parentId).Select(q => new CategoryViewModel()
+            {
+                Id = q.Id,
+                Name = q.Name,
+                Description = q.Description,
+                ParentId = q.ParentId
+            });
+        }
+
         public bool CheckDelete(int id)
         {
             try

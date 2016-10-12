@@ -19,14 +19,24 @@ namespace DataService.Service
             return repository.GetCategoryByShopId(shopId).ToList();
         }
 
-        public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
-        {
-            return repository.GetCategoryAndParentByShopId(shopId);
-        }
+        //public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
+        //{
+        //    return repository.GetCategoryAndParentByShopId(shopId);
+        //}
 
         public List<CategoryViewModel> GetAllCategory(string shopId)
         {
             return repository.GetCategory(shopId).ToList();
+        }
+
+        public List<CategoryViewModel> GetParentCategory(string shopId)
+        {
+            return repository.GetParentCategory(shopId).ToList();
+        }
+
+        public List<CategoryViewModel> GetCategoryByParent(int parentId)
+        {
+            return repository.GetCategoryByParent(parentId).ToList();
         }
 
         public bool EditCategory(int id, string name, string description)

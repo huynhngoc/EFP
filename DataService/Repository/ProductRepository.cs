@@ -25,15 +25,94 @@ namespace DataService.Repository
             return data;        
         }
 
-        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId)
+        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
             var count = param.iDisplayStart + 1;
             var rs = dbSet.Where(q => q.ShopId == shopId);            
             var search = param.sSearch;
             rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
                                 (!string.IsNullOrEmpty(param.sSearch)
-                                && q.Name.ToLower().Contains(param.sSearch.ToLower())))
-                .OrderBy(q => q.Name);
+                                && (
+                                    (sName && q.Name.ToLower().Contains(param.sSearch.ToLower())) ||
+                                    (sCate && q.Category.Name.ToLower().Contains(param.sSearch.ToLower())) ||
+                                    (sDesc && q.Description.ToLower().Contains(param.sSearch.ToLower()))
+                                )
+                                )
+                         );
+            // .OrderBy(q => q.Name);
+            switch (param.iSortCol_0)
+            {
+                case 0:
+                case 2: if (param.sSortDir_0 == "asc")
+                        { 
+                            rs = rs.OrderBy(q => q.Name);
+                        } else
+                        {
+                            rs = rs.OrderByDescending(q => q.Name);
+                        }
+                    break;
+                case 3:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.Description);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.Description);
+                    }
+                    break;
+                case 4:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.Category.Name);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.Category.Name);
+                    }
+                    break;
+                case 5:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.Price);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.Price);
+                    }
+                    break;
+                case 6:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.PromotionPrice);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.PromotionPrice);
+                    }
+                    break;
+                case 7:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.Status);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.Status);
+                    }
+                    break;
+                case 8:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.IsInStock);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.IsInStock);
+                    }
+                    break;
+                default: rs = rs.OrderBy(q => q.Name);break;
+            }
             Debug.WriteLine("---------rs " + rs.Count());
             //if (rs.Count() == 0) return null;
             var data = rs.Select(q => new ProductViewModel()
@@ -53,6 +132,7 @@ namespace DataService.Repository
                 //                , q.Attr7//.ToString() 
                 //}),
                 Status = q.Status,
+                IsInStock = q.IsInStock,
                 DateCreated = q.DateCreated,
                 DateModified = q.DateModified,
                 Price = (decimal)(q.Price),

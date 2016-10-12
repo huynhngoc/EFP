@@ -20,12 +20,12 @@ namespace ShopManager.Controllers
             return View();
         }        
 
-        public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId)
+        public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc )
         {
             ProductService service = new ProductService();                        
             try
             {
-                var masterProducts = service.GetProduct(param, shopId);
+                var masterProducts = service.GetProduct(param, shopId, sName, sCate, sDesc);
                 Debug.WriteLine("----x " + masterProducts.Count());                
                 
                 var totalRecords = masterProducts.Count();
@@ -37,7 +37,7 @@ namespace ShopManager.Controllers
                 {
                     sEcho = param.sEcho,
                     iTotalRecords = totalRecords,
-                    iTotalDisplayRecords = displayRecords,
+                    iTotalDisplayRecords = totalRecords,//displayRecords,
                     aaData = data
                 }, JsonRequestBehavior.AllowGet);
             }

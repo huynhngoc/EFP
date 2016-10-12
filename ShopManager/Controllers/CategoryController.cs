@@ -15,6 +15,18 @@ namespace ShopManager.Controllers
             return View();
         }
 
+        public JsonResult Parent()
+        {
+            CategoryService service = new CategoryService();
+            return Json(service.GetParentCategory("1"), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Children(int parentId)
+        {
+            CategoryService service = new CategoryService();
+            return Json(service.GetCategoryByParent(parentId), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult All(string shopId)
         {
             CategoryService service = new CategoryService();

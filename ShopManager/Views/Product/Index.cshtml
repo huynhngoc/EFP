@@ -51,7 +51,10 @@
                                     <th>Tên</th>
                                     <th>Phân loại</th>
                                     <th>Mô tả</th>
+                                    <th>Giá</th>
+                                    <th>Giá khuyến mãi</th>
                                     <th>Trạng thái</th>
+                                    <th>Còn hàng</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -105,15 +108,7 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Mô tả:</label>
                                                     <div class="col-sm-10">
-                                                        <div class="summernote" id="#summernote">
-                                                            <h3>Giày viết ở đây</h3>
-                                                            dummy text of the printing and typesetting industry. <strong>Lorem Ipsum has been the industry's</strong> standard dummy text ever since the 1500s,
-                                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-                                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-                                                            typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with
-                                                            <br />
-
-                                                        </div>
+                                                        <textarea name="desc" class="form-control"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -130,16 +125,14 @@
                                     </div>
                                     <div id="tab-2" class="tab-pane">
                                         <div class="panel-body">
+                                            <button class="btn btn-success choose-template">Chọn 1 mẫu các đặc điểm</button>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Đặc điểm:</label>
                                                 <div class="col-sm-10 input-group">
-                                                    <input type="text" class="form-control" placeholder="màu, size ..." width="20px">
+                                                    <input type="text" class="form-control" readonly>
                                                     <span class="input-group-btn" style="width:0px"></span>
-                                                    <input type="text" class="form-control"
-                                                           placeholder="(màu) đỏ, xanh ..." id="tokenfield" />
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-secondary" type="button"><span class="fa fa-trash-o"></span></button>
-                                                    </span>
+                                                    <input type="text" name="attr" class="form-control"
+                                                           placeholder="(màu) đỏ, xanh ..." />                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -156,7 +149,7 @@
                                                     <div class="col-md-6">
                                                         <form id="dropzone" class="dropzone" action="#">
                                                             <div class="dropzone-previews"></div>
-                                                            @*<button type="submit" class="btn btn-primary pull-right">Submit this form!</button>*@
+                                                            <button type="submit" class="btn btn-primary pull-right">Submit this form!</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -178,7 +171,7 @@
         <!-- end modal -->
         <!-- modal -->
         <div class="modal inmodal" id="viewDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
+            @*<div class="modal-dialog">
                 <div class="modal-content animated bounceInRight">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -216,7 +209,7 @@
                         <button type="button" class="btn btn-primary">Lưu</button>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
         <!-- end modal -->
 
@@ -270,6 +263,13 @@
                 , "sAjaxSource": "../Product/GetMasterProduct"
                 , "fnServerParams": function (aoData) {
                     aoData.push({ "name": "shopId", "value": "1" });
+                    sName = $("#sName").hasClass("active");                    
+                    if ($("#sName").length == 0) sName = true;
+                    sCate = $("#sCate").hasClass("active");
+                    sDesc = $("#sDesc").hasClass("active");
+                    aoData.push({ "name": "sName", "value": sName });
+                    aoData.push({ "name": "sCate", "value": sCate });
+                    aoData.push({ "name": "sDesc", "value": sDesc });
                 }
                 , "fnInitComplete": function (oSettings, json) {
                     $(".product-master").removeAttr("style");
@@ -288,17 +288,16 @@
                           }
                         , { "bVisible": false, "aTargets": [0], "mData": "Id" }
                         , { "aTargets": [2], "mData": "Name" }
-                        , { "aTargets": [3], "mData": "Category[1]" }
+                        , { "aTargets": [3], "mData": function (source) { return source.Category[1]; } }
                         , { "aTargets": [4], "mData": "Description" }
                         , {
                             "bSortable": false
                             , "aTargets": [-1]
-                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button><button class="btn btn-info view-detail" title="Xem nhanh" type="button"><i class="fa fa-arrows-v"></i></button></div>'
+                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
                             , "mData": "null"
                         }
                         , {
-                            "mData": function (source) {
-                                //console.log(source);
+                            "mData": function (source) {                                
                                 var status = source.Status;
                                 if (status == true) {
                                     return '<span class="label label-primary">Bình thường</span>';
@@ -306,11 +305,31 @@
                                     return '<span class="label label-danger">Ngưng bán</span>';
                                 }
                             }
+                            , "aTargets": [7]
+                        }
+                        , {
+                            "mData": function (source) {
+                                //console.log(source);
+                                var status = source.IsInStock;
+                                if (status == true) {
+                                    return '<span class="label label-primary">Còn hàng</span>';
+                                } else {
+                                    return '<span class="label label-danger">Hết hàng</span>';
+                                }
+                            }
+                               , "aTargets": [8]
+                        }
+                        , {
+                            "mData": "Price"
                             , "aTargets": [5]
+                        }
+                        , {
+                            "mData": "Promotion"
+                           , "aTargets": [6]
                         }
                 ]
                 , "oLanguage": languageConfig
-                , "iDisplayLength": 25
+                , "iDisplayLength": 10
                 //, "aLengthMenu": [5, 10, 25]
                 , "bLengthChange": false
                 , 'sDom': 'l<"toolbar"f>rtip'//'<"H"lf"toolbar"r>t<"F"ip>'//'<"toolbar">lTfgitp' //frtip'//'<"html5buttons"B>lTfgitp'                
@@ -330,79 +349,79 @@
                         +'</div>');
             $("div.toolbar .dataTables_filter").addClass("col-sm-8 col-lg-8");
             $("div.toolbar .dataTables_filter").append('<div data-toggle="buttons-checkbox" class="btn-group">'
-                            + '<button class="btn btn-primary btn-outline active" type="button" >Tên</button>'
-                            + '<button class="btn btn-primary btn-outline" type="button" aria-pressed="false">Phân loại</button>'
-                            + '<button class="btn btn-primary btn-outline" type="button" aria-pressed="false">Mô tả</button>'
+                            + '<button id="sName" class="btn btn-primary btn-outline active" type="button" >Tên</button>'
+                            + '<button id="sCate" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Phân loại</button>'
+                            + '<button id="sDesc" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Mô tả</button>'
                         +'</div>');
             table = productTable;            
             /* setting show detailed product*/            
-            $('.product-master').on('click', '.view-detail', function (evt) {
-                //var id = productTable.DataTable().row($(this)).data()[4];
-                var clickedRow = $(this).closest("tr");
-                var id = productTable.fnGetData($(clickedRow)).Id;
-                console.log(id);
-                //$('.product-detail').hide();
-                //$(id).show();
-                //$(currentChildren).remove();
-                $('.product-info').remove();
-                if (productTable.fnIsOpen(clickedRow)) {
-                    productTable.fnClose(clickedRow);
-                } else {
-                    productTable.fnOpen(clickedRow, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"><thead><tr><th></th><th></th><th>Đặc điểm</th><th>Giá riêng</th><th>Giá khuyến mãi</th><th>Tình trạng</th><th>#</th></tr></thead></table></div>'
-                                    , "product-info");
-                    currentChildren = $(".product-detail").dataTable({
-                        "bProcessing": true
-                    , "bServerSide": true
-                    , "sAjaxSource": "http://localhost:26638/Product/GetDetailedProduct"
-                    , "fnServerParams": function (aoData) {                        
-                        aoData.push({ "name": "masterId", "value": id });
-                    }
-                    , "aoColumnDefs": [                        
-                              { "bVisible": false, "aTargets": [0], "mData": "Id" }
-                            , {
-                                "bSortable": false
-                                , "aTargets": [1]
-                                , "mData": "null"
-                                , "sDefaultContent": "<input type='checkbox'>"                                
-                              }
-                            , {
-                                "aTargets": [2]
-                                , "mData": "Properties"
-                            }
-                            , { "aTargets": [3], "mData": "Price"                                
-                            }
-                            , {
-                                "aTargets": [4], "mData": "PromotionPrice"                                
-                              }
-                            , {
-                                "mData": function (source) {
-                                    //console.log(source);
-                                    var status = source.Status;
-                                    if (status == true) {
-                                        return '<span class="label label-primary">Còn hàng</span>';
-                                    } else {
-                                        return '<span class="label label-danger">Hết hàng</span>';
-                                    }
-                                }
-                                , "aTargets": [5]                                
-                            }
-                            , {
-                                "bSortable": false
-                                , "aTargets": [-1]
-                                , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewDetailModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
-                                , "mData": "null"
-                            }                            
-                    ]
-                    , "oLanguage": languageConfig
-                    , "iDisplayLength": 5                                    
-                    , "bLengthChange": false
+            //$('.product-master').on('click', '.view-detail', function (evt) {
+            //    var id = productTable.DataTable().row($(this)).data()[4];
+            //    var clickedRow = $(this).closest("tr");
+            //    var id = productTable.fnGetData($(clickedRow)).Id;
+            //    console.log(id);
+            //    $('.product-detail').hide();
+            //    $(id).show();
+            //    $(currentChildren).remove();
+            //    $('.product-info').remove();
+            //    if (productTable.fnIsOpen(clickedRow)) {
+            //        productTable.fnClose(clickedRow);
+            //    } else {
+            //        productTable.fnOpen(clickedRow, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"><thead><tr><th></th><th></th><th>Đặc điểm</th><th>Giá riêng</th><th>Giá khuyến mãi</th><th>Tình trạng</th><th>#</th></tr></thead></table></div>'
+            //                        , "product-info");
+            //        currentChildren = $(".product-detail").dataTable({
+            //            "bProcessing": true
+            //        , "bServerSide": true
+            //        , "sAjaxSource": "http://localhost:26638/Product/GetDetailedProduct"
+            //        , "fnServerParams": function (aoData) {                        
+            //            aoData.push({ "name": "masterId", "value": id });                        
+            //        }
+            //        , "aoColumnDefs": [                        
+            //                  { "bVisible": false, "aTargets": [0], "mData": "Id" }
+            //                , {
+            //                    "bSortable": false
+            //                    , "aTargets": [1]
+            //                    , "mData": "null"
+            //                    , "sDefaultContent": "<input type='checkbox'>"                                
+            //                  }
+            //                , {
+            //                    "aTargets": [2]
+            //                    , "mData": "Properties"
+            //                }
+            //                , { "aTargets": [3], "mData": "Price"                                
+            //                }
+            //                , {
+            //                    "aTargets": [4], "mData": "PromotionPrice"                                
+            //                  }
+            //                , {
+            //                    "mData": function (source) {
+            //                        console.log(source);
+            //                        var status = source.Status;
+            //                        if (status == true) {
+            //                            return '<span class="label label-primary">Còn hàng</span>';
+            //                        } else {
+            //                            return '<span class="label label-danger">Hết hàng</span>';
+            //                        }
+            //                    }
+            //                    , "aTargets": [5]                                
+            //                }
+            //                , {
+            //                    "bSortable": false
+            //                    , "aTargets": [-1]
+            //                    , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewDetailModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
+            //                    , "mData": "null"
+            //                }                            
+            //        ]
+            //        , "oLanguage": languageConfig
+            //        , "iDisplayLength": 5                                    
+            //        , "bLengthChange": false
 
-                    });
+            //        });
                     
 
                     
-                }
-            });
+            //    }
+            //});
 
             
             /* set description input */
@@ -412,7 +431,7 @@
 
 
             /*tokenfield*/
-            $('#tokenfield').tokenfield();
+            //$('#tokenfield').tokenfield();
 
             /* switcher*/
             var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
