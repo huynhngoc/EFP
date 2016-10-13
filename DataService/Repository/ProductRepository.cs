@@ -27,12 +27,13 @@ namespace DataService.Repository
 
         public ProductViewModel GetProductById(int id)
         {
+            entites.Configuration.ProxyCreationEnabled = true;
             Product p= FindByKey(id);
             return new ProductViewModel()
             {
                 Id = p.Id,
                 Name = p.Name,
-                Category = new List<string>() { p.CategoryId.ToString(), p.Category.Name},
+                Category = new List<string>() {p.Category.ParentId.ToString(), p.CategoryId.ToString(), p.Category.Name},
                 Description = p.Description,
                 DateCreated = p.DateCreated,
                 DateModified = p.DateModified,
@@ -41,13 +42,13 @@ namespace DataService.Repository
                 Price = p.Price,
                 Promotion = p.PromotionPrice,
                 TemplateId = p.TemplateId,
-                Attr = p.Attr1.ToString() + "_" +
-                p.Attr2.ToString() + "_" +
-                p.Attr3.ToString() + "_" +
-                p.Attr4.ToString() + "_" +
-                p.Attr5.ToString() + "_" +
-                p.Attr6.ToString() + "_" +
-                p.Attr7.ToString()
+                Attr = p.Attr1?.ToString() + "_" +
+                p.Attr2?.ToString() + "_" +
+                p.Attr3?.ToString() + "_" +
+                p.Attr4?.ToString() + "_" +
+                p.Attr5?.ToString() + "_" +
+                p.Attr6?.ToString() + "_" +
+                p.Attr7?.ToString()
             };
         }
 

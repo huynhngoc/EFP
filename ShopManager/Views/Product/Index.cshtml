@@ -27,6 +27,8 @@
 
     <!-- Select2-->
     @Styles.Render("~/Select2-CSS")
+    <!-- Touch Spin-->
+    @Styles.Render("~/TouchSpin-CSS")
 }
 
 
@@ -111,6 +113,14 @@
                                                     <div class="col-sm-10">
                                                         <textarea name="desc" class="form-control"></textarea>
                                                     </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Giá:</label>
+                                                    <div class="col-sm-10"><input class="price-input" name="price" placeholder="Giá" min="0" step="1000"/></div>                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Giá khuyến mãi:</label>
+                                                    <div class="col-sm-10"><input class="price-input" name="promotion" placeholder="Giá khuyến mãi" min="0" step="1000" /></div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Tình trạng:</label>
@@ -267,6 +277,8 @@
     <!-- Select2-->
     @Scripts.Render("~/Select2-JS")
 
+    <!-- touchspin--> 
+    @Scripts.Render("~/TouchSpin-JS")
     <script>
         var s;
         var table;
@@ -287,6 +299,31 @@
                         , "sInfoFiltered": " - lọc ra từ _MAX_ kết quả"
         }
 
+        function initCategory(parentId, selectVal) {
+            $(".category-select").empty();
+            $.ajax({
+                url: '../Category/Children',
+                type: 'POST',
+                data: {
+                    'parentId': parentId
+                },
+                success: function (data, textStatus, xhr) {
+                    for (var i = 0; i < data.length; i++) {
+                        $(".category-select").append("<option value='" + data[i].Id + "'>"
+                            + data[i].Name
+                            + "</option>");
+                    }
+                    if (selectVal != null) {
+                        $(".category-select").val(selectVal);
+                    }
+                },
+                error: function () {
+                    console.log("error");
+                }
+
+            });
+        }
+
         function initParentCategory() {
             $.ajax({
                 url: '../Category/Parent',
@@ -295,6 +332,8 @@
                     
                 },
                 success: function (data, textStatus, xhr) {
+                    $(".parentCategory-select").empty();
+                    $(".parentCategory-select").append("<option></option>");
                     for (var i = 0; i< data.length; i++){
                         $(".parentCategory-select").append("<option value='" + data[i].Id + "'>"
                             + data[i].Name
@@ -302,25 +341,7 @@
                     }
                     $(".parentCategory-select").on("change", function () {
                         var parentId = $(this).val();
-                        $(".category-select").empty();
-                        $.ajax({
-                            url: '../Category/Children',
-                            type: 'POST',
-                            data: {
-                                'parentId' : parentId
-                            },
-                            success: function (data, textStatus, xhr) {
-                                for (var i = 0; i < data.length; i++) {
-                                    $(".category-select").append("<option value='" + data[i].Id + "'>"
-                                        + data[i].Name
-                                        + "</option>");
-                                }
-                            },
-                            error: function () {
-                                console.log("error");
-                            }
-                            
-                        });
+                        initCategory(parentId);
                     })
                 },
                 error: function () {
@@ -354,12 +375,40 @@
 
         }
 
+        function editForm(id) {
+            $.ajax({
+                url: '../Product/GetProductById',
+                type: 'POST',
+                data: {
+                    "id": id
+                },
+                success: function (data, textStatus, xhr) {
+                    $("#viewProductModal").find('input[name="id"]').val(data.Id);
+                    $("#viewProductModal").find('input[name="name"]').val(data.Name);
+                    $("#viewProductModal").find('textarea[name="desc"]').val(data.Description);
+                    $("#viewProductModal").find('select.parentCategory-select').val(data.Category[0]);
+                    //$("#viewProductModal").find('select[name="category"]').val(data.Category[1]);
+                    initCategory(data.Category[0], data.Category[1]);
+                    $("#viewProductModal").find('input[name="status"]').attr("checked", data.Status);
+                    $("#viewProductModal").find('input[name="isInStock"]').attr("checked",data.IsInStock);
+                    $("#viewProductModal").find('input[name="price"]').val(data.Price);
+                    $("#viewProductModal").find('input[name="promotion"]').val(data.Promotion);
+
+                    $("#viewProductModal").modal("show");
+                },
+                error: function () {
+
+                }
+            })
+            
+        }
+
         function initButton() {
             $(".edit-button").on("click", function () {                
                 var clickedRow = $(this).closest("tr");
-                var id = productTable.fnGetData($(clickedRow)).Id;
-                
-                $("#viewProductModal").modal("show");
+                var id = table.fnGetData($(clickedRow)).Id;
+                console.log(id);
+                editForm(id);                
             })
         }
 
@@ -389,6 +438,9 @@
                     //productTable.DataTable({
                         
                     //});
+                }
+                , "fnDrawCallback": function (oSettings, json) {
+                    initButton();
                 }
                 , "aoColumnDefs": [
                           { "bSortable": false
@@ -446,7 +498,7 @@
                 , 'sDom': 'l<"toolbar"f>rtip'//'<"H"lf"toolbar"r>t<"F"ip>'//'<"toolbar">lTfgitp' //frtip'//'<"html5buttons"B>lTfgitp'                
             
             });            
-                       
+            initButtonAroundDataTable();
             table = productTable;
 
             initParentCategory();
@@ -520,6 +572,18 @@
             //    }
             //});
 
+
+            /* touchspin*/
+            $(".price-input").TouchSpin({
+                min: 0,
+                max: 100000000000,
+                step: 1000,                
+                boostat: 100000,
+                postfix: 'đồng',
+                verticalbuttons: true,
+                buttondown_class: 'btn btn-white',
+                buttonup_class: 'btn btn-white'
+            });
             
             /* set description input */
             $(".summernote").summernote({
@@ -546,12 +610,12 @@
                 }
             });
 
-            $("#viewProductModal").on("opened", function () {
-                /* image carousel*/
-                $('.product-images').slick({
-                    dots: true
-                });                
-            });
+            //$("#viewProductModal").on("opened", function () {
+            //    /* image carousel*/
+            //    $('.product-images').slick({
+            //        dots: true
+            //    });                
+            //});
 
             $("#detailProStatus").on("change", function(){
                 if ($("#detailProStatus").is(":checked")){
@@ -563,10 +627,10 @@
                 }
             });
 
-            ///* image carousel*/
-            $('.product-images').slick({
-                dots: true
-            });
+            /////* image carousel*/
+            //$('.product-images').slick({
+            //    dots: true
+            //});
 
             /* select2*/
             //$(".category-select").select2({

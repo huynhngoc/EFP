@@ -140,7 +140,12 @@ namespace ShopManager
             //select2 JS 
             bundles.Add(new ScriptBundle("~/Select2-JS").Include(
                 "~/Content/js/plugins/select2/select2.full.min.js"));
-
+            // touchspin Css
+            bundles.Add(new StyleBundle("~/TouchSpin-CSS").Include(
+                "~/Content/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css"));
+            //touchspin JS
+            bundles.Add(new ScriptBundle("~/TouchSpin-JS").Include(
+                "~/Content/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"));
         }
 
     }
