@@ -137,7 +137,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MasterId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Urls" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
@@ -199,6 +199,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Attr1" Type="nvarchar" MaxLength="100" />
           <Property Name="Attr2" Type="nvarchar" MaxLength="100" />
@@ -428,7 +429,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ProductPictures">
-              <PropertyRef Name="MasterId" />
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -604,7 +605,6 @@
           <EntitySet Name="Intents" EntityType="EFPModel.Intent" />
           <EntitySet Name="OrderDetails" EntityType="EFPModel.OrderDetail" />
           <EntitySet Name="Orders" EntityType="EFPModel.Order" />
-          <EntitySet Name="ProductPictures" EntityType="EFPModel.ProductPicture" />
           <EntitySet Name="Responses" EntityType="EFPModel.Respons" />
           <EntitySet Name="Shops" EntityType="EFPModel.Shop" />
           <EntitySet Name="sysdiagrams" EntityType="EFPModel.sysdiagram" />
@@ -668,6 +668,7 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="ProductPictures" EntityType="EFPModel.ProductPicture" />
           <EntitySet Name="Products" EntityType="EFPModel.Product" />
           <EntitySet Name="TemplateProducts" EntityType="EFPModel.TemplateProduct" />
           <AssociationSet Name="FK_MasterProducts_Categories" Association="EFPModel.FK_MasterProducts_Categories">
@@ -836,15 +837,6 @@
           <NavigationProperty Name="Customer" Relationship="EFPModel.FK_Orders_Customers" FromRole="Order" ToRole="Customer" />
           <NavigationProperty Name="OrderDetails" Relationship="EFPModel.FK_OrderDetails_Orders" FromRole="Order" ToRole="OrderDetail" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Orders_Shops" FromRole="Order" ToRole="Shop" />
-        </EntityType>
-        <EntityType Name="ProductPicture">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MasterId" Type="Int32" Nullable="false" />
-          <Property Name="Urls" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Product" Relationship="EFPModel.FK_ProductPictures_MasterProducts" FromRole="ProductPicture" ToRole="Product" />
         </EntityType>
         <EntityType Name="Respons">
           <Key>
@@ -1063,6 +1055,15 @@
           <End Type="EFPModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="EFPModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="ProductPicture">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Urls" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="EFPModel.FK_ProductPictures_MasterProducts" FromRole="ProductPicture" ToRole="Product" />
+        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
@@ -1097,6 +1098,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Attr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Attr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -1140,7 +1142,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ProductPicture">
-              <PropertyRef Name="MasterId" />
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1314,15 +1316,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductPictures">
-            <EntityTypeMapping TypeName="EFPModel.ProductPicture">
-              <MappingFragment StoreEntitySet="ProductPictures">
-                <ScalarProperty Name="Urls" ColumnName="Urls" />
-                <ScalarProperty Name="MasterId" ColumnName="MasterId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Responses">
             <EntityTypeMapping TypeName="EFPModel.Respons">
               <MappingFragment StoreEntitySet="Responses">
@@ -1364,6 +1357,15 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="ProductPictures">
+            <EntityTypeMapping TypeName="EFPModel.ProductPicture">
+              <MappingFragment StoreEntitySet="ProductPictures">
+                <ScalarProperty Name="Urls" ColumnName="Urls" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="EFPModel.Product">
               <MappingFragment StoreEntitySet="Products">
@@ -1400,6 +1402,7 @@
                 <ScalarProperty Name="Attr2" ColumnName="Attr2" />
                 <ScalarProperty Name="Attr1" ColumnName="Attr1" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -135,6 +135,7 @@
     <Compile Include="ViewModel\ProductViewModel.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
+    <Compile Include="ViewModel\TemplateProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="EFPModel.edmx">

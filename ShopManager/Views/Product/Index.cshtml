@@ -24,6 +24,9 @@
 
     <!-- dropzone -->
     @Styles.Render("~/DropZone-CSS")
+
+    <!-- Select2-->
+    @Styles.Render("~/Select2-CSS")
 }
 
 
@@ -89,21 +92,18 @@
                                                     <label class="col-sm-2 control-label">Tên:</label>
                                                     <div class="col-sm-10"><input type="text" class="form-control" placeholder="Tên sản phẩm"></div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group select-container">
                                                     <label class="col-sm-2 control-label">Phân loại:</label>
-                                                    <div class="col-sm-10">
-                                                        <select class="form-control">
-                                                            <option></option>
-                                                            <option value="0">Bahamas</option>
-                                                            <option value="1">Bahrain</option>
-                                                            <option value="2">Bangladesh</option>
-                                                            <option value="3">Barbados</option>
-                                                            <option value="4">Belarus</option>
-                                                            <option value="5">Belgium</option>
-                                                            <option value="6">Belize</option>
-                                                            <option value="7">Benin</option>
+                                                    <div class="col-sm-5">
+                                                        <select class="form-control parentCategory-select">
+                                                            <option></option>                                                            
                                                         </select>
                                                     </div>
+                                                    <div class="col-sm-5">
+                                                        <select class="form-control category-select">                                                                                                                      
+                                                        </select>
+                                                    </div> 
+                                                    <div class="col-sm-10 pull-right"><a target="_blank" href="../Category/Index">Thêm phân loại sản phẩm</a></div>                                                   
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Mô tả:</label>
@@ -212,7 +212,27 @@
             </div>*@
         </div>
         <!-- end modal -->
+        <!-- modal template choser-->
+<div class="modal inmodal" id="templateChoser" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">            
+            <div class="modal-body">
+                <div class="panel-body">                    
+                    <fieldset class="form-horizontal">                        
+                        <div class="form-group">                            
+                            <select class="form-control template-select" multiple></select>
+                        </div>
+                    </fieldset>
+                    
+                </div>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>                
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <!--end content-->
@@ -235,18 +255,20 @@
     <!-- Dropzone-->
     @Scripts.Render("~/DropZone-JS")
 
+    <!-- Select2-->
+    @Scripts.Render("~/Select2-JS")
+
     <script>
         var s;
         var table;
         var currentChildren;
-        $(document).ready(function () {
-            var languageConfig = {
-                "oPaginate": {
-                    "sNext": "Tiếp"
-                    , "sLast": "Cuối"
-                    , "sPrevious": "Trước"
-                    , "sFirst": "Đầu"
-                }
+        var languageConfig = {
+            "oPaginate": {
+                "sNext": "Tiếp"
+                , "sLast": "Cuối"
+                , "sPrevious": "Trước"
+                , "sFirst": "Đầu"
+            }
                         , "sInfo": "Kết quả từ _START_ đến _END_ trong số _TOTAL_"
                         , "sInfoThousands": "."
                         , "sLoadingRecords": "Đang tải ..."
@@ -254,7 +276,76 @@
                         , "sSearch": "Tìm kiếm:"
                         , "sZeroRecords": "Không tìm thấy kết quả"
                         , "sInfoFiltered": " - lọc ra từ _MAX_ kết quả"
-            }
+        }
+
+        function initParentCategory() {
+            $.ajax({
+                url: '../Category/Parent',
+                type: 'POST',
+                data: {
+                    
+                },
+                success: function (data, textStatus, xhr) {
+                    for (var i = 0; i< data.length; i++){
+                        $(".parentCategory-select").append("<option value='" + data[i].Id + "'>"
+                            + data[i].Name
+                            +"</option>");
+                    }
+                    $(".parentCategory-select").on("change", function () {
+                        var parentId = $(this).val();
+                        $(".category-select").empty();
+                        $.ajax({
+                            url: '../Category/Children',
+                            type: 'POST',
+                            data: {
+                                'parentId' : parentId
+                            },
+                            success: function (data, textStatus, xhr) {
+                                for (var i = 0; i < data.length; i++) {
+                                    $(".category-select").append("<option value='" + data[i].Id + "'>"
+                                        + data[i].Name
+                                        + "</option>");
+                                }
+                            },
+                            error: function () {
+                                console.log("error");
+                            }
+                            
+                        });
+                    })
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+            
+        }
+
+        function initButtonAroundDataTable() {
+            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary">Thêm</button></div>');
+            $(".toolbar div.option-group").append('<div class="btn-group">'
+                            + '<button data-toggle="dropdown" class="btn btn-primary btn-outline btn-sm dropdown-toggle" aria-expanded="false">Đã chọn <span class="selected-nummer">0</span> sản phẩm<span class="caret"></span></button>'
+                            + '<ul class="dropdown-menu">'
+                              //+'<li><a href="#"></a></li>'
+                            + '<li><a href="#" >Chuyển trạng thái bình thường</a></li>'
+                            + '<li><a href="#">Chuyển trạng thái ngưng bán</a></li>'
+                            + '<li class="divider"></li>'
+                            + '<li><a href="#">Đánh dấu còn hàng</a></li>'
+                            + '<li><a href="#">Đánh dấu hết hàng</a></li>'
+                            + '<li class="divider"></li>'
+                            + '<li><a href="#">Xóa</a></li>'
+                            + '</ul>'
+                        + '</div>');
+            $("div.toolbar .dataTables_filter").addClass("col-sm-8 col-lg-8");
+            $("div.toolbar .dataTables_filter").append('<div data-toggle="buttons-checkbox" class="btn-group">'
+                            + '<button id="sName" class="btn btn-primary btn-outline active" type="button" >Tên</button>'
+                            + '<button id="sCate" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Phân loại</button>'
+                            + '<button id="sDesc" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Mô tả</button>'
+                        + '</div>');
+
+        }
+        $(document).ready(function () {
+            
             var productTable;                        
 
             productTable = $(".product-master").dataTable({
@@ -293,7 +384,7 @@
                         , {
                             "bSortable": false
                             , "aTargets": [-1]
-                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
+                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success edit-button" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger delete-button" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
                             , "mData": "null"
                         }
                         , {
@@ -335,25 +426,11 @@
                 , 'sDom': 'l<"toolbar"f>rtip'//'<"H"lf"toolbar"r>t<"F"ip>'//'<"toolbar">lTfgitp' //frtip'//'<"html5buttons"B>lTfgitp'                
             
             });            
-            
-            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary">Thêm</button></div>');
-            $(".toolbar div.option-group").append('<div class="btn-group">'
-                            + '<button data-toggle="dropdown" class="btn btn-primary btn-outline btn-sm dropdown-toggle" aria-expanded="false">Đã chọn <span class="selected-nummer">0</span> sản phẩm<span class="caret"></span></button>'
-                            +'<ul class="dropdown-menu">'
-                              //+'<li><a href="#"></a></li>'
-                            +'<li><a href="#" >Chuyển trạng thái bình thường</a></li>'
-                            +'<li><a href="#">Chuyển trạng thái hết hàng</a></li>'
-                            +'<li class="divider"></li>'
-                            +'<li><a href="#">Xóa</a></li>'
-                            +'</ul>'
-                        +'</div>');
-            $("div.toolbar .dataTables_filter").addClass("col-sm-8 col-lg-8");
-            $("div.toolbar .dataTables_filter").append('<div data-toggle="buttons-checkbox" class="btn-group">'
-                            + '<button id="sName" class="btn btn-primary btn-outline active" type="button" >Tên</button>'
-                            + '<button id="sCate" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Phân loại</button>'
-                            + '<button id="sDesc" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Mô tả</button>'
-                        +'</div>');
-            table = productTable;            
+                       
+            table = productTable;
+
+            initParentCategory();
+
             /* setting show detailed product*/            
             //$('.product-master').on('click', '.view-detail', function (evt) {
             //    var id = productTable.DataTable().row($(this)).data()[4];
@@ -470,6 +547,13 @@
             $('.product-images').slick({
                 dots: true
             });
+
+            /* select2*/
+            //$(".category-select").select2({
+            //    placeholder: "Chọn 1 loại sản phẩm",
+            //    allowClear: true,
+            //    dropdownParent: $(".select-container")
+            //});
 
             /* dropzone*/
             Dropzone.options.dropzone = {

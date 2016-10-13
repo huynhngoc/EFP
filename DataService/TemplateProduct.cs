@@ -21,6 +21,7 @@ namespace DataService
         }
     
         public int Id { get; set; }
+        public string Name { get; set; }
         public string ShopId { get; set; }
         public string Attr1 { get; set; }
         public string Attr2 { get; set; }

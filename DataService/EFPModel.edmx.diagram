@@ -16,7 +16,6 @@
         <EntityTypeShape EntityType="EFPModel.Intent" Width="1.5" PointX="5.25" PointY="4.25" />
         <EntityTypeShape EntityType="EFPModel.OrderDetail" Width="1.5" PointX="17.25" PointY="20.125" />
         <EntityTypeShape EntityType="EFPModel.Order" Width="1.5" PointX="9.75" PointY="19.625" />
-        <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="15" PointY="16.875" />
         <EntityTypeShape EntityType="EFPModel.Respons" Width="1.5" PointX="10.5" PointY="16.125" />
         <EntityTypeShape EntityType="EFPModel.Shop" Width="1.5" PointX="5.25" PointY="15.375" />
         <EntityTypeShape EntityType="EFPModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" />
@@ -35,8 +34,9 @@
         <AssociationConnector Association="EFPModel.FK_Orders_Shops" />
         <AssociationConnector Association="EFPModel.FK_Responses_Shops" />
         <AssociationConnector Association="EFPModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="EFPModel.Product" Width="1.5" PointX="12.75" PointY="13.5" />
-        <EntityTypeShape EntityType="EFPModel.TemplateProduct" Width="1.5" PointX="7.5" PointY="7.75" />
+        <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="15" PointY="15.25" />
+        <EntityTypeShape EntityType="EFPModel.Product" Width="1.5" PointX="12.75" PointY="13.375" />
+        <EntityTypeShape EntityType="EFPModel.TemplateProduct" Width="1.5" PointX="7.5" PointY="7.625" />
         <AssociationConnector Association="EFPModel.FK_MasterProducts_Categories" />
         <AssociationConnector Association="EFPModel.FK_OrderDetails_MasterProducts" />
         <AssociationConnector Association="EFPModel.FK_ProductPictures_MasterProducts" />

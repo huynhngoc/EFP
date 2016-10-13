@@ -134,6 +134,13 @@ namespace ShopManager
             //sweetalert JS
             bundles.Add(new ScriptBundle("~/SweetAlert-JS").Include(
                 "~/Content/js/plugins/sweetalert/sweetalert.min.js"));
+            //select2 CSS
+            bundles.Add(new StyleBundle("~/Select2-CSS").Include(
+                "~/Content/css/plugins/select2/select2.min.css"));
+            //select2 JS 
+            bundles.Add(new ScriptBundle("~/Select2-JS").Include(
+                "~/Content/js/plugins/select2/select2.full.min.js"));
+
         }
 
     }
