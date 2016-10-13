@@ -73,5 +73,10 @@ namespace DataService.Service
             var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);            
             return rs;
         }
+
+        public ProductViewModel GetProductById(int id)
+        {
+            return repository.GetProductById(id);
+        }
     }
 }

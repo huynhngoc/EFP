@@ -88,9 +88,10 @@
                                     <div id="tab-1" class="tab-pane active">
                                         <div class="panel-body">
                                             <fieldset class="form-horizontal">
+                                                <input type="hidden" name="id"/>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Tên:</label>
-                                                    <div class="col-sm-10"><input type="text" class="form-control" placeholder="Tên sản phẩm"></div>
+                                                    <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên sản phẩm" /></div>
                                                 </div>
                                                 <div class="form-group select-container">
                                                     <label class="col-sm-2 control-label">Phân loại:</label>
@@ -100,7 +101,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-5">
-                                                        <select class="form-control category-select">                                                                                                                      
+                                                        <select name="category" class="form-control category-select">                                                                                                                      
                                                         </select>
                                                     </div> 
                                                     <div class="col-sm-10 pull-right"><a target="_blank" href="../Category/Index">Thêm phân loại sản phẩm</a></div>                                                   
@@ -114,9 +115,17 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Tình trạng:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="checkbox" class="js-switch" id="masterProStatus" checked />
+                                                        <input type="checkbox" name="status" class="js-switch" id="masterProStatus" checked />
                                                         <span class="label label-primary" id="masterStatusOn">Bình thường</span>
                                                         <span class="label label-danger" id="masterStatusOff" style="display:none">Ngưng bán</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Tình trạng hàng:</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="checkbox" name="isInStock" class="js-switch" id="detailProStatus" checked />
+                                                        <span class="label label-primary" id="detailStatusOn">Còn hàng</span>
+                                                        <span class="label label-danger" id="detailStatusOff" style="display:none">Hết hàng</span>
                                                     </div>
                                                 </div>
 
@@ -125,14 +134,13 @@
                                     </div>
                                     <div id="tab-2" class="tab-pane">
                                         <div class="panel-body">
-                                            <button class="btn btn-success choose-template">Chọn 1 mẫu các đặc điểm</button>
+                                            <input name="templateId" type="hidden" />
+                                            <div><button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
+                                            <button class="btn btn-primary remove-template" >Không dùng mẫu đặc điểm nữa</button>
+                                            </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Đặc điểm:</label>
-                                                <div class="col-sm-10 input-group">
-                                                    <input type="text" class="form-control" readonly>
-                                                    <span class="input-group-btn" style="width:0px"></span>
-                                                    <input type="text" name="attr" class="form-control"
-                                                           placeholder="(màu) đỏ, xanh ..." />                                                    
+                                                <div class="col-sm-10 input-group">                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -223,6 +231,7 @@
                             <select class="form-control template-select" multiple></select>
                         </div>
                     </fieldset>
+
                     
                 </div>
 
@@ -344,6 +353,16 @@
                         + '</div>');
 
         }
+
+        function initButton() {
+            $(".edit-button").on("click", function () {                
+                var clickedRow = $(this).closest("tr");
+                var id = productTable.fnGetData($(clickedRow)).Id;
+                
+                $("#viewProductModal").modal("show");
+            })
+        }
+
         $(document).ready(function () {
             
             var productTable;                        
@@ -365,6 +384,7 @@
                 , "fnInitComplete": function (oSettings, json) {
                     $(".product-master").removeAttr("style");
                     $(".product-master thead tr").addClass("info");
+                    initButton();
                     //$(".product-master tbody tr").addClass("success");
                     //productTable.DataTable({
                         
@@ -384,7 +404,7 @@
                         , {
                             "bSortable": false
                             , "aTargets": [-1]
-                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success edit-button" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewProductModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger delete-button" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
+                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success edit-button" type="button" title="Chi tiết"><i class="fa fa-edit"></i></button><button class="btn btn-danger delete-button" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
                             , "mData": "null"
                         }
                         , {
@@ -561,7 +581,7 @@
                 autoProcessQueue: false,
                 uploadMultiple: true,
                 parallelUploads: 100,
-                maxFiles: 100,
+                maxFiles: 10,
 
                 // Dropzone settings
                 init: function () {

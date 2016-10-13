@@ -29,7 +29,6 @@ namespace DataService
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Entity> Entities { get; set; }
@@ -40,7 +39,8 @@ namespace DataService
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ProductPicture> ProductPictures { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<TemplateProduct> TemplateProducts { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
     }
 }

@@ -31,8 +31,8 @@ namespace DataService
         public string Attr6 { get; set; }
         public string Attr7 { get; set; }
     
+        public virtual Shop Shop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
-        public virtual Shop Shop { get; set; }
     }
 }

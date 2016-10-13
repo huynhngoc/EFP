@@ -20,6 +20,20 @@ namespace ShopManager.Controllers
             return View();
         }        
 
+        public JsonResult GetProductById(int id)
+        {
+            ProductService service = new ProductService();
+            try
+            {
+                return Json(service.GetProductById(id), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc )
         {
             ProductService service = new ProductService();                        

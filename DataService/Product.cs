@@ -24,7 +24,7 @@ namespace DataService
         public int Id { get; set; }
         public string ShopId { get; set; }
         public string Name { get; set; }
-        public Nullable<int> CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public string Attr1 { get; set; }
         public string Attr2 { get; set; }
         public string Attr3 { get; set; }

@@ -9,8 +9,8 @@ using DataService.JqueryDataTable;
 
 namespace DataService.Repository
 {
-    public class ProductRepository: BaseRepository<Product>
-    {        
+    public class ProductRepository : BaseRepository<Product>
+    {
         public IQueryable<Product> GetProductByShopId(string shopId)
         {
             return dbSet.Where(q => q.ShopId == shopId);
@@ -20,9 +20,35 @@ namespace DataService.Repository
         {
             IEnumerable<int> query = from c in entites.Categories where c.ParentId == cateId select c.Id;
             Debug.WriteLine(query.ToArray());
-            var data = dbSet.Where(q => (q.CategoryId == cateId || query.Contains(q.CategoryId.Value)) && q.ShopId == shopId);            
-            
-            return data;        
+            var data = dbSet.Where(q => (q.CategoryId == cateId ) && q.ShopId == shopId);
+
+            return data;
+        }
+
+        public ProductViewModel GetProductById(int id)
+        {
+            Product p= FindByKey(id);
+            return new ProductViewModel()
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Category = new List<string>() { p.CategoryId.ToString(), p.Category.Name},
+                Description = p.Description,
+                DateCreated = p.DateCreated,
+                DateModified = p.DateModified,
+                IsInStock = p.IsInStock,
+                Status = p.Status,
+                Price = p.Price,
+                Promotion = p.PromotionPrice,
+                TemplateId = p.TemplateId,
+                Attr = p.Attr1.ToString() + "_" +
+                p.Attr2.ToString() + "_" +
+                p.Attr3.ToString() + "_" +
+                p.Attr4.ToString() + "_" +
+                p.Attr5.ToString() + "_" +
+                p.Attr6.ToString() + "_" +
+                p.Attr7.ToString()
+            };
         }
 
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)

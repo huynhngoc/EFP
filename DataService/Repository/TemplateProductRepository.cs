@@ -15,13 +15,13 @@ namespace DataService.Repository
             {
                 Id = q.Id,
                 Name = q.Name,
-                Attr = new List<string>() { q.Attr1.ToString()
-            , q.Attr2.ToString()
-            , q.Attr3.ToString()
-            , q.Attr4.ToString()
-            , q.Attr5.ToString()
-            , q.Attr6.ToString()
-            , q.Attr7.ToString() }
+                Attr = q.Attr1.ToString() + "_"+
+                    q.Attr2.ToString()
+            + "_" + q.Attr3.ToString()
+            + "_" + q.Attr4.ToString()
+            + "_" + q.Attr5.ToString()
+            + "_" + q.Attr6.ToString()
+            + "_" + q.Attr7.ToString() 
             }            
             ).ToList();
         }

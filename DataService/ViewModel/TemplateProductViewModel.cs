@@ -10,6 +10,6 @@ namespace DataService.ViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<string> Attr { get; set; }
+        public string Attr { get; set; }
     }
 }
