@@ -27,29 +27,36 @@ namespace DataService.Repository
 
         public ProductViewModel GetProductById(int id)
         {
-            entites.Configuration.ProxyCreationEnabled = true;
-            Product p= FindByKey(id);
-            return new ProductViewModel()
+            try
             {
-                Id = p.Id,
-                Name = p.Name,
-                Category = new List<string>() {p.Category.ParentId.ToString(), p.CategoryId.ToString(), p.Category.Name},
-                Description = p.Description,
-                DateCreated = p.DateCreated,
-                DateModified = p.DateModified,
-                IsInStock = p.IsInStock,
-                Status = p.Status,
-                Price = p.Price,
-                Promotion = p.PromotionPrice,
-                TemplateId = p.TemplateId,
-                Attr = p.Attr1?.ToString() + "_" +
-                p.Attr2?.ToString() + "_" +
-                p.Attr3?.ToString() + "_" +
-                p.Attr4?.ToString() + "_" +
-                p.Attr5?.ToString() + "_" +
-                p.Attr6?.ToString() + "_" +
-                p.Attr7?.ToString()
-            };
+                entites.Configuration.ProxyCreationEnabled = true;
+                Product p = FindByKey(id);
+                return new ProductViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Category = new List<string>() { p.Category.ParentId.ToString(), p.CategoryId.ToString(), p.Category.Name },
+                    Description = p.Description,
+                    DateCreated = p.DateCreated,
+                    DateModified = p.DateModified,
+                    IsInStock = p.IsInStock,
+                    Status = p.Status,
+                    Price = p.Price,
+                    Promotion = p.PromotionPrice,
+                    TemplateId = p.TemplateId,
+                    Attr = p.Attr1?.ToString() + "_" +
+                    p.Attr2?.ToString() + "_" +
+                    p.Attr3?.ToString() + "_" +
+                    p.Attr4?.ToString() + "_" +
+                    p.Attr5?.ToString() + "_" +
+                    p.Attr6?.ToString() + "_" +
+                    p.Attr7?.ToString()
+                };
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
@@ -163,10 +170,46 @@ namespace DataService.Repository
                 DateCreated = q.DateCreated,
                 DateModified = q.DateModified,
                 Price = (decimal)(q.Price),
-                Promotion = (decimal?)(q.Price)
+                Promotion = (decimal?)(q.PromotionPrice)
             });
             Debug.WriteLine("---------data " + data.Count());            
             return data;            
         }
+
+        public bool SetStatus(int id, bool status)
+        {
+            try
+            {
+                
+                Product p = FindByKey(id);
+                p.Status = status;
+                p.DateModified = DateTime.Now;
+                return Update(p);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        public bool SetInStock(int id, bool inStock)
+        {
+            try
+            {
+                
+                Product p = FindByKey(id);
+                p.IsInStock = inStock;
+                p.DateModified = DateTime.Now;              
+                return Update(p);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+
     }
 }

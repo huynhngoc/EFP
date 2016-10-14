@@ -29,6 +29,9 @@
     @Styles.Render("~/Select2-CSS")
     <!-- Touch Spin-->
     @Styles.Render("~/TouchSpin-CSS")
+
+    <!--sweet alert-->
+    @Styles.Render("~/SweetAlert-CSS")
 }
 
 
@@ -52,7 +55,7 @@
                             <thead>
                                 <tr>                                    
                                     <th>Id</th>
-                                    <th><input type='checkbox'></th>
+                                    <th><input class="all-check" type='checkbox'></th>
                                     <th>Tên</th>
                                     <th>Phân loại</th>
                                     <th>Mô tả</th>
@@ -111,7 +114,7 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Mô tả:</label>
                                                     <div class="col-sm-10">
-                                                        <textarea name="desc" class="form-control"></textarea>
+                                                        <textarea name="desc" class="form-control" style="resize:none"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -143,17 +146,57 @@
                                         </div>
                                     </div>
                                     <div id="tab-2" class="tab-pane">
-                                        <div class="panel-body">
-                                            <input name="templateId" type="hidden" />
-                                            <div><button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
-                                            <button class="btn btn-primary remove-template" >Không dùng mẫu đặc điểm nữa</button>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-2 control-label">Đặc điểm:</label>
-                                                <div class="col-sm-10 input-group">                                                    
+                                        <fieldset class="form-horizontal">
+                                            <div class="panel-body">
+                                                <input name="templateId" type="hidden" />
+                                                <div class="form-group">
+                                                    <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
+                                                    <button class="btn btn-primary remove-template">Không dùng mẫu đặc điểm nữa</button>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <input name="attr" class="form-control" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </fieldset>
                                     </div>
                                     <div id="tab-3" class="tab-pane">
                                         <div class="panel-body">
@@ -180,8 +223,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <span class="pull-left">Ngày tạo: <cite class="date-created"></cite></span><br />
+                        <span class="pull-left">Ngày sửa: <cite class="date-modified"></cite></span>
                         <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-primary">Lưu</button>
+                        <button type="button" class="btn btn-primary save-changes-button">Lưu</button>
                     </div>
                 </div>
             </div>
@@ -279,6 +324,8 @@
 
     <!-- touchspin--> 
     @Scripts.Render("~/TouchSpin-JS")
+    <!-- sweetalert -->
+    @Scripts.Render("~/SweetAlert-JS")
     <script>
         var s;
         var table;
@@ -351,19 +398,71 @@
             
         }
 
+        function groupAction(urlText, data) {
+            var rowSelected = $("tr.active");
+            var idList = [];
+            //console.log(rowSelected);
+            for (var i = 0; i < rowSelected.length; i++) {
+                var id = table.fnGetData($(rowSelected[i])).Id;
+                idList.push(id);
+            }
+            data.idList = idList;
+            console.log(idList);
+            $.ajax({
+                url: urlText,
+                type: 'POST',
+                data: data,
+                success: function (data, textStatus, xhr) {
+                    if (data == true) {
+                        table._fnAjaxUpdate();
+                        swal({
+                            title: "Thành công",
+                            animation: "slide-from-top",
+                            //text: "I will close in 2 seconds.",
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        $("input.all-check").click();
+                    } else {
+                        swal({
+                            title: "Không sửa được sản phẩm",
+                            animation: "slide-from-top",
+                            //text: "I will close in 2 seconds.",
+                            type: "warning",
+                            //timer: 2000,
+                            showConfirmButton: true
+                        });
+                    }
+
+                },
+                error: function () {
+                    console.log("error");
+                    swal({
+                        title: "Đã có lỗi xảy ra",
+                        animation: "slide-from-top",
+                        //text: "I will close in 2 seconds.",
+                        type: "warning",
+                        //timer: 2000,
+                        showConfirmButton: true
+                    });
+                }
+            });
+        }
+
         function initButtonAroundDataTable() {
             $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary">Thêm</button></div>');
             $(".toolbar div.option-group").append('<div class="btn-group">'
-                            + '<button data-toggle="dropdown" class="btn btn-primary btn-outline btn-sm dropdown-toggle" aria-expanded="false">Đã chọn <span class="selected-nummer">0</span> sản phẩm<span class="caret"></span></button>'
+                            + '<button data-toggle="dropdown" class="btn btn-primary btn-outline btn-sm dropdown-toggle" aria-expanded="false">Đã chọn <span class="selected-number">0</span> sản phẩm<span class="caret"></span></button>'
                             + '<ul class="dropdown-menu">'
                               //+'<li><a href="#"></a></li>'
-                            + '<li><a href="#" >Chuyển trạng thái bình thường</a></li>'
-                            + '<li><a href="#">Chuyển trạng thái ngưng bán</a></li>'
+                            + '<li class="set-active"><a href="#" >Chuyển trạng thái bình thường</a></li>'
+                            + '<li class="set-deactive" ><a href="#">Chuyển trạng thái ngưng bán</a></li>'
                             + '<li class="divider"></li>'
-                            + '<li><a href="#">Đánh dấu còn hàng</a></li>'
-                            + '<li><a href="#">Đánh dấu hết hàng</a></li>'
-                            + '<li class="divider"></li>'
-                            + '<li><a href="#">Xóa</a></li>'
+                            + '<li class="set-inStock" ><a href="#">Đánh dấu còn hàng</a></li>'
+                            + '<li class="set-outStock" ><a href="#">Đánh dấu hết hàng</a></li>'
+                            //+ '<li class="divider"></li>'
+                            //+ '<li><a href="#">Xóa</a></li>'
                             + '</ul>'
                         + '</div>');
             $("div.toolbar .dataTables_filter").addClass("col-sm-8 col-lg-8");
@@ -373,6 +472,38 @@
                             + '<button id="sDesc" class="btn btn-primary btn-outline" type="button" aria-pressed="false">Mô tả</button>'
                         + '</div>');
 
+            $(".set-active").on("click", function () {
+                groupAction("../Product/SetStatus", {"status":true});
+            });
+            $(".set-deactive").on("click", function () {
+                groupAction("../Product/SetStatus", { "status": false });
+            });
+            $(".set-inStock").on("click", function () {
+                groupAction("../Product/SetInStock", {"inStock": true});
+            });
+            $(".set-outStock").on("click", function () {
+                groupAction("../Product/SetInStock", {"inStock": false});
+            });
+
+            $("input.all-check").on("change", function () {
+                checkbox = $("input.row-check");                
+                if ($(this).is(":checked")) {
+                    for (var i = 0; i < checkbox.length; i++) {
+                        var row = $(checkbox[i]).closest("tr");
+                        if (!$(row).hasClass("active")) {
+                            $(checkbox[i]).click();
+                        }
+                    }                    
+                } else {
+                    for (var i = 0; i < checkbox.length; i++) {
+                        var row = $(checkbox[i]).closest("tr");
+                        if ($(row).hasClass("active")) {
+                            $(checkbox[i]).click();
+                        }
+                    }
+                }
+                $(".selected-number").text($("input.row-check:checked").length);
+            });
         }
 
         function editForm(id) {
@@ -388,11 +519,21 @@
                     $("#viewProductModal").find('textarea[name="desc"]').val(data.Description);
                     $("#viewProductModal").find('select.parentCategory-select').val(data.Category[0]);
                     //$("#viewProductModal").find('select[name="category"]').val(data.Category[1]);
-                    initCategory(data.Category[0], data.Category[1]);
-                    $("#viewProductModal").find('input[name="status"]').attr("checked", data.Status);
-                    $("#viewProductModal").find('input[name="isInStock"]').attr("checked",data.IsInStock);
+                    initCategory(data.Category[0], data.Category[1]);                    
+
+                    if ($("#viewProductModal").find('input[name="status"]').is(":checked") != data.Status) {
+                        $("#viewProductModal").find('input[name="status"]').click();
+                    }
+
+                    if ($("#viewProductModal").find('input[name="isInStock"]').is(":checked") != data.IsInStock) {
+                        $("#viewProductModal").find('input[name="isInStock"]').click();
+                    }
+
                     $("#viewProductModal").find('input[name="price"]').val(data.Price);
                     $("#viewProductModal").find('input[name="promotion"]').val(data.Promotion);
+                    
+                    $(".date-created").text(Date(data.DateCreated));
+                    $(".date-modified").text(Date(data.DateModified));
 
                     $("#viewProductModal").modal("show");
                 },
@@ -410,6 +551,88 @@
                 console.log(id);
                 editForm(id);                
             })
+
+            //$(".delete-button").on("click", function () {
+            //    var clickedRow = $(this).closest("tr");
+            //    var id = table.fnGetData($(clickedRow)).Id;
+            //    console.log(id);
+            //    deleteProduct(id);
+            //});
+            $("input.row-check").on("change", function () {
+                var clickedRow = $(this).closest("tr");
+                if ($(this).is(":checked")) {
+                    clickedRow.addClass("active");
+                } else {
+                    clickedRow.removeClass("active");
+                    if ($("input.all-check").is(":checked")){
+                        $("input.all-check").removeAttr("checked");
+                    }
+                }
+                $(".selected-number").text($("input.row-check:checked").length);
+            });
+
+        }
+
+        function initModalButton() {
+            $(".save-changes-button").on("click", function () {
+                id = $("#viewProductModal").find('input[name="id"]').val();
+                name = $("#viewProductModal").find('input[name="name"]').val();
+                description = $("#viewProductModal").find('textarea[name="desc"]').val();
+                categoryId = $("#viewProductModal").find('select.category-select').val();
+                price = $("#viewProductModal").find('input[name="price"]').val();
+                promotion = $("#viewProductModal").find('input[name="promotion"]').val();
+                status = $("#viewProductModal").find('input[name="status"]').is(":checked");
+                isInStock = $("#viewProductModal").find('input[name="isInStock"]').is(":checked");
+
+                $.ajax({
+                    url: '../Product/Update',
+                    type: 'POST',
+                    data: {
+                        "id": id,
+                        "name": name,
+                        "description": description,
+                        "categoryId": categoryId,
+                        "price": price,
+                        "promotion": promotion,
+                        "status":status,
+                        "isInStock": isInStock
+                    },
+                    success: function (data, textStatus, xhr) {
+                        if (data == true) {
+                            table._fnAjaxUpdate();
+                            swal({
+                                title: "Thành công",
+                                animation: "slide-from-top",
+                                //text: "I will close in 2 seconds.",
+                                type: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            $("#viewProductModal").modal("hide");
+                        } else {
+                            swal({
+                                title: "Không sửa được sản phẩm",
+                                animation: "slide-from-top",
+                                //text: "I will close in 2 seconds.",
+                                type: "warning",
+                                //timer: 2000,
+                                showConfirmButton: true
+                            });
+                        }
+                    },
+                    error: function () {
+                        console.log("error");
+                        swal({
+                            title: "Không sửa được sản phẩm",
+                            animation: "slide-from-top",
+                            //text: "I will close in 2 seconds.",
+                            type: "warning",
+                            //timer: 2000,
+                            showConfirmButton: true
+                        });
+                    }
+                })
+            });
         }
 
         $(document).ready(function () {
@@ -446,7 +669,7 @@
                           { "bSortable": false
                             , "aTargets": [1]
                             , "mData": "null"
-                            , "sDefaultContent": "<input type='checkbox'>"
+                            , "sDefaultContent": "<input class='row-check' type='checkbox'>"
                             //, "sTitle": "<input type='checkbox'>"
                           }
                         , { "bVisible": false, "aTargets": [0], "mData": "Id" }
@@ -456,7 +679,7 @@
                         , {
                             "bSortable": false
                             , "aTargets": [-1]
-                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success edit-button" type="button" title="Chi tiết"><i class="fa fa-edit"></i></button><button class="btn btn-danger delete-button" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
+                            , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success edit-button" type="button" title="Chi tiết"><i class="fa fa-edit"></i></button></div>'//'<div class="btn-group"><button class="btn btn-success edit-button" type="button" title="Chi tiết"><i class="fa fa-edit"></i></button><button class="btn btn-danger delete-button" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
                             , "mData": "null"
                         }
                         , {
@@ -502,6 +725,7 @@
             table = productTable;
 
             initParentCategory();
+            initModalButton();
 
             /* setting show detailed product*/            
             //$('.product-master').on('click', '.view-detail', function (evt) {
@@ -585,10 +809,10 @@
                 buttonup_class: 'btn btn-white'
             });
             
-            /* set description input */
-            $(".summernote").summernote({
-                //toolbar:["style",["bold", "italic", "underline", "clear"]]
-            });
+            ///* set description input */
+            //$(".summernote").summernote({
+            //    //toolbar:["style",["bold", "italic", "underline", "clear"]]
+            //});
 
 
             /*tokenfield*/

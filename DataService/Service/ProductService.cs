@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataService.Repository;
 using DataService.JqueryDataTable;
 using DataService.ViewModel;
+using System.Diagnostics;
 
 namespace DataService.Service
 {
@@ -24,6 +25,30 @@ namespace DataService.Service
         public IQueryable<Product> GetAllMasterProductByShopId(string shopId)
         {
             return repository.GetProductByShopId(shopId);
+        }
+
+        public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
+        {
+            try
+            {
+                Product p = repository.FindByKey(id);
+                p.Id = id;
+                p.Name = name;
+                p.Description = description;
+                p.CategoryId = categoryId;
+                p.Price = price;
+                p.PromotionPrice = promotion;
+                p.Status = status;
+                p.IsInStock = isInStock;
+                p.DateModified = DateTime.Now;
+                repository.Update(p);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
         }
 
         public List<Product> GetProductByCategory(int cateId, string shopId)
@@ -77,6 +102,40 @@ namespace DataService.Service
         public ProductViewModel GetProductById(int id)
         {
             return repository.GetProductById(id);
+        }
+
+        public bool SetStatus(int[] idList, bool status)
+        {
+            try
+            {
+                foreach (var id in idList)
+                {
+                    repository.SetStatus(id, status);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+        }
+
+        public bool SetInStock(int[] idList, bool inStock)
+        {
+            try
+            {
+                foreach (var id in idList)
+                {
+                    repository.SetInStock(id, inStock);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
         }
     }
 }

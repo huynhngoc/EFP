@@ -34,6 +34,48 @@ namespace ShopManager.Controllers
             }
         }
 
+        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
+        {
+            ProductService service = new ProductService();
+            try
+            {
+                return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock ), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult SetStatus(int[] idList, bool status)
+        {
+            ProductService service = new ProductService();
+            try
+            {
+                return Json(service.SetStatus(idList, status), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult SetInStock(int[] idList, bool inStock)
+        {
+            ProductService service = new ProductService();
+            try
+            {
+                return Json(service.SetInStock(idList, inStock), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc )
         {
             ProductService service = new ProductService();                        
@@ -69,7 +111,7 @@ namespace ShopManager.Controllers
         //    {
         //        var detailedProducts = service.GetDetailedProduct(param, masterId);
         //        Debug.WriteLine("----x " + detailedProducts.Count());                
-                
+
         //        var totalRecords = detailedProducts.Count();
         //        var data = detailedProducts.Skip(param.iDisplayStart)
         //            .Take(param.iDisplayLength);
@@ -123,5 +165,7 @@ namespace ShopManager.Controllers
         //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         //    }
         //}
+
+
     }
 }
