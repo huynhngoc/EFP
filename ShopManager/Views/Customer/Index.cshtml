@@ -1,0 +1,230 @@
+﻿
+ <div class="row">
+                    <div class="mail-box-header">
+
+                        <form method="get" action="index.html" class="pull-right mail-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-sm" name="search" placeholder="Search customer">
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        Tim kiem
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <h2>
+                            Danh sách khách hàng
+                        </h2>
+                        <div class="mail-tools tooltip-demo m-t-md">
+                            <div class="btn-group pull-right">
+                                <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i></button>
+                                <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
+
+                            </div>
+                            <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lai danh sách" onclick="reloadTable()"><i class="fa fa-refresh"></i>F5</button>
+                            <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Them khach hang" onclick="showCusAddModal()">+</button>
+
+
+                        </div>
+                    </div>
+                    <div class="mail-box">
+                        <div style="width: 97%; margin: 0 auto;">
+                            <table id="cusDataTable" class="table table-striped table-bordered table-hover" cellspacing="10" style="text-align: center;">
+                                <thead>
+                                    <tr>
+                                        <th>Tên</th>
+                                        <th>Miêu tả</th>
+                                        <th>Địa chỉ</th>
+                                        <th>SDT</th>
+                                        <th>Email</th>
+                                        <th></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                @*<tfoot>
+                <tr>
+                    <th class="col-md-2">Tên</th>
+                    <th class="col-md-4">Địa chỉ</th>
+                    <th class="col-md-1">SDT</th>
+                    <th class="col-md-1">Email</th>
+                    <th class="col-md-2"></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>*@
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+ 
+
+
+<div class="modal fade" id="cusEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" style="margin-top: 15%;">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #1ab394">
+                    <h2 class="modal-title" id="myModalLabel" style="color: white; text-align: center; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; ">Thông tin chi tiết</h2>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td align="right">Tên:</td>
+                                <td><input value="" id="editName" style="width:100%"></td>
+                            </tr>
+                            <tr>
+                                <td align="right">Địa chỉ:</td>
+                                <td><input value="" id="editAddr" style="width:100%"></td>
+                            </tr>
+                            <tr>
+                                <td align="right">Miêu tả:</td>
+                                <td><textarea id="editDes" value="" style="resize: vertical; width: 100%"></textarea></td>
+                            </tr>
+                        
+                            <tr>
+                                <td align="right">Số điện thoại:</td>
+                                <td><input value="" id="editPhone" style="width:100%" onchange="validate(2,this.value)" /><a id="phone_errorTxt" style="color: red; display:none;">Số điện thoại không hợp lệ</a></td>
+                            </tr>
+                            <tr>
+                                <td align="right">Email:</td>
+                                <td><input value="" id="editMail" onchange="validate(1,this.value)" style="width:100%" /><a id="mail_errorTxt" style="color: red; display:none;">Email không hợp lệ</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="hidden" id="cusEditID" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSave" class="btn btn-default" data-dismiss="modal" onclick="editCustomerDetail(); clear_table();">Lưu</button>
+                    <button type="button" id="btnCloseModal" class="btn btn-default" data-dismiss="modal" onclick="clear_table();">Huỷ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal fade" id="sucModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" style="margin-top: 15%;">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #1ab394; color:white">
+                    <h1 class="modal-title" id="sucTxt" style="text-align:center;">Tạo mới khách hàng thành công!</h1>
+                </div>
+                <div class="modal-footer" style="text-align:center;">
+                    <button type="button" id="btnCloseModal" class="btn btn-default" data-dismiss="modal" onclick="oTable.fnDraw();">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="failModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" style="margin-top: 15%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="failTxt" style="text-align:center;">Tạo mới thất bại</h1>
+                </div>
+                <div class="modal-footer" style="text-align:center">
+                    <button type="button" id="btnCloseModal" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="createFailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" style="margin-top: 15%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" style="text-align:center;">Tạo mới thất bại</h1>
+                    <h3 style="text-align:center;">Vui lòng nhập tên</h3>
+                </div>
+                <div class="modal-footer" style="text-align:center">
+                    <button type="button" id="btnSave" class="btn btn-default" data-dismiss="modal" onclick="showCusAddModal();">Tạo lại</button>
+                    <button type="button" id="btnCloseModal" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal fade" id="cusAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" style="margin-top: 15%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="myModalLabel">Thông tin khách hàng mới</h2>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td>Tên:</td>
+                                <td><input value="" id="addNameTxt"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Địa chỉ:</td>
+                                <td><input value="" id="addAddrTxt"></td>
+                            </tr>
+                            <tr>
+                                <td>Thông tin:</td>
+                                <td><textarea id="addDescTxt"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td>Số điện thoại</td>
+                                <td><input value="" id="addPhoneTxt"></td>
+                            </tr>
+                            <tr>
+                                <td>Email:</td>
+                                <td><input value="" id="addMailTxt" onchange="validate(1,this.value)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCloseModal" class="btn btn-default" onclick ="addCustomer(); " data-dismiss="modal">Tạo mới</button>
+                    <button type="button" id="btnCloseModal" class="btn btn-default" data-dismiss="modal" onclick="clear_table()">Huỷ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@section CustomJS {
+@Scripts.Render("~/DataTable-JS")
+@Scripts.Render("~/Customer-JS")
+}
+
+
+}
+@section CustomCSS {
+    <style>
+        .dataTables_filter {
+            width: 50%;
+            float: right;
+            text-align: right;
+        }
+        .dataTables_paginate{
+            width: 50%;
+            text-align: right;
+        }
+        .cusDataTable{
+            width:100%;
+        }
+        .modal-open {
+            overflow: scroll;
+        }
+        #wrapper {
+            display: block;
+            margin: auto;
+            width:100%;
+        }
+        div.dataTables_processing {
+            color: red;
+            border: 1px;
+        }
+
+    </style>
+}
