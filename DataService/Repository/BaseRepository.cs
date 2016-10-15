@@ -56,6 +56,7 @@ namespace DataService.Repository
             try
             {
                 dbSet.Add(entity);
+
                 return true;
             }
             catch

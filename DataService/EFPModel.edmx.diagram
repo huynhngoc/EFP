@@ -4,23 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9df6d80736144b2893ef62203f52eb4a" Name="Diagram1">
-        <EntityTypeShape EntityType="EFPModel.AspNetRole" Width="1.5" PointX="0.75" PointY="13" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.AspNetUser" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Category" Width="1.5" PointX="7.5" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="10.5" PointY="19.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Customer" Width="1.5" PointX="7.5" PointY="18.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.DetailedProduct" Width="1.5" PointX="12" PointY="11.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Entity" Width="1.5" PointX="7.5" PointY="21.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Intent" Width="1.5" PointX="5.25" PointY="19.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.MasterProduct" Width="1.5" PointX="9.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.OrderDetail" Width="1.5" PointX="15" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Order" Width="1.5" PointX="12.75" PointY="16.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="14.25" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Respons" Width="1.5" PointX="7.5" PointY="15.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EFPModel.Shop" Width="1.5" PointX="5.25" PointY="14.625" IsExpanded="true" />
+      <Diagram DiagramId="77a53f6273744322b3119c934f37cd40" Name="Diagram1">
+        <EntityTypeShape EntityType="EFPModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.AspNetRole" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.AspNetUser" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Category" Width="1.5" PointX="7.5" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="10.5" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Customer" Width="1.5" PointX="7.5" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.DetailedProduct" Width="1.5" PointX="12" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Entity" Width="1.5" PointX="7.5" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Intent" Width="1.5" PointX="5.25" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.MasterProduct" Width="1.5" PointX="9.75" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.OrderDetail" Width="1.5" PointX="15" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Order" Width="1.5" PointX="12.75" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="12" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Respons" Width="1.5" PointX="7.5" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EFPModel.Shop" Width="1.5" PointX="5.25" PointY="15.375" IsExpanded="true" />
         <AssociationConnector Association="EFPModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Shops_AspNetUsers" ManuallyRouted="false" />
@@ -41,8 +42,6 @@
         <AssociationConnector Association="EFPModel.FK_Orders_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.FK_Responses_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="EFPModel.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="EFPModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="EFPModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

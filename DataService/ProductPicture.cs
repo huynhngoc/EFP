@@ -14,9 +14,9 @@ namespace DataService
     
     public partial class ProductPicture
     {
+        public int Id { get; set; }
         public int MasterId { get; set; }
         public string Urls { get; set; }
-        public int Id { get; set; }
     
         public virtual MasterProduct MasterProduct { get; set; }
     }

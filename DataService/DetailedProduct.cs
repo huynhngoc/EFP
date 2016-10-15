@@ -14,14 +14,13 @@ namespace DataService
     
     public partial class DetailedProduct
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DetailedProduct()
         {
             this.OrderDetails = new HashSet<OrderDetail>();
         }
     
         public int Id { get; set; }
-        public decimal Price { get; set; }
+        public Nullable<decimal> Price { get; set; }
         public Nullable<decimal> PromotionPrice { get; set; }
         public bool Status { get; set; }
         public int MasterId { get; set; }
@@ -34,7 +33,6 @@ namespace DataService
         public string Attr7 { get; set; }
     
         public virtual MasterProduct MasterProduct { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

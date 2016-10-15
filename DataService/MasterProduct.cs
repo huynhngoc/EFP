@@ -14,7 +14,6 @@ namespace DataService
     
     public partial class MasterProduct
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MasterProduct()
         {
             this.DetailedProducts = new HashSet<DetailedProduct>();
@@ -36,12 +35,12 @@ namespace DataService
         public System.DateTime DateCreated { get; set; }
         public System.DateTime DateModified { get; set; }
         public bool Status { get; set; }
+        public decimal Price { get; set; }
+        public Nullable<decimal> PromotionPrice { get; set; }
     
         public virtual Category Category { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetailedProduct> DetailedProducts { get; set; }
         public virtual Shop Shop { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductPicture> ProductPictures { get; set; }
     }
 }

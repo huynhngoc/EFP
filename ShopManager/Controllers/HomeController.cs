@@ -10,10 +10,16 @@ namespace ShopManager.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            //return RedirectToAction("Customer", "Customer", new { area = "" });
+            return RedirectToAction("Index", "Customer", new { area = "" });
         }
 
-
+        //public ActionResult GetAllCustomer()
+        //{
+        //    CustomerService service = new CustomerService();
+        //    var data = service.GetAllCustomer();
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
         public ActionResult Test(string id)
         {
             CategoryService service = new CategoryService();

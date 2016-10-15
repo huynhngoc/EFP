@@ -100,6 +100,7 @@
     <Compile Include="Intent.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="JqueryDataTable\JQueryDataTableParamModel.cs" />
     <Compile Include="MasterProduct.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -114,17 +115,14 @@
     </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CategoryRepository.cs" />
-    <Compile Include="Repository\MasterProductRepository.cs" />
+    <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Respons.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\CategoryService.cs" />
-    <Compile Include="Service\MasterProductService.cs" />
+    <Compile Include="Service\CustomerService.cs" />
     <Compile Include="Shop.cs">
-      <DependentUpon>EFPModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagram.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CustomerViewModel.cs" />
@@ -134,17 +132,18 @@
     <Compile Include="ViewModel\OrderViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="EFPModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>EFPModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="EFPModel.edmx.diagram">
       <DependentUpon>EFPModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EFPModel.Context.tt">
@@ -158,10 +157,6 @@
       <LastGenOutput>EFPModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
