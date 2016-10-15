@@ -85,7 +85,7 @@
                     <div class="modal-body">
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1"> Thông tin chung</a></li>
+                                <li class="active base-tab"><a data-toggle="tab" href="#tab-1"> Thông tin chung</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-2">Đặc điểm</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-3"> Hình ảnh</a></li>
                             </ul>
@@ -151,7 +151,7 @@
                                                 <input name="templateId" type="hidden" />
                                                 <div class="form-group">
                                                     <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
-                                                    <button class="btn btn-primary remove-template">Không dùng mẫu đặc điểm nữa</button>
+                                                    <button class="btn btn-primary remove-template">Không dùng mẫu <span class="template-name"></span> nữa</button>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label"></label>
@@ -223,8 +223,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <span class="pull-left">Ngày tạo: <cite class="date-created"></cite></span><br />
-                        <span class="pull-left">Ngày sửa: <cite class="date-modified"></cite></span>
+                        <div class="pull-left">
+                            <div >Ngày tạo: <cite class="date-created"></cite></div>
+                            <div >Lần sửa cuối: <cite class="date-modified"></cite></div>
+                        </div>
                         <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
                         <button type="button" class="btn btn-primary save-changes-button">Lưu</button>
                     </div>
@@ -283,10 +285,19 @@
                 <div class="panel-body">                    
                     <fieldset class="form-horizontal">                        
                         <div class="form-group">                            
-                            <select class="form-control template-select" multiple></select>
+                            
                         </div>
                     </fieldset>
-
+                    <table class="table table-hover template-table" >
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Tên</th>
+                                <th>Các đặc điểm</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                    </table>
                     
                 </div>
 
@@ -346,6 +357,12 @@
                         , "sInfoFiltered": " - lọc ra từ _MAX_ kết quả"
         }
 
+        function FormatDateVN(date) {
+            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
+            var d = new Date(parseInt(milli));
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        }
+
         function initCategory(parentId, selectVal) {
             $(".category-select").empty();
             $.ajax({
@@ -396,6 +413,44 @@
                 }
             });
             
+        }
+
+        function initAttr(templateId, attr) {
+            $("#viewProductModal input[name='attr']").each(function (i) {
+                $(this).closest(".form-group").css("visibility", "hidden");
+                $(this).val("");
+            });
+            if (templateId == null) {
+                $(".template-name").closest("button").hide();
+                return;
+            }
+            $(".template-name").closest("button").show();
+            $.ajax({
+                url: "../Template/GetTemplateById",
+                type: "POST",
+                data: {
+                    "id": templateId
+                },
+                success: function (data, textStatus, xhr) {
+                    $(".template-name").text(data.Name);
+                    var attrName = data.Attr.split("_");
+                    var attrList = attr.split("_");
+                    for (var i = 0; i < attrName.length; i++) {
+                        if (attrName[i] && 0 !== attrName.length) {
+                            var input = $("#viewProductModal input[name='attr']")[i];
+                            var form = $(input).closest(".form-group");
+                            var label = $(form).find("label");
+                            $(label).text(attrName[i]);
+                            $(input).val(attrList[i]);
+                            $(form).css("visibility", "visible");
+                        }
+                    }
+                },
+                error: function () {
+                    console.log("error");
+                }
+
+            })
         }
 
         function groupAction(urlText, data) {
@@ -528,14 +583,23 @@
                     if ($("#viewProductModal").find('input[name="isInStock"]').is(":checked") != data.IsInStock) {
                         $("#viewProductModal").find('input[name="isInStock"]').click();
                     }
-
+                    
                     $("#viewProductModal").find('input[name="price"]').val(data.Price);
                     $("#viewProductModal").find('input[name="promotion"]').val(data.Promotion);
                     
-                    $(".date-created").text(Date(data.DateCreated));
-                    $(".date-modified").text(Date(data.DateModified));
+                    console.log(data.DateCreated);
+                    console.log(data.DateModified);
+                    console.log(FormatDateVN(data.DateCreated));
+                    console.log(FormatDateVN(data.DateModified));
+                    $(".date-created").text(FormatDateVN(data.DateCreated));
+                    $(".date-modified").text(FormatDateVN(data.DateModified));
+
+                    $("#viewProductModal").find("input[name='templateId']").val(data.TemplateId);
+
+                    initAttr(data.TemplateId, data.Attr);
 
                     $("#viewProductModal").modal("show");
+                    $(".base-tab").click();
                 },
                 error: function () {
 
@@ -583,7 +647,11 @@
                 promotion = $("#viewProductModal").find('input[name="promotion"]').val();
                 status = $("#viewProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#viewProductModal").find('input[name="isInStock"]').is(":checked");
-
+                templateId = $("#viewProductModal").find('input[name="templateId"]').val();
+                var attr = [];
+                $("#viewProductModal input[name='attr']").each(function () {
+                    attr.push($(this).val());
+                });
                 $.ajax({
                     url: '../Product/Update',
                     type: 'POST',
@@ -595,7 +663,9 @@
                         "price": price,
                         "promotion": promotion,
                         "status":status,
-                        "isInStock": isInStock
+                        "isInStock": isInStock,
+                        "templateId": templateId,
+                        "attr": attr
                     },
                     success: function (data, textStatus, xhr) {
                         if (data == true) {
@@ -632,6 +702,51 @@
                         });
                     }
                 })
+            });
+
+            $(".choose-template").on("click", function () {
+                $.ajax({
+                    url:'../Template/All',
+                    type: "POST",
+                    data: {
+                        "shopId": 1
+                    },
+                    success: function (data, textStatus, xhr) {
+                        $('.template-table').dataTable({
+                            //"bProcessing": true,
+                            //"sAjaxSource": "../Template/All"
+                            "aaData": data.aaData
+                            ,"aoColumnDefs": [
+                                { "bSortable": false
+                                , "aTargets": [0]
+                                , "mData": "Id"  
+                                , "bVisible": false
+                                }
+                                , {
+                                    "bSortable": true
+                                , "aTargets": [1]
+                                , "mData": "Name"
+                                }
+                                , {
+                                    "bSortable": true
+                                , "aTargets": [2]
+                                , "mData": "Attr"
+                                }
+                                , {
+                                    "bSortable": false
+                                , "aTargets": [3]
+                                , "mData": "null"
+                                }
+                            ]
+
+                        })
+                        $("#templateChoser").modal("show");
+
+                    },
+                    error: function () {
+                        console.log('error');
+                    }
+                });
             });
         }
 

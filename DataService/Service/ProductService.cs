@@ -27,7 +27,7 @@ namespace DataService.Service
             return repository.GetProductByShopId(shopId);
         }
 
-        public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
+        public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
         {
             try
             {
@@ -41,6 +41,14 @@ namespace DataService.Service
                 p.Status = status;
                 p.IsInStock = isInStock;
                 p.DateModified = DateTime.Now;
+                p.TemplateId = templateId;
+                p.Attr1 = attr[0];
+                p.Attr2 = attr[1];
+                p.Attr3 = attr[2];
+                p.Attr4 = attr[3];
+                p.Attr5 = attr[4];
+                p.Attr6 = attr[5];
+                p.Attr7 = attr[6];
                 repository.Update(p);
                 return true;
             }

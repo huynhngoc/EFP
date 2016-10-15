@@ -34,12 +34,12 @@ namespace ShopManager.Controllers
             }
         }
 
-        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
+        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
         {
             ProductService service = new ProductService();
             try
             {
-                return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock ), JsonRequestBehavior.AllowGet);
+                return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock, templateId, attr ), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

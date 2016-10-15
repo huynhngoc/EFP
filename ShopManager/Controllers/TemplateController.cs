@@ -18,7 +18,13 @@ namespace ShopManager.Controllers
         public JsonResult All(string shopId)
         {
             TemplateProductService service = new TemplateProductService();
-            return Json(service.GetTemplate(shopId), JsonRequestBehavior.AllowGet);
+            return Json(new { aaData = service.GetTemplate(shopId) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetTemplateById(int id)
+        {
+            TemplateProductService service = new TemplateProductService();
+            return Json(service.GetTemplateById(id), JsonRequestBehavior.AllowGet);
         }
     }
 }
