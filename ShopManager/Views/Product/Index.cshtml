@@ -478,7 +478,9 @@
                             timer: 2000,
                             showConfirmButton: false
                         });
-                        $("input.all-check").click();
+                        if ($("input.all-check").is(":checked")) {
+                            $("input.all-check").click();
+                        }
                     } else {
                         swal({
                             title: "Không sửa được sản phẩm",
@@ -712,32 +714,56 @@
                         "shopId": 1
                     },
                     success: function (data, textStatus, xhr) {
-                        $('.template-table').dataTable({
+                        var templateTable = $('.template-table').dataTable({
                             //"bProcessing": true,
                             //"sAjaxSource": "../Template/All"
                             "aaData": data.aaData
+                            , "oLanguage": languageConfig
+                            , "bDestroy": true
                             ,"aoColumnDefs": [
                                 { "bSortable": false
-                                , "aTargets": [0]
-                                , "mData": "Id"  
-                                , "bVisible": false
+                                    , "aTargets": [0]
+                                    , "mData": "Id"  
+                                    , "bVisible": false
                                 }
                                 , {
                                     "bSortable": true
-                                , "aTargets": [1]
-                                , "mData": "Name"
+                                    , "aTargets": [1]
+                                    , "mData": "Name"
                                 }
-                                , {
-                                    "bSortable": true
-                                , "aTargets": [2]
-                                , "mData": "Attr"
+                                , { "bSortable": true
+                                    , "aTargets": [2]
+                                    , "mData": function (source) {
+                                        var listAttr = source.Attr.split("_");
+                                        var content = "";
+                                        for (var i = 0; i < listAttr.length; i++) {
+                                            content += ("<span class='badge badge-success'>" + listAttr[i] + "</span>");
+                                        }
+                                        return content;
+                                    }
                                 }
                                 , {
                                     "bSortable": false
-                                , "aTargets": [3]
-                                , "mData": "null"
+                                    , "bSearchable": false
+                                    , "aTargets": [3]
+                                    , "mData": null
+                                    , "sDefaultContent": "<button class='btn btn-primary change-template-button'>Chọn</button>"
                                 }
                             ]
+                            , "fnInitComplete": function (oSetting, json) {
+                                $('.template-table').removeAttr("style");
+                                $(".change-template-button").on("click", function () {
+                                    var clickedRow = $(this).closest("tr");
+                                    var id = templateTable.fnGetData($(clickedRow)).Id;
+                                    $("#viewProductModal input[name='templateId']").val(id);
+                                    var attrList = "";
+                                    $("#viewProductModal input[name='attr']").each(function () {
+                                        attrList += $(this).val() + "_";
+                                    })
+                                    initAttr(id, attrList);
+                                    $("#templateChoser").modal("hide");
+                                });
+                            }
 
                         })
                         $("#templateChoser").modal("show");
