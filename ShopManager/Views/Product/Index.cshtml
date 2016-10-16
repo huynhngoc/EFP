@@ -90,7 +90,7 @@
                                 <li class=""><a data-toggle="tab" href="#tab-3"> Hình ảnh</a></li>
                             </ul>
                             <div class="tab-content">                               
-                                    <div id="tab-1" class="tab-pane active">
+                                    <div id="tab-1" class="tab-pane active base-tab">
                                         <div class="panel-body">
                                             <fieldset class="form-horizontal">
                                                 <input type="hidden" name="id"/>
@@ -231,46 +231,149 @@
         </div>
         <!-- end modal -->
         <!-- modal -->
-        <div class="modal inmodal" id="viewDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
-            @*<div class="modal-dialog">
+        <div class="modal inmodal" id="addProductModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content animated bounceInRight">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Thông tin sản phẩm</h4>
-                        <small class="font-bold">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+                        <h4 class="modal-title">Thêm sản phẩm</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="panel-body">
-                            <fieldset class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Tên:</label>
-                                    <div class="col-sm-10"><input type="text" readonly="true" class="form-control" placeholder="Tên sản phẩm" value="Giày bata nam, màu xanh đen, size 32"></div>
-                                </div>
+                        <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active base-tab"><a data-toggle="tab" href="#tab-1-add"> Thông tin chung</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-2-add">Đặc điểm</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-3-add"> Hình ảnh</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab-1-add" class="tab-pane active base-tab">
+                                    <div class="panel-body">
+                                        <fieldset class="form-horizontal">
+                                            @*<input type="hidden" name="id" />*@
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Tên:</label>
+                                                <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên sản phẩm" /></div>
+                                            </div>
+                                            <div class="form-group select-container">
+                                                <label class="col-sm-2 control-label">Phân loại:</label>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control parentCategory-select">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <select name="category" class="form-control category-select"></select>
+                                                </div>
+                                                <div class="col-sm-10 pull-right"><a target="_blank" href="../Category/Index">Thêm phân loại sản phẩm</a></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Mô tả:</label>
+                                                <div class="col-sm-10">
+                                                    <textarea name="desc" class="form-control" style="resize:none"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Giá:</label>
+                                                <div class="col-sm-10"><input class="price-input" name="price" placeholder="Giá" min="0" step="1000" /></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Giá khuyến mãi:</label>
+                                                <div class="col-sm-10"><input class="price-input" name="promotion" placeholder="Giá khuyến mãi" min="0" step="1000" /></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Tình trạng:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="checkbox" checked name="status" class="js-switch" id="masterProStatus" checked />
+                                                    <span class="label label-primary" id="masterStatusOn">Bình thường</span>
+                                                    <span class="label label-danger" id="masterStatusOff" style="display:none">Ngưng bán</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Tình trạng hàng:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="checkbox" checked name="isInStock" class="js-switch" id="detailProStatus" checked />
+                                                    <span class="label label-primary" id="detailStatusOn">Còn hàng</span>
+                                                    <span class="label label-danger" id="detailStatusOff" style="display:none">Hết hàng</span>
+                                                </div>
+                                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Giá:</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control" placeholder="$160.00" value="2000000"></div>
+                                        </fieldset>
+                                    </div>
                                 </div>
+                                <div id="tab-2-add" class="tab-pane">
+                                    <fieldset class="form-horizontal">
+                                        <div class="panel-body">
+                                            <input name="templateId" type="hidden" />
+                                            <div class="form-group">
+                                                <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
+                                                <button class="btn btn-primary remove-template">Không dùng mẫu <span class="template-name"></span> nữa</button>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-10">
+                                                    <input name="attr" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div id="tab-3-add" class="tab-pane">
+                                    <div class="panel-body">                                        
+                                        <div class="col-md-12">
+                                            <form id="dropzoneadd" class="dropzone" action="#">
+                                                <div class="dropzone-previews"></div>
+                                            </form>
+                                        </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Tình trạng:</label>
-                                    <div class="col-sm-10">
-                                        <input type="checkbox" class="js-switch" id="detailProStatus" checked />
-                                        <span class="label label-primary" id="detailStatusOn">Bình thường</span>
-                                        <span class="label label-danger" id="detailStatusOff" style="display:none">Hết hàng</span>
+
                                     </div>
                                 </div>
 
-                            </fieldset>
+                            </div>
                         </div>
-
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-primary">Lưu</button>
+                    <div class="modal-footer">                        
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary add-save-button">Thêm</button>
                     </div>
                 </div>
-            </div>*@
+            </div>
         </div>
         <!-- end modal -->
         <!-- modal template choser-->
@@ -335,6 +438,7 @@
     @Scripts.Render("~/SweetAlert-JS")
     <script>
         var editDropzone;
+        var addDropzone;
         var table;
         var currentChildren;
         var languageConfig = {
@@ -361,6 +465,10 @@
 
         function initCategory(parentId, selectVal) {
             $(".category-select").empty();
+            if (parentId == null || parentId =="") {                
+                $("#addProductModal .parentCategory-select option:first").prop("selected", true);
+                return;
+            }
             $.ajax({
                 url: '../Category/Children',
                 type: 'POST',
@@ -412,7 +520,7 @@
         }
 
         function initAttr(templateId, attr) {
-            $("#viewProductModal input[name='attr']").each(function (i) {
+            $("input[name='attr']").each(function (i) {
                 $(this).closest(".form-group").css("visibility", "hidden");
                 $(this).val("");
             });
@@ -433,7 +541,14 @@
                     var attrList = attr.split("_");
                     for (var i = 0; i < attrName.length; i++) {
                         if (attrName[i] && 0 !== attrName.length) {
-                            var input = $("#viewProductModal input[name='attr']")[i];
+
+                            var input;
+                            if ($("#viewProductModal").hasClass("in")) {
+                                input = $("#viewProductModal input[name='attr']")[i];
+                            }
+                            else {
+                                input = $("#addProductModal input[name='attr']")[i];
+                            }
                             var form = $(input).closest(".form-group");
                             var label = $(form).find("label");
                             $(label).text(attrName[i]);
@@ -503,8 +618,20 @@
             });
         }
 
+        function addForm() {
+            $("#addProductModal input").each(function () {
+                $(this).val("");
+            });
+            //("#addProductModal input[name='templateId']").val(null);
+            addDropzone.removeAllFiles();
+            initAttr(null, "______");
+            initCategory(null);
+            $("#addProductModal").modal("show");
+            $(".base-tab a").click();
+        }
+
         function initButtonAroundDataTable() {
-            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary">Thêm</button></div>');
+            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary add-button">Thêm</button></div>');
             $(".toolbar div.option-group").append('<div class="btn-group">'
                             + '<button data-toggle="dropdown" class="btn btn-primary btn-outline btn-sm dropdown-toggle" aria-expanded="false">Đã chọn <span class="selected-number">0</span> sản phẩm<span class="caret"></span></button>'
                             + '<ul class="dropdown-menu">'
@@ -557,6 +684,10 @@
                 }
                 $(".selected-number").text($("input.row-check:checked").length);
             });
+
+            $(".add-button").on("click", function () {
+                addForm();
+            });
         }
 
         function editForm(id) {
@@ -597,7 +728,7 @@
                     initAttr(data.TemplateId, data.Attr);
 
                     $("#viewProductModal").modal("show");
-                    $(".base-tab").click();
+                    $(".base-tab a").click();
                 },
                 error: function () {
 
@@ -650,72 +781,70 @@
                 $("#viewProductModal input[name='attr']").each(function () {
                     attr.push($(this).val());
                 });
-                console.log("begin");
-                var files = editDropzone.getAcceptedFiles();
-                //var files = document.getElementById("inputfile").files;
-                console.log(files);
-                console.log("end");
                 
-                var data = new FormData();
-                $(files).each(function () {
-                    data.append(this.name, this);
-                });
-                $.ajax({
-                    url: '../Product/Upload',
-                    method: "POST",
-                    processData: false,
-                    contentType: false,
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                    },
-                    error: function () {
-                        console.log("error");
-                    }
-                });
-
-
-                //data.append("id", id);
-                //data.append("name", name);
-                //data.append("description", description);
-                //data.append("categoryId", categoryId);
-                //data.append("price", price);
-                //data.append("promotion", promotion);
-                //data.append("status", status);
-                //data.append("isInStock", isInStock);
-                //data.append("templateId", templateId);
-                //data.append("attr", attr);
-                //data.append("files", files);
-
                 $.ajax({
                     url: '../Product/Update',
                     type: 'POST',
                     //processData: false,                    
                     data: //data,
                         {
-                        "id": id,
-                        "name": name,
-                        "description": description,
-                        "categoryId": categoryId,
-                        "price": price,
-                        "promotion": promotion,
-                        "status":status,
-                        "isInStock": isInStock,
-                        "templateId": templateId,
-                        "attr": attr                        
-                    },
+                            "id": id,
+                            "name": name,
+                            "description": description,
+                            "categoryId": categoryId,
+                            "price": price,
+                            "promotion": promotion,
+                            "status": status,
+                            "isInStock": isInStock,
+                            "templateId": templateId,
+                            "attr": attr
+                        },
                     success: function (data, textStatus, xhr) {
                         if (data == true) {
                             table._fnAjaxUpdate();
-                            swal({
-                                title: "Thành công",
-                                animation: "slide-from-top",
-                                //text: "I will close in 2 seconds.",
-                                type: "success",
-                                timer: 2000,
-                                showConfirmButton: false
+                            console.log("begin");
+                            var files = editDropzone.getAcceptedFiles();
+                            //var files = document.getElementById("inputfile").files;
+                            console.log(files);
+                            console.log("end");
+
+                            var data = new FormData();
+                            $(files).each(function () {
+                                data.append(this.name, this);
                             });
-                            $("#viewProductModal").modal("hide");
+                            id = $("#viewProductModal").find('input[name="id"]').val();
+                            data.append("id", id);
+                            $.ajax({
+                                url: '../Product/Upload',
+                                method: "POST",
+                                processData: false,
+                                contentType: false,
+                                data: data,
+                                success: function (data) {
+                                    console.log(data);
+                                    swal({
+                                        title: "Thành công",
+                                        animation: "slide-from-top",
+                                        //text: "I will close in 2 seconds.",
+                                        type: "success",
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
+                                    editDropzone.removeAllFiles();
+                                    $("#viewProductModal").modal("hide");
+                                },
+                                error: function () {
+                                    console.log("error");
+                                    swal({
+                                        title: "Đã có sự cố khi tải hình",
+                                        animation: "slide-from-top",
+                                        //text: "I will close in 2 seconds.",
+                                        type: "warning",
+                                        //timer: 2000,
+                                        showConfirmButton: true
+                                    });
+                                }
+                            });
                         } else {
                             swal({
                                 title: "Không sửa được sản phẩm",
@@ -738,7 +867,7 @@
                             showConfirmButton: true
                         });
                     }
-                })
+                });
             });
 
             $(".choose-template").on("click", function () {
@@ -790,11 +919,18 @@
                                 $(".change-template-button").on("click", function () {
                                     var clickedRow = $(this).closest("tr");
                                     var id = templateTable.fnGetData($(clickedRow)).Id;
-                                    $("#viewProductModal input[name='templateId']").val(id);
                                     var attrList = "";
-                                    $("#viewProductModal input[name='attr']").each(function () {
-                                        attrList += $(this).val() + "_";
-                                    })
+                                    if ($("#viewProductModal").hasClass('in')) {
+                                        $("#viewProductModal input[name='templateId']").val(id);
+                                        $("#viewProductModal input[name='attr']").each(function () {
+                                            attrList += $(this).val() + "_";
+                                        });
+                                    } else {
+                                        $("#addProductModal input[name='templateId']").val(id);
+                                        $("#addProductModal input[name='attr']").each(function () {
+                                            attrList += $(this).val() + "_";
+                                        });
+                                    }
                                     initAttr(id, attrList);
                                     $("#templateChoser").modal("hide");
                                 });
@@ -814,6 +950,111 @@
                 $("#viewProductModal input[name='templateId']").val(null);
                 initAttr(null);
             });
+
+            $(".add-save-button").on("click", function () {
+                //id = $("#viewProductModal").find('input[name="id"]').val();
+                name = $("#addProductModal").find('input[name="name"]').val();
+                description = $("#addProductModal").find('textarea[name="desc"]').val();
+                categoryId = $("#addProductModal").find('select.category-select').val();
+                price = $("#addProductModal").find('input[name="price"]').val();
+                promotion = $("#addProductModal").find('input[name="promotion"]').val();
+                status = $("#addProductModal").find('input[name="status"]').is(":checked");
+                isInStock = $("#addProductModal").find('input[name="isInStock"]').is(":checked");
+                templateId = $("#addProductModal").find('input[name="templateId"]').val();
+                var attr = [];
+                $("#addProductModal input[name='attr']").each(function () {
+                    attr.push($(this).val());
+                });
+
+                $.ajax({
+                    url: '../Product/Add',
+                    type: 'POST',
+                    //processData: false,                    
+                    data: //data,
+                        {
+                            //"id": id,
+                            "name": name,
+                            "description": description,
+                            "categoryId": categoryId,
+                            "price": price,
+                            "promotion": promotion,
+                            "status": status,
+                            "isInStock": isInStock,
+                            "templateId": templateId,
+                            "attr": attr
+                        },
+                    success: function (data, textStatus, xhr) {
+                        if (data != null) {
+                            table._fnAjaxUpdate();
+                            console.log("begin");
+                            var files = addDropzone.getAcceptedFiles();
+                            //var files = document.getElementById("inputfile").files;
+                            console.log(files);
+                            console.log("end");
+
+                            var formData = new FormData();
+                            $(files).each(function () {
+                                formData.append(this.name, this);
+                            });
+                            var id = data.Id;
+                            console.log(data);
+                            console.log(id);
+                            formData.append("id", id);
+                            $.ajax({
+                                url: '../Product/Upload',
+                                method: "POST",
+                                processData: false,
+                                contentType: false,
+                                data: formData,
+                                success: function (data) {
+                                    console.log(data);
+                                    swal({
+                                        title: "Thành công",
+                                        animation: "slide-from-top",
+                                        //text: "I will close in 2 seconds.",
+                                        type: "success",
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
+                                    addDropzone.removeAllFiles();
+                                    $("#addProductModal").modal("hide");
+                                },
+                                error: function () {
+                                    console.log("error");
+                                    swal({
+                                        title: "Đã có sự cố khi tải hình",
+                                        animation: "slide-from-top",
+                                        //text: "I will close in 2 seconds.",
+                                        type: "warning",
+                                        //timer: 2000,
+                                        showConfirmButton: true
+                                    });
+                                }
+                            });
+                        } else {
+                            swal({
+                                title: "Không thêm được sản phẩm",
+                                animation: "slide-from-top",
+                                //text: "I will close in 2 seconds.",
+                                type: "warning",
+                                //timer: 2000,
+                                showConfirmButton: true
+                            });
+                        }
+                    },
+                    error: function () {
+                        console.log("error");
+                        swal({
+                            title: "Không thêm được sản phẩm",
+                            animation: "slide-from-top",
+                            //text: "I will close in 2 seconds.",
+                            type: "warning",
+                            //timer: 2000,
+                            showConfirmButton: true
+                        });
+                    }
+                });
+            });
         }
 
         $(document).ready(function () {
@@ -823,7 +1064,7 @@
             productTable = $(".product-master").dataTable({
                 "bProcessing": true
                 , "bServerSide": true
-                , "sAjaxSource": "../Product/GetMasterProduct"
+                , "sAjaxSource": "../Product/GetProduct"
                 , "fnServerParams": function (aoData) {
                     aoData.push({ "name": "shopId", "value": "1" });
                     sName = $("#sName").hasClass("active");                    
@@ -908,76 +1149,7 @@
             initParentCategory();
             initModalButton();
 
-            /* setting show detailed product*/            
-            //$('.product-master').on('click', '.view-detail', function (evt) {
-            //    var id = productTable.DataTable().row($(this)).data()[4];
-            //    var clickedRow = $(this).closest("tr");
-            //    var id = productTable.fnGetData($(clickedRow)).Id;
-            //    console.log(id);
-            //    $('.product-detail').hide();
-            //    $(id).show();
-            //    $(currentChildren).remove();
-            //    $('.product-info').remove();
-            //    if (productTable.fnIsOpen(clickedRow)) {
-            //        productTable.fnClose(clickedRow);
-            //    } else {
-            //        productTable.fnOpen(clickedRow, '<div class="table-responsive"><table class="table table-bordered table-hover product-detail"><thead><tr><th></th><th></th><th>Đặc điểm</th><th>Giá riêng</th><th>Giá khuyến mãi</th><th>Tình trạng</th><th>#</th></tr></thead></table></div>'
-            //                        , "product-info");
-            //        currentChildren = $(".product-detail").dataTable({
-            //            "bProcessing": true
-            //        , "bServerSide": true
-            //        , "sAjaxSource": "http://localhost:26638/Product/GetDetailedProduct"
-            //        , "fnServerParams": function (aoData) {                        
-            //            aoData.push({ "name": "masterId", "value": id });                        
-            //        }
-            //        , "aoColumnDefs": [                        
-            //                  { "bVisible": false, "aTargets": [0], "mData": "Id" }
-            //                , {
-            //                    "bSortable": false
-            //                    , "aTargets": [1]
-            //                    , "mData": "null"
-            //                    , "sDefaultContent": "<input type='checkbox'>"                                
-            //                  }
-            //                , {
-            //                    "aTargets": [2]
-            //                    , "mData": "Properties"
-            //                }
-            //                , { "aTargets": [3], "mData": "Price"                                
-            //                }
-            //                , {
-            //                    "aTargets": [4], "mData": "PromotionPrice"                                
-            //                  }
-            //                , {
-            //                    "mData": function (source) {
-            //                        console.log(source);
-            //                        var status = source.Status;
-            //                        if (status == true) {
-            //                            return '<span class="label label-primary">Còn hàng</span>';
-            //                        } else {
-            //                            return '<span class="label label-danger">Hết hàng</span>';
-            //                        }
-            //                    }
-            //                    , "aTargets": [5]                                
-            //                }
-            //                , {
-            //                    "bSortable": false
-            //                    , "aTargets": [-1]
-            //                    , "sDefaultContent": '<div class="btn-group"><button class="btn btn-success" type="button" title="Chi tiết" data-toggle="modal" data-target="#viewDetailModal"><i class="fa fa-edit"></i></button><button class="btn btn-danger" type="button" title="Xóa"><i class="fa fa-trash"></i></button></div>'
-            //                    , "mData": "null"
-            //                }                            
-            //        ]
-            //        , "oLanguage": languageConfig
-            //        , "iDisplayLength": 5                                    
-            //        , "bLengthChange": false
-
-            //        });
-                    
-
-                    
-            //    }
-            //});
-
-
+            
             /* touchspin*/
             $(".price-input").TouchSpin({
                 min: 0,
@@ -988,16 +1160,7 @@
                 verticalbuttons: true,
                 buttondown_class: 'btn btn-white',
                 buttonup_class: 'btn btn-white'
-            });
-            
-            ///* set description input */
-            //$(".summernote").summernote({
-            //    //toolbar:["style",["bold", "italic", "underline", "clear"]]
-            //});
-
-
-            /*tokenfield*/
-            //$('#tokenfield').tokenfield();
+            });                       
 
             /* switcher*/
             var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -1013,14 +1176,7 @@
                     $("#masterStatusOn").hide();
                     $("#masterStatusOff").show();
                 }
-            });
-
-            //$("#viewProductModal").on("opened", function () {
-            //    /* image carousel*/
-            //    $('.product-images').slick({
-            //        dots: true
-            //    });                
-            //});
+            });            
 
             $("#detailProStatus").on("change", function(){
                 if ($("#detailProStatus").is(":checked")){
@@ -1032,17 +1188,11 @@
                 }
             });
 
-            /////* image carousel*/
-            //$('.product-images').slick({
-            //    dots: true
-            //});
-
-            /* select2*/
-            //$(".category-select").select2({
-            //    placeholder: "Chọn 1 loại sản phẩm",
-            //    allowClear: true,
-            //    dropdownParent: $(".select-container")
-            //});
+            $('.modal').on('hidden.bs.modal', function (e) {
+                if ($('.modal').hasClass('in')) {
+                    $('body').addClass('modal-open');
+                }
+            });
 
             /* dropzone*/
             Dropzone.options.dropzone = {
@@ -1083,6 +1233,43 @@
 
             }
 
+            Dropzone.options.dropzoneadd = {
+
+                //autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 10,
+                paramName: "editFiles",
+                maxFiles: 10,
+                addRemoveLinks: true,
+                dictDefaultMessage: "Bấm hoặc kéo thả hình vào đây",
+                // Dropzone settings
+                init: function () {
+                    addDropzone = this;
+                    var myDropzone = this;
+                    //console.log(this.hiddenFileInput);
+                    $(this.hiddenFileInput).attr("name", "editFiles");
+                    console.log(this.options);
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+                    this.on("sendingmultiple", function () {
+                    });
+                    this.on("successmultiple", function (files, response) {
+                    });
+                    this.on("errormultiple", function (files, response) {
+                    });
+                    this.on("addedfile", function () {
+                        console.log(myDropzone.hiddenFileInput);
+                        $(myDropzone.hiddenFileInput).attr("name", "editFiles");
+                    });
+                    this.on("removedfile", function () {
+                        $(myDropzone.hiddenFileInput).attr("name", "editFiles");
+                    });
+                }
+
+            }
         });
 
     </script>

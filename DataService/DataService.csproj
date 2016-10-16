@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CategoryRepository.cs" />
+    <Compile Include="Repository\PictureRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\TemplateProductRepository.cs" />
     <Compile Include="Respons.cs">
@@ -116,6 +117,7 @@
     </Compile>
     <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\CategoryService.cs" />
+    <Compile Include="Service\PictureService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\TemplateProductService.cs" />
     <Compile Include="Shop.cs">

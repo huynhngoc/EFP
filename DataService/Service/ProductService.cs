@@ -62,44 +62,7 @@ namespace DataService.Service
         public List<Product> GetProductByCategory(int cateId, string shopId)
         {
             return repository.GetProductByCategory(cateId, shopId).ToList();
-        }
-
-        //public async Task<> GetProduct(JQueryDataTableParamModel param, string shopId)
-        //{
-        //    var masterProducts = repository.GetProductByShopId(shopId);
-        //    var count = param.iDisplayStart + 1;
-        //    try
-        //    {
-        //        var rs = (await masterProducts.Where(q => string.IsNullOrEmpty(param.sSearch) ||
-        //                    (!string.IsNullOrEmpty(param.sSearch)
-        //                    && q.Name.ToLower().Contains(param.sSearch.ToLower())))
-        //                    .OrderByDescending(q => q.Name)
-        //                    .Skip(param.iDisplayStart)
-        //                    .Take(param.iDisplayLength)
-        //                    .ToListAsync())
-        //                    .Select(q => new IConvertible[] {
-        //                        count++,
-        //                        q.Name,
-        //                        q.Description,
-        //                        q.Status,
-        //                        q.Id
-        //                    });
-        //        var totalRecords = rs.Count();
-
-        //        return Json(new
-        //        {
-        //            sEcho = param.sEcho,
-        //            iTotalRecords = totalRecords,
-        //            iTotalDisplayRecords = totalRecords,
-        //            aaData = rs
-        //        }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch
-        //    {
-        //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-        //    }            
-
-        //}
+        }       
 
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
@@ -143,6 +106,40 @@ namespace DataService.Service
             {
                 Debug.WriteLine(e);
                 return false;
+            }
+        }
+
+        public Product AddProduct(string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr, string shopId)
+        {
+            try
+            {
+                Product p = new Product()
+                {
+                    Name = name,
+                    Description = description,
+                    CategoryId = categoryId,
+                    Price = price,
+                    PromotionPrice = promotion,
+                    Status = status,
+                    IsInStock = isInStock,
+                    DateModified = DateTime.Now,
+                    TemplateId = templateId,
+                    DateCreated = DateTime.Now,
+                    ShopId = shopId,
+                    Attr1 = attr[0],
+                    Attr2 = attr[1],
+                    Attr3 = attr[2],
+                    Attr4 = attr[3],
+                    Attr5 = attr[4],
+                    Attr6 = attr[5],
+                    Attr7 = attr[6]
+                };
+                return repository.Add(p);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
             }
         }
     }

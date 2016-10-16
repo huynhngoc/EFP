@@ -176,6 +176,20 @@ namespace DataService.Repository
             return data;            
         }
 
+        public Product Add(Product p)
+        {
+            try
+            {
+                Product pro = dbSet.Add(p);
+                entites.SaveChanges();
+                return pro;
+            }
+            catch (Exception)
+            {
+                return null;
+            }            
+        }
+
         public bool SetStatus(int id, bool status)
         {
             try
