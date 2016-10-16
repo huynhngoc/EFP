@@ -199,22 +199,18 @@
                                         </fieldset>
                                     </div>
                                     <div id="tab-3" class="tab-pane">
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-md-4">
+                                        <div class="panel-body">                                            
+                                                <div class="col-md-6">
                                                     <div class="product-images">
                                                         
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8">
-                                                    <div class="col-md-6">
-                                                        <form id="dropzone" class="dropzone" action="#">
-                                                            <div class="dropzone-previews"></div>
-                                                            <button type="submit" class="btn btn-primary pull-right">Submit this form!</button>
-                                                        </form>
-                                                    </div>
+                                                <div class="col-md-6">                                                    
+                                                    <form id="dropzone" class="dropzone" action="#">
+                                                        <div class="dropzone-previews"></div>                                                            
+                                                    </form>                                                                                                            
                                                 </div>
-                                            </div>
+                                            
 
                                         </div>
                                     </div>
@@ -338,7 +334,7 @@
     <!-- sweetalert -->
     @Scripts.Render("~/SweetAlert-JS")
     <script>
-        var s;
+        var editDropzone;
         var table;
         var currentChildren;
         var languageConfig = {
@@ -654,10 +650,49 @@
                 $("#viewProductModal input[name='attr']").each(function () {
                     attr.push($(this).val());
                 });
+                console.log("begin");
+                var files = editDropzone.getAcceptedFiles();
+                //var files = document.getElementById("inputfile").files;
+                console.log(files);
+                console.log("end");
+                
+                var data = new FormData();
+                $(files).each(function () {
+                    data.append(this.name, this);
+                });
+                $.ajax({
+                    url: '../Product/Upload',
+                    method: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+
+
+                //data.append("id", id);
+                //data.append("name", name);
+                //data.append("description", description);
+                //data.append("categoryId", categoryId);
+                //data.append("price", price);
+                //data.append("promotion", promotion);
+                //data.append("status", status);
+                //data.append("isInStock", isInStock);
+                //data.append("templateId", templateId);
+                //data.append("attr", attr);
+                //data.append("files", files);
+
                 $.ajax({
                     url: '../Product/Update',
                     type: 'POST',
-                    data: {
+                    //processData: false,                    
+                    data: //data,
+                        {
                         "id": id,
                         "name": name,
                         "description": description,
@@ -667,7 +702,7 @@
                         "status":status,
                         "isInStock": isInStock,
                         "templateId": templateId,
-                        "attr": attr
+                        "attr": attr                        
                     },
                     success: function (data, textStatus, xhr) {
                         if (data == true) {
@@ -773,6 +808,11 @@
                         console.log('error');
                     }
                 });
+            });
+
+            $(".remove-template").on("click", function () {
+                $("#viewProductModal input[name='templateId']").val(null);
+                initAttr(null);
             });
         }
 
@@ -1007,25 +1047,37 @@
             /* dropzone*/
             Dropzone.options.dropzone = {
 
-                autoProcessQueue: false,
+                //autoProcessQueue: false,
                 uploadMultiple: true,
-                parallelUploads: 100,
+                parallelUploads: 10,
+                paramName: "editFiles",
                 maxFiles: 10,
-
+                addRemoveLinks: true,
+                dictDefaultMessage: "Bấm hoặc kéo thả hình vào đây",
                 // Dropzone settings
                 init: function () {
+                    editDropzone = this;
                     var myDropzone = this;
-
-                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        myDropzone.processQueue();
-                    });
+                    //console.log(this.hiddenFileInput);
+                    $(this.hiddenFileInput).attr("name", "editFiles");
+                    console.log(this.options);
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
                     this.on("sendingmultiple", function () {
                     });
                     this.on("successmultiple", function (files, response) {
                     });
                     this.on("errormultiple", function (files, response) {
+                    });
+                    this.on("addedfile", function () {
+                        console.log(myDropzone.hiddenFileInput);
+                        $(myDropzone.hiddenFileInput).attr("name", "editFiles");
+                    });
+                    this.on("removedfile", function () {
+                        $(myDropzone.hiddenFileInput).attr("name", "editFiles");
                     });
                 }
 

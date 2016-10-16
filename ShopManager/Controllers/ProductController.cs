@@ -9,11 +9,21 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using System.Globalization;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace ShopManager.Controllers
 {
     public class ProductController : Controller
     {
+        static Cloudinary m_cloudinary = new Cloudinary(new Account(
+            ConfigurationManager.AppSettings["CloudName"],
+            ConfigurationManager.AppSettings["AppId"],
+            ConfigurationManager.AppSettings["AppSecret"]));        
         // GET: Product
         public ActionResult Index()
         {
@@ -34,11 +44,74 @@ namespace ShopManager.Controllers
             }
         }
 
-        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
-        {
-            ProductService service = new ProductService();
+        public JsonResult Upload()
+        {            
+            //Dictionary<string, string> results = new Dictionary<string, string>();
             try
             {
+                int id = int.Parse(Request["id"]);
+                for (int i = 0; i < HttpContext.Request.Files.Count; i++)
+                {
+                    var file = HttpContext.Request.Files[i];
+
+                    if (file.ContentLength == 0)
+                    {
+                        //return PartialView("Upload", new Model(m_cloudinary));
+                        break;
+                    }
+
+                    var result = m_cloudinary.Upload(new ImageUploadParams()
+                    {
+                        File = new CloudinaryDotNet.Actions.FileDescription(file.FileName,
+                            file.InputStream),
+                        Transformation = new Transformation().Height(400).Width(400).Crop("fit")
+                    });
+
+                    //foreach (var token in result.JsonObj.Children())
+                    //{
+                    //    if (token is JProperty)
+                    //    {
+                    //        JProperty prop = (JProperty)token;
+                    //        results.Add(prop.Name, prop.Value.ToString());
+                    //    }
+                    //}
+
+                    //Photo p = new Photo()
+                    //{
+                    //    Bytes = (int)result.Length,
+                    //    CreatedAt = DateTime.Now,
+                    //    Format = result.Format,
+                    //    Height = result.Height,
+                    //    Path = result.Uri.AbsolutePath,
+                    //    PublicId = result.PublicId,
+                    //    ResourceType = result.ResourceType,
+                    //    SecureUrl = result.SecureUri.AbsoluteUri,
+                    //    Signature = result.Signature,
+                    //    Type = result.JsonObj["type"].ToString(),
+                    //    Url = result.Uri.AbsoluteUri,
+                    //    Version = Int32.Parse(result.Version),
+                    //    Width = result.Width,
+                    //};
+
+                    //album.Photos.Add(p);
+                    Debug.WriteLine(result);
+                    Debug.WriteLine(result.Uri.AbsoluteUri);
+                }
+                return Json(new {success= true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
+        {
+            ProductService service = new ProductService();            
+
+            try
+            {                
                 return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock, templateId, attr ), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
