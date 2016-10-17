@@ -89,23 +89,6 @@
           <Property Name="Email" Type="nvarchar" MaxLength="254" />
           <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
-        <EntityType Name="DetailedProducts">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Price" Type="money" Nullable="false" />
-          <Property Name="PromotionPrice" Type="money" />
-          <Property Name="Status" Type="bit" Nullable="false" />
-          <Property Name="MasterId" Type="int" Nullable="false" />
-          <Property Name="Attr1" Type="nvarchar" MaxLength="200" />
-          <Property Name="Attr2" Type="nvarchar" MaxLength="200" />
-          <Property Name="Attr3" Type="nvarchar" MaxLength="200" />
-          <Property Name="Attr4" Type="nvarchar" MaxLength="200" />
-          <Property Name="Attr5" Type="nvarchar" MaxLength="200" />
-          <Property Name="Attr6" Type="nvarchar" MaxLength="200" />
-          <Property Name="Attr7" Type="nvarchar" MaxLength="200" />
-        </EntityType>
         <EntityType Name="Entities">
           <Key>
             <PropertyRef Name="Id" />
@@ -124,26 +107,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IntentName" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <EntityType Name="MasterProducts">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="256" />
-          <Property Name="CategoryId" Type="int" />
-          <Property Name="Attr1" Type="nvarchar" MaxLength="100" />
-          <Property Name="Attr2" Type="nvarchar" MaxLength="100" />
-          <Property Name="Attr3" Type="nvarchar" MaxLength="100" />
-          <Property Name="Attr4" Type="nvarchar" MaxLength="100" />
-          <Property Name="Attr5" Type="nvarchar" MaxLength="100" />
-          <Property Name="Attr6" Type="nvarchar" MaxLength="100" />
-          <Property Name="Attr7" Type="nvarchar" MaxLength="100" />
-          <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="DateCreated" Type="datetime" Nullable="false" />
-          <Property Name="DateModified" Type="datetime" Nullable="false" />
-          <Property Name="Status" Type="bit" Nullable="false" />
-        </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -151,8 +114,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Details" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
-          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -170,12 +134,35 @@
         </EntityType>
         <EntityType Name="ProductPictures">
           <Key>
-            <PropertyRef Name="MasterId" />
-            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="MasterId" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Urls" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="Attr1" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr3" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr4" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr5" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr6" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr7" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="IsInStock" Type="bit" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="PromotionPrice" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="TemplateId" Type="int" />
         </EntityType>
         <EntityType Name="Responses">
           <Key>
@@ -196,6 +183,21 @@
           <Property Name="BannerImg" Type="nvarchar" MaxLength="1000" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TemplateProducts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Attr1" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr3" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr4" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr5" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr6" Type="nvarchar" MaxLength="100" />
+          <Property Name="Attr7" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <Association Name="FK_Categories_Categories">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -313,18 +315,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DetailedProducts_MasterProducts">
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
-          <End Role="DetailedProducts" Type="Self.DetailedProducts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MasterProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DetailedProducts">
-              <PropertyRef Name="MasterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Entities_Shops">
           <End Role="Shops" Type="Self.Shops" Multiplicity="0..1" />
           <End Role="Entities" Type="Self.Entities" Multiplicity="*" />
@@ -338,34 +328,46 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MasterProducts_Categories">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="MasterProducts">
+            <Dependent Role="Products">
               <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MasterProducts_Shops">
           <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Shops">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="MasterProducts">
+            <Dependent Role="Products">
               <PropertyRef Name="ShopId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderDetails_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProducts" Multiplicity="1" />
+        <Association Name="FK_MasterProducts_TemplateProduct">
+          <End Role="TemplateProducts" Type="Self.TemplateProducts" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateProducts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_MasterProducts">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
+            <Principal Role="Products">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="OrderDetails">
@@ -409,27 +411,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductPictures_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProducts" Multiplicity="1" />
+        <Association Name="FK_ProductPictures_MasterProducts">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="ProductPictures" Type="Self.ProductPictures" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
+            <Principal Role="Products">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ProductPictures">
               <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductPictures_MasterProducts">
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPictures" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MasterProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="MasterId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -469,6 +459,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TemplateProduct_Shops">
+          <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
+          <End Role="TemplateProducts" Type="Self.TemplateProducts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shops">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TemplateProducts">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="EFPModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -478,15 +480,15 @@
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DetailedProducts" EntityType="Self.DetailedProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Entities" EntityType="Self.Entities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Intents" EntityType="Self.Intents" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductPictures" EntityType="Self.ProductPictures" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Responses" EntityType="Self.Responses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TemplateProducts" EntityType="Self.TemplateProducts" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Categories1" EntitySet="Categories" />
@@ -523,24 +525,24 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
-          <AssociationSet Name="FK_DetailedProducts_MasterProducts" Association="Self.FK_DetailedProducts_MasterProducts">
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-          </AssociationSet>
           <AssociationSet Name="FK_Entities_Shops" Association="Self.FK_Entities_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Entities" EntitySet="Entities" />
           </AssociationSet>
           <AssociationSet Name="FK_MasterProducts_Categories" Association="Self.FK_MasterProducts_Categories">
             <End Role="Categories" EntitySet="Categories" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
+            <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <AssociationSet Name="FK_MasterProducts_Shops" Association="Self.FK_MasterProducts_Shops">
             <End Role="Shops" EntitySet="Shops" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
+            <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_DetailedProducts" Association="Self.FK_OrderDetails_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
+          <AssociationSet Name="FK_MasterProducts_TemplateProduct" Association="Self.FK_MasterProducts_TemplateProduct">
+            <End Role="TemplateProducts" EntitySet="TemplateProducts" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_MasterProducts" Association="Self.FK_OrderDetails_MasterProducts">
+            <End Role="Products" EntitySet="Products" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
@@ -555,12 +557,8 @@
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_DetailedProducts" Association="Self.FK_ProductPictures_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
-          </AssociationSet>
           <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="Self.FK_ProductPictures_MasterProducts">
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
+            <End Role="Products" EntitySet="Products" />
             <End Role="ProductPictures" EntitySet="ProductPictures" />
           </AssociationSet>
           <AssociationSet Name="FK_Responses_Intents" Association="Self.FK_Responses_Intents">
@@ -574,6 +572,10 @@
           <AssociationSet Name="FK_Shops_AspNetUsers" Association="Self.FK_Shops_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Shops" EntitySet="Shops" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemplateProduct_Shops" Association="Self.FK_TemplateProduct_Shops">
+            <End Role="Shops" EntitySet="Shops" />
+            <End Role="TemplateProducts" EntitySet="TemplateProducts" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -641,8 +643,8 @@
           <NavigationProperty Name="Categories1" Relationship="Self.FK_Categories_Categories" FromRole="Categories" ToRole="Categories1" />
           <NavigationProperty Name="Category1" Relationship="Self.FK_Categories_Categories" FromRole="Categories1" ToRole="Categories" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_Categories_Shops" FromRole="Categories" ToRole="Shops" />
-          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Categories" FromRole="Categories" ToRole="MasterProducts" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="EFPModel.FK_MasterProducts_Categories" FromRole="Category" ToRole="Product" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -671,26 +673,6 @@
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="DetailedProduct">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="PromotionPrice" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Status" Type="Boolean" Nullable="false" />
-          <Property Name="MasterId" Type="Int32" Nullable="false" />
-          <Property Name="Attr1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Attr2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Attr3" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Attr4" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Attr5" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Attr6" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Attr7" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MasterProduct" Relationship="Self.FK_DetailedProducts_MasterProducts" FromRole="DetailedProducts" ToRole="MasterProducts" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_DetailedProducts" FromRole="DetailedProducts" ToRole="OrderDetails" />
-          <NavigationProperty Name="ProductPictures" Relationship="Self.FK_ProductPictures_DetailedProducts" FromRole="DetailedProducts" ToRole="ProductPictures" />
-        </EntityType>
         <EntityType Name="Entity">
           <Key>
             <PropertyRef Name="Id" />
@@ -712,30 +694,6 @@
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Intents" FromRole="Intents" ToRole="Comments" />
           <NavigationProperty Name="Responses" Relationship="Self.FK_Responses_Intents" FromRole="Intents" ToRole="Responses" />
         </EntityType>
-        <EntityType Name="MasterProduct">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="Int32" />
-          <Property Name="Attr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Attr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Attr3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Attr4" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Attr5" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Attr6" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Attr7" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_MasterProducts_Categories" FromRole="MasterProducts" ToRole="Categories" />
-          <NavigationProperty Name="DetailedProducts" Relationship="Self.FK_DetailedProducts_MasterProducts" FromRole="MasterProducts" ToRole="DetailedProducts" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_MasterProducts_Shops" FromRole="MasterProducts" ToRole="Shops" />
-          <NavigationProperty Name="ProductPictures" Relationship="Self.FK_ProductPictures_MasterProducts" FromRole="MasterProducts" ToRole="ProductPictures" />
-        </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
             <PropertyRef Name="Id" />
@@ -744,9 +702,10 @@
           <Property Name="OrderId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <NavigationProperty Name="DetailedProduct" Relationship="Self.FK_OrderDetails_DetailedProducts" FromRole="OrderDetails" ToRole="DetailedProducts" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetails_Orders" FromRole="OrderDetails" ToRole="Orders" />
+          <Property Name="Details" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="EFPModel.FK_OrderDetails_MasterProducts" FromRole="OrderDetail" ToRole="Product" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -764,17 +723,6 @@
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders" FromRole="Orders" ToRole="OrderDetails" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_Orders_Shops" FromRole="Orders" ToRole="Shops" />
           <Property Name="UserNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ProductPicture">
-          <Key>
-            <PropertyRef Name="MasterId" />
-            <PropertyRef Name="ProductId" />
-          </Key>
-          <Property Name="MasterId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="Urls" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="DetailedProduct" Relationship="Self.FK_ProductPictures_DetailedProducts" FromRole="ProductPictures" ToRole="DetailedProducts" />
-          <NavigationProperty Name="MasterProduct" Relationship="Self.FK_ProductPictures_MasterProducts" FromRole="ProductPictures" ToRole="MasterProducts" />
         </EntityType>
         <EntityType Name="Respons">
           <Key>
@@ -802,9 +750,10 @@
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Shops" FromRole="Shops" ToRole="Comments" />
           <NavigationProperty Name="Customers" Relationship="Self.FK_Customers_Shops" FromRole="Shops" ToRole="Customers" />
           <NavigationProperty Name="Entities" Relationship="Self.FK_Entities_Shops" FromRole="Shops" ToRole="Entities" />
-          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Shops" FromRole="Shops" ToRole="MasterProducts" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Shops" FromRole="Shops" ToRole="Orders" />
           <NavigationProperty Name="Responses" Relationship="Self.FK_Responses_Shops" FromRole="Shops" ToRole="Responses" />
+          <NavigationProperty Name="Products" Relationship="EFPModel.FK_MasterProducts_Shops" FromRole="Shop" ToRole="Product" />
+          <NavigationProperty Name="TemplateProducts" Relationship="EFPModel.FK_TemplateProduct_Shops" FromRole="Shop" ToRole="TemplateProduct" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -870,18 +819,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MasterProducts_Categories">
-          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categories">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="CategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Comments_Intents">
           <End Role="Intents" Type="Self.Intent" Multiplicity="1" />
           <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
@@ -930,42 +867,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DetailedProducts_MasterProducts">
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="1" />
-          <End Role="DetailedProducts" Type="Self.DetailedProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MasterProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DetailedProducts">
-              <PropertyRef Name="MasterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderDetails_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProduct" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductPictures_DetailedProducts">
-          <End Role="DetailedProducts" Type="Self.DetailedProduct" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPicture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DetailedProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Entities_Shops">
           <End Role="Shops" Type="Self.Shop" Multiplicity="0..1" />
           <End Role="Entities" Type="Self.Entity" Multiplicity="*" />
@@ -987,30 +888,6 @@
             </Principal>
             <Dependent Role="Responses">
               <PropertyRef Name="IntentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductPictures_MasterProducts">
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="1" />
-          <End Role="ProductPictures" Type="Self.ProductPicture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MasterProducts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductPictures">
-              <PropertyRef Name="MasterId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1062,13 +939,10 @@
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
-          <EntitySet Name="DetailedProducts" EntityType="Self.DetailedProduct" />
           <EntitySet Name="Entities" EntityType="Self.Entity" />
           <EntitySet Name="Intents" EntityType="Self.Intent" />
-          <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
-          <EntitySet Name="ProductPictures" EntityType="Self.ProductPicture" />
           <EntitySet Name="Responses" EntityType="Self.Respons" />
           <EntitySet Name="Shops" EntityType="Self.Shop" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -1091,10 +965,6 @@
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Categories" EntitySet="Categories" />
           </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Categories" Association="Self.FK_MasterProducts_Categories">
-            <End Role="Categories" EntitySet="Categories" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
           <AssociationSet Name="FK_Comments_Intents" Association="Self.FK_Comments_Intents">
             <End Role="Intents" EntitySet="Intents" />
             <End Role="Comments" EntitySet="Comments" />
@@ -1111,18 +981,6 @@
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_DetailedProducts_MasterProducts" Association="Self.FK_DetailedProducts_MasterProducts">
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_DetailedProducts" Association="Self.FK_OrderDetails_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_DetailedProducts" Association="Self.FK_ProductPictures_DetailedProducts">
-            <End Role="DetailedProducts" EntitySet="DetailedProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
-          </AssociationSet>
           <AssociationSet Name="FK_Entities_Shops" Association="Self.FK_Entities_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Entities" EntitySet="Entities" />
@@ -1130,14 +988,6 @@
           <AssociationSet Name="FK_Responses_Intents" Association="Self.FK_Responses_Intents">
             <End Role="Intents" EntitySet="Intents" />
             <End Role="Responses" EntitySet="Responses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Shops" Association="Self.FK_MasterProducts_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="Self.FK_ProductPictures_MasterProducts">
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-            <End Role="ProductPictures" EntitySet="ProductPictures" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
             <End Role="Orders" EntitySet="Orders" />
@@ -1155,7 +1005,161 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Products" EntityType="EFPModel.Product" />
+          <AssociationSet Name="FK_OrderDetails_MasterProducts" Association="EFPModel.FK_OrderDetails_MasterProducts">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterProducts_Shops" Association="EFPModel.FK_MasterProducts_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <EntitySet Name="TemplateProducts" EntityType="EFPModel.TemplateProduct" />
+          <AssociationSet Name="FK_MasterProducts_TemplateProduct" Association="EFPModel.FK_MasterProducts_TemplateProduct">
+            <End Role="TemplateProduct" EntitySet="TemplateProducts" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemplateProduct_Shops" Association="EFPModel.FK_TemplateProduct_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="TemplateProduct" EntitySet="TemplateProducts" />
+          </AssociationSet>
+          <EntitySet Name="ProductPictures" EntityType="EFPModel.ProductPicture" />
+          <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="EFPModel.FK_ProductPictures_MasterProducts">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductPicture" EntitySet="ProductPictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterProducts_Categories" Association="EFPModel.FK_MasterProducts_Categories">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Attr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr4" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr5" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr6" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr7" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="IsInStock" Type="Boolean" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="PromotionPrice" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="TemplateId" Type="Int32" />
+          <NavigationProperty Name="OrderDetails" Relationship="EFPModel.FK_OrderDetails_MasterProducts" FromRole="Product" ToRole="OrderDetail" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_MasterProducts_Shops" FromRole="Product" ToRole="Shop" />
+          <NavigationProperty Name="TemplateProduct" Relationship="EFPModel.FK_MasterProducts_TemplateProduct" FromRole="Product" ToRole="TemplateProduct" />
+          <NavigationProperty Name="ProductPictures" Relationship="EFPModel.FK_ProductPictures_MasterProducts" FromRole="Product" ToRole="ProductPicture" />
+          <NavigationProperty Name="Category" Relationship="EFPModel.FK_MasterProducts_Categories" FromRole="Product" ToRole="Category" />
+        </EntityType>
+        <Association Name="FK_OrderDetails_MasterProducts">
+          <End Type="EFPModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="EFPModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterProducts_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TemplateProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Attr1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr4" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr5" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr6" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Attr7" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="EFPModel.FK_MasterProducts_TemplateProduct" FromRole="TemplateProduct" ToRole="Product" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_TemplateProduct_Shops" FromRole="TemplateProduct" ToRole="Shop" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_MasterProducts_TemplateProduct">
+          <End Type="EFPModel.TemplateProduct" Role="TemplateProduct" Multiplicity="0..1" />
+          <End Type="EFPModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateProduct">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TemplateProduct_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.TemplateProduct" Role="TemplateProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TemplateProduct">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ProductPicture">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Urls" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="EFPModel.FK_ProductPictures_MasterProducts" FromRole="ProductPicture" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_ProductPictures_MasterProducts">
+          <End Type="EFPModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="EFPModel.ProductPicture" Role="ProductPicture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductPicture">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterProducts_Categories">
+          <End Type="EFPModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="EFPModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1243,24 +1247,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DetailedProducts">
-            <EntityTypeMapping TypeName="EFPModel.DetailedProduct">
-              <MappingFragment StoreEntitySet="DetailedProducts">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="MasterId" ColumnName="MasterId" />
-                <ScalarProperty Name="Attr1" ColumnName="Attr1" />
-                <ScalarProperty Name="Attr2" ColumnName="Attr2" />
-                <ScalarProperty Name="Attr3" ColumnName="Attr3" />
-                <ScalarProperty Name="Attr4" ColumnName="Attr4" />
-                <ScalarProperty Name="Attr5" ColumnName="Attr5" />
-                <ScalarProperty Name="Attr6" ColumnName="Attr6" />
-                <ScalarProperty Name="Attr7" ColumnName="Attr7" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Entities">
             <EntityTypeMapping TypeName="EFPModel.Entity">
               <MappingFragment StoreEntitySet="Entities">
@@ -1281,30 +1267,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MasterProducts">
-            <EntityTypeMapping TypeName="EFPModel.MasterProduct">
-              <MappingFragment StoreEntitySet="MasterProducts">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="Attr1" ColumnName="Attr1" />
-                <ScalarProperty Name="Attr2" ColumnName="Attr2" />
-                <ScalarProperty Name="Attr3" ColumnName="Attr3" />
-                <ScalarProperty Name="Attr4" ColumnName="Attr4" />
-                <ScalarProperty Name="Attr5" ColumnName="Attr5" />
-                <ScalarProperty Name="Attr6" ColumnName="Attr6" />
-                <ScalarProperty Name="Attr7" ColumnName="Attr7" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
             <EntityTypeMapping TypeName="EFPModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="Details" ColumnName="Details" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -1325,15 +1291,6 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
                 <ScalarProperty Name="Receiver" ColumnName="Receiver" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProductPictures">
-            <EntityTypeMapping TypeName="EFPModel.ProductPicture">
-              <MappingFragment StoreEntitySet="ProductPictures">
-                <ScalarProperty Name="MasterId" ColumnName="MasterId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="Urls" ColumnName="Urls" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1367,6 +1324,56 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="EFPModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="PromotionPrice" ColumnName="PromotionPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="IsInStock" ColumnName="IsInStock" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Attr7" ColumnName="Attr7" />
+                <ScalarProperty Name="Attr6" ColumnName="Attr6" />
+                <ScalarProperty Name="Attr5" ColumnName="Attr5" />
+                <ScalarProperty Name="Attr4" ColumnName="Attr4" />
+                <ScalarProperty Name="Attr3" ColumnName="Attr3" />
+                <ScalarProperty Name="Attr2" ColumnName="Attr2" />
+                <ScalarProperty Name="Attr1" ColumnName="Attr1" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TemplateProducts">
+            <EntityTypeMapping TypeName="EFPModel.TemplateProduct">
+              <MappingFragment StoreEntitySet="TemplateProducts">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Attr7" ColumnName="Attr7" />
+                <ScalarProperty Name="Attr6" ColumnName="Attr6" />
+                <ScalarProperty Name="Attr5" ColumnName="Attr5" />
+                <ScalarProperty Name="Attr4" ColumnName="Attr4" />
+                <ScalarProperty Name="Attr3" ColumnName="Attr3" />
+                <ScalarProperty Name="Attr2" ColumnName="Attr2" />
+                <ScalarProperty Name="Attr1" ColumnName="Attr1" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductPictures">
+            <EntityTypeMapping TypeName="EFPModel.ProductPicture">
+              <MappingFragment StoreEntitySet="ProductPictures">
+                <ScalarProperty Name="Urls" ColumnName="Urls" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

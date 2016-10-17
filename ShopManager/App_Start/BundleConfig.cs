@@ -26,6 +26,79 @@ namespace ShopManager
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            //Header CSS
+            bundles.Add(new StyleBundle("~/Header-CSS").Include(
+                      "~/Content/css/bootstrap.min.css",
+                      "~/Content/font-awesome/css/font-awesome.css",
+                      "~/Content/css/animate.css",
+                      "~/Content/css/style.css"));
+            //Toastr style
+            bundles.Add(new StyleBundle("~/Toastr-style").Include(
+                      "~/Content/css/plugins/toastr/toastr.min.css"));
+            //Gritter
+            bundles.Add(new StyleBundle("~/Gritter").Include(
+                      "~/Content/js/plugins/gritter/jquery.gritter.css"));
+            //Mainly scripts
+            bundles.Add(new ScriptBundle("~/Mainly-scripts").Include(
+                      "~/Content/js/jquery-2.1.1.js",
+                      "~/Content/js/bootstrap.min.js",
+                      "~/Content/js/plugins/metisMenu/jquery.metisMenu.js",
+                      "~/Content/js/plugins/slimscroll/jquery.slimscroll.min.js"));
+            //Flot
+            bundles.Add(new ScriptBundle("~/Flot").Include(
+                      "~/Content/js/plugins/flot/jquery.flot.js",
+                      "~/Content/js/plugins/flot/jquery.flot.tooltip.min.js",
+                      "~/Content/js/plugins/flot/jquery.flot.spline.js",
+                      "~/Content/js/plugins/flot/jquery.flot.resize.js",
+                      "~/Content/js/plugins/flot/jquery.flot.symbol.js",
+                      "~/Content/js/plugins/flot/jquery.flot.time.js",
+                      "~/Content/js/plugins/flot/jquery.flot.pie.js"));
+            //Peity
+            bundles.Add(new ScriptBundle("~/Peity").Include(
+                      "~/Content/js/plugins/peity/jquery.peity.min.js",
+                      "~/Content/js/demo/peity-demo.js"));
+            //Custom and plugin javascript
+            bundles.Add(new ScriptBundle("~/Custom-and-plugin-javascript").Include(
+                      "~/Content/js/inspinia.js",
+                      "~/Content/js/plugins/pace/pace.min.js"));
+            //jQuery UI
+            bundles.Add(new ScriptBundle("~/jQuery-UI").Include(
+                      "~/Content/js/plugins/jquery-ui/jquery-ui.min.js"));
+            //GITTER
+            bundles.Add(new ScriptBundle("~/GITTER").Include(
+                      "~/Content/js/plugins/gritter/jquery.gritter.min.js"));
+            //Sparkline
+            bundles.Add(new ScriptBundle("~/Sparkline").Include(
+                      "~/Content/js/plugins/sparkline/jquery.sparkline.min.js"));
+            //ChartJS
+            bundles.Add(new ScriptBundle("~/ChartJS").Include(
+                      "~/Content/js/plugins/chartJs/Chart.min.js"));
+            //Toastr
+            bundles.Add(new ScriptBundle("~/Toastr").Include(
+                      "~/Content/js/plugins/toastr/toastr.min.js"));
+            //EasyPIE
+            bundles.Add(new ScriptBundle("~/EasyPIE").Include(
+                      "~/Content/js/plugins/easypiechart/jquery.easypiechart.js"));
+            //DataTable CSS
+            bundles.Add(new StyleBundle("~/DataTable-CSS").Include(
+                      "~/Content/css/plugins/dataTables/datatables.min.css"));
+            //DataTable JS
+            bundles.Add(new ScriptBundle("~/DataTable-JS").Include(
+                      "~/Content/js/plugins/dataTables/datatables.min.js"));
+            //SweetAlert CSS
+            bundles.Add(new StyleBundle("~/SweetAlert-CSS").Include(
+                      "~/Content/css/plugins/sweetalert/sweetalert.css"));
+            //SweetAlert JS
+            bundles.Add(new ScriptBundle("~/SweetAlert-JS").Include(
+                      "~/Content/js/plugins/sweetalert/sweetalert.min.js"));
+            //TouchSpin CSS
+            bundles.Add(new StyleBundle("~/TouchSpin-CSS").Include(
+                      "~/Content/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css"));
+            //TouchSpin JS
+            bundles.Add(new ScriptBundle("~/TouchSpin-JS").Include(
+                      "~/Content/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"));
+
         }
     }
 }

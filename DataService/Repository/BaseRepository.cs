@@ -41,6 +41,7 @@ namespace DataService.Repository
         {
             EFPEntities dbContext = new EFPEntities();
             dbContext.Configuration.ProxyCreationEnabled = false;
+            dbContext.Configuration.LazyLoadingEnabled = true;
             this.entites = dbContext;
             this.dbSet = dbContext.Set<TEntity>();
         }
@@ -64,11 +65,25 @@ namespace DataService.Repository
             }
         }
 
+        public TEntity CreateNew(TEntity entity)
+        {
+            try
+            {
+                TEntity rs = dbSet.Add(entity);
+                return rs;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public bool Delete(object key)
         {
             try
             {
                 dbSet.Remove(FindByKey(key));
+                entites.SaveChanges();
                 return true;
             }
             catch
@@ -81,7 +96,8 @@ namespace DataService.Repository
         {
             try
             {
-                this.entites.Entry(entity).State = EntityState.Modified;                
+                this.entites.Entry(entity).State = EntityState.Modified;
+                this.entites.SaveChanges();
                 return true;
             }
             catch
