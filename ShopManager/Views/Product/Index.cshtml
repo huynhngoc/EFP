@@ -32,6 +32,39 @@
 
     <!--sweet alert-->
     @Styles.Render("~/SweetAlert-CSS")
+
+    <style>
+        .picture-delete{
+            /*font-weight: 600;*/
+            /* color: #ffffff; */
+            /* background-color: #1ab394; */
+            /*padding: 6px 12px;*/
+            position: absolute;
+            top: -16px;
+            right: 0px;
+        }
+        .dropzone .dz-default.dz-message{
+            /*background-image:none;*/
+        }
+
+        .product-images .ibox-content {
+            clear: inherit;
+        }
+        .product-images{
+            padding:0px;
+            
+        }
+
+        .product-images .product-box{
+            margin-bottom:20px;
+        }
+
+        .image-container{
+            padding:20px 0px;
+            height: 360px;
+            overflow-y: scroll;
+        }
+    </style>
 }
 
 
@@ -199,13 +232,14 @@
                                         </fieldset>
                                     </div>
                                     <div id="tab-3" class="tab-pane">
-                                        <div class="panel-body">                                            
-                                                <div class="col-md-6">
+                                        <div class="panel-body">    
+                                            <input name="deleteImg" type="hidden" />                                       
+                                                <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 image-container">
                                                     <div class="product-images">
                                                         
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">                                                    
+                                                <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">                                                    
                                                     <form id="dropzone" class="dropzone" action="#">
                                                         <div class="dropzone-previews"></div>                                                            
                                                     </form>                                                                                                            
@@ -437,6 +471,7 @@
     <!-- sweetalert -->
     @Scripts.Render("~/SweetAlert-JS")
     <script>
+        var testData;
         var editDropzone;
         var addDropzone;
         var table;
@@ -690,6 +725,39 @@
             });
         }
 
+        function initPicture(productId) {
+            $(".product-images").empty();
+            $.ajax({
+                url: '../Product/GetPicture',
+                type:"POST",
+                data: {
+                    "productId": productId
+                },
+                success: function (data, textStatus, xhr) {
+                    testData = data;
+                    for (var imgId in data) {
+                        console.log(imgId);
+                        console.log(data[imgId]);
+                        console.log(data);
+                        $(".product-images").append('<div class="col-sm-4"><div class="product-box ">' +
+                                                            '<img style="width:100%" alt="'+imgId+'" src="'+data[imgId]+'" />' +
+                                                            '<span class="picture-delete" ><button class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button></span>' +
+                                                        '</div></div>');
+                    }
+                    $(".picture-delete").on("click", function () {
+                        img = $(this).closest("div").find("img");
+                        imgId = $(img).attr("alt");
+                        console.log(imgId);
+                        $("input[name='deleteImg']").val($("input[name='deleteImg']").val() + imgId + ",");
+                        $(img).closest("div").parent().remove();
+                    })
+                },
+                error: function () {
+                    console.log("error");
+                }
+            })
+        }
+
         function editForm(id) {
             $.ajax({
                 url: '../Product/GetProductById',
@@ -726,7 +794,8 @@
                     $("#viewProductModal").find("input[name='templateId']").val(data.TemplateId);
 
                     initAttr(data.TemplateId, data.Attr);
-
+                    initPicture(data.Id);
+                    $("#viewProductModal input[name='deleteImg']").val("");
                     $("#viewProductModal").modal("show");
                     $(".base-tab a").click();
                 },
@@ -738,6 +807,7 @@
         }
 
         function initButton() {
+            $(".edit-button").unbind("click");
             $(".edit-button").on("click", function () {                
                 var clickedRow = $(this).closest("tr");
                 var id = table.fnGetData($(clickedRow)).Id;
@@ -777,6 +847,10 @@
                 status = $("#viewProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#viewProductModal").find('input[name="isInStock"]').is(":checked");
                 templateId = $("#viewProductModal").find('input[name="templateId"]').val();
+                var deleteImg = $("#viewProductModal").find('input[name="deleteImg"]').val().split(",").filter(function (str) {
+                    return str != "undefined" && str != null && str.length > 0;
+                });
+                console.log(deleteImg);
                 var attr = [];
                 $("#viewProductModal input[name='attr']").each(function () {
                     attr.push($(this).val());
@@ -797,7 +871,8 @@
                             "status": status,
                             "isInStock": isInStock,
                             "templateId": templateId,
-                            "attr": attr
+                            "attr": attr,
+                            "removeImg": deleteImg
                         },
                     success: function (data, textStatus, xhr) {
                         if (data == true) {
@@ -807,44 +882,56 @@
                             //var files = document.getElementById("inputfile").files;
                             console.log(files);
                             console.log("end");
-
-                            var data = new FormData();
-                            $(files).each(function () {
-                                data.append(this.name, this);
-                            });
-                            id = $("#viewProductModal").find('input[name="id"]').val();
-                            data.append("id", id);
-                            $.ajax({
-                                url: '../Product/Upload',
-                                method: "POST",
-                                processData: false,
-                                contentType: false,
-                                data: data,
-                                success: function (data) {
-                                    console.log(data);
-                                    swal({
-                                        title: "Thành công",
-                                        animation: "slide-from-top",
-                                        //text: "I will close in 2 seconds.",
-                                        type: "success",
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
-                                    editDropzone.removeAllFiles();
-                                    $("#viewProductModal").modal("hide");
-                                },
-                                error: function () {
-                                    console.log("error");
-                                    swal({
-                                        title: "Đã có sự cố khi tải hình",
-                                        animation: "slide-from-top",
-                                        //text: "I will close in 2 seconds.",
-                                        type: "warning",
-                                        //timer: 2000,
-                                        showConfirmButton: true
-                                    });
-                                }
-                            });
+                            if (files.length > 0) {
+                                var data = new FormData();
+                                $(files).each(function () {
+                                    data.append(this.name, this);
+                                });
+                                id = $("#viewProductModal").find('input[name="id"]').val();
+                                data.append("id", id);
+                                $.ajax({
+                                    url: '../Product/Upload',
+                                    method: "POST",
+                                    processData: false,
+                                    contentType: false,
+                                    data: data,
+                                    success: function (data) {
+                                        console.log(data);
+                                        swal({
+                                            title: "Thành công",
+                                            animation: "slide-from-top",
+                                            //text: "I will close in 2 seconds.",
+                                            type: "success",
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        });
+                                        editDropzone.removeAllFiles();
+                                        $("#viewProductModal").modal("hide");
+                                    },
+                                    error: function () {
+                                        console.log("error");
+                                        swal({
+                                            title: "Đã có sự cố khi tải hình",
+                                            animation: "slide-from-top",
+                                            //text: "I will close in 2 seconds.",
+                                            type: "warning",
+                                            //timer: 2000,
+                                            showConfirmButton: true
+                                        });
+                                    }
+                                });
+                            } else {
+                                console.log(data);
+                                swal({
+                                    title: "Thành công",
+                                    animation: "slide-from-top",
+                                    //text: "I will close in 2 seconds.",
+                                    type: "success",
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });                                
+                                $("#viewProductModal").modal("hide");
+                            }
                         } else {
                             swal({
                                 title: "Không sửa được sản phẩm",
@@ -992,45 +1079,59 @@
                             console.log(files);
                             console.log("end");
 
-                            var formData = new FormData();
-                            $(files).each(function () {
-                                formData.append(this.name, this);
-                            });
-                            var id = data.Id;
-                            console.log(data);
-                            console.log(id);
-                            formData.append("id", id);
-                            $.ajax({
-                                url: '../Product/Upload',
-                                method: "POST",
-                                processData: false,
-                                contentType: false,
-                                data: formData,
-                                success: function (data) {
-                                    console.log(data);
-                                    swal({
-                                        title: "Thành công",
-                                        animation: "slide-from-top",
-                                        //text: "I will close in 2 seconds.",
-                                        type: "success",
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
-                                    addDropzone.removeAllFiles();
-                                    $("#addProductModal").modal("hide");
-                                },
-                                error: function () {
-                                    console.log("error");
-                                    swal({
-                                        title: "Đã có sự cố khi tải hình",
-                                        animation: "slide-from-top",
-                                        //text: "I will close in 2 seconds.",
-                                        type: "warning",
-                                        //timer: 2000,
-                                        showConfirmButton: true
-                                    });
-                                }
-                            });
+                            if (files.length > 0) {
+                                var formData = new FormData();
+                                $(files).each(function () {
+                                    formData.append(this.name, this);
+                                });
+                                var id = data.Id;
+                                console.log(data);
+                                console.log(id);
+                                formData.append("id", id);
+                                $.ajax({
+                                    url: '../Product/Upload',
+                                    method: "POST",
+                                    processData: false,
+                                    contentType: false,
+                                    data: formData,
+                                    success: function (data) {
+                                        console.log(data);
+                                        swal({
+                                            title: "Thành công",
+                                            animation: "slide-from-top",
+                                            //text: "I will close in 2 seconds.",
+                                            type: "success",
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        });
+                                        addDropzone.removeAllFiles();
+                                        $("#addProductModal").modal("hide");
+                                    },
+                                    error: function () {
+                                        console.log("error");
+                                        swal({
+                                            title: "Đã có sự cố khi tải hình",
+                                            animation: "slide-from-top",
+                                            //text: "I will close in 2 seconds.",
+                                            type: "warning",
+                                            //timer: 2000,
+                                            showConfirmButton: true
+                                        });
+                                    }
+                                });
+                            } else {
+                                swal({
+                                    title: "Thành công",
+                                    animation: "slide-from-top",
+                                    //text: "I will close in 2 seconds.",
+                                    type: "success",
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });                                
+                                $("#addProductModal").modal("hide");
+                            }
+
+                            
                         } else {
                             swal({
                                 title: "Không thêm được sản phẩm",
@@ -1204,6 +1305,7 @@
                 maxFiles: 10,
                 addRemoveLinks: true,
                 dictDefaultMessage: "Bấm hoặc kéo thả hình vào đây",
+                dictRemoveFile: "Bỏ hình này",
                 // Dropzone settings
                 init: function () {
                     editDropzone = this;
@@ -1242,6 +1344,7 @@
                 maxFiles: 10,
                 addRemoveLinks: true,
                 dictDefaultMessage: "Bấm hoặc kéo thả hình vào đây",
+                dictRemoveFile: "Bỏ hình này",
                 // Dropzone settings
                 init: function () {
                     addDropzone = this;

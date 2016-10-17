@@ -10,14 +10,14 @@ namespace DataService.Service
     public class PictureService
     {
         PictureRepository repository = new PictureRepository();
-        public Dictionary<int,string> GetAll(int productId)
+        public Dictionary<string,string> GetAll(int productId)
         {
             try
             {
-                Dictionary<int, string> result = new Dictionary<int, string>();
+                Dictionary<string, string> result = new Dictionary<string, string>();
                 foreach(var img in repository.GetAllPicture(productId).ToList())
                 {
-                    result.Add(img.Id, img.Urls);
+                    result.Add(img.Id.ToString(), img.Urls);
                 }
                 return result;
             }
@@ -49,6 +49,46 @@ namespace DataService.Service
         public bool DeletePicture(int id)
         {
             return repository.Delete(id);
+        }
+
+        public bool DeletePicture(int[] idList)
+        {
+            try
+            {
+                foreach (var id in idList)
+                {
+                    DeletePicture(id);
+                }
+                return true;
+            }
+            catch (Exception)
+            {                
+                return false;
+            }            
+        }
+
+        public string GetPublicId(int id)
+        {
+            var url = repository.FindByKey(id).Urls;
+            return url.Substring(url.LastIndexOf("/")+1, url.LastIndexOf(".") - url.LastIndexOf("/")-1);
+        }
+
+        public List<string> GetPublicId(int[] idList)
+        {
+            List<string> result = new List<string>();
+            try
+            {
+                foreach (var id in idList)
+                {                    
+                    result.Add(GetPublicId(id));
+                }
+                return result;             
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
         }
 
     }

@@ -108,12 +108,28 @@ namespace ShopManager.Controllers
             }
         }
 
-        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
+        public JsonResult GetPicture(int productId)
+        {
+            PictureService service = new PictureService();
+            return Json(service.GetAll(productId), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr, int[] removeImg)
         {
             ProductService service = new ProductService();            
 
             try
-            {                
+            {
+                PictureService picService = new PictureService();
+                var delParams = new DelResParams()
+                {
+                    PublicIds = picService.GetPublicId(removeImg),
+                    Invalidate = true
+                };
+                var delResult = m_cloudinary.DeleteResources(delParams);
+
+                picService.DeletePicture(removeImg);
+
                 return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock, templateId, attr ), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
