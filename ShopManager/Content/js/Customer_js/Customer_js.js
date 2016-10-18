@@ -47,19 +47,6 @@ function validate(mode, value) {
 
 }
 
-$('.demo3').click(function () {
-    swal({
-        title: "Are you sure?",
-        text: "You will not be able to recover this imaginary file!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it!",
-        closeOnConfirm: false
-    }, function () {
-        swal("Deleted!", "Your imaginary file has been deleted.", "success");
-    });
-});
 
 function clear_table() {
     create_validate_flag = 1;
@@ -67,26 +54,26 @@ function clear_table() {
     document.getElementById("mail_errorTxt").style.display = "none";
 }
 
-function setSucMes(sucmes) {
-    document.getElementById("sucTxt").innerHTML = sucmes;
-}
-function setfailMes(failmes) {
-    document.getElementById("failTxt").innerHTML = failmes;
-}
+//function setSucMes(sucmes) {
+//    document.getElementById("sucTxt").innerHTML = sucmes;
+//}
+//function setfailMes(failmes) {
+//    document.getElementById("failTxt").innerHTML = failmes;
+//}
 
-$('.demo3').click(function () {
-    swal({
-        title: "Are you sure?",
-        text: "You will not be able to recover this imaginary file!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it!",
-        closeOnConfirm: false
-    }, function () {
-        swal("Deleted!", "Your imaginary file has been deleted.", "success");
-    });
-});
+//$('.demo3').click(function () {
+//    swal({
+//        title: "Are you sure?",
+//        text: "You will not be able to recover this imaginary file!",
+//        type: "warning",
+//        showCancelButton: true,
+//        confirmButtonColor: "#DD6B55",
+//        confirmButtonText: "Yes, delete it!",
+//        closeOnConfirm: false
+//    }, function () {
+//        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+//    });
+//});
 
 $(document).ready(function () {
     $("#saveID").hide();
@@ -105,10 +92,10 @@ $(document).ready(function () {
                 , "sInfoThousands": "."
                 , "sLoadingRecords": "Đang tải ..."
                 , "sProcessing": "Đang xử lý ..."
-                , "sSearch": "Tìm kiếm: "
+                , "sSearch": "Tìm kiếm khách hàng: "
                 , "sZeroRecords": "Không tìm thấy kết quả"
                 , "sLengthMenu": "Hiện _MENU_ khách hàng"
-                , "sPlaceholder": "asdb"
+                , "searchPlaceholder": "Search records"
                 
     }
 
@@ -135,7 +122,7 @@ $(document).ready(function () {
         {
             "sWidth": '300px',
             "mData": function (source) {
-                return "<a id='" + source.CustomerId.trim() + "' onclick='getEditCustomer(this," + source.CustomerId.trim() + ")' class='btn btn-success search-dropdown'><span class='glyphicon glyphicon-pencil' aria-hidden='true'>Sửa</span> </a>"
+                return "<a id='" + source.CustomerId.trim() + "' onclick='getEditCustomer(this," + source.CustomerId.trim() + ")' class='btn btn-success search-dropdown'><span class='glyphicon glyphicon-pencil' aria-hidden='true'> Sửa</span> </a>"
             }, "bSortable": false
         }
         ],
@@ -201,12 +188,12 @@ function editCustomerDetail() {
             cache: true,
             traditional: true,
             data: ({
-                Id: document.getElementById("cusEditID").value,
-                Name: document.getElementById("editName").value,
-                Desc: document.getElementById("editDes").value,
-                Addr: document.getElementById("editAddr").value,
-                Phone: document.getElementById("editPhone").value,
-                Email: document.getElementById("editMail").value
+                Id: document.getElementById("cusEditID").value.trim(),
+                Name: document.getElementById("editName").value.trim(),
+                Desc: document.getElementById("editDes").value.trim(),
+                Addr: document.getElementById("editAddr").value.trim(),
+                Phone: document.getElementById("editPhone").value.trim(),
+                Email: document.getElementById("editMail").value.trim()
             }),
 
             success: function (data) {
