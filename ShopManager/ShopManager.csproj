@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -192,6 +195,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\animate.css" />
+    <Content Include="Content\css\bootstrap-theme.css" />
+    <Content Include="Content\css\bootstrap-theme.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\patterns\1.png" />
@@ -255,6 +260,7 @@
     <Content Include="Content\css\plugins\images\bootstrap-colorpicker\saturation.png" />
     <Content Include="Content\css\plugins\images\sort.png" />
     <Content Include="Content\css\plugins\images\sort_asc.png" />
+    <Content Include="Content\css\plugins\images\sort_both.png" />
     <Content Include="Content\css\plugins\images\sort_desc.png" />
     <Content Include="Content\css\plugins\images\sprite-skin-flat.png" />
     <Content Include="Content\css\plugins\images\sprite-skin-flat2.png" />
@@ -1185,6 +1191,7 @@
     <Content Include="Content\js\jquery-2.1.1.js" />
     <Content Include="Content\js\jquery-ui-1.10.4.min.js" />
     <Content Include="Content\js\jquery-ui.custom.min.js" />
+    <Content Include="Content\js\npm.js" />
     <Content Include="Content\js\plugins\blueimp\jquery.blueimp-gallery.min.js" />
     <Content Include="Content\js\plugins\bootstrap-markdown\bootstrap-markdown.js" />
     <Content Include="Content\js\plugins\bootstrap-markdown\markdown.js" />
@@ -1605,6 +1612,8 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\css\bootstrap-theme.css.map" />
+    <Content Include="Content\css\bootstrap-theme.min.css.map" />
     <Content Include="Content\css\bootstrap.css.map" />
     <Content Include="Content\css\bootstrap.min.css.map" />
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css.map" />
@@ -2094,7 +2103,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

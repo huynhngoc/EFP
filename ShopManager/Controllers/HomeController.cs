@@ -12,6 +12,7 @@ namespace ShopManager.Controllers
         {
             //return RedirectToAction("Customer", "Customer", new { area = "" });
             return RedirectToAction("Index", "Customer", new { area = "" });
+            //return View();
         }
 
         //public ActionResult GetAllCustomer()

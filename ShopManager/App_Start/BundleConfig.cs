@@ -32,7 +32,8 @@ namespace ShopManager
                       "~/Content/css/bootstrap.min.css",
                       "~/Content/font-awesome/css/font-awesome.css",
                       "~/Content/css/animate.css",
-                      "~/Content/css/style.css"));
+                      "~/Content/css/style.css",
+                      "~/Content/css/plugins/sweetalert/sweetalert.css"));
             //Toastr style
             bundles.Add(new StyleBundle("~/Toastr-style").Include(
                       "~/Content/css/plugins/toastr/toastr.min.css"));
@@ -80,8 +81,7 @@ namespace ShopManager
             //EasyPIE
             bundles.Add(new ScriptBundle("~/EasyPIE").Include(
                       "~/Content/js/plugins/easypiechart/jquery.easypiechart.js"));
-            bundles.Add(new ScriptBundle("~/Customer_js").Include(
-                      "~/Content/js/Customer_js/Customer_js.js"));
+
             //DataTable CSS
             bundles.Add(new StyleBundle("~/DataTable-CSS").Include(
                       "~/Content/css/plugins/dataTables/datatables.min.css"));
@@ -91,6 +91,19 @@ namespace ShopManager
             //Customer script
             bundles.Add(new ScriptBundle("~/Customer-JS").Include(
                       "~/Content/js/Customer_js/Customer_js.js"));
+
+            //Sweet Alert script
+            bundles.Add(new ScriptBundle("~/SweetAlert-JS").Include(
+                      "~/Content/js/plugins/sweetalert/sweetalert.min.js"));
+            //Sweet Alert script
+            bundles.Add(new StyleBundle("~/Fontawesome").Include(
+                      "~/Content/css/plugins/font-awesome/font-awesome.css"));
+
+            //sweet alert css
+            //bundles.Add(new StyleBundle("~/SweetAlert-CSS").Include(
+            //          "~/Content/css/plugins/sweetalert/sweetalert.css"));
+
+            
         }
     }
 }

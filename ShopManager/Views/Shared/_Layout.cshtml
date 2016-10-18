@@ -6,6 +6,9 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Header-CSS")
     @RenderSection("CustomCSS", required: false)
+    @*@Styles.Render("~/Fontawesome")*@
+    @*<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.12/integration/font-awesome/dataTables.fontAwesome.css" />*@
+    
 
 </head>
 <body class="md-skin pace-done fixed-nav fixed-nav-basic fixed-sidebar">
@@ -281,7 +284,7 @@
             <!--./Content header-->
             <!--Page's content-->
             <div class="wrapper wrapper-content">
-                @RenderBody();
+                @RenderBody()
             </div>
             <!--./Page's content-->
             <!--Footer-->
@@ -294,7 +297,6 @@
     </div>
 
     @Scripts.Render("~/Mainly-scripts")
-    
     @Scripts.Render("~/Custom-and-plugin-javascript")
     @RenderSection("CustomJS", required: false)
 </body>
