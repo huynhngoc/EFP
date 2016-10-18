@@ -32,5 +32,55 @@ namespace DataService.Service
             + "_" + q.Attr7?.ToString()
             };
         }
+
+
+        public bool AddTemplate(string name, string[] attr, string shopId)
+        {
+            try
+            {
+                TemplateProduct t = new TemplateProduct()
+                {
+                    Name = name,
+                    Attr1 = string.IsNullOrEmpty(attr[0]) ? null : attr[0],
+                    Attr2 = string.IsNullOrEmpty(attr[0]) ? null : attr[1],
+                    Attr3 = string.IsNullOrEmpty(attr[0]) ? null : attr[2],
+                    Attr4 = string.IsNullOrEmpty(attr[0]) ? null : attr[3],
+                    Attr5 = string.IsNullOrEmpty(attr[0]) ? null : attr[4],
+                    Attr6 = string.IsNullOrEmpty(attr[0]) ? null : attr[5],
+                    Attr7 = string.IsNullOrEmpty(attr[0]) ? null : attr[6],
+                    ShopId = shopId
+                };
+                return repository.Create(t);
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+
+        public bool UpdateTemplate(int id, string[] attr, string shopId)
+        {
+            try
+            {
+                return repository.Update(new TemplateProduct()
+                {
+                    Id=id,
+                    Attr1 = string.IsNullOrEmpty(attr[0]) ? null : attr[0],
+                    Attr2 = string.IsNullOrEmpty(attr[0]) ? null : attr[1],
+                    Attr3 = string.IsNullOrEmpty(attr[0]) ? null : attr[2],
+                    Attr4 = string.IsNullOrEmpty(attr[0]) ? null : attr[3],
+                    Attr5 = string.IsNullOrEmpty(attr[0]) ? null : attr[4],
+                    Attr6 = string.IsNullOrEmpty(attr[0]) ? null : attr[5],
+                    Attr7 = string.IsNullOrEmpty(attr[0]) ? null : attr[6],
+                    ShopId = shopId
+                });
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
     }
 }
