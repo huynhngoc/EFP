@@ -18,7 +18,15 @@ namespace DataService.Service
 
       public int AddCustomer(string Id,string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
       {
-          Customer _customer = new Customer(Id, Name, Desc, Addr, Phone, Email, ShopId);
+          Customer _customer = new Customer();
+          _customer.CustomerId = Id;
+          _customer.Name = Name;
+          _customer.Address = Addr;
+          _customer.Description = Desc;
+          _customer.Phone = Phone;
+          _customer.Email = Email;
+          _customer.ShopId = ShopId;
+
           var success = repository.AddCustomer(_customer);
           Debug.WriteLine("addcus: " + success);
           return success;
