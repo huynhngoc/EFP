@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -7,8 +8,7 @@
     @Styles.Render("~/Header-CSS")
     @RenderSection("CustomCSS", required: false)
 </head>
-<body class="md-skin fixed-nav fixed-nav-basic fixed-sidebar">
-
+<body class="md-skin fixed-nav fixed-nav-basic fixed-sidebar">    
     <div id="wrapper">
         <!--Left navbar-->
         <nav class="navbar-default navbar-static-side" role="navigation">
@@ -23,7 +23,7 @@
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                     <span class="block m-t-xs">
-                                        <strong class="font-bold">Tên người dùng</strong>
+                                        <strong class="font-bold">@User.Identity.GetUserName()</strong>
                                     </span> <span class="text-muted text-xs block">Quản trị viên <b class="caret"></b></span>
                                 </span>
                             </a>
@@ -271,14 +271,20 @@
                             </ul>
                         </li>
                         <!--./Notification icon-->
-                        <!--Log out-->
+                        <!--Log out-->                        
                         <li>
-                            <a href="#"> <i class="fa fa-sign-out"></i> Đăng xuất </a>
-                        </li>
+                            
+                            <a href="javascript:document.getElementById('logoutForm').submit()"> <i class="fa fa-sign-out"></i> Đăng xuất </a>
+                             
+                        </li>                                    
                         <!--./Log out-->
                     </ul>
                 </nav>
-            </div>
+            </div>            
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+            }
             <!--./Top navbar-->
             <!--Content header-->
             <div class="row wrapper border-bottom white-bg page-heading">

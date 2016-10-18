@@ -1,11 +1,14 @@
 ﻿@model ShopManager.Models.RegisterViewModel
+@using ShopManager.Models
 @{
     ViewBag.Title = "Register";
 }
 
+@Styles.Render("~/Header-CSS")
+
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@*@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
@@ -34,8 +37,90 @@
             <input type="submit" class="btn btn-default" value="Register" />
         </div>
     </div>
-}
+}*@
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <h2 style="margin-top:120px">Đăng kí</h2>
+            <p></p>
+            <a class="btn btn-success btn-facebook btn-outline" id="facebookRegister"> <i class="fa fa-facebook"></i> Đăng kí bằng tài khoản Facebook</a>
+            <section id="socialLoginForm">
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+            </section>
+            <p>&nbsp;</p>
+            <p> Hoặc tạo một tài khoản để sử dụng tiện ích của EFP</p>
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <form class="m-t" role="form">
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        @*<div class="form-group">
+                <input type="text" class="form-control" placeholder="Tên đăng nhập" required="">
+            </div>*@
+        <div class="form-group">
+            @*<input type="email" class="form-control" placeholder="Email" required="">*@
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control",  @placeholder = "Email" })
+        </div>
+        <div class="form-group">
+            @*<input type="password" class="form-control" placeholder="Password" required="">*@
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Mật khẩu" })
+        </div>
+        <div class="form-group">
+            @*<input type="password" class="form-control" placeholder="Xác nhận Password" required="">*@
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Xác nhận mật khẩu" })
+        </div>
+        @*<div class="form-group">
+                <input type="text" class="form-control" placeholder="Tên cửa hàng" required="">
+            </div>*@
+        @*<div class="form-group">
+                <div class="checkbox i-checks">
+                    <label>
+                        <input type="checkbox"><i></i> Tôi đồng ý với các điều khoản
+                    </label>
+                </div>
+            </div>*@
+        <button type="submit" class="btn btn-primary block full-width m-b">Đăng kí</button>
+        <p class="text-muted text-center"><small>Bạn đã có tài khoản?</small></p> <a class="btn btn-sm btn-white btn-block" href="Login">Đăng nhập</a>
+    </form>
 }
+           
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="choosePageModal" class="modal fade" data-backdrop="static" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chọn trang bạn muốn tạo tab</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Thêm một số tên trang ở đây</p>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+</body>
+
+
+
+@Scripts.Render("~/Mainly-scripts")
+<script>
+               
+        $(document).ready(function () {
+            //$('.i-checks').iCheck({
+            //    checkboxClass: 'icheckbox_square-green'
+            //    , radioClass: 'iradio_square-green'
+            //, });
+        });
+        $('#facebookRegister').click(function () {
+            $('#choosePageModal').modal('show');
+        });
+
+
+
+        
+</script>
+

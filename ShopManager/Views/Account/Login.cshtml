@@ -2,10 +2,13 @@
 @model LoginViewModel
 @{
     ViewBag.Title = "Log in";
+
 }
 
+@Styles.Render("~/Header-CSS")
+
 <h2>@ViewBag.Title.</h2>
-<div class="row">
+@*<div class="row">
     <div class="col-md-8">
         <section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -48,16 +51,77 @@
                     <p>
                         @Html.ActionLink("Forgot your password?", "ForgotPassword")
                     </p>*@
-            }
+            @*}
         </section>
-    </div>
-    <div class="col-md-4">
+    </div>*@
+    @*<div class="col-md-4">
         <section id="socialLoginForm">
             @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
         </section>
-    </div>
-</div>
+    </div>*@
+@*</div>*@
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <h2 style="margin-top:100px">Đăng nhập</h2>
+            <p>&nbsp;</p>
+            <section id="socialLoginForm">
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })             
+            </section>
+            <p>&nbsp;</p>
+            <section>
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+                <p> Hoặc đăng nhập bằng tài khoản đã đăng kí</p>
+                @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <form class="m-t" role="form" action="">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        @*<input type="text" class="form-control" placeholder="Username" required="">*@
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        @*<input type="password" class="form-control" placeholder="Password" required="">*@
+                    </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b">Đăng nhập</button> <a href="#"><small>Quên mật khẩu?</small></a>
+                    <p class="text-muted text-center"><small>Bạn chưa có tài khoản?</small></p> 
+                    @Html.ActionLink("Tạo tài khoản mới", "Register")
+                    @*<a class="btn btn-sm btn-white btn-block" href="register.html">Tạo tài khoản mới</a>*@
+                </form>
 }
+            </section>
+        </div>
+    </div>
+
+    <!-- Choose Page Modal -->
+    <div id="choosePageModal" class="modal fade" data-backdrop="static" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chọn trang bạn muốn tạo tab</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Thêm một số tên trang ở đây</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    
+</body>
+
+
+@Scripts.Render("~/Mainly-scripts")
+    <script>
+        $(document).ready(function () {
+            alert("load");
+            $('#loginWithFacebook').click(function () {
+                $('#choosePageModal').modal('show');
+            });
+        });        
+    </script>
