@@ -87,24 +87,10 @@ namespace DataService.Repository
             var rs = dbSet.Where(q => q.ShopId == shopId);
             var search = param.sSearch;
             Debug.WriteLine("----sort col num " + param.iSortCol_0);
-            if (param.sSortDir_0 == "asc")
-                rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
-                               (!string.IsNullOrEmpty(param.sSearch)
-                               && q.Name.ToLower().Contains(param.sSearch.ToLower())))
-               .OrderBy(q => param.iSortCol_0 == 0 ? q.Name :
-                                                        param.iSortCol_0 == 1 ? q.Description :
-                                                        param.iSortCol_0 == 2 ? q.Address :
-                                                        param.iSortCol_0 == 3 ? q.Phone : q.Email);
-            else
-                rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
-                               (!string.IsNullOrEmpty(param.sSearch)
-                               && q.Name.ToLower().Contains(param.sSearch.ToLower())))
-               .OrderByDescending(q => param.iSortCol_0 == 0 ? q.Name :
-                                                        param.iSortCol_0 == 1 ? q.Description :
-                                                        param.iSortCol_0 == 2 ? q.Address :
-                                                        param.iSortCol_0 == 3 ? q.Phone : q.Email);
-
-
+            rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+                           (!string.IsNullOrEmpty(param.sSearch)
+                           && q.Name.ToLower().Contains(param.sSearch.ToLower())))
+           .OrderBy(q => q.Name);
             Debug.WriteLine("---------rs " + rs.Count());
             //if (rs.Count() == 0) return null;
             var data = rs.Select(q => new CustomerViewModel()

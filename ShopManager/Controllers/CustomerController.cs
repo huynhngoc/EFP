@@ -28,14 +28,23 @@ namespace ShopManager.Controllers
             string shopId = Session["shopId"].ToString();
             try
             {
-                param.iSortCol_0 = Convert.ToInt32(Request["iSortCol_0"]);// getcol
-                param.sSortDir_0 = Request["sSortDir_0"]; // asc or desc
+                var whichCol = Convert.ToInt32(Request["iSortCol_0"]);// getcol
+                var whichOrder = Request["sSortDir_0"]; // asc or desc
 
 
                 var customers = service.GetAllCustomer(param, shopId);
                 Debug.WriteLine("----x " + customers.Count());
                 IQueryable<CustomerViewModel> data = customers.Skip(param.iDisplayStart).Take(param.iDisplayLength);
-
+                if (whichOrder == "asc")
+                    data = data.OrderBy(q => whichCol == 0 ? q.Name :
+                                                            whichCol == 1 ? q.Description :
+                                                            whichCol == 2 ? q.Address :
+                                                            whichCol == 3 ? q.Phone : q.Email);
+                else
+                    data = data.OrderByDescending(q => whichCol == 0 ? q.Name :
+                                                            whichCol == 1 ? q.Description :
+                                                            whichCol == 2 ? q.Address :
+                                                            whichCol == 3 ? q.Phone : q.Email);
                 var totalRecords = customers.Count();
                 //var data = customers;
                 Debug.WriteLine("display start " + param.iDisplayStart + "display length " + param.iDisplayLength);

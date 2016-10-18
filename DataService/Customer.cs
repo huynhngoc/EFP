@@ -19,17 +19,6 @@ namespace DataService
             this.Orders = new HashSet<Order>();
         }
 
-        public Customer(string a, string b, string c, string d, string e, string f, string g)
-        {
-            this.CustomerId = a;
-            this.Name = b;
-            this.Description = c;
-            this.Address = d;
-            this.Phone = e;
-            this.Email = f;
-            this.ShopId = g;
-        }
-    
         public string CustomerId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
