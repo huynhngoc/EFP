@@ -119,6 +119,8 @@
     <Compile Include="Service\CategoryService.cs" />
     <Compile Include="Service\PictureService.cs" />
     <Compile Include="Service\ProductService.cs" />
+    <Compile Include="Repository\ShopRepository.cs" />
+    <Compile Include="Service\ShopService.cs" />
     <Compile Include="Service\TemplateProductService.cs" />
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
@@ -137,6 +139,7 @@
     <Compile Include="ViewModel\ProductViewModel.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
+    <Compile Include="ViewModel\ShopViewModal.cs" />
     <Compile Include="ViewModel\TemplateProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

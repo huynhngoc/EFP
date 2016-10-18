@@ -7,7 +7,7 @@
 
 @Styles.Render("~/Header-CSS")
 
-<h2>@ViewBag.Title.</h2>
+@*<h2>@ViewBag.Title.</h2>*@
 @*<div class="row">
     <div class="col-md-8">
         <section id="loginForm">
@@ -118,8 +118,7 @@
 
 @Scripts.Render("~/Mainly-scripts")
     <script>
-        $(document).ready(function () {
-            alert("load");
+        $(document).ready(function () {            
             $('#loginWithFacebook').click(function () {
                 $('#choosePageModal').modal('show');
             });

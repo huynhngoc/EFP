@@ -1,0 +1,107 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    Layout = null;
+}
+@Styles.Render("~/Header-CSS")
+
+<!DOCTYPE html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Chọn trang</title>
+</head>
+
+<body class="md-skin fixed-nav fixed-nav-basic fixed-sidebar">
+    <div id="wrapper">
+        <!--Left navbar-->       
+        <!--./Left navbar-->
+        <!--Page wrapper-->
+        <div id="page-wrapper" class="gray-bg">
+            <!--Top navbar-->
+            <div class="row border-bottom">
+                <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>                        
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <!--<li>
+                            <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
+                        </li>-->
+                        <!--Notification icon-->
+                        <li class="dropdown">
+                            <!--Number of notification-->
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#"> <i class="fa fa-bell"></i> <span class="label label-danger">8</span> </a>
+                            <ul class="dropdown-menu dropdown-alerts">
+                                <li>
+                                    <a href="mailbox.html">
+                                        <div> <i class="fa fa-envelope fa-fw"></i> Bạn có 1 comment mới <span class="pull-right text-muted small">4 minutes ago</span> </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="profile.html">
+                                        <div> <i class="fa fa-twitter fa-fw"></i> Bạn có 2 tin nhắn mới <span class="pull-right text-muted small">12 minutes ago</span> </div>
+                                    </a>
+                                </li>
+                                <!--See all alert-->
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a href="notifications.html"> <strong>See All Alerts</strong> <i class="fa fa-angle-right"></i> </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--./Notification icon-->
+                        <!--Log out-->
+                        <li>
+
+                            <a href="javascript:document.getElementById('logoutForm').submit()"> <i class="fa fa-sign-out"></i> Đăng xuất </a>
+
+                        </li>
+                        <!--./Log out-->
+                    </ul>
+                </nav>
+            </div>
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+            }
+            <!--./Top navbar-->
+            <!--Content header-->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-sm-4">
+                    <h2>@ViewBag.Title</h2>
+                    <ol class="breadcrumb">
+                        <li> <a href="index.html">Trang chủ</a> </li>
+                        <li class="active"> <strong>@ViewBag.Title</strong> </li>
+                    </ol>
+                </div>
+                <div class="col-sm-8">
+                    <div class="title-action"> <a href="" class="btn btn-primary">Nút gì đó</a> </div>
+                </div>
+            </div>
+            <!--./Content header-->
+            <!--Page's content-->
+            <div class="wrapper wrapper-content">
+                
+            </div>
+            <!--./Page's content-->
+            <!--Footer-->
+            <div class="footer">
+                <div> <strong>Copyright</strong> EFP &copy; 2016 </div>
+            </div>
+            <!--./footer-->
+        </div>
+        <!--./Page wapper-->
+    </div>
+    
+</body>
+
+
+@Scripts.Render("~/Mainly-scripts")
+<script>
+        $(document).ready(function () {
+            
+        });
+</script>
