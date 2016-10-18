@@ -59,22 +59,21 @@ namespace DataService.Service
             }
         }
 
-        public bool UpdateTemplate(int id, string[] attr, string shopId)
+        public bool UpdateTemplate(int id, string name, string[] attr)
         {
             try
             {
-                return repository.Update(new TemplateProduct()
-                {
-                    Id=id,
-                    Attr1 = string.IsNullOrEmpty(attr[0]) ? null : attr[0],
-                    Attr2 = string.IsNullOrEmpty(attr[0]) ? null : attr[1],
-                    Attr3 = string.IsNullOrEmpty(attr[0]) ? null : attr[2],
-                    Attr4 = string.IsNullOrEmpty(attr[0]) ? null : attr[3],
-                    Attr5 = string.IsNullOrEmpty(attr[0]) ? null : attr[4],
-                    Attr6 = string.IsNullOrEmpty(attr[0]) ? null : attr[5],
-                    Attr7 = string.IsNullOrEmpty(attr[0]) ? null : attr[6],
-                    ShopId = shopId
-                });
+                TemplateProduct t = repository.FindByKey(id);
+                t.Name = name;
+                t.Attr1 = string.IsNullOrEmpty(attr[0]) ? null : attr[0];
+                t.Attr2 = string.IsNullOrEmpty(attr[0]) ? null : attr[1];
+                t.Attr3 = string.IsNullOrEmpty(attr[0]) ? null : attr[2];
+                t.Attr4 = string.IsNullOrEmpty(attr[0]) ? null : attr[3];
+                t.Attr5 = string.IsNullOrEmpty(attr[0]) ? null : attr[4];
+                t.Attr6 = string.IsNullOrEmpty(attr[0]) ? null : attr[5];
+                t.Attr7 = string.IsNullOrEmpty(attr[0]) ? null : attr[6];                
+                return repository.Update(t);
+                                    
             }
             catch (Exception)
             {
