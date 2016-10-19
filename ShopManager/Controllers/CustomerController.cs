@@ -24,8 +24,7 @@ namespace ShopManager.Controllers
         public JsonResult GetAllCustomer(JQueryDataTableParamModel param)
         {
             CustomerService service = new CustomerService();
-            Session["shopId"] = 7;
-            string shopId = Session["shopId"].ToString();
+            string shopId = Session["ShopId"].ToString();
             try
             {
                 var whichCol = Convert.ToInt32(Request["iSortCol_0"]);// getcol

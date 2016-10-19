@@ -16,18 +16,20 @@ function validate(mode, value) {
     if (mode == 1) {
         var atpos = value.indexOf("@");
         var dotpos = value.lastIndexOf(".");
-        alert(atpos + " " + (dotpos ));
-        alert(value.length);
-        alert(value.length - dotpos);
+        //alert(atpos + " " + (dotpos ));
+        //alert(value.length);
+        //alert(value.length - dotpos);
         if (atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length- dotpos<=2 || atpos == -1 || dotpos == -1) {
             create_validate_flag = 0;
             document.getElementById("mail_errorTxt").style.display = "block";
-            alert("false");
+            //alert("false");
+            document.getElementById("btnSave").disabled=true;
         }
         else {
             create_validate_flag = 1;
             document.getElementById("mail_errorTxt").style.display = "none";
-            alert("true");
+            document.getElementById("btnSave").disabled=false;
+            //alert("true");
         }
         //2 = phone mode
     }
@@ -36,12 +38,12 @@ function validate(mode, value) {
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
             create_validate_flag = 1;
             document.getElementById("phone_errorTxt").style.display = "none";
-            alert("true");
+            document.getElementById("btnSave").disabled = false;
         }
         else {
             create_validate_flag = 0;
             document.getElementById("phone_errorTxt").style.display = "block";
-            alert("false");
+            document.getElementById("btnSave").disabled = true;
         }
     }
 
@@ -120,9 +122,8 @@ $(document).ready(function () {
         { "mData": "Phone", "bSortable": true },
         { "mData": "Email", "bSortable": true },
         {
-            "sWidth": '300px',
             "mData": function (source) {
-                return "<a id='" + source.CustomerId.trim() + "' onclick='getEditCustomer(this," + source.CustomerId.trim() + ")' class='btn btn-success search-dropdown'><span class='glyphicon glyphicon-pencil' aria-hidden='true'> Sửa</span> </a>"
+                return "<a id='" + source.CustomerId.trim() + "' onclick='getEditCustomer(this," + source.CustomerId.trim() + ")' class='btn btn-success search-dropdown'><span class='fa fa-edit' aria-hidden='true'></span> </a>"
             }, "bSortable": false
         }
         ],
@@ -140,45 +141,45 @@ $(document).ready(function () {
 
 
 
-function addCustomer() {
-    var _id = Math.round(Math.random() * 1000);
-    var _name = document.getElementById("addNameTxt").value;
-    var _addr = document.getElementById("addAddrTxt").value;
-    var _desc = document.getElementById("addDescTxt").value;
-    var _phone = document.getElementById("addPhoneTxt").value;
-    var _mail = document.getElementById("addMailTxt").value;
+//function addCustomer() {
+//    var _id = Math.round(Math.random() * 1000);
+//    var _name = document.getElementById("addNameTxt").value;
+//    var _addr = document.getElementById("addAddrTxt").value;
+//    var _desc = document.getElementById("addDescTxt").value;
+//    var _phone = document.getElementById("addPhoneTxt").value;
+//    var _mail = document.getElementById("addMailTxt").value;
 
-    if (_name != "") {
-        $.ajax({
-            url: "/Customer/AddCustomer",
-            cache: false,
-            traditional: true,
-            type: "POST",
-            data: ({
-                Id: _id,
-                Name: _name,
-                Addr: _addr,
-                Desc: _desc,
-                Phone: _phone,
-                Email: _mail
-            }),
+//    if (_name != "") {
+//        $.ajax({
+//            url: "/Customer/AddCustomer",
+//            cache: false,
+//            traditional: true,
+//            type: "POST",
+//            data: ({
+//                Id: _id,
+//                Name: _name,
+//                Addr: _addr,
+//                Desc: _desc,
+//                Phone: _phone,
+//                Email: _mail
+//            }),
 
-            success: function (data) {
-                if (data == 1) {
-                    showSucModal(createSuc_Mes);
-                }
-                else if (data == 2) {
-                    showFailModal(createFaildup_Mes);
-                }
-                else showFailModal(fail_Mes);
-            },
-            error: function () {
-                showFailModal(fail_Mes);
-            }
-        });
-    }
-    else showCreateFailModal();
-}
+//            success: function (data) {
+//                if (data == 1) {
+//                    showSucModal(createSuc_Mes);
+//                }
+//                else if (data == 2) {
+//                    showFailModal(createFaildup_Mes);
+//                }
+//                else showFailModal(fail_Mes);
+//            },
+//            error: function () {
+//                showFailModal(fail_Mes);
+//            }
+//        });
+//    }
+//    else showCreateFailModal();
+//}
 
 function editCustomerDetail() {
     var _inputCusID = document.getElementById("cusEditID").value;
