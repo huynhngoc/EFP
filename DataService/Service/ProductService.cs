@@ -14,7 +14,11 @@ namespace DataService.Service
     {
         ProductRepository repository = new ProductRepository();
         public ProductService()
+<<<<<<< HEAD
         {
+=======
+        {                        
+>>>>>>> refs/remotes/origin/ProductCategory
         }
 
         //public List<MasterProduct> GetAllMasterProductByShopId(string shopId)
@@ -27,7 +31,11 @@ namespace DataService.Service
             return repository.GetProductByShopId(shopId);
         }
 
+<<<<<<< HEAD
         public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
+=======
+        public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
+>>>>>>> refs/remotes/origin/ProductCategory
         {
             try
             {
@@ -41,6 +49,17 @@ namespace DataService.Service
                 p.Status = status;
                 p.IsInStock = isInStock;
                 p.DateModified = DateTime.Now;
+<<<<<<< HEAD
+=======
+                p.TemplateId = templateId;
+                p.Attr1 = attr[0];
+                p.Attr2 = attr[1];
+                p.Attr3 = attr[2];
+                p.Attr4 = attr[3];
+                p.Attr5 = attr[4];
+                p.Attr6 = attr[5];
+                p.Attr7 = attr[6];
+>>>>>>> refs/remotes/origin/ProductCategory
                 repository.Update(p);
                 return true;
             }
@@ -54,6 +73,7 @@ namespace DataService.Service
         public List<Product> GetProductByCategory(int cateId, string shopId)
         {
             return repository.GetProductByCategory(cateId, shopId).ToList();
+<<<<<<< HEAD
         }
 
         //public async Task<> GetProduct(JQueryDataTableParamModel param, string shopId)
@@ -96,6 +116,13 @@ namespace DataService.Service
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
             var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);
+=======
+        }       
+
+        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
+        {
+            var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);            
+>>>>>>> refs/remotes/origin/ProductCategory
             return rs;
         }
 
@@ -138,6 +165,7 @@ namespace DataService.Service
             }
         }
 
+<<<<<<< HEAD
         //Long
         public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
         {
@@ -155,3 +183,40 @@ namespace DataService.Service
         }
     }
 }
+=======
+        public Product AddProduct(string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr, string shopId)
+        {
+            try
+            {
+                Product p = new Product()
+                {
+                    Name = name,
+                    Description = description,
+                    CategoryId = categoryId,
+                    Price = price,
+                    PromotionPrice = promotion,
+                    Status = status,
+                    IsInStock = isInStock,
+                    DateModified = DateTime.Now,
+                    TemplateId = templateId,
+                    DateCreated = DateTime.Now,
+                    ShopId = shopId,
+                    Attr1 = attr[0],
+                    Attr2 = attr[1],
+                    Attr3 = attr[2],
+                    Attr4 = attr[3],
+                    Attr5 = attr[4],
+                    Attr6 = attr[5],
+                    Attr7 = attr[6]
+                };
+                return repository.Add(p);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+    }
+}
+>>>>>>> refs/remotes/origin/ProductCategory

@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44302</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CloudinaryDotNet, Version=1.0.26.0, Culture=neutral, PublicKeyToken=c8234dc617ae7841, processorArchitecture=MSIL">
+      <HintPath>..\packages\CloudinaryDotNet.1.0.26\lib\net40\CloudinaryDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -178,10 +182,16 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+<<<<<<< HEAD
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+=======
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
+>>>>>>> refs/remotes/origin/ProductCategory
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -219,12 +229,18 @@
     <Content Include="Content\css\plugins\blueimp\css\blueimp-gallery.min.css" />
     <Content Include="Content\css\plugins\blueimp\css\demo.css" />
     <Content Include="Content\css\plugins\blueimp\img\error.png" />
+<<<<<<< HEAD
     <Content Include="Content\css\plugins\blueimp\img\error.svg" />
     <Content Include="Content\css\plugins\blueimp\img\loading.gif" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.png" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.svg" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.png" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.svg" />
+=======
+    <Content Include="Content\css\plugins\blueimp\img\loading.gif" />
+    <Content Include="Content\css\plugins\blueimp\img\play-pause.png" />
+    <Content Include="Content\css\plugins\blueimp\img\video-play.png" />
+>>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\css\plugins\bootstrap-markdown\bootstrap-markdown.min.css" />
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css" />
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.min.css" />
@@ -244,7 +260,10 @@
     <Content Include="Content\css\plugins\daterangepicker\daterangepicker-bs3.css" />
     <Content Include="Content\css\plugins\dropzone\basic.css" />
     <Content Include="Content\css\plugins\dropzone\dropzone.css" />
+<<<<<<< HEAD
     <Content Include="Content\css\plugins\footable\fonts\footable.svg" />
+=======
+>>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\css\plugins\footable\footable.core.css" />
     <Content Include="Content\css\plugins\fullcalendar\fullcalendar.css" />
     <Content Include="Content\css\plugins\fullcalendar\fullcalendar.print.css" />
@@ -299,7 +318,10 @@
     <Content Include="Content\css\plugins\nouslider\jquery.nouislider.css" />
     <Content Include="Content\css\plugins\select2\select2.min.css" />
     <Content Include="Content\css\plugins\slick\ajax-loader.gif" />
+<<<<<<< HEAD
     <Content Include="Content\css\plugins\slick\fonts\slick.svg" />
+=======
+>>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\css\plugins\slick\slick-theme.css" />
     <Content Include="Content\css\plugins\slick\slick.css" />
     <Content Include="Content\css\plugins\social-buttons\social-buttons.css" />
@@ -309,8 +331,19 @@
     <Content Include="Content\css\plugins\sweetalert\sweetalert.css" />
     <Content Include="Content\css\plugins\switchery\switchery.css" />
     <Content Include="Content\css\plugins\toastr\toastr.min.css" />
+<<<<<<< HEAD
     <Content Include="Content\css\plugins\touchspin\jquery.bootstrap-touchspin.min.css" />
     <Content Include="Content\css\style.css" />
+=======
+    <Content Include="Content\css\plugins\tokenfield\bootstrap-tokenfield.css" />
+    <Content Include="Content\css\plugins\tokenfield\bootstrap-tokenfield.min.css" />
+    <Content Include="Content\css\plugins\tokenfield\tokenfield-typeahead.css" />
+    <Content Include="Content\css\plugins\tokenfield\tokenfield-typeahead.min.css" />
+    <Content Include="Content\css\plugins\touchspin\jquery.bootstrap-touchspin.min.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+>>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\demo\chartjs-demo.js" />
@@ -737,6 +770,11 @@
     <Content Include="Content\js\plugins\switchery\switchery.js" />
     <Content Include="Content\js\plugins\tinycon\tinycon.min.js" />
     <Content Include="Content\js\plugins\toastr\toastr.min.js" />
+<<<<<<< HEAD
+=======
+    <Content Include="Content\js\plugins\tokenfield\bootstrap-tokenfield.js" />
+    <Content Include="Content\js\plugins\tokenfield\bootstrap-tokenfield.min.js" />
+>>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\js\plugins\touchspin\jquery.bootstrap-touchspin.min.js" />
     <Content Include="Content\js\plugins\validate\jquery.validate.min.js" />
     <Content Include="Content\js\plugins\video\responsible-video.js" />
@@ -748,6 +786,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\css\bootstrap.css.map" />
     <Content Include="Content\css\bootstrap.min.css.map" />
+<<<<<<< HEAD
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css.map" />
     <Content Include="Content\css\plugins\footable\fonts\footable.eot" />
     <Content Include="Content\css\plugins\footable\fonts\footable.ttf" />
@@ -758,6 +797,61 @@
     <Content Include="Content\js\plugins\chartist\chartist.min.js.map" />
     <Content Include="Content\js\plugins\diff_match_patch\COPYING" />
     <Content Include="Content\js\plugins\justified-gallery\README.md" />
+=======
+    <Content Include="Content\css\plugins\blueimp\img\error.svg" />
+    <Content Include="Content\css\plugins\blueimp\img\play-pause.svg" />
+    <Content Include="Content\css\plugins\blueimp\img\video-play.svg" />
+    <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css.map" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.eot" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.svg" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.ttf" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.woff" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.eot" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.svg" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.ttf" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\font-awesome\less\animated.less" />
+    <Content Include="Content\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Content\font-awesome\less\core.less" />
+    <Content Include="Content\font-awesome\less\fixed-width.less" />
+    <Content Include="Content\font-awesome\less\font-awesome.less" />
+    <Content Include="Content\font-awesome\less\icons.less" />
+    <Content Include="Content\font-awesome\less\larger.less" />
+    <Content Include="Content\font-awesome\less\list.less" />
+    <Content Include="Content\font-awesome\less\mixins.less" />
+    <Content Include="Content\font-awesome\less\path.less" />
+    <Content Include="Content\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Content\font-awesome\less\stacked.less" />
+    <Content Include="Content\font-awesome\less\variables.less" />
+    <Content Include="Content\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Content\font-awesome\scss\_animated.scss" />
+    <Content Include="Content\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Content\font-awesome\scss\_core.scss" />
+    <Content Include="Content\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Content\font-awesome\scss\_icons.scss" />
+    <Content Include="Content\font-awesome\scss\_larger.scss" />
+    <Content Include="Content\font-awesome\scss\_list.scss" />
+    <Content Include="Content\font-awesome\scss\_mixins.scss" />
+    <Content Include="Content\font-awesome\scss\_path.scss" />
+    <Content Include="Content\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Content\font-awesome\scss\_stacked.scss" />
+    <Content Include="Content\font-awesome\scss\_variables.scss" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\js\plugins\chartist\chartist.min.js.map" />
+    <Content Include="Content\js\plugins\diff_match_patch\COPYING" />
+    <Content Include="Content\js\plugins\justified-gallery\README.md" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+>>>>>>> refs/remotes/origin/ProductCategory
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -804,7 +898,14 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Order\All.cshtml" />
+=======
+    <Content Include="Views\Product\ManageProduct.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Template\Index.cshtml" />
+>>>>>>> refs/remotes/origin/ProductCategory
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -844,7 +945,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>26638</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:26638/</IISUrl>
+          <IISUrl>https://localhost:44302/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

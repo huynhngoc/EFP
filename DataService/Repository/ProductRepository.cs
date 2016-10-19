@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using DataService.ViewModel;
 using DataService.JqueryDataTable;
+<<<<<<< HEAD
 using DataService.Service;
+=======
+>>>>>>> refs/remotes/origin/ProductCategory
 
 namespace DataService.Repository
 {
@@ -21,7 +24,11 @@ namespace DataService.Repository
         {
             IEnumerable<int> query = from c in entites.Categories where c.ParentId == cateId select c.Id;
             Debug.WriteLine(query.ToArray());
+<<<<<<< HEAD
             var data = dbSet.Where(q => (q.CategoryId == cateId) && q.ShopId == shopId);
+=======
+            var data = dbSet.Where(q => (q.CategoryId == cateId ) && q.ShopId == shopId);
+>>>>>>> refs/remotes/origin/ProductCategory
 
             return data;
         }
@@ -63,7 +70,11 @@ namespace DataService.Repository
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
             var count = param.iDisplayStart + 1;
+<<<<<<< HEAD
             var rs = dbSet.Where(q => q.ShopId == shopId);
+=======
+            var rs = dbSet.Where(q => q.ShopId == shopId);            
+>>>>>>> refs/remotes/origin/ProductCategory
             var search = param.sSearch;
             rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
                                 (!string.IsNullOrEmpty(param.sSearch)
@@ -78,6 +89,7 @@ namespace DataService.Repository
             switch (param.iSortCol_0)
             {
                 case 0:
+<<<<<<< HEAD
                 case 2:
                     if (param.sSortDir_0 == "asc")
                     {
@@ -87,6 +99,15 @@ namespace DataService.Repository
                     {
                         rs = rs.OrderByDescending(q => q.Name);
                     }
+=======
+                case 2: if (param.sSortDir_0 == "asc")
+                        { 
+                            rs = rs.OrderBy(q => q.Name);
+                        } else
+                        {
+                            rs = rs.OrderByDescending(q => q.Name);
+                        }
+>>>>>>> refs/remotes/origin/ProductCategory
                     break;
                 case 3:
                     if (param.sSortDir_0 == "asc")
@@ -148,7 +169,11 @@ namespace DataService.Repository
                         rs = rs.OrderByDescending(q => q.IsInStock);
                     }
                     break;
+<<<<<<< HEAD
                 default: rs = rs.OrderBy(q => q.Name); break;
+=======
+                default: rs = rs.OrderBy(q => q.Name);break;
+>>>>>>> refs/remotes/origin/ProductCategory
             }
             Debug.WriteLine("---------rs " + rs.Count());
             //if (rs.Count() == 0) return null;
@@ -175,6 +200,7 @@ namespace DataService.Repository
                 Price = (decimal)(q.Price),
                 Promotion = (decimal?)(q.PromotionPrice)
             });
+<<<<<<< HEAD
             Debug.WriteLine("---------data " + data.Count());
             return data;
         }
@@ -184,6 +210,31 @@ namespace DataService.Repository
             try
             {
 
+=======
+            Debug.WriteLine("---------data " + data.Count());            
+            return data;            
+        }
+
+        public Product Add(Product p)
+        {
+            try
+            {
+                Product pro = dbSet.Add(p);
+                entites.SaveChanges();
+                return pro;
+            }
+            catch (Exception)
+            {
+                return null;
+            }            
+        }
+
+        public bool SetStatus(int id, bool status)
+        {
+            try
+            {
+                
+>>>>>>> refs/remotes/origin/ProductCategory
                 Product p = FindByKey(id);
                 p.Status = status;
                 p.DateModified = DateTime.Now;
@@ -200,10 +251,17 @@ namespace DataService.Repository
         {
             try
             {
+<<<<<<< HEAD
 
                 Product p = FindByKey(id);
                 p.IsInStock = inStock;
                 p.DateModified = DateTime.Now;
+=======
+                
+                Product p = FindByKey(id);
+                p.IsInStock = inStock;
+                p.DateModified = DateTime.Now;              
+>>>>>>> refs/remotes/origin/ProductCategory
                 return Update(p);
             }
             catch (Exception e)
@@ -213,6 +271,7 @@ namespace DataService.Repository
             }
         }
 
+<<<<<<< HEAD
         //Long
         public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
         {
@@ -247,3 +306,8 @@ namespace DataService.Repository
         }
     }
 }
+=======
+
+    }
+}
+>>>>>>> refs/remotes/origin/ProductCategory

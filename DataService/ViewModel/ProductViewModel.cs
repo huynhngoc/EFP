@@ -20,6 +20,12 @@ namespace DataService.ViewModel
         public decimal Price { get; set; }
         public decimal? Promotion { get; set; }
         public int? TemplateId { get; set; }
+<<<<<<< HEAD
 
     }
 }
+=======
+        
+    }
+}
+>>>>>>> refs/remotes/origin/ProductCategory
