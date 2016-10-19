@@ -20,7 +20,8 @@ namespace ShopManager.Controllers
         {
             return View();
         }
-        
+
+        [Authorize]
         public ActionResult ChooseShop()
         {
             return View();
@@ -41,9 +42,9 @@ namespace ShopManager.Controllers
             dynamic parameters = new ExpandoObject();
             parameters.access_token = token;
             parameters.app_id = "161282120980764";
-            var fbResult = fbApp.Post(id + "/tabs", parameters);
-
-            return Json(fbResult);
+            Facebook.JsonObject fbResult = fbApp.Post(id + "/tabs", parameters);
+            var fbWebhook = fbApp.Post(id + "/subscribed_apps", parameters);
+            return Json(new { addTab = fbResult, subscribe = fbWebhook});
         }
 
 

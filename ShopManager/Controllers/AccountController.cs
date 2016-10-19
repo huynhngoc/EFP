@@ -81,7 +81,7 @@ namespace ShopManager.Controllers
             {
                 case SignInStatus.Success:
                     //return RedirectToLocal(returnUrl);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ChooseShop", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -174,8 +174,8 @@ namespace ShopManager.Controllers
                         // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                        userManager.AddToRole(user.Id, "ShopOwner");
-                        return RedirectToAction("Index", "Home");
+                        UserManager.AddToRole(user.Id, "ShopOwner");
+                        return RedirectToAction("ChooseShop", "Home");
                     }
                     AddErrors(result);
                 }
@@ -347,7 +347,7 @@ namespace ShopManager.Controllers
             {
                 case SignInStatus.Success:
                     //return RedirectToLocal(returnUrl);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ChooseShop", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -394,7 +394,7 @@ namespace ShopManager.Controllers
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         UserManager.AddToRole(user.Id, "ShopOwner");
                         //return RedirectToLocal(returnUrl);
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("ChooseShop", "Home");
                     }
                 }
                 AddErrors(result);
