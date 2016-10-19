@@ -34,20 +34,21 @@ namespace ShopManager.Controllers
             {
                 var rs = (orders.Where(q => string.IsNullOrEmpty(param.sSearch) ||
                             (!string.IsNullOrEmpty(param.sSearch)
-                            && q.customerName.ToLower().Contains(param.sSearch.ToLower())))
-                            .OrderByDescending(q => q.dateModified)
+                            && q.CustomerName.ToLower().Contains(param.sSearch.ToLower())))
+                            .OrderByDescending(q => q.DateModified)
                             .Skip(param.iDisplayStart)
                             .Take(param.iDisplayLength)
                             .ToList())
                             .Select(q => new IConvertible[] {
-                                q.id,
-                                q.dateCreated.ToShortDateString(),
-                                q.dateModified.ToShortDateString(),
-                                q.status,
-                                q.total,
-                                q.customerName,
-                                q.shippingAddress,
-                                q.receiver
+                                q.Id,
+                                q.DateCreated.ToShortDateString(),
+                                q.DateModified.ToShortDateString(),
+                                q.Status,
+                                q.Total,
+                                q.CustomerName,
+                                q.ShippingAddress,
+                                q.Receiver,
+                                q.Phone
                             });
                 var totalRecords = rs.Count();
 
@@ -75,11 +76,11 @@ namespace ShopManager.Controllers
                 var rs = (orders
                             .ToList())
                             .Select(q => new IConvertible[] {
-                                count++,
-                                q.details,
-                                q.quantity,
-                                q.price,
-                                q.price*q.quantity
+                                ++count,
+                                q.Properties,
+                                q.Quantity,
+                                q.Price,
+                                q.Price*q.Quantity
                             });
                 var totalRecords = rs.Count();
 
@@ -104,20 +105,24 @@ namespace ShopManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateOrder(int orderId, string status)
+        public ActionResult UpdateOrder(int orderId, string status, string receiver, string address, string phone)
         {
             OrderService service = new OrderService();
-            return Content(service.EditOrder(orderId, status).ToString());
+            if (!(receiver!=null && receiver.Length > 0))
+            {
+                receiver = null;
+            }
+            return Content(service.EditOrder(orderId, status, receiver, address, phone).ToString());
         }
 
         [HttpPost]
-        public ActionResult CreateOrder(string note, string status, string address, string receiver
+        public ActionResult CreateOrder(string note, string status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
-            string shopId = (string)Session["ShopId"];
-            string custId = (string)Session["CustId"];
+            string shopId = "1";// (string)Session["ShopId"];
+            string custId = "3";//(string)Session["CustId"];
             OrderService service = new OrderService();
-            bool rs = service.AddOrder(shopId, note, custId, status, address, receiver, listDetail);
+            bool rs = service.AddOrder(shopId, note, custId, status, address, receiver, phone, listDetail);
             return Content(rs.ToString());
         }
     }

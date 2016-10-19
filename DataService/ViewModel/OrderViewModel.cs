@@ -9,34 +9,36 @@ namespace DataService.ViewModel
 {
     public class OrderViewModel
     {
-        public int id { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateModified { get; set; }
-        public decimal total { get; set; }
-        public string customerId { get; set; }
-        public string customerName { get; set; }
-        public string note { get; set; }
-        public string status { get; set; }
-        public string shippingAddress { get; set; }
-        public string receiver { get; set; }
+        public int Id { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        public decimal Total { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public string Note { get; set; }
+        public string Status { get; set; }
+        public string ShippingAddress { get; set; }
+        public string Receiver { get; set; }
+        public string Phone { get; set; }
 
         public OrderViewModel()
         {
         }
 
         public OrderViewModel(int id, DateTime dateCreated, DateTime dateModified, string customerId,
-            string customerName, string note, decimal total, string status, string shippingAddress, string receiver)
+            string customerName, string note, decimal total, string status, string shippingAddress, string receiver, string phone)
         {
-            this.id = id;
-            this.dateCreated = dateCreated;
-            this.dateModified = dateModified;
-            this.customerId = customerId;
-            this.customerName = customerName;
-            this.note = note;
-            this.total = total;
-            this.status = status;
-            this.shippingAddress = shippingAddress;
-            this.receiver = receiver;
+            this.Id = id;
+            this.DateCreated = dateCreated;
+            this.DateModified = dateModified;
+            this.CustomerId = customerId;
+            this.CustomerName = customerName;
+            this.Note = note;
+            this.Total = total;
+            this.Status = status;
+            this.ShippingAddress = shippingAddress;
+            this.Receiver = receiver;
+            this.Phone = phone;
         }
     }
 

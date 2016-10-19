@@ -19,56 +19,39 @@ namespace DataService.Repository
         {
             return dbSet.Where(q => q.Id == orderId).Select(q => new OrderViewModel()
             {
-                id = q.Id,
-                customerId = q.CustomerId,
-                customerName = q.Customer.Name,
-                dateCreated = q.DateCreated,
-                dateModified = q.DateModified,
-                note = q.UserNote,
-                total = 0,
-                status = q.Status,
-                shippingAddress = q.ShippingAddress,
-                receiver = q.Receiver
+                Id = q.Id,
+                CustomerId = q.CustomerId,
+                CustomerName = q.Customer.Name,
+                DateCreated = q.DateCreated,
+                DateModified = q.DateModified,
+                Note = q.UserNote,
+                Total = 0,
+                Status = q.Status,
+                ShippingAddress = q.ShippingAddress,
+                Receiver = q.Receiver,
+                Phone = q.Phone
         }).First();
         }
 
-        public bool EditOrderByOrderId(int orderId, string status)
+        public bool EditOrderByOrderId(int orderId, string status, string receiver, string address, string phone)
         {
             Order order = this.FindByKey(orderId);
             order.Status = status;
+            order.Receiver = receiver;
+            order.Phone = phone;
+            order.ShippingAddress = address;
             order.DateModified = DateTime.Now;
+
             return this.Update(order);
         }
 
-        public Order AddOrder(string shopId, string note, string custId, string status
-            , string address, string receiver, List<OrderDetailViewModel> listDetail)
+        public Order AddOrder(Order o)
         {
-            bool rs = true;
             var transaction = entites.Database.BeginTransaction();
-            List<OrderDetail> listOD = new List<OrderDetail>();
-            //created = modified
-            Order o = new Order();
-            o.ShopId = shopId;
-            o.UserNote = note;
-            o.DateCreated = DateTime.Now;
-            o.DateModified = DateTime.Now;
-            o.CustomerId = custId;
-            o.Status = status;
-            o.ShippingAddress = address;
-            o.Receiver = receiver;
 
             o = CreateNew(o);
-            if (o != null)
-            {
-                OrderDetailRepository odRepo = new OrderDetailRepository();
-                odRepo.AddOrderDetails(o.Id, listDetail);
-            }
-            else
-            {
-                rs = false;
-            }
             
-            if (rs)
+            if (o!=null)
             {
                 entites.SaveChanges();
                 transaction.Commit();
@@ -112,10 +95,10 @@ namespace DataService.Repository
             {
                 OrderDetail od = new OrderDetail();
                 od.OrderId = orderId;
-                od.ProductId = o.productId;
-                od.Details = o.details;
-                od.Quantity = o.quantity;
-                od.Price = o.price;
+                od.ProductId = o.ProductId;
+                od.Properties = o.Properties;
+                od.Quantity = o.Quantity;
+                od.Price = o.Price;
                 try
                 {
                     rs = Create(od);

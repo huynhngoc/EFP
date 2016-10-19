@@ -18,16 +18,17 @@ namespace DataService.Service
             var orders = orderRepo.GetAllOrderByShopId(shopId);
             var orderViewModelList = orders.Select(q => new OrderViewModel()
             {
-                id = q.Id,
-                customerId = q.CustomerId,
-                customerName = q.Customer.Name,
-                dateCreated = q.DateCreated,
-                dateModified = q.DateModified,
-                note = q.UserNote,
-                total = CalculateTotalPrice(q.OrderDetails.ToList()),
-                status = q.Status,
-                shippingAddress = q.ShippingAddress,
-                receiver = q.Receiver
+                Id = q.Id,
+                CustomerId = q.CustomerId,
+                CustomerName = q.Customer.Name,
+                DateCreated = q.DateCreated,
+                DateModified = q.DateModified,
+                Note = q.UserNote,
+                Total = CalculateTotalPrice(q.OrderDetails.ToList()),
+                Status = q.Status,
+                ShippingAddress = q.ShippingAddress,
+                Receiver = q.Receiver,
+                Phone = q.Phone
             });
             return orderViewModelList.ToList();
         }
@@ -37,9 +38,10 @@ namespace DataService.Service
             var ods = orderDetailRepo.GetDetailByOrderId(orderId);
             var viewModelList = ods.Select(q => new OrderDetailViewModel()
             {
-                quantity = q.Quantity,
-                price = q.Price,
-                details = q.Details,
+                ProductId = q.ProductId,
+                Quantity = q.Quantity,
+                Price = q.Price,
+                Properties = q.Properties,
             });
             return viewModelList.ToList();
         }
@@ -53,22 +55,6 @@ namespace DataService.Service
             }
             return total;
         }
-        
-        //public string GetCustomerNameFromOrderId(int orderId)
-        //{
-        //    return orderRepo.GetCustomerNameByCustomerId(orderRepo.GetOrderByOrderId(orderId).CustomerId);
-        //}
-
-        //private OrderViewModel ConvertOrderToViewModel(Order o)
-        //{
-        //    return new OrderViewModel(o.Id, o.DateCreated, o.DateModified, o.CustomerId,
-        //        o.Customer.Name, o.UserNote, 0, o.Status, o.ShippingAddress, o.Receiver);
-        //}
-
-        //private OrderDetailViewModel ConvertOrderDetailToViewModel(OrderDetail od)
-        //{
-        //    return new OrderDetailViewModel(od.Details, od.Quantity, od.Price);
-        //}
 
         public OrderViewModel GetOrderModelFromOrderId(int orderId)
         {
@@ -76,24 +62,44 @@ namespace DataService.Service
             return order;
         }
 
-        public bool EditOrder(int orderId, string status)
+        public bool EditOrder(int orderId, string status, string receiver, string address, string phone)
         {
-            return orderRepo.EditOrderByOrderId(orderId, status);
+            return orderRepo.EditOrderByOrderId(orderId, status, receiver, address, phone);
         }
 
-        public bool AddOrder(string shopId, string note, string custId, string status, string address, string receiver
+        public bool AddOrder(string shopId, string note, string custId, string status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
             bool rs = true;
-            Order o=orderRepo.AddOrder(shopId, note, custId, status, address, receiver, listDetail);
-            if (o != null)
-            {
-                rs = orderDetailRepo.AddOrderDetails(o.Id, listDetail);
-            }
-            else
+            if (listDetail == null || listDetail.Count == 0)
             {
                 rs = false;
             }
+            else
+            {
+                Order o = new Order();
+                o.ShopId = shopId;
+                o.UserNote = note;
+                o.DateCreated = DateTime.Now;
+                o.DateModified = DateTime.Now;
+                o.CustomerId = custId;
+                o.Status = status;
+                o.ShippingAddress = address;
+                o.Receiver = receiver;
+                o.Phone = phone;
+
+                o = orderRepo.AddOrder(o);
+
+                if (o != null)
+                {
+                    rs = orderDetailRepo.AddOrderDetails(o.Id, listDetail);
+                }
+                else
+                {
+                    rs = false;
+                }
+            }
+            
             return rs;
         }
     }
