@@ -37,8 +37,6 @@
                         <th class="col-md-1 dt-head-center">Tình trạng</th>
                         <th class="col-md-1 dt-head-center">Thành tiền</th>
                         <th class="col-md-2 dt-head-center">Khách hàng</th>
-                        <th class="col-md-2 dt-head-center">Địa chỉ tới</th>
-                        <th class="col-md-2 dt-head-center">Người nhận</th>
                         <th class="col-md-1" style="width: auto;"></th>
                     </tr>
                 </thead>
@@ -141,7 +139,7 @@
     <div class="modal-dialog modal-lg" style="margin-top: 10px;">
         <div class="modal-content">
             <div class="modal-header" style="padding: 10px 5px">
-                <h4 class="modal-title" id="myModalLabel" >Thêm đơn hàng</h4>
+                <h4 class="modal-title" id="myModalLabel">Thêm đơn hàng</h4>
             </div>
             <div class="modal-body">
                 <table class="table" id="cuscreateTable" border="0">
@@ -294,7 +292,6 @@
 
     @*Global code*@
     <script>
-        var shopId = '@Session["ShopId"].ToString()';
         var languageConfig;
 
         languageConfig = {
@@ -330,15 +327,20 @@
                 "bProcessing": true
                     , "bServerSide": true
                     , "sAjaxSource": "/Order/GetOrderFromShopId"
-                    , "fnServerParams": function (aoData) {
-                        aoData.push({ "name": "shopId", "value": shopId });
-                    }
-                    , "aoColumnDefs": [{ "aTargets": [0], "mData": 0 }
-                            , { "aTargets": [1], "mData": 1 }
-                            , { "aTargets": [2], "mData": 2 }
+                    , "aoColumnDefs": [{ "aTargets": [0], "mData": "Id" }
+                            , {
+                                "aTargets": [1], "mData": function (source) {
+                                    return FormatShortDateVN(source.DateCreated);
+                                }
+                            }
+                            , {
+                                "aTargets": [2], "mData": function (source) {
+                                    return FormatShortDateVN(source.DateModified);
+                                }
+                            }
                             , {
                                 "aTargets": [3], "mData": function (source) {
-                                    var status = source[3];
+                                    var status = source.Status;
                                     if (status == "DELIVERING") {
                                         return '<span class="label label-success">Đang giao hàng</span>';
                                     }
@@ -353,16 +355,14 @@
                                     }
                                 }
                             }
-                            , { "aTargets": [4], "mData": 4 }
-                            , { "aTargets": [5], "mData": 5 }
-                            , { "aTargets": [6], "mData": 6 }
-                            , { "aTargets": [7], "mData": 7 }
+                            , { "aTargets": [4], "mData": "Total" }
+                            , { "aTargets": [5], "mData": "CustomerName" }
                             , {
                                 "bSortable": false
                                 , "aTargets": [-1]
                                 //, "sDefaultContent": '<a id="" onclick="showOrderModal();" class="btn btn-default search-dropdown"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Sửa</a>'
                                 , "mData": function (data, type, row) {
-                                    return '<a id="' + data[0] + '" onclick="showOrderModal(' + data[0] + ')" class="btn btn-success search-dropdown"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Sửa</a>'
+                                    return '<a id="' + data[0] + '" onclick="showOrderModal(' + data.Id + ')" class="btn btn-success search-dropdown"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Sửa</a>'
                                 }
                             }
                     ]
@@ -394,7 +394,6 @@
 
     @*Modal script*@
     <script>
-        var shopId = '@Session["ShopId"].ToString()';
         //Edit order
         //Chưa làm total footer
         function showOrderModal(id) {
@@ -546,9 +545,6 @@
                     "bProcessing": true
                     , "bServerSide": true
                     , "sAjaxSource": "/Product/GetAvailableProducts"
-                    , "fnServerParams": function (aoData) {
-                        aoData.push({ "name": "shopId", "value": shopId });
-                    }
                     , "aoColumnDefs": [{ "aTargets": [0], "mData": "Id" }
                             , { "aTargets": [1], "mData": "Name" }
                             , { "aTargets": [2], "mData": "Price" }
@@ -697,6 +693,12 @@
             var d = new Date(parseInt(milli));
             return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
         }
+
+        function FormatShortDateVN(date) {
+            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
+            var d = new Date(parseInt(milli));
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+        }
     </script>
 
     @*Add order*@
@@ -718,8 +720,8 @@
 
                     arDetail.push({ productid, properties, quantity, price});
                     }
-                    }
-                    else {
+                }
+                else {
                 rs = "detail";
                 //alert no detail
             }

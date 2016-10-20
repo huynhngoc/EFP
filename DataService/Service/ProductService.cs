@@ -14,11 +14,7 @@ namespace DataService.Service
     {
         ProductRepository repository = new ProductRepository();
         public ProductService()
-<<<<<<< HEAD
         {
-=======
-        {                        
->>>>>>> refs/remotes/origin/ProductCategory
         }
 
         //public List<MasterProduct> GetAllMasterProductByShopId(string shopId)
@@ -30,12 +26,7 @@ namespace DataService.Service
         {
             return repository.GetProductByShopId(shopId);
         }
-
-<<<<<<< HEAD
-        public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
-=======
         public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
->>>>>>> refs/remotes/origin/ProductCategory
         {
             try
             {
@@ -49,8 +40,6 @@ namespace DataService.Service
                 p.Status = status;
                 p.IsInStock = isInStock;
                 p.DateModified = DateTime.Now;
-<<<<<<< HEAD
-=======
                 p.TemplateId = templateId;
                 p.Attr1 = attr[0];
                 p.Attr2 = attr[1];
@@ -59,7 +48,6 @@ namespace DataService.Service
                 p.Attr5 = attr[4];
                 p.Attr6 = attr[5];
                 p.Attr7 = attr[6];
->>>>>>> refs/remotes/origin/ProductCategory
                 repository.Update(p);
                 return true;
             }
@@ -73,56 +61,12 @@ namespace DataService.Service
         public List<Product> GetProductByCategory(int cateId, string shopId)
         {
             return repository.GetProductByCategory(cateId, shopId).ToList();
-<<<<<<< HEAD
+
         }
-
-        //public async Task<> GetProduct(JQueryDataTableParamModel param, string shopId)
-        //{
-        //    var masterProducts = repository.GetProductByShopId(shopId);
-        //    var count = param.iDisplayStart + 1;
-        //    try
-        //    {
-        //        var rs = (await masterProducts.Where(q => string.IsNullOrEmpty(param.sSearch) ||
-        //                    (!string.IsNullOrEmpty(param.sSearch)
-        //                    && q.Name.ToLower().Contains(param.sSearch.ToLower())))
-        //                    .OrderByDescending(q => q.Name)
-        //                    .Skip(param.iDisplayStart)
-        //                    .Take(param.iDisplayLength)
-        //                    .ToListAsync())
-        //                    .Select(q => new IConvertible[] {
-        //                        count++,
-        //                        q.Name,
-        //                        q.Description,
-        //                        q.Status,
-        //                        q.Id
-        //                    });
-        //        var totalRecords = rs.Count();
-
-        //        return Json(new
-        //        {
-        //            sEcho = param.sEcho,
-        //            iTotalRecords = totalRecords,
-        //            iTotalDisplayRecords = totalRecords,
-        //            aaData = rs
-        //        }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch
-        //    {
-        //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-        //    }            
-
-        //}
 
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
             var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);
-=======
-        }       
-
-        public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
-        {
-            var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);            
->>>>>>> refs/remotes/origin/ProductCategory
             return rs;
         }
 
@@ -165,25 +109,6 @@ namespace DataService.Service
             }
         }
 
-<<<<<<< HEAD
-        //Long
-        public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
-        {
-            var rs = repository.GetAvailableProducts(param, shopId);
-            var list = rs.ToList();
-
-            foreach(var item in list)
-            {
-                item.Name = Utility.CreateAttributeString(item.Id);
-            }
-
-            rs = list.AsQueryable();
-            
-            return rs;
-        }
-    }
-}
-=======
         public Product AddProduct(string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr, string shopId)
         {
             try
@@ -217,6 +142,20 @@ namespace DataService.Service
                 return null;
             }
         }
+        //Long
+        public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
+        {
+            var rs = repository.GetAvailableProducts(param, shopId);
+            var list = rs.ToList();
+
+            foreach (var item in list)
+            {
+                item.Name = Utility.CreateAttributeString(item.Id);
+            }
+
+            rs = list.AsQueryable();
+
+            return rs;
+        }
     }
 }
->>>>>>> refs/remotes/origin/ProductCategory

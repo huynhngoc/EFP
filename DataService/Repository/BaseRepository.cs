@@ -57,6 +57,7 @@ namespace DataService.Repository
             try
             {
                 dbSet.Add(entity);
+                entites.SaveChanges();
                 return true;
             }
             catch
@@ -70,6 +71,7 @@ namespace DataService.Repository
             try
             {
                 TEntity rs = dbSet.Add(entity);
+                entites.SaveChanges();
                 return rs;
             }
             catch

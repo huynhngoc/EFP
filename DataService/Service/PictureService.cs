@@ -32,11 +32,13 @@ namespace DataService.Service
         {
             try
             {
-                return repository.Create(new ProductPicture()
+                ProductPicture p =  new ProductPicture()
                 {
                     Urls = url,
                     ProductId = productId
-                });               
+                };
+                var result = repository.Create(p);
+                return result;
             }
             catch (Exception)
             {

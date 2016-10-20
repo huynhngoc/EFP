@@ -27,10 +27,6 @@ namespace ShopManager
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/ProductCategory
             //Header CSS
             bundles.Add(new StyleBundle("~/Header-CSS").Include(
                       "~/Content/css/bootstrap.min.css",
@@ -90,7 +86,6 @@ namespace ShopManager
             //DataTable JS
             bundles.Add(new ScriptBundle("~/DataTable-JS").Include(
                       "~/Content/js/plugins/dataTables/datatables.min.js"));
-<<<<<<< HEAD
             //SweetAlert CSS
             bundles.Add(new StyleBundle("~/SweetAlert-CSS").Include(
                       "~/Content/css/plugins/sweetalert/sweetalert.css"));
@@ -103,8 +98,7 @@ namespace ShopManager
             //TouchSpin JS
             bundles.Add(new ScriptBundle("~/TouchSpin-JS").Include(
                       "~/Content/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"));
-
-=======
+            
             //SummerNote CSS
             bundles.Add(new StyleBundle("~/SummerNote-CSS").Include(
                       "~/Content/css/plugins/summernote/summernote.css"));
@@ -146,25 +140,12 @@ namespace ShopManager
             //nestable js
             bundles.Add(new ScriptBundle("~/Nestable-JS").Include(
                 "~/Content/js/plugins/nestable/jquery.nestable.js"));
-            //sweetalert CSS
-            bundles.Add(new StyleBundle("~/SweetAlert-CSS").Include(
-                "~/Content/css/plugins/sweetalert/sweetalert.css"));
-            //sweetalert JS
-            bundles.Add(new ScriptBundle("~/SweetAlert-JS").Include(
-                "~/Content/js/plugins/sweetalert/sweetalert.min.js"));
             //select2 CSS
             bundles.Add(new StyleBundle("~/Select2-CSS").Include(
                 "~/Content/css/plugins/select2/select2.min.css"));
             //select2 JS 
             bundles.Add(new ScriptBundle("~/Select2-JS").Include(
                 "~/Content/js/plugins/select2/select2.full.min.js"));
-            // touchspin Css
-            bundles.Add(new StyleBundle("~/TouchSpin-CSS").Include(
-                "~/Content/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css"));
-            //touchspin JS
-            bundles.Add(new ScriptBundle("~/TouchSpin-JS").Include(
-                "~/Content/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"));
->>>>>>> refs/remotes/origin/ProductCategory
         }
 
     }

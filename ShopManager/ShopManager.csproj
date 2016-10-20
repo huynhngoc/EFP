@@ -185,13 +185,9 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-<<<<<<< HEAD
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
-=======
-    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
->>>>>>> refs/remotes/origin/ProductCategory
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -229,18 +225,15 @@
     <Content Include="Content\css\plugins\blueimp\css\blueimp-gallery.min.css" />
     <Content Include="Content\css\plugins\blueimp\css\demo.css" />
     <Content Include="Content\css\plugins\blueimp\img\error.png" />
-<<<<<<< HEAD
     <Content Include="Content\css\plugins\blueimp\img\error.svg" />
     <Content Include="Content\css\plugins\blueimp\img\loading.gif" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.png" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.svg" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.png" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.svg" />
-=======
     <Content Include="Content\css\plugins\blueimp\img\loading.gif" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.png" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.png" />
->>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\css\plugins\bootstrap-markdown\bootstrap-markdown.min.css" />
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css" />
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.min.css" />
@@ -260,10 +253,7 @@
     <Content Include="Content\css\plugins\daterangepicker\daterangepicker-bs3.css" />
     <Content Include="Content\css\plugins\dropzone\basic.css" />
     <Content Include="Content\css\plugins\dropzone\dropzone.css" />
-<<<<<<< HEAD
     <Content Include="Content\css\plugins\footable\fonts\footable.svg" />
-=======
->>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\css\plugins\footable\footable.core.css" />
     <Content Include="Content\css\plugins\fullcalendar\fullcalendar.css" />
     <Content Include="Content\css\plugins\fullcalendar\fullcalendar.print.css" />
@@ -318,10 +308,7 @@
     <Content Include="Content\css\plugins\nouslider\jquery.nouislider.css" />
     <Content Include="Content\css\plugins\select2\select2.min.css" />
     <Content Include="Content\css\plugins\slick\ajax-loader.gif" />
-<<<<<<< HEAD
     <Content Include="Content\css\plugins\slick\fonts\slick.svg" />
-=======
->>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\css\plugins\slick\slick-theme.css" />
     <Content Include="Content\css\plugins\slick\slick.css" />
     <Content Include="Content\css\plugins\social-buttons\social-buttons.css" />
@@ -331,10 +318,8 @@
     <Content Include="Content\css\plugins\sweetalert\sweetalert.css" />
     <Content Include="Content\css\plugins\switchery\switchery.css" />
     <Content Include="Content\css\plugins\toastr\toastr.min.css" />
-<<<<<<< HEAD
     <Content Include="Content\css\plugins\touchspin\jquery.bootstrap-touchspin.min.css" />
     <Content Include="Content\css\style.css" />
-=======
     <Content Include="Content\css\plugins\tokenfield\bootstrap-tokenfield.css" />
     <Content Include="Content\css\plugins\tokenfield\bootstrap-tokenfield.min.css" />
     <Content Include="Content\css\plugins\tokenfield\tokenfield-typeahead.css" />
@@ -343,7 +328,6 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\font-awesome\css\font-awesome.css" />
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
->>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\demo\chartjs-demo.js" />
@@ -770,11 +754,8 @@
     <Content Include="Content\js\plugins\switchery\switchery.js" />
     <Content Include="Content\js\plugins\tinycon\tinycon.min.js" />
     <Content Include="Content\js\plugins\toastr\toastr.min.js" />
-<<<<<<< HEAD
-=======
     <Content Include="Content\js\plugins\tokenfield\bootstrap-tokenfield.js" />
     <Content Include="Content\js\plugins\tokenfield\bootstrap-tokenfield.min.js" />
->>>>>>> refs/remotes/origin/ProductCategory
     <Content Include="Content\js\plugins\touchspin\jquery.bootstrap-touchspin.min.js" />
     <Content Include="Content\js\plugins\validate\jquery.validate.min.js" />
     <Content Include="Content\js\plugins\video\responsible-video.js" />
@@ -786,7 +767,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\css\bootstrap.css.map" />
     <Content Include="Content\css\bootstrap.min.css.map" />
-<<<<<<< HEAD
     <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css.map" />
     <Content Include="Content\css\plugins\footable\fonts\footable.eot" />
     <Content Include="Content\css\plugins\footable\fonts\footable.ttf" />
@@ -797,7 +777,6 @@
     <Content Include="Content\js\plugins\chartist\chartist.min.js.map" />
     <Content Include="Content\js\plugins\diff_match_patch\COPYING" />
     <Content Include="Content\js\plugins\justified-gallery\README.md" />
-=======
     <Content Include="Content\css\plugins\blueimp\img\error.svg" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.svg" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.svg" />
@@ -851,7 +830,6 @@
     <Content Include="Content\js\plugins\diff_match_patch\COPYING" />
     <Content Include="Content\js\plugins\justified-gallery\README.md" />
     <Content Include="Content\fonts\FontAwesome.otf" />
->>>>>>> refs/remotes/origin/ProductCategory
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -898,19 +876,14 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Order\All.cshtml" />
-=======
     <Content Include="Views\Product\ManageProduct.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Template\Index.cshtml" />
->>>>>>> refs/remotes/origin/ProductCategory
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\font-awesome\" />
-    <Folder Include="Content\fonts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

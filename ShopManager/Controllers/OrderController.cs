@@ -21,15 +21,19 @@ namespace ShopManager.Controllers
         public ActionResult Index()
         {
             Session["ShopId"] = "1";
-            Session["CustId"] = "Cust01";
+            Session["CustId"] = "3";
             return View("All");
         }
 
-        public JsonResult GetOrderFromShopId(JQueryDataTableParamModel param, string shopId)
+        public JsonResult GetOrderFromShopId(JQueryDataTableParamModel param)
         {
+            var shopId = (string)Session["ShopId"];
             OrderService service = new OrderService();
             var orders = service.GetAllOrders(shopId);
             var count = param.iDisplayStart + 1;
+
+            var whichCol = param.iSortCol_0;// getcol
+            var whichOrder = param.sSortDir_0;// asc or desc
             try
             {
                 var rs = (orders.Where(q => string.IsNullOrEmpty(param.sSearch) ||
@@ -37,27 +41,80 @@ namespace ShopManager.Controllers
                             && q.CustomerName.ToLower().Contains(param.sSearch.ToLower())))
                             .OrderByDescending(q => q.DateModified)
                             .Skip(param.iDisplayStart)
-                            .Take(param.iDisplayLength)
-                            .ToList())
-                            .Select(q => new IConvertible[] {
-                                q.Id,
-                                q.DateCreated.ToShortDateString(),
-                                q.DateModified.ToShortDateString(),
-                                q.Status,
-                                q.Total,
-                                q.CustomerName,
-                                q.ShippingAddress,
-                                q.Receiver,
-                                q.Phone
-                            });
+                            .Take(param.iDisplayLength));
                 var totalRecords = rs.Count();
+
+                switch (param.iSortCol_0)
+                {
+                    case 0:
+                        if (param.sSortDir_0 == "asc")
+                        {
+                            rs = rs.OrderBy(q => q.Id);
+                        }
+                        else
+                        {
+                            rs = rs.OrderByDescending(q => q.Id);
+                        }
+                        break;
+                    case 1:
+                        if (param.sSortDir_0 == "asc")
+                        {
+                            rs = rs.OrderBy(q => q.DateCreated);
+                        }
+                        else
+                        {
+                            rs = rs.OrderByDescending(q => q.DateCreated);
+                        }
+                        break;
+                    case 2:
+                        if (param.sSortDir_0 == "asc")
+                        {
+                            rs = rs.OrderBy(q => q.DateModified);
+                        }
+                        else
+                        {
+                            rs = rs.OrderByDescending(q => q.DateModified);
+                        }
+                        break;
+                    case 3:
+                        if (param.sSortDir_0 == "asc")
+                        {
+                            rs = rs.OrderBy(q => q.Status);
+                        }
+                        else
+                        {
+                            rs = rs.OrderByDescending(q => q.Status);
+                        }
+                        break;
+                    case 4:
+                        if (param.sSortDir_0 == "asc")
+                        {
+                            rs = rs.OrderBy(q => q.Total);
+                        }
+                        else
+                        {
+                            rs = rs.OrderByDescending(q => q.Total);
+                        }
+                        break;
+                    case 5:
+                        if (param.sSortDir_0 == "asc")
+                        {
+                            rs = rs.OrderBy(q => q.CustomerName);
+                        }
+                        else
+                        {
+                            rs = rs.OrderByDescending(q => q.CustomerName);
+                        }
+                        break;
+                    default: rs = rs.OrderBy(q => q.DateModified); break;
+                }
 
                 return Json(new
                 {
                     sEcho = param.sEcho,
                     iTotalRecords = totalRecords,
                     iTotalDisplayRecords = totalRecords,
-                    aaData = rs
+                    aaData = rs.ToList()
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -119,8 +176,8 @@ namespace ShopManager.Controllers
         public ActionResult CreateOrder(string note, string status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
-            string shopId = "1";// (string)Session["ShopId"];
-            string custId = "3";//(string)Session["CustId"];
+            string shopId = (string)Session["ShopId"];// (string)Session["ShopId"];
+            string custId = (string)Session["CustId"];//(string)Session["CustId"];
             OrderService service = new OrderService();
             bool rs = service.AddOrder(shopId, note, custId, status, address, receiver, phone, listDetail);
             return Content(rs.ToString());

@@ -9,36 +9,26 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Diagnostics;
 using Newtonsoft.Json;
-<<<<<<< HEAD
-=======
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using System.Globalization;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
->>>>>>> refs/remotes/origin/ProductCategory
 
 namespace ShopManager.Controllers
 {
     public class ProductController : Controller
     {
-<<<<<<< HEAD
-=======
         static Cloudinary m_cloudinary = new Cloudinary(new Account(
             ConfigurationManager.AppSettings["CloudName"],
             ConfigurationManager.AppSettings["AppId"],
-            ConfigurationManager.AppSettings["AppSecret"]));        
->>>>>>> refs/remotes/origin/ProductCategory
+            ConfigurationManager.AppSettings["AppSecret"]));
         // GET: Product
         public ActionResult Index()
         {
             return View();
-<<<<<<< HEAD
         }
-=======
-        }        
->>>>>>> refs/remotes/origin/ProductCategory
 
         public JsonResult GetProductById(int id)
         {
@@ -54,21 +44,9 @@ namespace ShopManager.Controllers
             }
         }
 
-<<<<<<< HEAD
-        public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock)
-        {
-            ProductService service = new ProductService();
-            try
-            {
-                return Json(service.UpdateProduct(id, name, description, categoryId, price, promotion, status, isInStock), JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-=======
         public JsonResult Upload()
         {
-            PictureService service = new PictureService();            
+            PictureService service = new PictureService();
             try
             {
                 int id = int.Parse(Request["id"]);
@@ -121,24 +99,15 @@ namespace ShopManager.Controllers
                     Debug.WriteLine(result);
                     Debug.WriteLine(result.Uri.AbsoluteUri);
                 }
-                return Json(new {success= true }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
 
->>>>>>> refs/remotes/origin/ProductCategory
                 return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
             }
         }
 
-<<<<<<< HEAD
-        public JsonResult SetStatus(int[] idList, bool status)
-        {
-            ProductService service = new ProductService();
-            try
-            {
-                return Json(service.SetStatus(idList, status), JsonRequestBehavior.AllowGet);
-=======
         public JsonResult GetPicture(int productId)
         {
             PictureService service = new PictureService();
@@ -147,7 +116,7 @@ namespace ShopManager.Controllers
 
         public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr, int[] removeImg)
         {
-            ProductService service = new ProductService();            
+            ProductService service = new ProductService();
 
             try
             {
@@ -161,8 +130,7 @@ namespace ShopManager.Controllers
 
                 picService.DeletePicture(removeImg);
 
-                return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock, templateId, attr ), JsonRequestBehavior.AllowGet);
->>>>>>> refs/remotes/origin/ProductCategory
+                return Json(service.UpdateProduct(id, name, description, categoryId, price, promotion, status, isInStock, templateId, attr), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -171,14 +139,6 @@ namespace ShopManager.Controllers
             }
         }
 
-<<<<<<< HEAD
-        public JsonResult SetInStock(int[] idList, bool inStock)
-        {
-            ProductService service = new ProductService();
-            try
-            {
-                return Json(service.SetInStock(idList, inStock), JsonRequestBehavior.AllowGet);
-=======
         public JsonResult Add(string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
         {
             ProductService service = new ProductService();
@@ -186,7 +146,6 @@ namespace ShopManager.Controllers
             try
             {
                 return Json(new { Id = service.AddProduct(name, description, categoryId, price, promotion, status, isInStock, templateId, attr, shopId).Id }, JsonRequestBehavior.AllowGet);
->>>>>>> refs/remotes/origin/ProductCategory
             }
             catch (Exception e)
             {
@@ -195,34 +154,12 @@ namespace ShopManager.Controllers
             }
         }
 
-<<<<<<< HEAD
-        public JsonResult GetMasterProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
-=======
         public JsonResult SetStatus(int[] idList, bool status)
->>>>>>> refs/remotes/origin/ProductCategory
         {
             ProductService service = new ProductService();
             try
             {
-<<<<<<< HEAD
-                var masterProducts = service.GetProduct(param, shopId, sName, sCate, sDesc);
-                Debug.WriteLine("----x " + masterProducts.Count());
-
-                var totalRecords = masterProducts.Count();
-                var data = masterProducts.Skip(param.iDisplayStart)
-                    .Take(param.iDisplayLength);
-                var displayRecords = data.Count();
-                Debug.WriteLine("-----l ");
-                return Json(new
-                {
-                    sEcho = param.sEcho,
-                    iTotalRecords = totalRecords,
-                    iTotalDisplayRecords = totalRecords,//displayRecords,
-                    aaData = data
-                }, JsonRequestBehavior.AllowGet);
-=======
                 return Json(service.SetStatus(idList, status), JsonRequestBehavior.AllowGet);
->>>>>>> refs/remotes/origin/ProductCategory
             }
             catch (Exception e)
             {
@@ -230,87 +167,12 @@ namespace ShopManager.Controllers
                 return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
             }
         }
-<<<<<<< HEAD
-        //public JsonResult GetDetailedProduct(JQueryDataTableParamModel param, int masterId)
-        //{
-        //    //string shopId = "1";
-        //    DetailedProductService service = new DetailedProductService();                        
-        //    try
-        //    {
-        //        var detailedProducts = service.GetDetailedProduct(param, masterId);
-        //        Debug.WriteLine("----x " + detailedProducts.Count());                
-
-        //        var totalRecords = detailedProducts.Count();
-        //        var data = detailedProducts.Skip(param.iDisplayStart)
-        //            .Take(param.iDisplayLength);
-        //        var displayRecords = data.Count();
-        //        Debug.WriteLine("-----l ");
-        //        return Json(new
-        //        {
-        //            sEcho = param.sEcho,
-        //            iTotalRecords = totalRecords,
-        //            iTotalDisplayRecords = displayRecords,
-        //            aaData = data
-        //        }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        Debug.WriteLine(e.Message);
-        //        return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
-        //        //var data = new string[0];
-        //        //Debug.WriteLine(e.Message);
-        //        //return Json(new
-        //        //{
-        //        //    sEcho = param.sEcho,
-        //        //    iTotalRecords = 0,
-        //        //    iTotalDisplayRecords = 0,
-        //        //    aaData = data
-        //        //}, JsonRequestBehavior.AllowGet);
-        //    }
-
-        //}
-
-        //public ActionResult GetProduct(JQueryDataTableParamModel param, string shopId)
-        //{
-        //    MasterProductService service = new MasterProductService();
-        //    var masterProducts = service.GetAllMasterProductByShopId(shopId);
-        //    var count = param.iDisplayStart + 1;
-        //    try
-        //    {
-        //        var rs = service.GetAllMasterProductByShopId(shopId).ToList();
-        //        var totalRecords = rs.Count();
-
-        //        return Json(new
-        //        {
-        //            sEcho = param.sEcho,
-        //            iTotalRecords = totalRecords,
-        //            iTotalDisplayRecords = totalRecords,
-        //            aaData = rs
-        //        }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch
-        //    {
-        //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
-
-        //Long
-        public JsonResult GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
-=======
 
         public JsonResult SetInStock(int[] idList, bool inStock)
->>>>>>> refs/remotes/origin/ProductCategory
         {
             ProductService service = new ProductService();
             try
             {
-<<<<<<< HEAD
-                var masterProducts = service.GetAvailableProducts(param, shopId);
-                Debug.WriteLine("----x " + masterProducts.Count());
-
-                var totalRecords = masterProducts.Count();
-                var data = masterProducts;
-=======
                 return Json(service.SetInStock(idList, inStock), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -320,19 +182,18 @@ namespace ShopManager.Controllers
             }
         }
 
-        public JsonResult GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc )
+        public JsonResult GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
-            ProductService service = new ProductService();                        
+            ProductService service = new ProductService();
             try
             {
                 var products = service.GetProduct(param, shopId, sName, sCate, sDesc);
-                Debug.WriteLine("----x " + products.Count());                
-                
+                Debug.WriteLine("----x " + products.Count());
+
                 var totalRecords = products.Count();
                 var data = products.Skip(param.iDisplayStart)
                     .Take(param.iDisplayLength);
                 var displayRecords = data.Count();
->>>>>>> refs/remotes/origin/ProductCategory
                 Debug.WriteLine("-----l ");
                 return Json(new
                 {
@@ -342,23 +203,39 @@ namespace ShopManager.Controllers
                     aaData = data
                 }, JsonRequestBehavior.AllowGet);
             }
-<<<<<<< HEAD
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
             }
         }
-=======
-            catch(Exception e)
+
+        //Long
+
+        public JsonResult GetAvailableProducts(JQueryDataTableParamModel param)
+        {
+            ProductService service = new ProductService();
+            var shopId = (string)Session["ShopId"];
+            try
+            {
+                var products = service.GetAvailableProducts(param, shopId);
+
+                var totalRecords = products.Count();
+                var data = products;
+                Debug.WriteLine("-----l ");
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = totalRecords,
+                    iTotalDisplayRecords = totalRecords,//displayRecords,
+                    aaData = data
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
-            }            
+            }
         }
-       
-
-
->>>>>>> refs/remotes/origin/ProductCategory
     }
 }
