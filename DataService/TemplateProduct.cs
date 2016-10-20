@@ -14,13 +14,13 @@ namespace DataService
     
     public partial class TemplateProduct
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TemplateProduct()
         {
             this.Products = new HashSet<Product>();
         }
     
         public int Id { get; set; }
+        public string Name { get; set; }
         public string ShopId { get; set; }
         public string Attr1 { get; set; }
         public string Attr2 { get; set; }
@@ -29,10 +29,8 @@ namespace DataService
         public string Attr5 { get; set; }
         public string Attr6 { get; set; }
         public string Attr7 { get; set; }
-        public string Name { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products { get; set; }
         public virtual Shop Shop { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

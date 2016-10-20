@@ -14,11 +14,10 @@ namespace DataService
     
     public partial class Product
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            this.ProductPictures = new HashSet<ProductPicture>();
             this.OrderDetails = new HashSet<OrderDetail>();
+            this.ProductPictures = new HashSet<ProductPicture>();
         }
     
         public int Id { get; set; }
@@ -41,12 +40,10 @@ namespace DataService
         public Nullable<decimal> PromotionPrice { get; set; }
         public Nullable<int> TemplateId { get; set; }
     
+        public virtual Category Category { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<ProductPicture> ProductPictures { get; set; }
         public virtual Shop Shop { get; set; }
         public virtual TemplateProduct TemplateProduct { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductPicture> ProductPictures { get; set; }
-        public virtual Category Category { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

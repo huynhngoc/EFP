@@ -12,15 +12,12 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class Entity
+    public partial class Conversation
     {
-        public int Id { get; set; }
-        public string EntityName { get; set; }
-        public string Value { get; set; }
-        public bool IsDynamic { get; set; }
-        public string Description { get; set; }
+        public string Id { get; set; }
         public string ShopId { get; set; }
-    
-        public virtual Shop Shop { get; set; }
+        public int IntentId { get; set; }
+        public bool IsRead { get; set; }
+        public System.DateTime LastUpdate { get; set; }
     }
 }

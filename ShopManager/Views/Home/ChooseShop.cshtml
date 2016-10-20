@@ -230,6 +230,9 @@
                         success: function (data, textStatus, xhr) {
                             console.log(data);
                             console.log(data["success"]);
+                            initShop();
+                            $("#choosePageModal").modal("hide");
+
                         }
                     });
                 });

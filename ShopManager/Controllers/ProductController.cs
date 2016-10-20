@@ -22,8 +22,8 @@ namespace ShopManager.Controllers
     {
         static Cloudinary m_cloudinary = new Cloudinary(new Account(
             ConfigurationManager.AppSettings["CloudName"],
-            ConfigurationManager.AppSettings["AppId"],
-            ConfigurationManager.AppSettings["AppSecret"]));
+            ConfigurationManager.AppSettings["CloudAppId"],
+            ConfigurationManager.AppSettings["CloudAppSecret"]));
         // GET: Product
         public ActionResult Index()
         {

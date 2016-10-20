@@ -70,6 +70,9 @@
     <Compile Include="Comment.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Conversation.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Customer.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -131,6 +134,9 @@
     <Compile Include="Service\TemplateProductService.cs" />
     <Compile Include="Service\Utility.cs" />
     <Compile Include="Shop.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TemplateProduct.cs">

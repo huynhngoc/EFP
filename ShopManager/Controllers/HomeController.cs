@@ -10,6 +10,7 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using Facebook;
 using System.Dynamic;
+using System.Configuration;
 
 namespace ShopManager.Controllers
 {
@@ -41,7 +42,7 @@ namespace ShopManager.Controllers
             FacebookClient fbApp = new FacebookClient(token);
             dynamic parameters = new ExpandoObject();
             //parameters.access_token = token;
-            parameters.app_id = "161282120980764";
+            parameters.app_id = ConfigurationManager.AppSettings["FbAppId"];
             
 
             // add tab
@@ -53,8 +54,8 @@ namespace ShopManager.Controllers
             //get long-lived 
             dynamic getAccessParam = new ExpandoObject();
             getAccessParam.grant_type = "fb_exchange_token";
-            getAccessParam.client_id = "161282120980764";
-            getAccessParam.client_secret = "40d95140ed2f41994dffa498bf62bb4c";
+            getAccessParam.client_id = ConfigurationManager.AppSettings["FbAppId"];
+            getAccessParam.client_secret = ConfigurationManager.AppSettings["FbAppSecret"];
             getAccessParam.fb_exchange_token = token;
 
             var fbToken = fbApp.Get("oauth/access_token", getAccessParam);
@@ -69,7 +70,7 @@ namespace ShopManager.Controllers
             string userId = User.Identity.GetUserId();            
             ShopService shopService = new ShopService();
             bool result = false;
-            if (shopService.GetShopByUserId(userId) == null)
+            if (shopService.GetShop(id) == null)
             {
                 shopService.CreateShop(id, name, longToken, userId);
 

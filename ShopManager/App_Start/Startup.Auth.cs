@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -55,8 +56,8 @@ namespace ShopManager
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
-               appId: "161282120980764",
-               appSecret: "40d95140ed2f41994dffa498bf62bb4c");
+               appId: ConfigurationManager.AppSettings["FbAppId"],
+               appSecret: ConfigurationManager.AppSettings["FbAppSecret"]);
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
