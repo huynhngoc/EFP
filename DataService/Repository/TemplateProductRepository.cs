@@ -9,9 +9,9 @@ namespace DataService.Repository
 {
     public class TemplateProductRepository: BaseRepository<TemplateProduct>
     {
-        public List<TemplateProductViewModel> GetTemplate(string shopId)
+        public List<TemplateProductViewModel1> GetTemplate(string shopId)
         {
-            return dbSet.Where(q => q.ShopId == shopId).Select(q => new TemplateProductViewModel()
+            return dbSet.Where(q => q.ShopId == shopId).Select(q => new TemplateProductViewModel1()
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -24,6 +24,11 @@ namespace DataService.Repository
             + "_" + q.Attr7.ToString() 
             }            
             ).ToList();
+        }
+
+        public IEnumerable<TemplateProduct> GetTemplateByIdAndShop(int id, string shopId)
+        {
+            return dbSet.Where(q => (q.Id == id) && (q.ShopId == shopId));
         }
     }
 }

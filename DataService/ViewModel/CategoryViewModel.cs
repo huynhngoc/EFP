@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataService.ViewModel
 {
-    public class CategoryViewModelAn
+    public class CategoryViewModel
     {
         public int Level { get; set; }
         public int CategoryId { get; set; }
@@ -19,7 +19,7 @@ namespace DataService.ViewModel
             ChildCategory = new List<CategoryViewModel>();
         }
     }
-    public class CategoryViewModelNgoc
+    public class CategoryViewModel1
     {
         public int Id { get; set; }
         public string Name { get; set; }

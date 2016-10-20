@@ -49,8 +49,14 @@ namespace DataService.Service
          return repository.EditCustomer(Id,Name,Addr,Desc,Phone,Email,ShopId);
      }
 
+        public Customer GetCustomerByCustomerId(string customerId)
+        {
+            Customer Customer = repository.GetCustomerById(customerId).FirstOrDefault();
+            return Customer;
+        }
 
-  }
+
+    }
        
         
 }

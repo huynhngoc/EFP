@@ -1,7 +1,9 @@
-﻿using DataService.Repository;
+﻿using DataService.JqueryDataTable;
+using DataService.Repository;
 using DataService.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -197,43 +199,15 @@ namespace DataService.Service
             }
 
         }
-
-
-    }
-}
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataService.Repository;
-using DataService.JqueryDataTable;
-using DataService.ViewModel;
-using System.Diagnostics;
-
-namespace DataService.Service
-{
-    public class ProductService
-    {
-        ProductRepository repository = new ProductRepository();
-        public ProductService()
-        {
-        }
-
-        //public List<MasterProduct> GetAllMasterProductByShopId(string shopId)
-        //{
-        //    return repository.GetProductByShopId(shopId).ToList();
-        //}
-
         public IQueryable<Product> GetAllMasterProductByShopId(string shopId)
         {
-            return repository.GetProductByShopId(shopId);
+            return productRepository.GetProductByShopId(shopId);
         }
         public bool UpdateProduct(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
         {
             try
             {
-                Product p = repository.FindByKey(id);
+                Product p = productRepository.FindByKey(id);
                 p.Id = id;
                 p.Name = name;
                 p.Description = description;
@@ -251,7 +225,7 @@ namespace DataService.Service
                 p.Attr5 = attr[4];
                 p.Attr6 = attr[5];
                 p.Attr7 = attr[6];
-                repository.Update(p);
+                productRepository.Update(p);
                 return true;
             }
             catch (Exception e)
@@ -263,19 +237,19 @@ namespace DataService.Service
 
         public List<Product> GetProductByCategory(int cateId, string shopId)
         {
-            return repository.GetProductByCategory(cateId, shopId).ToList();
+            return productRepository.GetProductByCategory(cateId, shopId).ToList();
 
         }
 
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
-            var rs = repository.GetProduct(param, shopId, sName, sCate, sDesc);
+            var rs = productRepository.GetProduct(param, shopId, sName, sCate, sDesc);
             return rs;
         }
 
         public ProductViewModel GetProductById(int id)
         {
-            return repository.GetProductById(id);
+            return productRepository.GetProductById(id);
         }
 
         public bool SetStatus(int[] idList, bool status)
@@ -284,7 +258,7 @@ namespace DataService.Service
             {
                 foreach (var id in idList)
                 {
-                    repository.SetStatus(id, status);
+                    productRepository.SetStatus(id, status);
                 }
                 return true;
             }
@@ -301,7 +275,7 @@ namespace DataService.Service
             {
                 foreach (var id in idList)
                 {
-                    repository.SetInStock(id, inStock);
+                    productRepository.SetInStock(id, inStock);
                 }
                 return true;
             }
@@ -337,7 +311,7 @@ namespace DataService.Service
                     Attr6 = attr[5],
                     Attr7 = attr[6]
                 };
-                return repository.Add(p);
+                return productRepository.Add(p);
             }
             catch (Exception e)
             {
@@ -348,7 +322,7 @@ namespace DataService.Service
         //Long
         public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
         {
-            var rs = repository.GetAvailableProducts(param, shopId);
+            var rs = productRepository.GetAvailableProducts(param, shopId);
             var list = rs.ToList();
 
             foreach (var item in list)
@@ -360,5 +334,6 @@ namespace DataService.Service
 
             return rs;
         }
+
     }
 }

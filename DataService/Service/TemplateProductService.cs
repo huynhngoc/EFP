@@ -10,16 +10,16 @@ namespace DataService.Service
     public class TemplateProductService
     {
         TemplateProductRepository repository = new TemplateProductRepository();
-        public List<TemplateProductViewModel> GetTemplate(string shopId)
+        public List<TemplateProductViewModel1> GetTemplate(string shopId)
         {
             return repository.GetTemplate(shopId);
         }
 
-        public TemplateProductViewModel GetTemplateById(int id)
+        public TemplateProductViewModel1 GetTemplateById(int id)
         {
 
             TemplateProduct q = repository.FindByKey(id);
-            return new TemplateProductViewModel()
+            return new TemplateProductViewModel1()
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -84,7 +84,7 @@ namespace DataService.Service
         public TemplateProductViewModel GetTemplateByIdAndShop(int id, string shopId)
         {
             TemplateProductViewModel templateModel = new TemplateProductViewModel();
-            TemplateProduct template = templateProductRepository.GetTemplateByIdAndShop(id, shopId).FirstOrDefault();
+            TemplateProduct template = repository.GetTemplateByIdAndShop(id, shopId).FirstOrDefault();
             templateModel.Id = template.Id;
             templateModel.ShopId = template.ShopId;
             templateModel.Attr1 = template.Attr1;

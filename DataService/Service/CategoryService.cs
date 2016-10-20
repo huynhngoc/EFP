@@ -90,29 +90,6 @@ namespace DataService.Service
 
         }
 
-
-    }
-
-        //public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
-        //{
-        //    return repository.GetCategoryAndParentByShopId(shopId);
-        //}
-
-        public List<CategoryViewModel> GetAllCategory(string shopId)
-        {
-            return repository.GetCategory(shopId).ToList();
-        }
-
-        public List<CategoryViewModel> GetParentCategory(string shopId)
-        {
-            return repository.GetParentCategory(shopId).ToList();
-        }
-
-        public List<CategoryViewModel> GetCategoryByParent(int parentId)
-        {
-            return repository.GetCategoryByParent(parentId).ToList();
-        }
-
         public bool EditCategory(int id, string name, string description)
         {
             Category c = repository.FindByKey(id);
@@ -129,19 +106,19 @@ namespace DataService.Service
                 return false;
             }
             if (c.Products == null || c.Categories1 == null || c.Categories1.Count() == 0 || c.Products.Count() == 0)
-            {                
-                return repository.Delete(id); 
+            {
+                return repository.Delete(id);
             }
             else
             {
                 return false;
-            }            
+            }
         }
 
         public bool CheckDelete(int id)
         {
             return repository.CheckDelete(id);
-            
+
         }
 
         public int AddNewCategory(string name, string description, int? parentId, string shopId)
@@ -155,5 +132,31 @@ namespace DataService.Service
             };
             return repository.AddNewCategory(c);
         }
+
+        public List<CategoryViewModel1> GetAllCategory(string shopId)
+        {
+            return repository.GetCategory(shopId).ToList();
+        }
+
+        public List<CategoryViewModel1> GetParentCategory(string shopId)
+        {
+            return repository.GetParentCategory(shopId).ToList();
+        }
+
+        public List<CategoryViewModel1> GetCategoryByParent(int parentId)
+        {
+            return repository.GetCategoryByParent(parentId).ToList();
+        }
+
+
     }
+
+    //public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
+    //{
+    //    return repository.GetCategoryAndParentByShopId(shopId);
+    //}
+
+   
+
+
 }
