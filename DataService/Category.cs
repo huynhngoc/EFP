@@ -18,20 +18,20 @@ namespace DataService
         public Category()
         {
             this.Categories1 = new HashSet<Category>();
-            this.MasterProducts = new HashSet<MasterProduct>();
+            this.Products = new HashSet<Product>();
         }
     
         public int Id { get; set; }
-        public string ShopId { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public Nullable<int> ParentId { get; set; }
-        public string Name { get; set; }
+        public string ShopId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Categories1 { get; set; }
         public virtual Category Category1 { get; set; }
         public virtual Shop Shop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MasterProduct> MasterProducts { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

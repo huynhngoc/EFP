@@ -57,6 +57,7 @@ namespace DataService.Repository
             try
             {
                 dbSet.Add(entity);
+                entites.SaveChanges();
                 return true;
             }
             catch
@@ -65,11 +66,26 @@ namespace DataService.Repository
             }
         }
 
+        public TEntity CreateNew(TEntity entity)
+        {
+            try
+            {
+                TEntity rs = dbSet.Add(entity);
+                entites.SaveChanges();
+                return rs;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public bool Delete(object key)
         {
             try
             {
                 dbSet.Remove(FindByKey(key));
+                entites.SaveChanges();
                 return true;
             }
             catch
