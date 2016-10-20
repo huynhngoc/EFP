@@ -15,7 +15,6 @@ namespace DataService.Repository
         bool Delete(Object key);
         bool Update(TEntity entity);
         TEntity FindByKey(Object Key);
-        Task<TEntity> GetAsync(object key);
     }
     public abstract class BaseRepository<TEntity>: IRepository<TEntity>
         where TEntity:class
@@ -67,11 +66,25 @@ namespace DataService.Repository
             }
         }
 
+        public TEntity CreateNew(TEntity entity)
+        {
+            try
+            {
+                TEntity rs = dbSet.Add(entity);
+                entites.SaveChanges();
+                return rs;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public bool Delete(object key)
         {
             try
             {
-                dbSet.Remove(FindByKey(key));                
+                dbSet.Remove(FindByKey(key));
                 entites.SaveChanges();
                 return true;
             }
@@ -86,7 +99,7 @@ namespace DataService.Repository
             try
             {
                 this.entites.Entry(entity).State = EntityState.Modified;
-                this.entites.SaveChanges();            
+                this.entites.SaveChanges();
                 return true;
             }
             catch
@@ -105,11 +118,6 @@ namespace DataService.Repository
             {
                 return null;
             }
-        }
-
-        public async Task<TEntity> GetAsync(object key)
-        {
-            return await this.dbSet.FindAsync(key);
         }
     }
 }

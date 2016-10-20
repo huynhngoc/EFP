@@ -14,28 +14,28 @@ namespace DataService.Repository
             return dbSet.Where(q => q.ShopId == shopId);
         }
 
-        public IEnumerable<CategoryViewModel> GetCategory(string shopId)
+        public IEnumerable<CategoryViewModel1> GetCategory(string shopId)
         {
-            return dbSet.Where(q=> q.ShopId ==shopId).Select(q=> new CategoryViewModel()
+            return dbSet.Where(q => q.ShopId == shopId).Select(q => new CategoryViewModel1()
             {
-                Id=q.Id,
-                Name=q.Name,
-                Description=q.Description,
-                ParentId=q.ParentId                
+                Id = q.Id,
+                Name = q.Name,
+                Description = q.Description,
+                ParentId = q.ParentId
             });
         }      
 
-        public IEnumerable<CategoryViewModel> GetParentCategory(string shopId)
+        public IEnumerable<CategoryViewModel1> GetParentCategory(string shopId)
         {
-            return dbSet.Where(q => q.ParentId == null).Select(q => new CategoryViewModel()
+            return dbSet.Where(q => q.ParentId == null).Select(q => new CategoryViewModel1()
             {
                 Id = q.Id, Name = q.Name, Description = q.Description, ParentId = q.ParentId
             });
         }
 
-        public IEnumerable<CategoryViewModel> GetCategoryByParent(int parentId)
+        public IEnumerable<CategoryViewModel1> GetCategoryByParent(int parentId)
         {
-            return dbSet.Where(q => q.ParentId == parentId).Select(q => new CategoryViewModel()
+            return dbSet.Where(q => q.ParentId == parentId).Select(q => new CategoryViewModel1()
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -63,62 +63,63 @@ namespace DataService.Repository
             
         }
 
-        public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
-        {
-            List<CategoryParentViewModel> list = new List<CategoryParentViewModel>();
-            var rootCategories = dbSet.Where(q => q.ShopId == shopId && q.ParentId == null).ToList();
-            foreach (Category cate in rootCategories)
-            {
-                CategoryParentViewModel entry = new CategoryParentViewModel()
-                {
-                    Id = cate.Id,
-                    Description = cate.Description,
-                    ShopId = cate.ShopId,
-                    Name = cate.Name
-                };
-                if (GetAllChild(entry.Id) == null)
-                {
-                    entry.Children = null;
-                }
-                else
-                {
-                    entry.Children = GetAllNode(GetAllChild(entry.Id));                    
-                }
-                list.Add(entry);
+        //public List<CategoryParentViewModel> GetCategoryAndParentByShopId(string shopId)
+        //{
+        //    List<CategoryParentViewModel> list = new List<CategoryParentViewModel>();
+        //    var rootCategories = dbSet.Where(q => q.ShopId == shopId && q.ParentId == null).ToList();
+        //    foreach (Category cate in rootCategories)
+        //    {
+        //        CategoryParentViewModel entry = new CategoryParentViewModel()
+        //        {
+        //            Id = cate.Id,
+        //            Description = cate.Description,
+        //            ShopId = cate.ShopId,
+        //            Name = cate.Name
+        //        };
+        //        if (GetAllChild(entry.Id) == null)
+        //        {
+        //            entry.Children = null;
+        //        }
+        //        else
+        //        {
+        //            entry.Children = GetAllNode(GetAllChild(entry.Id));                    
+        //        }
+        //        list.Add(entry);
 
-            }
-            return list;
-        }
-        private List<CategoryParentViewModel> GetAllChild(int cateId)
-        {            
-            return dbSet.Where(q => q.ParentId == cateId).Select(q => new CategoryParentViewModel()
-            {
-                Id = q.Id,
-                ShopId = q.ShopId,
-                Description = q.Description,
-                Name = q.Name                    
-            }).ToList();            
-        }
+        //    }
+        //    return list;
+        //}
 
-        private List<CategoryParentViewModel> GetAllNode(List<CategoryParentViewModel> rootCategories)
-        {
-            List<CategoryParentViewModel> children = new List<CategoryParentViewModel>();
-            foreach (CategoryParentViewModel entry in rootCategories)
-            {                
-                if (GetAllChild(entry.Id) == null)
-                {
-                    entry.Children = null;
-                }
-                else
-                {
-                    entry.Children = GetAllNode(GetAllChild(entry.Id));                    
-                }
-                children.Add(entry);
+        //private List<CategoryParentViewModel> GetAllChild(int cateId)
+        //{            
+        //    return dbSet.Where(q => q.ParentId == cateId).Select(q => new CategoryParentViewModel()
+        //    {
+        //        Id = q.Id,
+        //        ShopId = q.ShopId,
+        //        Description = q.Description,
+        //        Name = q.Name                    
+        //    }).ToList();            
+        //}
+
+        //private List<CategoryParentViewModel> GetAllNode(List<CategoryParentViewModel> rootCategories)
+        //{
+        //    List<CategoryParentViewModel> children = new List<CategoryParentViewModel>();
+        //    foreach (CategoryParentViewModel entry in rootCategories)
+        //    {                
+        //        if (GetAllChild(entry.Id) == null)
+        //        {
+        //            entry.Children = null;
+        //        }
+        //        else
+        //        {
+        //            entry.Children = GetAllNode(GetAllChild(entry.Id));                    
+        //        }
+        //        children.Add(entry);
                 
-            }
+        //    }
 
-            return children;
-        }
+        //    return children;
+        //}
 
         public int AddNewCategory(Category c)
         {
@@ -131,6 +132,29 @@ namespace DataService.Repository
             catch
             {
                 return 0;
+            }
+        }
+
+        public IEnumerable<CategoryViewModel> GetCategoryByShopID(string shopId)
+        {
+            return dbSet.Where(q => (q.ShopId == shopId)).Select(q => new CategoryViewModel()
+            {
+                CategoryId = q.Id,
+                Description = q.Description,
+                CategoryName = q.Name,
+                ParentId = q.ParentId
+            });
+        }
+        public IEnumerable<Category> getChildCategoryId(string shopId, int parentCategoryId)
+        {
+            var category = dbSet.Where(q => (q.Id == parentCategoryId) && (q.ParentId == null));
+            if (category != null)
+            {
+                return dbSet.Where(q => (q.ShopId == shopId) && (q.ParentId == parentCategoryId));
+            }
+            else
+            {
+                return null;
             }
         }
     }

@@ -23,12 +23,12 @@ namespace ShopManager.Controllers
         static Cloudinary m_cloudinary = new Cloudinary(new Account(
             ConfigurationManager.AppSettings["CloudName"],
             ConfigurationManager.AppSettings["AppId"],
-            ConfigurationManager.AppSettings["AppSecret"]));        
+            ConfigurationManager.AppSettings["AppSecret"]));
         // GET: Product
         public ActionResult Index()
         {
             return View();
-        }        
+        }
 
         public JsonResult GetProductById(int id)
         {
@@ -46,7 +46,7 @@ namespace ShopManager.Controllers
 
         public JsonResult Upload()
         {
-            PictureService service = new PictureService();            
+            PictureService service = new PictureService();
             try
             {
                 int id = int.Parse(Request["id"]);
@@ -99,7 +99,7 @@ namespace ShopManager.Controllers
                     Debug.WriteLine(result);
                     Debug.WriteLine(result.Uri.AbsoluteUri);
                 }
-                return Json(new {success= true }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -116,7 +116,7 @@ namespace ShopManager.Controllers
 
         public JsonResult Update(int id, string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr, int[] removeImg)
         {
-            ProductService service = new ProductService();            
+            ProductService service = new ProductService();
 
             try
             {
@@ -130,7 +130,7 @@ namespace ShopManager.Controllers
 
                 picService.DeletePicture(removeImg);
 
-                return Json(service.UpdateProduct(id, name,description,categoryId, price, promotion, status, isInStock, templateId, attr ), JsonRequestBehavior.AllowGet);
+                return Json(service.UpdateProduct(id, name, description, categoryId, price, promotion, status, isInStock, templateId, attr), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -182,14 +182,14 @@ namespace ShopManager.Controllers
             }
         }
 
-        public JsonResult GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc )
+        public JsonResult GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
-            ProductService service = new ProductService();                        
+            ProductService service = new ProductService();
             try
             {
                 var products = service.GetProduct(param, shopId, sName, sCate, sDesc);
-                Debug.WriteLine("----x " + products.Count());                
-                
+                Debug.WriteLine("----x " + products.Count());
+
                 var totalRecords = products.Count();
                 var data = products.Skip(param.iDisplayStart)
                     .Take(param.iDisplayLength);
@@ -203,14 +203,39 @@ namespace ShopManager.Controllers
                     aaData = data
                 }, JsonRequestBehavior.AllowGet);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
-            }            
+            }
         }
-       
 
+        //Long
 
+        public JsonResult GetAvailableProducts(JQueryDataTableParamModel param)
+        {
+            ProductService service = new ProductService();
+            var shopId = (string)Session["ShopId"];
+            try
+            {
+                var products = service.GetAvailableProducts(param, shopId);
+
+                var totalRecords = products.Count();
+                var data = products;
+                Debug.WriteLine("-----l ");
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = totalRecords,
+                    iTotalDisplayRecords = totalRecords,//displayRecords,
+                    aaData = data
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

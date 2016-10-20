@@ -187,8 +187,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
@@ -229,6 +231,12 @@
     <Content Include="Content\css\plugins\blueimp\css\blueimp-gallery.min.css" />
     <Content Include="Content\css\plugins\blueimp\css\demo.css" />
     <Content Include="Content\css\plugins\blueimp\img\error.png" />
+    <Content Include="Content\css\plugins\blueimp\img\error.svg" />
+    <Content Include="Content\css\plugins\blueimp\img\loading.gif" />
+    <Content Include="Content\css\plugins\blueimp\img\play-pause.png" />
+    <Content Include="Content\css\plugins\blueimp\img\play-pause.svg" />
+    <Content Include="Content\css\plugins\blueimp\img\video-play.png" />
+    <Content Include="Content\css\plugins\blueimp\img\video-play.svg" />
     <Content Include="Content\css\plugins\blueimp\img\loading.gif" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.png" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.png" />
@@ -251,6 +259,7 @@
     <Content Include="Content\css\plugins\daterangepicker\daterangepicker-bs3.css" />
     <Content Include="Content\css\plugins\dropzone\basic.css" />
     <Content Include="Content\css\plugins\dropzone\dropzone.css" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.svg" />
     <Content Include="Content\css\plugins\footable\footable.core.css" />
     <Content Include="Content\css\plugins\fullcalendar\fullcalendar.css" />
     <Content Include="Content\css\plugins\fullcalendar\fullcalendar.print.css" />
@@ -305,6 +314,7 @@
     <Content Include="Content\css\plugins\nouslider\jquery.nouislider.css" />
     <Content Include="Content\css\plugins\select2\select2.min.css" />
     <Content Include="Content\css\plugins\slick\ajax-loader.gif" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.svg" />
     <Content Include="Content\css\plugins\slick\slick-theme.css" />
     <Content Include="Content\css\plugins\slick\slick.css" />
     <Content Include="Content\css\plugins\social-buttons\social-buttons.css" />
@@ -314,6 +324,8 @@
     <Content Include="Content\css\plugins\sweetalert\sweetalert.css" />
     <Content Include="Content\css\plugins\switchery\switchery.css" />
     <Content Include="Content\css\plugins\toastr\toastr.min.css" />
+    <Content Include="Content\css\plugins\touchspin\jquery.bootstrap-touchspin.min.css" />
+    <Content Include="Content\css\style.css" />
     <Content Include="Content\css\plugins\tokenfield\bootstrap-tokenfield.css" />
     <Content Include="Content\css\plugins\tokenfield\bootstrap-tokenfield.min.css" />
     <Content Include="Content\css\plugins\tokenfield\tokenfield-typeahead.css" />
@@ -324,6 +336,7 @@
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\Customer_js\Customer_js.js" />
     <Content Include="Content\js\demo\chartjs-demo.js" />
     <Content Include="Content\js\demo\dashboard-demo.js" />
     <Content Include="Content\js\demo\flot-demo.js" />
@@ -761,6 +774,16 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\css\bootstrap.css.map" />
     <Content Include="Content\css\bootstrap.min.css.map" />
+    <Content Include="Content\css\plugins\bootstrap-rtl\bootstrap-rtl.css.map" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.eot" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.ttf" />
+    <Content Include="Content\css\plugins\footable\fonts\footable.woff" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.eot" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.ttf" />
+    <Content Include="Content\css\plugins\slick\fonts\slick.woff" />
+    <Content Include="Content\js\plugins\chartist\chartist.min.js.map" />
+    <Content Include="Content\js\plugins\diff_match_patch\COPYING" />
+    <Content Include="Content\js\plugins\justified-gallery\README.md" />
     <Content Include="Content\css\plugins\blueimp\img\error.svg" />
     <Content Include="Content\css\plugins\blueimp\img\play-pause.svg" />
     <Content Include="Content\css\plugins\blueimp\img\video-play.svg" />
@@ -860,16 +883,18 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Order\All.cshtml" />
     <Content Include="Views\Product\ManageProduct.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Home\ChooseShop.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartialSignUp.cshtml" />
     <Content Include="Views\Shop\Index.cshtml" />
+    <Content Include="Views\Template\Index.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Template\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

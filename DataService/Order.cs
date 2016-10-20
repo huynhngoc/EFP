@@ -22,17 +22,18 @@ namespace DataService
     
         public int Id { get; set; }
         public string ShopId { get; set; }
-        public string UserNote { get; set; }
         public System.DateTime DateCreated { get; set; }
         public System.DateTime DateModified { get; set; }
         public string CustomerId { get; set; }
         public string Status { get; set; }
         public string ShippingAddress { get; set; }
         public string Receiver { get; set; }
+        public string UserNote { get; set; }
+        public string Phone { get; set; }
     
         public virtual Customer Customer { get; set; }
+        public virtual Shop Shop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual Shop Shop { get; set; }
     }
 }

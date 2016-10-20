@@ -1,0 +1,373 @@
+﻿
+@{
+    ViewBag.Title = "Mẫu đặc điểm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section CustomCSS {
+    <!-- DataTables -->
+    @Styles.Render("~/DataTable-CSS")
+
+    <!--sweet alert-->
+    @Styles.Render("~/SweetAlert-CSS")
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                @*<h5>Nhóm các sản phẩm</h5>*@
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover template-table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Tên</th>
+                                <th>Các đặc điểm</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- end grid -->
+</div>
+
+
+<!--modal-->
+<div class="modal inmodal" id="templateModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Thêm mẫu đặc điểm</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form id="addForm">                        
+                        <fieldset class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Tên:</label>
+                                <div class="col-sm-8"><input required type="text" name="name" class="form-control" placeholder="Tên mẫu đặc điểm" /></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 1:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 2:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 3:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 4:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 5:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 6:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 7:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Mô tả"/></div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>
+                <button type="button" onclick="addTemplate()" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="editTemplateModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Sửa mẫu đặc điểm</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form id="editForm">
+                        <input type="hidden" name="id"/>
+                        <fieldset class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Tên:</label>
+                                <div class="col-sm-8"><input required type="text" name="name" class="form-control" placeholder="Tên mẫu đặc điểm" /></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 1:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 2:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 3:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 4:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 5:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 6:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Đặc điểm 7:</label>
+                                <div class="col-sm-8"><input type="text" name="attr" class="form-control" placeholder="Đặc điểm"/></div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Hủy</button>
+                <button type="button" onclick="editTemplate()" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section CustomJS {
+
+    <!-- DataTables -->
+    @Scripts.Render("~/DataTable-JS")
+    <!-- SweetAlert -->
+    @Scripts.Render("~/SweetAlert-JS")
+    <script>
+        var templateTable;
+        var languageConfig = {
+            "oPaginate": {
+                "sNext": "Tiếp"
+                , "sLast": "Cuối"
+                , "sPrevious": "Trước"
+                , "sFirst": "Đầu"
+            }
+                        , "sInfo": "Kết quả từ _START_ đến _END_ trong số _TOTAL_"
+                        , "sInfoThousands": "."
+                        , "sLoadingRecords": "Đang tải ..."
+                        , "sProcessing": "Đang xử lý ..."
+                        , "sSearch": "Tìm kiếm:"
+                        , "sZeroRecords": "Không tìm thấy kết quả"
+                        , "sInfoFiltered": " - lọc ra từ _MAX_ kết quả"
+        }
+
+        function initButton() {
+            $(".change-template-button").on("click", function () {
+                var clickedRow = $(this).closest("tr");
+                var id = templateTable.fnGetData($(clickedRow)).Id;
+                console.log()
+                $.ajax({
+                    url: '../Template/GetTemplateById',
+                    type: "POST",
+                    data: {
+                        "id": id
+                    },
+                    success: function (data, textStatus, xhr) {
+                        console.log(data);
+                        editForm(data.Id, data.Name, data.Attr);
+                    }
+                })
+            });
+        }
+
+        function addTemplate() {
+            var name = $("#templateModal input[name='name']").val();
+            var attrList = [];
+            $("#templateModal input[name='attr']").each(function (index) {
+                attrList.push($(this).val());
+            });
+            $.ajax({
+                url: '../Template/AddTemplate',
+                type: 'POST',
+                data: {                    
+                    "name": name,
+                    "attr": attrList
+                },
+                success: function (data, textStatus, xhr) {
+                    if (data == true) {
+                        templateTable._fnAjaxUpdate();
+                        initButton();
+                        $("#templateModal").modal("hide");
+                        swal({
+                            title: "Thêm thành công!"
+                            //, text: "I will close in 2 seconds."
+                            , timer: 2000
+                            , type: "success"
+                            , showConfirmButton: false
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!"
+                            //, text: "I will close in 2 seconds."
+                            //, timer: 2000
+                            , type: "warning"
+                            , showConfirmButton: true
+                        });
+                    }
+                },
+                error: function () {
+                    console.log("error");
+                    swal({
+                        title: "Thất bại!"
+                        //, text: "I will close in 2 seconds."
+                        //, timer: 2000
+                            , type: "warning"
+                            , showConfirmButton: true
+                    });
+                }
+            });
+        }
+
+        function editTemplate(){
+            var id = $("#editTemplateModal input[name='id']").val();
+            var name = $("#editTemplateModal input[name='name']").val();
+            var attrList = [];
+            $("#editTemplateModal input[name='attr']").each(function (index) {
+                attrList.push($(this).val());
+            });
+            $.ajax({
+                url: '../Template/UpdateTemplate',
+                type:'POST',
+                data: {
+                    "id": id,
+                    "name":name,
+                    "attr":  attrList
+                },
+                success: function (data, textStatus, xhr) {
+                    if (data == true) {
+                        templateTable._fnAjaxUpdate();
+                        initButton();
+                        $("#editTemplateModal").modal("hide");
+                        swal({
+                            title: "Sửa thành công!"
+                            //, text: "I will close in 2 seconds."
+                            , timer: 2000
+                            , type: "success"
+                            , showConfirmButton: false
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!"
+                            //, text: "I will close in 2 seconds."
+                            //, timer: 2000
+                            , type: "warning"
+                            , showConfirmButton: true
+                        });
+                    }
+                },
+                error: function () {
+                    console.log("error");
+                    swal({
+                        title: "Thất bại!"
+                        //, text: "I will close in 2 seconds."
+                        //, timer: 2000
+                            , type: "warning"
+                            , showConfirmButton: true
+                    });
+                }
+            });
+        }
+
+        function editForm(id, name, attr) {
+            $("#editTemplateModal input[name='id']").val(id);
+            $("#editTemplateModal input[name='name']").val(name);
+            var attrList = attr.split("_");
+            console.log(attrList);
+            console.log($("#editTemplateModal input[name='attr']"));
+            $("#editTemplateModal input[name='attr']").each(function (index) {
+                console.log(this);
+                console.log(index);
+                console.log(attrList);
+                $(this).val(attrList[index]);
+            });
+            $("#editTemplateModal").modal("show");
+        }
+
+        $(document).ready(function () {
+            templateTable = $('.template-table').dataTable({
+                "bProcessing": true,
+                "sAjaxSource": "../Template/All?shopId=1"
+                , "oLanguage": languageConfig
+                , "bDestroy": true
+                , "aoColumnDefs": [
+                    {
+                        "bSortable": false
+                        , "aTargets": [0]
+                        , "mData": "Id"
+                        , "bVisible": false
+                    }
+                    , {
+                        "bSortable": true
+                        , "aTargets": [1]
+                        , "mData": "Name"
+                    }
+                    , {
+                        "bSortable": true
+                        , "aTargets": [2]
+                        , "mData": function (source) {
+                            var listAttr = source.Attr.split("_");
+                            var content = "";
+                            for (var i = 0; i < listAttr.length; i++) {
+                                content += ("<span class='badge badge-success'>" + listAttr[i] + "</span>");
+                            }
+                            return content;
+                        }
+                    }
+                    , {
+                        "bSortable": false
+                        , "bSearchable": false
+                        , "aTargets": [3]
+                        , "mData": null
+                        , "sDefaultContent": "<button class='btn btn-primary change-template-button'>Sửa</button>"
+                    }
+                ]
+                , "fnInitComplete": function (oSetting, json) {
+                    $('.template-table').removeAttr("style");
+                    initButton();
+                }
+                , 'sDom': 'l<"toolbar"f>rtip'
+                , "fnDrawCallback": function (oSettings, json) {
+                    initButton();
+                }
+            });
+
+
+            $("div.toolbar").prepend('<div class="col-sm-4 col-lg-4 option-group"><button class="btn btn-primary add-button">Thêm</button></div>');
+            $(".add-button").on("click", function () {
+                document.getElementById("addForm").reset();
+                $("#templateModal").modal("show");
+            });
+        });
+    </script>
+}
+

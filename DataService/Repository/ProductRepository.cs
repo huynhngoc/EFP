@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataService.ViewModel;
 using DataService.JqueryDataTable;
+using DataService.Service;
 
 namespace DataService.Repository
 {
@@ -20,7 +21,7 @@ namespace DataService.Repository
         {
             IEnumerable<int> query = from c in entites.Categories where c.ParentId == cateId select c.Id;
             Debug.WriteLine(query.ToArray());
-            var data = dbSet.Where(q => (q.CategoryId == cateId ) && q.ShopId == shopId);
+            var data = dbSet.Where(q => (q.CategoryId == cateId) && q.ShopId == shopId);
 
             return data;
         }
@@ -62,7 +63,7 @@ namespace DataService.Repository
         public IQueryable<ProductViewModel> GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
             var count = param.iDisplayStart + 1;
-            var rs = dbSet.Where(q => q.ShopId == shopId);            
+            var rs = dbSet.Where(q => q.ShopId == shopId);
             var search = param.sSearch;
             rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
                                 (!string.IsNullOrEmpty(param.sSearch)
@@ -77,13 +78,15 @@ namespace DataService.Repository
             switch (param.iSortCol_0)
             {
                 case 0:
-                case 2: if (param.sSortDir_0 == "asc")
-                        { 
-                            rs = rs.OrderBy(q => q.Name);
-                        } else
-                        {
-                            rs = rs.OrderByDescending(q => q.Name);
-                        }
+                case 2:
+                    if (param.sSortDir_0 == "asc")
+                    {
+                        rs = rs.OrderBy(q => q.Name);
+                    }
+                    else
+                    {
+                        rs = rs.OrderByDescending(q => q.Name);
+                    }
                     break;
                 case 3:
                     if (param.sSortDir_0 == "asc")
@@ -145,7 +148,7 @@ namespace DataService.Repository
                         rs = rs.OrderByDescending(q => q.IsInStock);
                     }
                     break;
-                default: rs = rs.OrderBy(q => q.Name);break;
+                default: rs = rs.OrderBy(q => q.Name); break;
             }
             Debug.WriteLine("---------rs " + rs.Count());
             //if (rs.Count() == 0) return null;
@@ -172,10 +175,9 @@ namespace DataService.Repository
                 Price = (decimal)(q.Price),
                 Promotion = (decimal?)(q.PromotionPrice)
             });
-            Debug.WriteLine("---------data " + data.Count());            
-            return data;            
+            Debug.WriteLine("---------data " + data.Count());
+            return data;
         }
-
         public Product Add(Product p)
         {
             try
@@ -187,14 +189,14 @@ namespace DataService.Repository
             catch (Exception)
             {
                 return null;
-            }            
+            }
         }
 
         public bool SetStatus(int id, bool status)
         {
             try
             {
-                
+
                 Product p = FindByKey(id);
                 p.Status = status;
                 p.DateModified = DateTime.Now;
@@ -211,10 +213,9 @@ namespace DataService.Repository
         {
             try
             {
-                
                 Product p = FindByKey(id);
                 p.IsInStock = inStock;
-                p.DateModified = DateTime.Now;              
+                p.DateModified = DateTime.Now;      
                 return Update(p);
             }
             catch (Exception e)
@@ -223,7 +224,48 @@ namespace DataService.Repository
                 return false;
             }
         }
+        
+        //Long
+        public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
+        {
+            var count = param.iDisplayStart + 1;
+            var rs = dbSet.Where(q => q.ShopId == shopId && q.IsInStock && q.Status);
+            var search = param.sSearch;
+            rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+                                (!string.IsNullOrEmpty(param.sSearch)
+                                && (q.Name.ToLower().Contains(param.sSearch.ToLower())))
+                         );
 
+            Debug.WriteLine("---------rs " + rs.Count());
 
+            var data = rs.Select(q => new ProductViewModel()
+            {
+                Id = q.Id,
+                //Name = Utility.CreateAttributeString(q.Id),
+                Description = q.Description,
+                Price = q.PromotionPrice != null ? (decimal)q.PromotionPrice : q.Price,
+            });
+            Debug.WriteLine("---------data " + data.Count());
+            return data;
+        }
+
+        public Product GetProduct(int id)
+        {
+            return dbSet.Where(q => q.Id == id).First();
+        }
+        public TemplateProduct GetTemplateProduct(int id)
+        {
+            return dbSet.Where(q => q.Id == id).Select(q=>q.TemplateProduct).First();
+        }
+
+        //Ân
+        public IEnumerable<Product> GetProductByShopAndCategory(string shopId, int categoryId)
+        {
+            return dbSet.Where(q => q.ShopId == shopId && q.CategoryId == categoryId && q.Status == true);
+        }
+        public IEnumerable<Product> GetProductByProductId(string shopId, int categoryId, int Id)
+        {
+            return dbSet.Where(q => q.ShopId == shopId && q.CategoryId == categoryId && q.Id == Id && q.Status == true);
+        }
     }
 }
