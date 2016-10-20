@@ -1,31 +1,328 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    Layout = null;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<!DOCTYPE html>
+<html>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EFP | Facebook E-commerce Page</title>
+    @Styles.Render("~/Toastr-style")
+    @Styles.Render("~/Header-CSS")
+    @Styles.Render("~/Slick-CSS")
+</head>
+<body class="fixed-sidebar fixed-nav fixed-nav-basic pace-done mini-navbar">
+    <div id="wrapper">
+        <!--Left navbar-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu" style="display: block;">
+                    <!--User Information-->
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <!--User name-->
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        <strong class="font-bold">@ViewBag.PageInfo.UserName</strong>
+                                    </span> <span class="text-muted text-xs block">Xem các đơn hàng của bạn<b class="caret"></b></span>
+                                </span>
+                            </a>
+                            <!--Button view order-->
+                            <ul class="dropdown-menu animated fadeInDown m-t-xs">
+                                <li><a>Đơn hàng 3</a></li>
+                                <li><a>Đơn hàng 2</a></li>
+                                <li><a>Đơn hàng 1</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">EFP</div>
+                    </li>
+                    <!--./User Information-->
+                    <!--Generate Category menu-->
+                    @foreach (var item in ViewBag.Category)
+                    {
+                        //Parent category
+                    <li>
+                        <a href="#" id="parentcate-@item.CategoryId" onclick="loadProductOfParentCategory(@ViewBag.PageInfo.ShopId,@item.CategoryId,0,12,'@item.CategoryName',0)">
+                            <span class="nav-label">@item.CategoryName</span><span class="fa arrow"></span>
+                        </a>
+
+                        @*Child category*@
+                        @foreach (var subItem in item.ChildCategory)
+                            {
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,9,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
+                        </ul>
+                            }
+                    </li>
+                    }
+                    <!--./Generate Category menu-->
+                </ul>
+            </div>
+        </nav>
+        <!--./Left navbar-->
+        <!--Page wrapper-->
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <!--Top navbar-->
+                <nav class="navbar navbar-fixed-top  " role="navigation" style="margin-bottom: 0">
+                    <!--Form search-->
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "><i class="fa fa-bars"></i> </a>
+                        <form role="search" class="navbar-form-custom">
+                            <div class="form-group">
+                                <input type="text" placeholder="Tìm kiếm" class="form-control" name="top-search" id="top-search">
+                            </div>
+                        </form>
+                    </div>
+                    <!--./Form search-->
+                    <!--Top navbar right-->
+                    <ul class="nav navbar-top-links navbar-right">
+                        <!--Cart icon-->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="javascript:void(0)" id="cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="label label-danger" id="cartQuantity"></span>
+                            </a>
+                        </li>
+                        <!--./Cart icon-->
+                    </ul>
+                    <!--./Top navbar right-->
+                </nav>
+                <!--./Top navbar-->
+            </div>
+            <!--Page's content-->
+            <div class="wrapper-content">
+                <div class="row">
+                    <!--Category Name-->
+                    <div class="col-sm-12">
+                        <h2 id="h2CategoryName">Categrory Name</h2>
+                        <hr style="border: 0.1px solid" />
+                    </div>
+                    <!--./Category Name-->
+                    <!--Product content-->
+                    <div id="productItemTempate" style="display: none;">
+                        <div class="col-sm-4">
+                            <div class="ibox animated fadeInDown">
+                                <div class="ibox-content product-box" style="max-width:100%; max-height:100%">
+                                    <div class="product-imitation"></div>
+                                    <div class="product-desc">
+                                        <span class="product-price" style="background-color:orangered">
+                                        </span>
+                                        <a href="javascript:void(0)" class="product-name"></a>
+                                        <div class="small m-t-xs">
+                                            <s class="text-muted"></s>
+                                            <h4 style="color:red;font-size:20px; display: inline"></h4>
+                                        </div>
+                                        <div class="m-t text-righ"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divProductContent">
+                        <div id="loadingSpinner" style="display:none">
+                            <div class="sk-spinner sk-spinner-cube-grid">
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                                <div class="sk-cube"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--./Product content-->
+                    <!--Load more-->
+                    <div class="col-sm-12 text-center animated fadeInDown" style="padding-bottom:30px" id="divLoadMore">
+                    </div>
+                    <!--./Load more-->
+                    <!--View detail Modal-->
+                    <div class="modal inmodal fade" id="viewDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" style="width:95%">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Chi tiết sản phẩm</h4>
+                                </div>
+                                <div class="modal-body" style="padding:0px">
+                                    <div class="ibox" id="viewDetail">
+                                        <div id="hiddenValue"></div>
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="product-images" id="divProductImage">
+                                                        <div class="product-imitation" style="height:420px;background: url('http://www.iclarified.com/images/news/33910/140830/140830.png') center no-repeat;background-size: contain"></div>
+                                                        <div class="product-imitation" style="height:420px;background: url('http://www.iclarified.com/images/news/33910/140830/140830.png') center no-repeat;background-size: contain"></div>
+                                                        <div class="product-imitation" style="height:420px;background: url('http://www.iclarified.com/images/news/33910/140830/140830.png') center no-repeat;background-size: contain"></div>
+                                                        <div class="product-imitation" style="height:420px;background: url('http://www.iclarified.com/images/news/33910/140830/140830.png') center no-repeat;background-size: contain"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h2 class="font-bold m-b-xs" id="productName"></h2>
+                                                    <hr>
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-sm-7" id="productPriceDiv">
+                                                                <s class="text-muted" id="mainPrice"></s><h2 class="product-main-price inline" style="color:red" id="promotionPrice"></h2>
+                                                            </div>
+                                                            <div id="quantityAndAddToCart">
+                                                                <div class="col-sm-3" style="width:150px">
+                                                                    <input class="text-center" type="number" id="quantity" value="1" readonly>
+                                                                </div>
+                                                                <div class="col-sm-2 pull-right">
+                                                                    <button class="btn btn-primary" id="addToCartOnViewDetail"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input id="productId" type="hidden" />
+                                                    <hr>
+                                                    <h4>Đặc tính sản phẩm</h4>
+                                                    <table class="table" id="tblAttribute" style="width:100%; border:hidden"></table>
+                                                    <hr>
+                                                    <h4>Mô tả sản phẩm</h4>
+                                                    <div id="productDescription">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--./View detail-->
+                    <!--Cart Modal-->
+                    <div class="modal inmodal fade" id="cartModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="width: 90%">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Giỏ hàng của bạn</h4>
+                                </div>
+                                <div class="modal-body" style="padding:0px">
+                                    <div style="display:none" id="cartDetailItem">
+                                        <div class="ibox-content" style="padding:5px 20px 5px 20px">
+                                            <div class="table-responsive">
+                                                <table class="table shoping-cart-table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="col-sm-2" style="vertical-align:middle"><div class="cart-product-imitation"></div></td>
+                                                            <td class="desc col-sm-5" style="vertical-align:middle"><h3><a href="#" class="text-navy">Desktop publishing software</a></h3></td>
+                                                            <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
+                                                            <td class="col-sm-2" style="vertical-align:middle"><input type="number" class="form-control" min="1"></td>
+                                                            <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
+                                                            <td class="col-sm-1" style="vertical-align:middle"><a href="#" class="text-muted"><i class="fa fa-trash" style="font-size:20px"></i></a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="totalPriceInCart" style="display:none">
+                                        <div class="ibox-content" style="padding:5px 20px 5px 20px">
+                                            <div class="table-responsive">
+                                                <table class="table shoping-cart-table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="col-sm-10"><h3>Tổng cộng</h3></td>
+                                                            <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
+                                                            <td class="col-sm-1"><h4>VND</h4></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="ibox" id="cartDetailList"></div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-white pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Tiếp tục mua hàng</button>
+                                    <a href="/Home/CheckOut?customerId=@ViewBag.PageInfo.UserId" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--./Cart Modal-->
+
+                </div>
+
+            </div>
+            <!--./Page's content-->
+            <!--Footer-->
+            <div class="footer">
+                <div class="text-center"> <strong>Copyright</strong> EFP &copy; 2016 | <a>Powered by EFP</a> </div>
+            </div>
+            <!--./footer-->
+        </div>
+        <!--./Page wapper-->
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+    <!-- Mainly scripts -->
+    @Scripts.Render("~/Mainly-scripts")
+    <!-- Custom and plugin javascript -->
+    @Scripts.Render("~/Custom-and-plugin-javascript")
+    <!--Custom JS-->
+    @Scripts.Render("~/Home-customjs")
+    <!--Slick JS-->
+    @Scripts.Render("~/Slick-carousel")
+    <!--TouchSpin JS-->
+    @Scripts.Render("~/TouchSpin-JS")
+    <!--Toastr JS-->
+    @Scripts.Render("~/Toastr")
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "/GetData/GetCart",
+                dataType: "json",
+                success: function (data) {
+                    $('#cartQuantity').text(data.length);
+                }
+            });
+            $('#divProductImage').slick({
+                dots: true,
+                speed: 500,
+                autoplay: true,
+                autoplaySpeed: 5000,
+            });
+            $("#quantity").TouchSpin({
+                min: 1,
+                step: 1,
+                boostat: 5,
+                maxboostedstep: 10,
+                buttondown_class: 'btn btn-white',
+                buttonup_class: 'btn btn-white'
+            });
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "100",
+                "hideDuration": "100",
+                "timeOut": "2500",
+                "extendedTimeOut": "500",
+                "showEasing": "swing",
+                "hideEasing": "swing",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
+    </script>
+
+</body>
+
+</html>

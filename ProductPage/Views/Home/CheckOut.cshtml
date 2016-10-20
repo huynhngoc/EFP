@@ -1,0 +1,177 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán</title>
+    @Styles.Render("~/Header-CSS")
+    @Styles.Render("~/Sweet-Alert-CSS")
+</head>
+
+<body class="gray-bg">
+    <div class="loginscreen animated fadeInDown">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInRight" id="checkOutInfo">
+                    <div class="ibox-content p-xl" style="display:none">
+                        <div class="table-responsive m-t">
+                            <table class="table invoice-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn giá</th>
+                                        <th>Tổng tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <!-- /table-responsive -->
+                        <table class="table invoice-total">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Tổng cộng :</strong></td>
+                                    <td><h3></h3> (VND)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p class="m-t-none m-b" style="display: inline">Tên khách hàng: </p>
+                                    <h3 id="userName" class="inline">Nguyễn Văn A</h3>
+                                    <div class="form-group">
+                                        <label>người nhận</label>
+                                        <input id="receiver" type="text" placeholder="Người nhận" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Số điện thoại</label>
+                                        <input id="phone" type="tel" placeholder="Số điện thoại" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Địa chỉ nhận hàng</label>
+                                        <textarea id="shippingAddress" style="resize:none" placeholder="Địa chỉ nhận hàng" class="form-control"> </textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ghi chú</label>
+                                        <textarea id="userNote" style="resize:none" placeholder="Ghi chú" class="form-control"> </textarea>
+                                    </div>
+                                    <div class="text-right">
+                                        <button class="btn btn-primary" onclick="addOrder()"><i class="fa fa-dollar"></i> Đặt hàng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mainly scripts -->
+    @Scripts.Render("~/Mainly-scripts")
+    @Scripts.Render("~/Sweet-Alert-JS")
+
+    <script>
+        var customerId = @ViewBag.PageInfo.UserId;
+
+        $.ajax({
+            url:"/GetData/GetCheckOutInfo",
+            data:{
+                customerId:customerId
+            },
+            dataType:"json",
+            success:function(result){
+                if(result!=null&&result.listCart!=null&&result.listCart.length!=0){
+                    $('#checkOutInfo').find("div.ibox-content.p-xl").removeAttr("style");
+                    var total = 0;
+                    for(var i=0;i<result.listCart.length;i++){
+                        total = total + (result.listCart[i].quantity*result.listCart[i].price)
+                        $('#checkOutInfo').find("table.table.invoice-table > tbody").append("<tr>"+
+                                        "<td>"+
+                                            " <div><strong>"+result.listCart[i].properties+"</strong></div>"+
+                                        "</td>"+
+                                        "<td>"+result.listCart[i].quantity+"</td>"+
+                                        "<td>"+result.listCart[i].price+"</td>"+
+                                        "<td>"+(result.listCart[i].quantity*result.listCart[i].price)+" (VND)</td>"+
+                                        "</tr>")
+                    }
+
+                    $('#checkOutInfo').find("table.table.invoice-total > tbody > tr > td:nth-child(2) > h3").text(total);
+                    $('#userName').text('');
+                    $('#userName').text(result.userName);
+                    $('#receiver').val('');
+                    $('#receiver').val(result.receiver);
+                    $('#phone').val('');
+                    $('#phone').val(result.phone);
+                    $('#shippingAddress').val('');
+                    $('#shippingAddress').val(result.shippingAddress);
+                    $('#userNote').val('');
+
+
+
+                }else{
+                    $('#checkOutInfo').find("div.ibox-content.p-xl").attr("style","display:none");
+                    $('#checkOutInfo').append("<h2 class='text-center'>Chưa có sản phẩm trong giỏ hàng</h2>");
+                }
+            },
+            error:function(){
+                $('#checkOutInfo').find("div.ibox-content.p-xl").attr("style","display:none");
+                $('#checkOutInfo').append("<h2 class='text-center'>Chưa có sản phẩm trong giỏ hàng</h2>");
+            }
+        })
+
+        function addOrder(){
+            var shopId = @ViewBag.PageInfo.ShopId;
+            var userNote = $('#userNote').val();
+            var shippingAddress = $('#shippingAddress').val();
+            var receiver = $('#receiver').val();
+            var phone = $('#phone').val();
+            $.ajax({
+                url:"/GetData/AddOrder",
+                data:{
+                    shopId: shopId,
+                    note: userNote,
+                    custId: customerId,
+                    address: shippingAddress,
+                    receiver: receiver,
+                    phone: phone
+                },
+                success: function(data){
+                    if(data=="True"){
+                        swal({
+                            title: "Thành công",
+                            text: "Bạn đã tạo đơn hàng thành công",
+                            type: "success"
+                        },
+                        function (isConfirm) {
+                            if(isConfirm){
+                                window.location.href = "~/../Index";
+                            }
+                        }
+                        );
+                    }else{
+                        alert("failed");
+                    }
+                },
+                error: function(){
+                    alert("Failed");
+                }
+            })
+        };
+
+        
+
+
+    </script>
+
+
+</body>
+
+</html>
