@@ -23,6 +23,7 @@ namespace ShopManager.Controllers
         
         public JsonResult GetAllCustomer(JQueryDataTableParamModel param)
         {
+            Session["ShopId"] = "1";
             CustomerService service = new CustomerService();
             string shopId = Session["ShopId"].ToString();
             try

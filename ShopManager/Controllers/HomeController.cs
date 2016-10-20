@@ -14,25 +14,15 @@ namespace ShopManager.Controllers
     {
         public ActionResult Index()
         {
-            //return RedirectToAction("Customer", "Customer", new { area = "" });
-            return RedirectToAction("Index", "Customer", new { area = "" });
-            //return View();
+            return View();
         }
 
-        //public ActionResult GetAllCustomer()
-        //{
-        //    CustomerService service = new CustomerService();
-        //    var data = service.GetAllCustomer();
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
         public ActionResult Test(string id)
         {
             CategoryService service = new CategoryService();
             var data = service.CategoryByShop(id);            
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
-        
 
         public ActionResult About()
         {

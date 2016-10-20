@@ -1,12 +1,13 @@
 ﻿
+<div class="mail-tools tooltip-demo m-t-md">
+    <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="load lai danh sách" onclick="reloadtable()"><i class="fa fa-refresh"></i>f5</button>
+    <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="them khach hang" onclick="showCusAddModal()">+</button>
+</div>
 @*<div class="mail-box-header">*@
         @*<h2>
             Danh sách khách hàng
         </h2>
-        <div class="mail-tools tooltip-demo m-t-md">
-            <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lai danh sách" onclick="reloadTable()"><i class="fa fa-refresh"></i>F5</button>
-            <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Them khach hang" onclick="showCusAddModal()">+</button>
-        </div>
+        
 </div>*@
         @*<div style="width: 97%; margin: 0 auto;">*@
         @*<div class="ibox-content">
@@ -263,12 +264,13 @@
 @section CustomJS {
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/Customer-JS")
-    @Scripts.Render("~/Sweetalert-JS")
+    @Scripts.Render("~/SweetAlert-JS")
 }
 @section CustomCSS {
     @Styles.Render("~/DataTable-CSS")
+    @Styles.Render("~/SweetAlert-CSS")
     <style>
-        .dataTables_filter {
+        /*.dataTables_filter {
             width: 50%;
             float: right;
             text-align: right;
@@ -276,7 +278,7 @@
         .dataTables_paginate{
             float: right;
             margin: 0;
-        }
+        }*/
         /*cusDataTable {
             width: 100%;
         }

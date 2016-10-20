@@ -141,45 +141,34 @@ $(document).ready(function () {
 
 
 
-//function addCustomer() {
-//    var _id = Math.round(Math.random() * 1000);
-//    var _name = document.getElementById("addNameTxt").value;
-//    var _addr = document.getElementById("addAddrTxt").value;
-//    var _desc = document.getElementById("addDescTxt").value;
-//    var _phone = document.getElementById("addPhoneTxt").value;
-//    var _mail = document.getElementById("addMailTxt").value;
+function addCustomer() {
+    var _id = Math.round(Math.random() * 1000);
+    var _name = document.getElementById("addNameTxt").value;
+    var _addr = document.getElementById("addAddrTxt").value;
+    var _desc = document.getElementById("addDescTxt").value;
+    var _phone = document.getElementById("addPhoneTxt").value;
+    var _mail = document.getElementById("addMailTxt").value;
 
-//    if (_name != "") {
-//        $.ajax({
-//            url: "/Customer/AddCustomer",
-//            cache: false,
-//            traditional: true,
-//            type: "POST",
-//            data: ({
-//                Id: _id,
-//                Name: _name,
-//                Addr: _addr,
-//                Desc: _desc,
-//                Phone: _phone,
-//                Email: _mail
-//            }),
+    if (_name != "") {
+        $.ajax({
+            url: "/Customer/AddCustomer",
+            cache: false,
+            traditional: true,
+            type: "POST",
+            data: ({
+                Id: _id,
+                Name: _name,
+                Addr: _addr,
+                Desc: _desc,
+                Phone: _phone,
+                Email: _mail
+            }),
 
-//            success: function (data) {
-//                if (data == 1) {
-//                    showSucModal(createSuc_Mes);
-//                }
-//                else if (data == 2) {
-//                    showFailModal(createFaildup_Mes);
-//                }
-//                else showFailModal(fail_Mes);
-//            },
-//            error: function () {
-//                showFailModal(fail_Mes);
-//            }
-//        });
-//    }
-//    else showCreateFailModal();
-//}
+            
+        });
+    }
+    else showCreateFailModal();
+}
 
 function editCustomerDetail() {
     var _inputCusID = document.getElementById("cusEditID").value;
