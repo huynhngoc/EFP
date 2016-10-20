@@ -17,9 +17,9 @@ namespace DataService
         public int Id { get; set; }
         public string EntityName { get; set; }
         public string Value { get; set; }
-        public string isDynamic { get; set; }
         public string Description { get; set; }
         public string ShopId { get; set; }
+        public bool IsDynamic { get; set; }
     
         public virtual Shop Shop { get; set; }
     }

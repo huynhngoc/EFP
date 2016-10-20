@@ -96,7 +96,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EntityName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Value" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="isDynamic" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="IsDynamic" Type="bit" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ShopId" Type="nvarchar" MaxLength="128" />
         </EntityType>
@@ -780,10 +780,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EntityName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="isDynamic" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Entities_Shops" FromRole="Entity" ToRole="Shop" />
+          <Property Name="IsDynamic" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Intent">
           <Key>
@@ -1261,9 +1261,9 @@
           <EntitySetMapping Name="Entities">
             <EntityTypeMapping TypeName="EFPModel.Entity">
               <MappingFragment StoreEntitySet="Entities">
+                <ScalarProperty Name="IsDynamic" ColumnName="IsDynamic" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="isDynamic" ColumnName="isDynamic" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="EntityName" ColumnName="EntityName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

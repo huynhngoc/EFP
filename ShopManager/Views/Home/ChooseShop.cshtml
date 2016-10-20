@@ -121,6 +121,10 @@
                     <span id="text-alert"></span>
                     <button id="addShop" class="btn btn-primary">Thêm cửa hàng</button>
                 </div>
+                <span class="danger">@ViewBag.ErrorMessage</span>
+                <div class="ibox-content shop-list">
+                   
+                </div>
                 <!--./Page's content-->
                 <!--Footer-->
                 <div class="footer">
@@ -245,7 +249,19 @@
             }
 
             var shopList = [];
-            $(document).ready(function () {
+
+            function initShopElements(data) {
+                console.log(data);
+                $(".shop-list").append('<div class="ibox-content" id="' + data.Id + '">' +
+                            '<form action="../Home/GoToShop"><input type="hidden" name="shopId" value="'+data.Id+'"/>' +                            
+                            '<b>'+ data.ShopName +'</b>' +
+                            '<span class="pull-right"><button type="submit" class="btn btn-primary choose-page">Vào</button></span>' +
+                        '</form></div>');
+            }
+
+            function initShop() {
+                $(".shop-list").empty();
+                $("#text-alert").text("");
                 $.ajax({
                     url: '../Home/GetShop',
                     type: 'POST',
@@ -254,21 +270,24 @@
                         if (data == null || data.length == 0) {
                             $("#text-alert").text("Bạn chưa có cửa hàng nào sử dụng dịch vụ của EFP");
                         } else {
-
-                        }
-                        $("#addShop").on("click", function () {
-                            ChoosePage();
-                        });
-                        $(data).each(function () {
-                            shopList.push($(this).Id);
-                        });
+                            $(data).each(function (i, val) {
+                                console.log($(this));
+                                initShopElements(val);
+                            });
+                        }                                                
                     },
                     error: function () {
 
                     }
                 });
+            }
 
-
+            $(document).ready(function () {
+                initShop();
+                $("#addShop").on("click", function () {
+                    ChoosePage();
+                });
+                
 
             });
 

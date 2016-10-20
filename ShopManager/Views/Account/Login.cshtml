@@ -1,9 +1,11 @@
 ﻿@using ShopManager.Models
 @model LoginViewModel
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Đăng nhập";
 
 }
+
+<title>Đăng nhập</title>
 
 @Styles.Render("~/Header-CSS")
 
@@ -78,37 +80,23 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <form class="m-t" role="form" action="">
                     <div class="form-group">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         @*<input type="text" class="form-control" placeholder="Username" required="">*@
                     </div>
                     <div class="form-group">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Mật khẩu" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                         @*<input type="password" class="form-control" placeholder="Password" required="">*@
                     </div>
-                    <button type="submit" class="btn btn-primary block full-width m-b">Đăng nhập</button> <a href="#"><small>Quên mật khẩu?</small></a>
+                    <button type="submit" class="btn btn-primary block full-width m-b">Đăng nhập</button> 
+                    @*<a href="#"><small>Quên mật khẩu?</small></a>*@
                     <p class="text-muted text-center"><small>Bạn chưa có tài khoản?</small></p> 
                     @Html.ActionLink("Tạo tài khoản mới", "Register")
                     @*<a class="btn btn-sm btn-white btn-block" href="register.html">Tạo tài khoản mới</a>*@
                 </form>
 }
             </section>
-        </div>
-    </div>
-
-    <!-- Choose Page Modal -->
-    <div id="choosePageModal" class="modal fade" data-backdrop="static" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Chọn trang bạn muốn tạo tab</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Thêm một số tên trang ở đây</p>
-                </div>
-            </div>
         </div>
     </div>
         
@@ -118,9 +106,5 @@
 
 @Scripts.Render("~/Mainly-scripts")
     <script>
-        $(document).ready(function () {            
-            $('#loginWithFacebook').click(function () {
-                $('#choosePageModal').modal('show');
-            });
-        });        
+            
     </script>

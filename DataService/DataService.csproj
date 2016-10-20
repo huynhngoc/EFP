@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CategoryRepository.cs" />
+    <Compile Include="Repository\EntityRepository.cs" />
     <Compile Include="Repository\PictureRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\TemplateProductRepository.cs" />
@@ -117,6 +118,7 @@
     </Compile>
     <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\CategoryService.cs" />
+    <Compile Include="Service\EntitiyService.cs" />
     <Compile Include="Service\PictureService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Repository\ShopRepository.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="TemplateProduct.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utils\DefaultEntity.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
@@ -139,7 +142,7 @@
     <Compile Include="ViewModel\ProductViewModel.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
-    <Compile Include="ViewModel\ShopViewModal.cs" />
+    <Compile Include="ViewModel\ShopViewModel.cs" />
     <Compile Include="ViewModel\TemplateProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

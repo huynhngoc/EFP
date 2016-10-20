@@ -1,12 +1,12 @@
 ﻿@model ShopManager.Models.RegisterViewModel
 @using ShopManager.Models
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Đăng ký";
 }
 
+<title>Đăng ký</title>
 @Styles.Render("~/Header-CSS")
 
-<h2>@ViewBag.Title.</h2>
 
 @*@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
@@ -42,11 +42,11 @@
 <body class="gray-bg">
     <div class="middle-box text-center loginscreen   animated fadeInDown">
         <div>
-            <h2 style="margin-top:120px">Đăng kí</h2>
+            <h2 style="margin-top:120px">Đăng ký</h2>
             <p></p>
-            <a class="btn btn-success btn-facebook btn-outline" id="facebookRegister"> <i class="fa fa-facebook"></i> Đăng kí bằng tài khoản Facebook</a>
+            @*<a class="btn btn-success btn-facebook btn-outline" id="facebookRegister"> <i class="fa fa-facebook"></i> Đăng kí bằng tài khoản Facebook</a>*@
             <section id="socialLoginForm">
-                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                @Html.Partial("_ExternalLoginsListPartialSignUp", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
             </section>
             <p>&nbsp;</p>
             <p> Hoặc tạo một tài khoản để sử dụng tiện ích của EFP</p>
