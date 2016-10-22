@@ -43,7 +43,7 @@ namespace DataService
         public virtual Category Category { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<ProductPicture> ProductPictures { get; set; }
-        public virtual Shop Shop { get; set; }
         public virtual TemplateProduct TemplateProduct { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

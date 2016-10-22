@@ -14,9 +14,9 @@ namespace DataService.Repository
             return dbSet.Where(q => q.ShopId == shopId);
         }
 
-        public IEnumerable<CategoryViewModel1> GetCategory(string shopId)
+        public IEnumerable<CategoryBasicViewModel> GetCategory(string shopId)
         {
-            return dbSet.Where(q => q.ShopId == shopId).Select(q => new CategoryViewModel1()
+            return dbSet.Where(q => q.ShopId == shopId).Select(q => new CategoryBasicViewModel()
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -25,17 +25,17 @@ namespace DataService.Repository
             });
         }      
 
-        public IEnumerable<CategoryViewModel1> GetParentCategory(string shopId)
+        public IEnumerable<CategoryBasicViewModel> GetParentCategory(string shopId)
         {
-            return dbSet.Where(q => q.ParentId == null).Select(q => new CategoryViewModel1()
+            return dbSet.Where(q => q.ParentId == null).Select(q => new CategoryBasicViewModel()
             {
                 Id = q.Id, Name = q.Name, Description = q.Description, ParentId = q.ParentId
             });
         }
 
-        public IEnumerable<CategoryViewModel1> GetCategoryByParent(int parentId)
+        public IEnumerable<CategoryBasicViewModel> GetCategoryByParent(int parentId)
         {
-            return dbSet.Where(q => q.ParentId == parentId).Select(q => new CategoryViewModel1()
+            return dbSet.Where(q => q.ParentId == parentId).Select(q => new CategoryBasicViewModel()
             {
                 Id = q.Id,
                 Name = q.Name,

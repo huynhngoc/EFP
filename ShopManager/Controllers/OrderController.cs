@@ -179,7 +179,7 @@ namespace ShopManager.Controllers
             string shopId = (string)Session["ShopId"];// (string)Session["ShopId"];
             string custId = (string)Session["CustId"];//(string)Session["CustId"];
             OrderService service = new OrderService();
-            bool rs = service.AddOrder(shopId, note, custId, status, address, receiver, phone, listDetail);
+            bool rs = service.AddOrder(shopId, note, 1, status, address, receiver, phone, listDetail);
             return Content(rs.ToString());
         }
     }

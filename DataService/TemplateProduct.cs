@@ -30,7 +30,7 @@ namespace DataService
         public string Attr6 { get; set; }
         public string Attr7 { get; set; }
     
-        public virtual Shop Shop { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

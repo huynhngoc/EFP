@@ -26,13 +26,19 @@ namespace DataService.Repository
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IEnumerable<Customer> GetCustomerById(string cusId)
+        public IEnumerable<Customer> GetCustomerById(int cusId)
         {
-            Debug.WriteLine("-----id_in " + cusId);
-            Debug.WriteLine("asdasdasd" + dbSet.Where(q => q.CustomerId == cusId).ToString());
+            //Debug.WriteLine("-----id_in " + cusId);
+            //Debug.WriteLine("asdasdasd" + dbSet.Where(q => q.Id == cusId).ToString());
             //Debug.WriteLine("fuk" + dbSet.Find(cusId).ToString());
-            return dbSet.Where(q => q.CustomerId == cusId);
+            return dbSet.Where(q => q.Id == cusId);
         }
+
+        public Customer GetCustomerByFbId(string customerFbId, string shopId)
+        {
+            return dbSet.Where(q => q.CustomerFbId == customerFbId && q.ShopId == shopId).FirstOrDefault();
+        }
+
         /// <summary>
         /// delete a customer by id
         /// </summary>
@@ -62,9 +68,10 @@ namespace DataService.Repository
         {
             try
             {
-                Debug.WriteLine("cus ID" + _cus.CustomerId);
-                Debug.WriteLine("get cus null?" + GetCustomerById(_cus.CustomerId).Count());
-                if (GetCustomerById(_cus.CustomerId).Count() == 0)
+                //debug what????
+                //Debug.WriteLine("cus ID" + _cus.CustomerId);
+                //Debug.WriteLine("get cus null?" + GetCustomerById(_cus.CustomerId).Count());
+                if (FindByKey(_cus.Id) == null)
                 {
                     Create(_cus);
                     this.Save();
@@ -95,7 +102,8 @@ namespace DataService.Repository
             //if (rs.Count() == 0) return null;
             var data = rs.Select(q => new CustomerViewModel()
             {
-                CustomerId = q.CustomerId,
+                //id dung de edit nen lay int id
+                CustomerId = q.Id,
                 Name = q.Name,
                 Description = q.Description,
                 Address = q.Address,
@@ -109,15 +117,15 @@ namespace DataService.Repository
         {
             entites.SaveChanges();
         }
-        public bool EditCustomer(string Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
+        public bool EditCustomer(int Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
         {
-            Customer dummyCustomer = (Customer)GetCustomerById(Id).FirstOrDefault();
-            dummyCustomer.Name = Name;
-            dummyCustomer.Address = Addr;
-            dummyCustomer.Description = Desc;
-            dummyCustomer.Phone = Phone;
-            dummyCustomer.Email = Email;
-            var result = Update(dummyCustomer);
+            Customer customer = FindByKey(Id);
+            customer.Name = Name;
+            customer.Address = Addr;
+            customer.Description = Desc;
+            customer.Phone = Phone;
+            customer.Email = Email;
+            var result = Update(customer);
             this.Save();
             return result;
         }

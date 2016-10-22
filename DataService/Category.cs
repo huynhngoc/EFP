@@ -28,7 +28,7 @@ namespace DataService
     
         public virtual ICollection<Category> Categories1 { get; set; }
         public virtual Category Category1 { get; set; }
-        public virtual Shop Shop { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

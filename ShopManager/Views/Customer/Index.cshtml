@@ -1,4 +1,39 @@
-﻿
+﻿@{
+    ViewBag.Title = "Quản lý khách hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section CustomCSS {
+    @Styles.Render("~/DataTable-CSS")
+    @Styles.Render("~/SweetAlert-CSS")
+    <style>
+        /*.dataTables_filter {
+            width: 50%;
+            float: right;
+            text-align: right;
+        }
+        .dataTables_paginate{
+            float: right;
+            margin: 0;
+        }*/
+        /*cusDataTable {
+            width: 100%;
+        }
+
+        .modal-open {
+            overflow: scroll;
+        }*/
+
+        /*#wrapper {
+            display: block;
+            margin: auto;
+            width: 100%;
+        }*/
+        /*div.dataTables_processing {
+            color: red;
+            border: 1px;
+        }*/
+    </style>
+}
 <div class="mail-tools tooltip-demo m-t-md">
     <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="load lai danh sách" onclick="reloadtable()"><i class="fa fa-refresh"></i>f5</button>
     <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="them khach hang" onclick="showCusAddModal()">+</button>
@@ -263,38 +298,6 @@
 
 @section CustomJS {
     @Scripts.Render("~/DataTable-JS")
-    @Scripts.Render("~/Customer-JS")
     @Scripts.Render("~/SweetAlert-JS")
-}
-@section CustomCSS {
-    @Styles.Render("~/DataTable-CSS")
-    @Styles.Render("~/SweetAlert-CSS")
-    <style>
-        /*.dataTables_filter {
-            width: 50%;
-            float: right;
-            text-align: right;
-        }
-        .dataTables_paginate{
-            float: right;
-            margin: 0;
-        }*/
-        /*cusDataTable {
-            width: 100%;
-        }
-
-        .modal-open {
-            overflow: scroll;
-        }*/
-
-        /*#wrapper {
-            display: block;
-            margin: auto;
-            width: 100%;
-        }*/
-        /*div.dataTables_processing {
-            color: red;
-            border: 1px;
-        }*/
-    </style>
+    @Scripts.Render("~/Customer-JS")    
 }

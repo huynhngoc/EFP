@@ -133,17 +133,17 @@ namespace DataService.Service
             return repository.AddNewCategory(c);
         }
 
-        public List<CategoryViewModel1> GetAllCategory(string shopId)
+        public List<CategoryBasicViewModel> GetAllCategory(string shopId)
         {
             return repository.GetCategory(shopId).ToList();
         }
 
-        public List<CategoryViewModel1> GetParentCategory(string shopId)
+        public List<CategoryBasicViewModel> GetParentCategory(string shopId)
         {
             return repository.GetParentCategory(shopId).ToList();
         }
 
-        public List<CategoryViewModel1> GetCategoryByParent(int parentId)
+        public List<CategoryBasicViewModel> GetCategoryByParent(int parentId)
         {
             return repository.GetCategoryByParent(parentId).ToList();
         }

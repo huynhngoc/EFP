@@ -67,7 +67,7 @@ namespace DataService.Service
             return orderRepo.EditOrderByOrderId(orderId, status, receiver, address, phone);
         }
 
-        public bool AddOrder(string shopId, string note, string custId, string status, string address, string receiver, string phone
+        public bool AddOrder(string shopId, string note, int custId, string status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
             bool rs = true;

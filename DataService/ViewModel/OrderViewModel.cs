@@ -13,7 +13,7 @@ namespace DataService.ViewModel
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public decimal Total { get; set; }
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string Note { get; set; }
         public string Status { get; set; }
@@ -25,7 +25,7 @@ namespace DataService.ViewModel
         {
         }
 
-        public OrderViewModel(int id, DateTime dateCreated, DateTime dateModified, string customerId,
+        public OrderViewModel(int id, DateTime dateCreated, DateTime dateModified, int customerId,
             string customerName, string note, decimal total, string status, string shippingAddress, string receiver, string phone)
         {
             this.Id = id;

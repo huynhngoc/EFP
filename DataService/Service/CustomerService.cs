@@ -16,10 +16,11 @@ namespace DataService.Service
            
       }
 
+        //add customer theo facebook id
       public int AddCustomer(string Id,string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
       {
           Customer _customer = new Customer();
-          _customer.CustomerId = Id;
+          _customer.CustomerFbId = Id;
           _customer.Name = Name;
           _customer.Address = Addr;
           _customer.Description = Desc;
@@ -44,17 +45,25 @@ namespace DataService.Service
      //    return success;
      //}
 
-     public Boolean EditCustomer(string Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
+            //edit customer theo int id của customer
+     public Boolean EditCustomer(int Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
      {
          return repository.EditCustomer(Id,Name,Addr,Desc,Phone,Email,ShopId);
      }
 
-        public Customer GetCustomerByCustomerId(string customerId)
+        
+        public Customer GetCustomerByCustomerId(int customerId)
         {
-            Customer Customer = repository.GetCustomerById(customerId).FirstOrDefault();
-            return Customer;
+            //Customer Customer = repository.GetCustomerById(customerId).FirstOrDefault();
+            Customer customer = repository.FindByKey(customerId);
+            return customer;
         }
 
+        public Customer GetCustomerByFacebookId(string customerFbId, string shopId)
+        {
+            Customer customer = repository.GetCustomerByFbId(customerFbId,shopId);
+            return customer;
+        }
 
     }
        
