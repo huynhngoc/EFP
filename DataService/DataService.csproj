@@ -143,6 +143,7 @@
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\DefaultEntity.cs" />
+    <Compile Include="Utils\WebhookObject.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />

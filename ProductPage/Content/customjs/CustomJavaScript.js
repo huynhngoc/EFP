@@ -24,7 +24,7 @@ function loadProductOfParentCategory(shopId, parentId, start, quantity, category
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198.29px",
+                            "height": "190px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
@@ -168,7 +168,7 @@ function loadProductByShopAndCategory(shopId, categoryId, start, quantity, categ
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198.29px",
+                            "height": "190px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
