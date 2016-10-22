@@ -88,7 +88,7 @@ namespace ShopManager.Controllers
             return data;
             //1 = success / 2 = success but fail in creating / 3 = exception
         }
-        public bool EditCustomer(string Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
+        public bool EditCustomer(int Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
         {
             ShopId = "7";
             Debug.WriteLine("id: " + Id + "| name: " + Name + "|address: " + Addr + "|description: " + Desc + "|Phone: "

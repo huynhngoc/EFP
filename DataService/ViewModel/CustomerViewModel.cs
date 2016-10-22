@@ -8,7 +8,7 @@ namespace DataService
 {
     public class CustomerViewModel
     {
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
@@ -16,7 +16,7 @@ namespace DataService
         public string Email { get; set; }
         public string shopId { get; set; }
 
-        public CustomerViewModel(string id, string name, string des, string add, string phone, string email, string shopid)
+        public CustomerViewModel(int id, string name, string des, string add, string phone, string email, string shopid)
         {
             this.CustomerId = id;
             this.Name = name;

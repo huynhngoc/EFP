@@ -88,7 +88,7 @@ namespace ProductPage.Controllers
         }
 
         // Get cart object
-        public ActionResult GetCart()
+        public JsonResult GetCart()
         {
             if (Session["Cart"] == null)
             {
@@ -153,7 +153,10 @@ namespace ProductPage.Controllers
                 }
                 string status = OrderStatus.PROCESSING;
                 bool result;
-                result = orderService.AddOrder(shopId, note, custId, status, address, receiver, phone, listOrderDetail);
+
+                Customer customer = customerService.GetCustomerByFacebookId(custId, shopId);
+                // sua thanh lay id tu facebook --> kiem id tu database r them vao
+                result = orderService.AddOrder(shopId, note, customer.Id, status, address, receiver, phone, listOrderDetail);
                 if (result)
                 {
                     Session["Cart"] = null;
@@ -171,19 +174,23 @@ namespace ProductPage.Controllers
         }
 
         //Get Check out information
-        public ActionResult GetCheckOutInfo(string customerId)
+        public ActionResult GetCheckOutInfo(string customerId, string shopId)
         {
             //Get Cart
             List<CartModel> listCart = (List<CartModel>)Session["Cart"];
             if (listCart != null)
             {
                 //Create list Customer
-                Customer customer = customerService.GetCustomerByCustomerId(customerId);
+
+                //replace bang get customer by facebook Id dung chung vs shopId
+                //Customer customer = customerService.GetCustomerByCustomerId(customerId);
+                Customer customer = customerService.GetCustomerByFacebookId(customerId, shopId);
+
                 //Create checkout view model
                 CheckOutViewModel checkOutViewModel = new CheckOutViewModel();
-                checkOutViewModel.userName = customer.Name;
-                checkOutViewModel.phone = customer.Phone;
-                checkOutViewModel.shippingAddress = customer.Address;
+                checkOutViewModel.userName = customer?.Name;
+                checkOutViewModel.phone = customer?.Phone;
+                checkOutViewModel.shippingAddress = customer?.Address;
                 checkOutViewModel.listCart = listCart;
                 return Json(checkOutViewModel, JsonRequestBehavior.AllowGet);
             }

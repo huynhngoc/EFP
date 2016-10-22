@@ -123,7 +123,7 @@ $(document).ready(function () {
         { "mData": "Email", "bSortable": true },
         {
             "mData": function (source) {
-                return "<a id='" + source.CustomerId.trim() + "' onclick='getEditCustomer(this," + source.CustomerId.trim() + ")' class='btn btn-success search-dropdown'><span class='fa fa-edit' aria-hidden='true'></span> </a>"
+                return "<a id='" + source.CustomerId + "' onclick='getEditCustomer(this," + source.CustomerId + ")' class='btn btn-success search-dropdown'><span class='fa fa-edit' aria-hidden='true'></span> </a>"
             }, "bSortable": false
         }
         ],

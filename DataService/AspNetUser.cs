@@ -18,8 +18,8 @@ namespace DataService
         {
             this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
             this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
-            this.Shops = new HashSet<Shop>();
             this.AspNetRoles = new HashSet<AspNetRole>();
+            this.Shops = new HashSet<Shop>();
         }
     
         public string Id { get; set; }
@@ -37,7 +37,7 @@ namespace DataService
     
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual ICollection<Shop> Shops { get; set; }
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        public virtual ICollection<Shop> Shops { get; set; }
     }
 }

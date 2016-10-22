@@ -19,7 +19,7 @@ namespace DataService.ViewModel
             ChildCategory = new List<CategoryViewModel>();
         }
     }
-    public class CategoryViewModel1
+    public class CategoryBasicViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

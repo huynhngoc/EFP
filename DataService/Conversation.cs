@@ -19,5 +19,8 @@ namespace DataService
         public int IntentId { get; set; }
         public bool IsRead { get; set; }
         public System.DateTime LastUpdate { get; set; }
+    
+        public virtual Respons Respons { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

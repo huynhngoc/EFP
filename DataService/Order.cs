@@ -24,14 +24,14 @@ namespace DataService
         public string UserNote { get; set; }
         public System.DateTime DateCreated { get; set; }
         public System.DateTime DateModified { get; set; }
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public string Status { get; set; }
         public string ShippingAddress { get; set; }
         public string Receiver { get; set; }
         public string Phone { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual Shop Shop { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }
