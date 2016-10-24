@@ -33,15 +33,15 @@ namespace DataService
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Entity> Entities { get; set; }
+        public virtual DbSet<Intent> Intents { get; set; }
         public virtual DbSet<Respons> Responses { get; set; }
         public virtual DbSet<TemplateProduct> TemplateProducts { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Conversation> Conversations { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Intent> Intents { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
     }
 }

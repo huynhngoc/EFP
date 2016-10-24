@@ -25,7 +25,7 @@ namespace DataService
         public System.DateTime DateCreated { get; set; }
         public System.DateTime DateModified { get; set; }
         public int CustomerId { get; set; }
-        public string Status { get; set; }
+        public int Status { get; set; }
         public string ShippingAddress { get; set; }
         public string Receiver { get; set; }
         public string Phone { get; set; }
