@@ -187,6 +187,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ChatCommentController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -209,6 +210,7 @@
     <Content Include="Content\css\animate.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\CustomCSS\ChatComment.css" />
     <Content Include="Content\css\patterns\1.png" />
     <Content Include="Content\css\patterns\2.png" />
     <Content Include="Content\css\patterns\3.png" />
@@ -337,6 +339,7 @@
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\Customer_js\Customer_js.js" />
+    <Content Include="Content\js\CustomJS\Utility.js" />
     <Content Include="Content\js\demo\chartjs-demo.js" />
     <Content Include="Content\js\demo\dashboard-demo.js" />
     <Content Include="Content\js\demo\flot-demo.js" />
@@ -892,9 +895,11 @@
     <Content Include="Views\Shop\Index.cshtml" />
     <Content Include="Views\Template\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\ChatComment\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

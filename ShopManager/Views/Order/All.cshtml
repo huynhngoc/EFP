@@ -13,7 +13,7 @@
         </h2>
 
         <!-- toolbar -->
-        <div class=" tooltip-demo m-t-md">
+        <div class="" tooltip-demo m-t-md">
             <div class="btn-group pull-right">
                 <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i></button>
                 <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
@@ -73,19 +73,19 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Người nhận:</label>
                         <div class="col-lg-10">
-                            <input id="edit_receiver" class="form-control" type="text"></a>
+                            <input id="edit_receiver" class="form-control" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Địa chỉ:</label>
                         <div class="col-lg-10">
-                            <input id="edit_address" class="form-control" type="text"></a>
+                            <input id="edit_address" class="form-control" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Số điện thoại:</label>
                         <div class="col-lg-10">
-                            <input id="edit_phone" class="form-control" type="text"></a>
+                            <input id="edit_phone" class="form-control" type="text">
                         </div>
                     </div>
                     <div class="form-group">
@@ -289,6 +289,7 @@
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
+    @Scripts.Render("~/Utility-JS")
 
     @*Global code*@
     <script>
@@ -330,27 +331,27 @@
                     , "aoColumnDefs": [{ "aTargets": [0], "mData": "Id" }
                             , {
                                 "aTargets": [1], "mData": function (source) {
-                                    return FormatShortDateVN(source.DateCreated);
+                                    return FormatDateVN(source.DateCreated);
                                 }
                             }
                             , {
                                 "aTargets": [2], "mData": function (source) {
-                                    return FormatShortDateVN(source.DateModified);
+                                    return FormatDateVN(source.DateModified);
                                 }
                             }
                             , {
                                 "aTargets": [3], "mData": function (source) {
                                     var status = source.Status;
-                                    if (status == "DELIVERING") {
+                                    if (status == 2) {
                                         return '<span class="label label-success">Đang giao hàng</span>';
                                     }
-                                    if (status == "COMPLETED") {
+                                    if (status == 3) {
                                         return '<span class="label label-primary">Đã xong</span>';
                                     }
-                                    if (status == "CANCELED") {
+                                    if (status == 4) {
                                         return '<span class="label label-danger">Đã huỷ</span>';
                                     }
-                                    if (status == "PROCESSING") {
+                                    if (status == 1) {
                                         return '<span class="label label-info">Chờ xử lý</span>';
                                     }
                                 }
@@ -463,8 +464,8 @@
             function GetOrderData() {
                 $.get('/Order/GetDetailModel', { orderId: id }, function (data) {
                     //Date
-                    $('#edit_created').text(FormatDateVN(data.DateCreated));
-                    $('#edit_modified').text(FormatDateVN(data.DateModified));
+                    $('#edit_created').text(FormatDateTimeVN(data.DateCreated));
+                    $('#edit_modified').text(FormatDateTimeVN(data.DateModified));
 
                     //Id
                     $('#edit_orderId').text(data.Id);
@@ -497,16 +498,16 @@
             function ChangeStatus(status) {
                 $('#edit_status').find('.active').removeClass('active');
 
-                if (status == "DELIVERING") {
+                if (status == 2) {
                     $('#edit_status').find('.btn-success').addClass('active');
                 }
-                if (status == "COMPLETED") {
+                if (status == 3) {
                     $('#edit_status').find('.btn-primary').addClass('active');
                 }
-                if (status == "CANCELED") {
+                if (status == 4) {
                     $('#edit_status').find('.btn-danger').addClass('active');
                 }
-                if (status == "PROCESSING") {
+                if (status == 1) {
                     $('#edit_status').find('.btn-info').addClass('active');
                 }
             }
@@ -643,10 +644,23 @@
         $("#edit_save").click(function () {
             var id = $("#edit_orderId").text();
             var status = ($.trim($("#edit_status").find(".active").find("input").attr("id")));
+            var stat;
+            if (status == "DELIVERING") {
+                stat = 2;
+            }
+            if (status == "COMPLETED") {
+                stat = 3;
+            }
+            if (status == "CANCELED") {
+                stat = 4;
+            }
+            if (status == "PROCESSING") {
+                stat = 1;
+            }
             var receiver = $("#edit_receiver").val();
             var address = $("#edit_address").val();
             var phone = $("#edit_phone").val();
-            UpdateOrder(id, status, receiver, address, phone);
+            UpdateOrder(id, stat, receiver, address, phone);
         });
 
         function UpdateOrder(id, status, receiver, address, phone) {
@@ -682,22 +696,6 @@
                 }
                 loadDT();
             });
-        }
-    </script>
-
-    Format Date
-    <script>
-        //Input: C# DateTime - Output: string "21-07-1995 18:52:49"
-        function FormatDateVN(date) {
-            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
-            var d = new Date(parseInt(milli));
-            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-        }
-
-        function FormatShortDateVN(date) {
-            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
-            var d = new Date(parseInt(milli));
-            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
         }
     </script>
 

@@ -149,7 +149,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
-    <Compile Include="ViewModel\OrderStatus.cs" />
+    <Compile Include="Utils\StatusAndMode.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\ProductItemViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />

@@ -149,6 +149,13 @@ namespace ShopManager
             //select2 JS 
             bundles.Add(new ScriptBundle("~/Customer-JS").Include(
                 "~/Content/js/Customer_js/Customer_js.js"));
+
+            //Utility JS 
+            bundles.Add(new ScriptBundle("~/Utility-JS").Include(
+                "~/Content/js/CustomJS/Utility.js"));
+            //ChatComment CSS
+            bundles.Add(new StyleBundle("~/ChatComment-CSS").Include(
+                "~/Content/css/CustomCSS/ChatComment.css"));
         }
     }
 }

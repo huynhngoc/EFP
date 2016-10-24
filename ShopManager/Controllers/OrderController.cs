@@ -162,7 +162,7 @@ namespace ShopManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateOrder(int orderId, string status, string receiver, string address, string phone)
+        public ActionResult UpdateOrder(int orderId, int status, string receiver, string address, string phone)
         {
             OrderService service = new OrderService();
             if (!(receiver!=null && receiver.Length > 0))
@@ -173,13 +173,13 @@ namespace ShopManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateOrder(string note, string status, string address, string receiver, string phone
+        public ActionResult CreateOrder(string note, int status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
             string shopId = (string)Session["ShopId"];// (string)Session["ShopId"];
-            string custId = (string)Session["CustId"];//(string)Session["CustId"];
+            //string custId = (string)Session["CustId"];//(string)Session["CustId"];
             OrderService service = new OrderService();
-            bool rs = service.AddOrder(shopId, note, 1, status, address, receiver, phone, listDetail);
+            bool rs = service.AddOrder(shopId, note, 1 /*hard code*/, status, address, receiver, phone, listDetail);
             return Content(rs.ToString());
         }
     }
