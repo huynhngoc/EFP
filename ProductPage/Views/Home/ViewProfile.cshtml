@@ -1,0 +1,338 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin cá nhân</title>
+    @Styles.Render("~/Toastr-style")
+    @Styles.Render("~/Header-CSS")
+    @Styles.Render("~/Sweet-Alert-CSS")
+    @Styles.Render("~/DataTable-CSS")
+</head>
+
+<body class="top-navigation">
+    <div id="wrapper">
+        <div id="page-wrapper" class="gray-bg">
+            <div class="wrapper wrapper-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Thông tin cá nhân</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="form-group" id="divInputName">
+                                        <label>Tên</label>
+                                        <input id="customerName" type="text" class="form-control" placeholder="Tên của bạn">
+                                        <p id="errorCustomerName" style="color:red; display:none">Vui lòng điền tên của ban!</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Điện thoại</label>
+                                        <input id="phone" type="tel" class="form-control" placeholder="Số điện thoại">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input id="email" type="email" class="form-control" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label><i class="fa fa-map-marker"></i> Địa chỉ</label>
+                                        <textarea id="address" class="form-control" placeholder="Địa chỉ" rows="4" style="resize:vertical"></textarea>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <button class="btn btn-default" onclick="window.location.href = '~/../Index';"><i class="fa fa-long-arrow-left"></i> Quay về</button>
+                                        <button class="btn btn-primary" onclick="updateCustomer()">Cập nhật</button>
+                                    </div>
+                                    <input id="CustomerId" type="hidden" />
+                                    <input id="Description" type="hidden" />
+                                    <input id="ShopId" type="hidden" />
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Các đơn hàng</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="table-responsive">
+                                        <table id="tableListOrder" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Ngày tạo</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Người nhận</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--View order detail-->
+                <div class="modal inmodal fade" id="viewOrderDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" style="width:95%">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title">Chi tiết đơn hàng</h4>
+                            </div>
+                            <div class="modal-body" style="padding:0px">
+                                <div class="ibox-content p-xl">
+                                    <div class="table-responsive m-t">
+                                        <table class="table invoice-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Đơn giá</th>
+                                                    <th>Tổng tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="listOrderDetail"></tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /table-responsive -->
+                                    <table class="table invoice-total">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Tổng cộng :</strong></td>
+                                                <td><h3 id="total"></h3> (VND)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Người nhận</label>
+                                                        <div class="col-sm-8"><p id="orderDetailReceiver" class="form-control-static">người nhận</p></div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Số điện thoại</label>
+                                                        <div class="col-sm-8"><p id="orderDetailPhone" class="form-control-static">Số điện thoại</p></div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Địa chỉ nhận hàng</label>
+                                                        <div class="col-sm-8"><p id="orderDetailAddress" class="form-control-static">Địa chỉ nhận hàng</p></div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Ghi chú</label>
+                                                        <div class="col-sm-8"><p id="orderDetailNote" class="form-control-static">Ghi chú</p></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--./View order detail-->
+
+            </div>
+            <div class="footer">
+                <div class="pull-right"> 10GB of <strong>250GB</strong> Free. </div>
+                <div> <strong>Copyright</strong> Example Company &copy; 2014-2015 </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mainly scripts -->
+    @Scripts.Render("~/Mainly-scripts")
+    @Scripts.Render("~/DataTable-JS")
+    @Scripts.Render("~/Sweet-Alert-JS")
+    <!--Toastr JS-->
+    @Scripts.Render("~/Toastr")
+
+    <script>
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": false,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "100",
+            "hideDuration": "100",
+            "timeOut": "2500",
+            "extendedTimeOut": "500",
+            "showEasing": "swing",
+            "hideEasing": "swing",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        var shopId = @ViewBag.PageInfo.ShopId;
+        var fbId = @ViewBag.PageInfo.FBId;
+        var url = "/GetData/GetOrdersByShopAndUser?shopId="+shopId+"&customerId=1";
+        var data;
+        var customer;
+        var languageConfig = {
+            "paginate": {
+                "next": "Tiếp",
+                "last": "Cuối",
+                "previous": "Trước",
+                "first": "Đầu"
+            },
+            "emptyTable":"Chưa có dữ liệu",
+            "infoEmpty": "Đang hiển thị 0 đến 0 trong 0 kết quả",
+            "info": "Kết quả từ _START_ đến _END_ trong số _TOTAL_",
+            "infoFiltered":   "(Lọc từ _MAX_ kết quả)",
+            "infoThousands": ".",
+            "loadingRecords": "Đang tải ...",
+            "processing": "Đang xử lý ...",
+            "search": "Tìm kiếm:",
+            "zeroRecords": "Không tìm thấy kết quả",
+            "infoFiltered": " - lọc ra từ _MAX_ kết quả",
+            "lengthMenu":     "Hiển thị  _MENU_ kết quả",
+        }
+
+
+        function FormatDateVN(date) {
+            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
+            var d = new Date(parseInt(milli));
+            return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        }
+
+        function showOrderDetail(orderId, receiver, phone, address, note){
+            $('#orderDetailReceiver').text('');
+            $('#orderDetailReceiver').text(receiver);
+            $('#orderDetailPhone').text('');
+            $('#orderDetailPhone').text(phone);
+            $('#orderDetailAddress').text('');
+            $('#orderDetailAddress').text(address);
+            $('#orderDetailNote').text('');
+            $('#orderDetailNote').text(note);
+            $.ajax({
+                url:"/GetData/GetOrderDetailByOrderId",
+                data: {orderId: orderId},
+                dataType:"json",
+                type: "post",
+                success: function(data){
+                    var total = 0;
+                    var totalPrice = 0;
+                    for(var i=0;i<data.length;i++){
+                        totalPrice = data[i].Price*data[i].Quantity;
+                        total = total + totalPrice;
+                        $('#listOrderDetail').append("<tr>"+
+                            "<td>"+data[i].Properties+"</td>"+
+                            "<td>"+data[i].Quantity+"</td>"+
+                            "<td>"+data[i].Price+"</td>"+
+                            "<td>"+totalPrice+"</td>"+
+                            "</tr>");
+                    };
+                    $('#total').append(total);
+                },
+                error: function(){
+
+                }
+            })
+            $('#viewOrderDetailModal').modal('show');
+        }
+
+        function updateCustomer(){
+            if($('#customerName').val().length==0){
+                $('#divInputName').addClass('has-error');
+                $('#errorCustomerName').show();
+            }else{
+                $('#divInputName').removeClass('has-error');
+                $('#errorCustomerName').hide();
+                $.ajax({
+                    url: "/GetData/UpdateCustomer",
+                    type: "post",
+                    data:{
+                        fbId:fbId,
+                        Name: $('#customerName').val(),
+                        Address:$('#address').text(),
+                        Description:$('#Description').val(),
+                        Phone:$('#phone').val(),
+                        Email:$('#email').val(),
+                        ShopId:$('#ShopId').val()
+                    },
+                    success:function(data){
+                        toastr.success("Cập nhật thông tin thành công", "Thành công");
+                    },
+                    error: function(){
+                        toastr.error("Cập nhật thông tin thất bại", "Thất bại");
+                    }
+                })
+            }
+
+        }
+        $(document).ready(function(){
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    shopId: shopId,
+                    fbId: fbId
+                },
+                dataTyoe: "json",
+                async: false,
+                success: function(result){
+                    data=result.data;
+                    customer=result.customer;
+                    $('#customerName').val('');
+                    $('#customerName').val(customer.Name);
+                    $('#phone').val('');
+                    $('#phone').val(customer.Phone);
+                    $('#email').val('');
+                    $('#email').val(customer.Email);
+                    $('#address').text('');
+                    $('#address').text(customer.Address);
+                    $('#CustomerId').val(customer.CustomerId);
+                    $('#Description').val(customer.Description);
+                    $('#ShopId').val(customer.ShopId);
+
+                },
+                error: function(){
+                    alert("That bai");
+                }
+            });
+            $('#tableListOrder').DataTable({
+                "processing": true,
+                data : data,
+                "order": [[ 5, "desc" ]],
+                "columnDefs": [
+                    {"data":"Id","targets": [ 0 ]},
+                    {"data": function (source) { return FormatDateVN(source.DateCreated) },"targets": [ 1 ]},
+                    {"data":"Status","targets": [ 2 ]},
+                    {"data":"Receiver","targets": [ 3 ]},
+                    {"targets": [ 4 ],"data": function(source){
+                        return "<button class='btn btn-xs btn-outline btn-success' onclick='showOrderDetail("+source.Id+",\""+source.Receiver+"\",\""+source.Phone+"\",\""+source.ShippingAddress+"\",\""+source.Note+"\")'>Chi tiết</button>"
+                    }
+                    },
+                    {"data":"DateCreated","visible":false,"targets": [ 5 ]},
+                ],
+                "language":languageConfig
+            });
+
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>

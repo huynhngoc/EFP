@@ -23,19 +23,13 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                             <!--User name-->
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <a>
                                 <span class="clear">
                                     <span class="block m-t-xs">
-                                        <strong class="font-bold">@ViewBag.PageInfo.UserName</strong>
-                                    </span> <span class="text-muted text-xs block">Xem các đơn hàng của bạn<b class="caret"></b></span>
+                                        <strong class="font-bold">Danh mục sản phẩm</strong>
+                                    </span>
                                 </span>
                             </a>
-                            <!--Button view order-->
-                            <ul class="dropdown-menu animated fadeInDown m-t-xs">
-                                <li><a>Đơn hàng 3</a></li>
-                                <li><a>Đơn hàng 2</a></li>
-                                <li><a>Đơn hàng 1</a></li>
-                            </ul>
                         </div>
                         <div class="logo-element">EFP</div>
                     </li>
@@ -44,19 +38,19 @@
                     @foreach (var item in ViewBag.Category)
                     {
                         //Parent category
-                    <li>
-                        <a href="#" id="parentcate-@item.CategoryId" onclick="loadProductOfParentCategory(@ViewBag.PageInfo.ShopId,@item.CategoryId,0,12,'@item.CategoryName',0)">
-                            <span class="nav-label">@item.CategoryName</span><span class="fa arrow"></span>
-                        </a>
+                        <li>
+                            <a href="#" id="parentcate-@item.CategoryId" onclick="loadProductOfParentCategory(@ViewBag.PageInfo.ShopId,@item.CategoryId,0,12,'@item.CategoryName',0)">
+                                <span class="nav-label">@item.CategoryName</span><span class="fa arrow"></span>
+                            </a>
 
-                        @*Child category*@
-                        @foreach (var subItem in item.ChildCategory)
+                            @*Child category*@
+                            @foreach (var subItem in item.ChildCategory)
                             {
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,9,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
-                        </ul>
+                                <ul class="nav nav-second-level collapse">
+                                    <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,9,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
+                                </ul>
                             }
-                    </li>
+                        </li>
                     }
                     <!--./Generate Category menu-->
                 </ul>
@@ -83,11 +77,25 @@
                         <!--Cart icon-->
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="javascript:void(0)" id="cart">
-                                <i class="fa fa-shopping-cart"></i>
+                                <i class="fa fa-shopping-cart" style="font-size:20px"></i>
                                 <span class="label label-danger" id="cartQuantity"></span>
                             </a>
                         </li>
                         <!--./Cart icon-->
+                        <!--User info-->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
+                                <strong class="font-bold">@ViewBag.PageInfo.UserName</strong><b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-alerts">
+                                <li>
+                                    <a href="/Home/ViewProfile">
+                                        Xem thông tin của bạn
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--./User info-->
                     </ul>
                     <!--./Top navbar right-->
                 </nav>
@@ -249,7 +257,7 @@
 
                                 <div class="modal-footer">
                                     <button class="btn btn-white pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Tiếp tục mua hàng</button>
-                                    <a href="/Home/CheckOut?customerId=@ViewBag.PageInfo.UserId" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
+                                    <a href="/Home/CheckOut" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
                                 </div>
                             </div>
                         </div>
