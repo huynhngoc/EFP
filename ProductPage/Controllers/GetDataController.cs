@@ -1,5 +1,6 @@
 ﻿using DataService;
 using DataService.Service;
+using DataService.Utils;
 using DataService.ViewModel;
 using ProductPage.Models;
 using System;
@@ -151,7 +152,7 @@ namespace ProductPage.Controllers
                     orderDetailModel.Quantity = listCart[i].quantity;
                     listOrderDetail.Add(orderDetailModel);
                 }
-                string status = OrderStatus.PROCESSING;
+                int status = (int) OrderStatus.PROCESSING;
                 bool result;
 
                 Customer customer = customerService.GetCustomerByFacebookId(fbId, shopId);
