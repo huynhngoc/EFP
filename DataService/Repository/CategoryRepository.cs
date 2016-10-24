@@ -27,7 +27,7 @@ namespace DataService.Repository
 
         public IEnumerable<CategoryBasicViewModel> GetParentCategory(string shopId)
         {
-            return dbSet.Where(q => q.ParentId == null).Select(q => new CategoryBasicViewModel()
+            return dbSet.Where(q => q.ParentId == null && q.ShopId == shopId).Select(q => new CategoryBasicViewModel()
             {
                 Id = q.Id, Name = q.Name, Description = q.Description, ParentId = q.ParentId
             });
