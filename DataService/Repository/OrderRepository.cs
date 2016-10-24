@@ -33,7 +33,7 @@ namespace DataService.Repository
         }).First();
         }
 
-        public bool EditOrderByOrderId(int orderId, string status, string receiver, string address, string phone)
+        public bool EditOrderByOrderId(int orderId, int status, string receiver, string address, string phone)
         {
             Order order = this.FindByKey(orderId);
             order.Status = status;

@@ -62,12 +62,12 @@ namespace DataService.Service
             return order;
         }
 
-        public bool EditOrder(int orderId, string status, string receiver, string address, string phone)
+        public bool EditOrder(int orderId, int status, string receiver, string address, string phone)
         {
             return orderRepo.EditOrderByOrderId(orderId, status, receiver, address, phone);
         }
 
-        public bool AddOrder(string shopId, string note, int custId, string status, string address, string receiver, string phone
+        public bool AddOrder(string shopId, string note, int custId, int status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
             bool rs = true;

@@ -111,6 +111,8 @@
     </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CategoryRepository.cs" />
+    <Compile Include="Repository\CommentRepository.cs" />
+    <Compile Include="Repository\ConversationRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Repository\OrderRepository.cs" />
     <Compile Include="Repository\EntityRepository.cs" />
@@ -123,6 +125,8 @@
     </Compile>
     <Compile Include="Service\BaseService.cs" />
     <Compile Include="Service\CategoryService.cs" />
+    <Compile Include="Service\CommentService.cs" />
+    <Compile Include="Service\ConversationService.cs" />
     <Compile Include="Service\EntitiyService.cs" />
     <Compile Include="JqueryDataTable\JQueryDataTableParamModel.cs" />
     <Compile Include="Service\CustomerService.cs" />
@@ -143,13 +147,14 @@
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\DefaultEntity.cs" />
+    <Compile Include="Utils\StatusAndMode.cs" />
+    <Compile Include="Utils\WebhookObject.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
-    <Compile Include="ViewModel\OrderStatus.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\ProductItemViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />

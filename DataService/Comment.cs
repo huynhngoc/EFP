@@ -17,7 +17,8 @@ namespace DataService
         public string Id { get; set; }
         public string FbUserId { get; set; }
         public string ShopId { get; set; }
-        public string Status { get; set; }
+        public bool IsRead { get; set; }
+        public int Status { get; set; }
         public int IntentId { get; set; }
         public System.DateTime DateCreated { get; set; }
     
