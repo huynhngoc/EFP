@@ -22,8 +22,7 @@ namespace ShopManager.Controllers
         /// <returns>json-list of customer</returns>
         
         public JsonResult GetAllCustomer(JQueryDataTableParamModel param)
-        {
-            Session["ShopId"] = "1";
+        {            
             CustomerService service = new CustomerService();
             string shopId = Session["ShopId"].ToString();
             try
@@ -82,15 +81,16 @@ namespace ShopManager.Controllers
         /// <returns>int</returns>
         public int AddCustomer(string Id, string Name, string Addr, string Desc, string Phone, string Email)
         {
+            string shopId = (string)Session["ShopId"];
             CustomerService service = new CustomerService();
             //var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
-            var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, "7");
+            var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
             return data;
             //1 = success / 2 = success but fail in creating / 3 = exception
         }
         public bool EditCustomer(int Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
         {
-            ShopId = "7";
+            ShopId = (string)Session["ShopId"];
             Debug.WriteLine("id: " + Id + "| name: " + Name + "|address: " + Addr + "|description: " + Desc + "|Phone: "
                 + Phone + "|Email: " + Email + "|ShopId: " + ShopId);
             CustomerService service = new CustomerService();

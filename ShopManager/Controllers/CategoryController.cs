@@ -29,6 +29,7 @@ namespace ShopManager.Controllers
 
         public JsonResult All(string shopId)
         {
+            shopId = (string)Session["ShopId"];
             CategoryService service = new CategoryService();
             return Json(service.GetAllCategory(shopId), JsonRequestBehavior.AllowGet);
         }
@@ -53,7 +54,7 @@ namespace ShopManager.Controllers
 
         public JsonResult Add(string name, string description, int? parentId)
         {
-            var shopId = "1";
+            string shopId = (string) Session["ShopId"];
             CategoryService service = new CategoryService();
             return Json(service.AddNewCategory(name,description,parentId, shopId), JsonRequestBehavior.AllowGet);
         }

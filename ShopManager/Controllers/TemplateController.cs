@@ -17,6 +17,7 @@ namespace ShopManager.Controllers
 
         public JsonResult All(string shopId)
         {
+            shopId = (string)Session["ShopId"];
             TemplateProductService service = new TemplateProductService();
             return Json(new { aaData = service.GetTemplate(shopId) }, JsonRequestBehavior.AllowGet);
         }

@@ -142,7 +142,7 @@ namespace ShopManager.Controllers
         public JsonResult Add(string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
         {
             ProductService service = new ProductService();
-            string shopId = "1";
+            string shopId = (string) Session["ShopId"];
             try
             {
                 return Json(new { Id = service.AddProduct(name, description, categoryId, price, promotion, status, isInStock, templateId, attr, shopId).Id }, JsonRequestBehavior.AllowGet);
@@ -184,6 +184,7 @@ namespace ShopManager.Controllers
 
         public JsonResult GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
+            shopId = (string) Session["ShopId"];
             ProductService service = new ProductService();
             try
             {
