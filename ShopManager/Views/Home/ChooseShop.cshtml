@@ -255,7 +255,7 @@
 
             function initShopElements(data) {
                 console.log(data);
-                $(".shop-list").append('<div class="ibox-content" id="' + data.Id + '">' +
+                $(".shop-list").append('<div class="ibox-content">' +
                             '<form action="../Home/GoToShop"><input type="hidden" name="shopId" value="'+data.Id+'"/>' +                            
                             '<b>'+ data.ShopName +'</b>' +
                             '<span class="pull-right"><button type="submit" class="btn btn-primary choose-page">Vào</button></span>' +
