@@ -9,26 +9,18 @@ using DataService.ViewModel;
 using DataService;
 using System.Diagnostics;
 using System.Text;
+using Newtonsoft.Json;
+using Facebook;
 
 namespace ProductPage.Controllers
 {
     public class HomeController : Controller
     {
 
-
+        ShopService shopService = new ShopService();
         public ActionResult Index(string signed_request)
         {
-            if (signed_request != null)
-            {
-                string signedRequest = hashSigned_request(signed_request);
-                Debug.WriteLine("signed_requets: " + signedRequest);
-            }
-
-            //Create model of facebook page information
-            FacebookPageViewModel pageInformation = new FacebookPageViewModel();
-            pageInformation.UserName = "Nguyễn Văn A";
-            pageInformation.ShopId = "1";
-            pageInformation.FBId = "1";
+            FacebookPageViewModel pageInformation = getInfoFromSignedRequest(signed_request);
             ViewBag.PageInfo = pageInformation;
 
             //Get Category list by shop id
@@ -36,32 +28,55 @@ namespace ProductPage.Controllers
             List<CategoryViewModel> listCategory = new List<CategoryViewModel>();
             listCategory = categoryService.GetCategoryByShopId(pageInformation.ShopId);
             ViewBag.Category = listCategory;
-
+            Session["PageInfo"+pageInformation.FBId] = pageInformation;
 
             return View();
         }
 
-        public ActionResult CheckOut()
+        public ActionResult CheckOut(string FBId)
         {
+            FacebookPageViewModel pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId];
+            ViewBag.PageInfo = pageInformation;
+            return View();
+        }
+
+        public ActionResult ViewProfile(string FBId)
+        {
+
+            FacebookPageViewModel pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId];
+            ViewBag.PageInfo = pageInformation;
+            return View();
+        }
+
+        // Get user and shop info
+        public FacebookPageViewModel getInfoFromSignedRequest(string signed_request)
+        {
+            string shopId = null;
+            string userId = null;
+            string userName = null;
+            if (signed_request != null)
+            {
+                string strSignedRequest = hashSigned_request(signed_request);
+                dynamic signedRequest = System.Web.Helpers.Json.Decode(strSignedRequest);
+                shopId = signedRequest.page.id.ToString();
+                userId = signedRequest.user_id.ToString();
+                ShopViewModel shop = shopService.GetShop(shopId);
+                if (shop != null)
+                {
+                    FacebookClient fbApp = new FacebookClient(shop.FbToken);
+                    dynamic userInfo = System.Web.Helpers.Json.Decode(fbApp.Get(userId).ToString());
+                    userName = userInfo.name;
+                }
+            }
             //Create model of facebook page information
             FacebookPageViewModel pageInformation = new FacebookPageViewModel();
-            pageInformation.UserName = "Nguyễn Văn A";
-            pageInformation.ShopId = "1";
-            pageInformation.FBId = "1";
-            ViewBag.PageInfo = pageInformation;
-            return View();
+            pageInformation.UserName = userName;
+            pageInformation.ShopId = shopId;
+            pageInformation.FBId = userId;
+            return pageInformation;
         }
 
-        public ActionResult ViewProfile()
-        {
-            FacebookPageViewModel pageInformation = new FacebookPageViewModel();
-            pageInformation.UserName = "Nguyễn Văn A";
-            pageInformation.ShopId = "1";
-            pageInformation.FBId = "1";
-            ViewBag.PageInfo = pageInformation;
-            return View();
-        }
-
+        // Hash signed_request
         public string hashSigned_request(string signed_request)
         {
             if (signed_request.Contains("."))

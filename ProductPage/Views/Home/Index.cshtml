@@ -89,7 +89,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-alerts">
                                 <li>
-                                    <a href="/Home/ViewProfile">
+                                    <a href="/Home/ViewProfile?FBId=@ViewBag.PageInfo.FBId">
                                         Xem thông tin của bạn
                                     </a>
                                 </li>
@@ -257,7 +257,7 @@
 
                                 <div class="modal-footer">
                                     <button class="btn btn-white pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Tiếp tục mua hàng</button>
-                                    <a href="/Home/CheckOut" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
+                                    <a href="/Home/CheckOut?FBId=@ViewBag.PageInfo.FBId" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
                                 </div>
                             </div>
                         </div>
@@ -290,6 +290,7 @@
     <!--Toastr JS-->
     @Scripts.Render("~/Toastr")
     <script>
+
         $(document).ready(function () {
             $.ajax({
                 url: "/GetData/GetCart",
