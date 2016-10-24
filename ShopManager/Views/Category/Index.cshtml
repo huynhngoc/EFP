@@ -24,11 +24,11 @@
         </ol>
     </div>
 
-    <div class="nestable-menu">
+    @*<div class="nestable-menu">
         <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Expand All</button>
         <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Collapse All</button>
         <button type="button" class="btn btn-primary pull-right add-base-button">Thêm</button>
-    </div>    
+    </div>*@    
 </div>
 
 <!--modal -->
@@ -121,7 +121,7 @@
                 data: {                    
                     'name': name,
                     'description': desc,
-                    'parentId': id
+                    'parentId': parentId
                 },
                 //contentType: 'application/json; charset=utf-8',
                 success: function (data, textStatus, xhr) {

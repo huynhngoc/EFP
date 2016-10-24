@@ -17,8 +17,9 @@ namespace ShopManager.Controllers
 
         public JsonResult Parent()
         {
+            string shopId = (string)Session["ShopId"];
             CategoryService service = new CategoryService();
-            return Json(service.GetParentCategory("1"), JsonRequestBehavior.AllowGet);
+            return Json(service.GetParentCategory(shopId), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Children(int parentId)
