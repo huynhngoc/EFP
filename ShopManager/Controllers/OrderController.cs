@@ -10,6 +10,7 @@ using DataService.JqueryDataTable;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class OrderController : Controller
     {
         //public ActionResult GetOrderFromShopId(string shopId)

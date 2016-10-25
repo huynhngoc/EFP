@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class ChatCommentController: Controller
     {
         public ActionResult Index()

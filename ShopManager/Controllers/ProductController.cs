@@ -18,6 +18,8 @@ using System.Configuration;
 
 namespace ShopManager.Controllers
 {
+    //[Authorize(Roles = "ShopOwner", Order = 1)]
+    [SessionRequiredFilter]
     public class ProductController : Controller
     {
         static Cloudinary m_cloudinary = new Cloudinary(new Account(

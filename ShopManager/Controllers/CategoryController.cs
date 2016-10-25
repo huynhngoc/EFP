@@ -7,6 +7,7 @@ using DataService.Service;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class CategoryController : Controller
     {
         // GET: Category

@@ -9,6 +9,7 @@ using DataService.JqueryDataTable;
 using DataService;
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class CustomerController : Controller
     {
         public ActionResult Index()
