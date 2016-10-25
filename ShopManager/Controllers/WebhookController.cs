@@ -54,9 +54,13 @@ namespace ShopManager.Controllers
         private void ProcessItem(dynamic fbObj)
         {
             dynamic obj = fbObj["object"];
-            dynamic entries = fbObj.entry;
+            dynamic entries = fbObj.entry;            
             foreach (dynamic entry in entries)
             {
+                if (HasProperty(entry, "messaging"))
+                {
+                    break;
+                }
                 string shopId = entry.id;
                 long time = entry.time;
 
@@ -99,6 +103,9 @@ namespace ShopManager.Controllers
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
+                                    break;
+                                case WebhookVerb.Unhide:
+                                    commentService.SetStatus(commentId, (int)CommentStatus.SHOWING);
                                     break;
                                 case WebhookVerb.Remove:
                                     commentService.SetStatus(commentId, (int)CommentStatus.DELETED);
