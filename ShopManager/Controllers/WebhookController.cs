@@ -42,7 +42,14 @@ namespace ShopManager.Controllers
             System.Diagnostics.Debug.WriteLine(jsonData);
             
             dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
-            ProcessItem(fbJson);
+            try
+            {
+                ProcessItem(fbJson);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.StackTrace);
+            }            
 
             System.Diagnostics.Debug.WriteLine("header");
             System.Diagnostics.Debug.WriteLine(this.Request.Headers["X-Hub-Signature"]);
@@ -170,14 +177,24 @@ namespace ShopManager.Controllers
 
         private bool HasProperty(dynamic obj, string name)
         {
-            Type objType = obj.GetType();
+            //Type objType = obj.GetType();
 
-            if (objType == typeof(ExpandoObject))
+            //if (objType == typeof(ExpandoObject))
+            //{
+            //    return ((IDictionary<string, object>)obj).ContainsKey(name);
+            //}
+
+            //return objType.GetProperty(name) != null;
+            try
             {
-                return ((IDictionary<string, object>)obj).ContainsKey(name);
+                var prop = obj[name];
+                return prop!=null;
             }
-
-            return objType.GetProperty(name) != null;
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Name = " + name);
+                return false;
+            }
         }
     }
 }
