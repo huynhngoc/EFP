@@ -10,7 +10,7 @@ namespace DataService.Service
     public class CommentService
     {
         CommentRepository repository = new CommentRepository();
-        public bool AddComment(string id, string fbUserId, long date, int intentId, string shopId)
+        public bool AddComment(string id, string fbUserId, long date, int intentId, int status, string shopId)
         {
             Comment c = repository.FindByKey(id);
             if (c == null)
@@ -19,8 +19,9 @@ namespace DataService.Service
                 {
                     Id = id,
                     FbUserId = fbUserId,
-                    DateCreated = new DateTime(date),
+                    DateCreated = (new DateTime(1970,1,1) + TimeSpan.FromSeconds(date)).ToLocalTime(),
                     IntentId = intentId,
+                    Status = status,
                     ShopId = shopId
                 };
                 return repository.Create(c);
@@ -28,19 +29,20 @@ namespace DataService.Service
             {
                 //c.Id = id;
                 c.FbUserId = fbUserId;
-                c.DateCreated = new DateTime(date);
+                c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
                 c.IntentId = intentId;
                 c.ShopId = shopId;
                 return repository.Update(c);
             }                       
         }
 
-        public bool HideComment(string commentId)
+        public bool SetStatus(string commentId, int status)
         {
             Comment c = repository.FindByKey(commentId);
             if (c != null)
-            {                
-                return true;
+            {
+                c.Status = status;                
+                return repository.Update(c);
             } else
             {
                 return false;

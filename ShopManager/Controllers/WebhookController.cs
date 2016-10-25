@@ -16,6 +16,8 @@ namespace ShopManager.Controllers
     {
         ShopService shopService = new ShopService();
         CommentService commentService = new CommentService();
+        ConversationService conversationService = new ConversationService();
+        FacebookClient fbApp = new FacebookClient();
         // GET: Webhook
         public ActionResult Index()
         {
@@ -70,39 +72,44 @@ namespace ShopManager.Controllers
                         if (item.Equals(WebhookItem.Comment))
                         {
                             string verb = value.verb;                            
-                            long createTime = value.time;
-                            string customerId = value.sender_id;
-                            int intent = 1;
+                            long createTime = value.created_time;
+                            string customerId = Convert.ToString(value.sender_id);
+                            int intent = (int)DefaultIntent.UNKNOWN;
+                            int status = (int)CommentStatus.SHOWING;
                             switch (verb)
                             {
                                 case WebhookVerb.Add:                                                                                                                                                
-                                case WebhookVerb.Edit:
-                                    if (HasProperty(value, "message"))
-                                    {
-                                        string message = value.message;
-                                        //chatbot api for message here
-                                    }
+                                case WebhookVerb.Edit:                                    
                                     if (HasProperty(value, "photo"))
                                     {
                                         //chatbot api intent photo here
-
+                                        intent = (int)DefaultIntent.PHOTO_EMO;
                                     }
                                     if (CheckTagOthers(commentId, shopId))
                                     {
                                         //chatbot api intent tag other here
+                                        intent = (int)DefaultIntent.TAG;
                                     }
-                                    commentService.AddComment(commentId, customerId, createTime, intent, shopId);
+                                    if (HasProperty(value, "message"))
+                                    {
+                                        string message = value.message;
+                                        //chatbot api for message here
+                                    }                                    
+                                    commentService.AddComment(commentId, customerId, createTime, intent, status, shopId);
                                     break;
                                 case WebhookVerb.Hide:
-
+                                    commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
                                     break;
-                                case WebhookVerb.Remove: break;
+                                case WebhookVerb.Remove:
+                                    commentService.SetStatus(commentId, (int)CommentStatus.DELETED);
+                                    break;
                                 default: break;
                             }
                             
                         }
                     } else if (field.Equals(WebhookField.Conversations)){
-
+                        string threadId = value.thread_id;
+                        checkLast(threadId, shopId, time);
                     }                    
 
                 }
@@ -111,13 +118,35 @@ namespace ShopManager.Controllers
 
         }
 
+        private void checkLast(string threadId, string shopId, long time)
+        {
+            string accessToken = shopService.GetShop(shopId).FbToken;
+            dynamic param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.fields = "from,created_time,message";
+            param.limit = 1;
+            dynamic result = fbApp.Get(threadId + "/messages", param);
+            dynamic detail = result.data[0];
+            if (shopId.Equals(detail.from.id))
+            {
+                conversationService.SetReadConversation(threadId, time);
+            } else
+            {
+                string message = detail.message;
+                //chatbot api here
+                int intent = (int) DefaultIntent.UNKNOWN;
+                conversationService.AddConversation(threadId, intent, time, shopId);
+            }
+        }
+
         private bool CheckTagOthers(string commentId, string shopId)
         {
             string accessToken = shopService.GetShop(shopId).FbToken;
-            FacebookClient fb = new FacebookClient(accessToken);
+            //FacebookClient fb = new FacebookClient(accessToken);
             dynamic param = new ExpandoObject();
             param.fields = "message_tags";
-            dynamic result = fb.Get(commentId, param);
+            param.access_token = accessToken;
+            dynamic result = fbApp.Get(commentId, param);
             if (HasProperty(result, "message_tags"))
             {
                 return true;
