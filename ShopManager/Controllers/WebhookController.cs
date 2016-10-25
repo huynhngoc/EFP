@@ -10,10 +10,11 @@ using System.Dynamic;
 using DataService.Service;
 using Facebook;
 
+
 namespace ShopManager.Controllers
 {
     public class WebhookController : Controller
-    {
+    {        
         ShopService shopService = new ShopService();
         CommentService commentService = new CommentService();
         ConversationService conversationService = new ConversationService();
@@ -136,9 +137,11 @@ namespace ShopManager.Controllers
             dynamic detail = result.data[0];
             if (shopId.Equals(detail.from.id))
             {
+                SignalRAlert.AlertHub.Send(shopId, detail);
                 conversationService.SetReadConversation(threadId, time);
             } else
             {
+                SignalRAlert.AlertHub.Send(shopId, detail);
                 string message = detail.message;
                 //chatbot api here
                 int intent = (int) DefaultIntent.UNKNOWN;

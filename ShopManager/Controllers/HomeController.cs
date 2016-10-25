@@ -88,7 +88,7 @@ namespace ShopManager.Controllers
         {
             ShopService service = new ShopService();
             if (service.CheckShopUser(shopId, User.Identity.GetUserId()))
-            {
+            {                
                 Session["ShopId"] = shopId;
                 return RedirectToAction("Index", "Shop");
             }            

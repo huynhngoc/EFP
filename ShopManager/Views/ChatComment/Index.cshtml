@@ -465,5 +465,37 @@
     <!-- Bundle -->
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
-    @Scripts.Render("~/TouchSpin-JS")
+    @Scripts.Render("~/TouchSpin-JS")   
+    @Scripts.Render("~/SignalR-JS")
+    @Scripts.Render("/signalr/hubs")
+    <script type="text/javascript">
+        $(function () {
+            // Declare a proxy to reference the hub.            
+            var chat = $.connection.alertHub;            
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.sendToPage = function (message) {
+                //// Html encode display name and message.
+                //var encodedName = $('<div />').text(name).html();
+                //var encodedMsg = $('<div />').text(message).html();
+                //// Add the message to the page.
+                //$('#discussion').append('<li><strong>' + encodedName
+                //    + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+                console.log(message);
+            };
+            // Get the user name and store it to prepend to messages.
+            //$('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    // Call the Send method on the hub.
+                    chat.server.send($('#displayname').val(), $('#message').val());
+                    // Clear text box and reset focus for next comment.
+                    $('#message').val('').focus();
+                });
+            });
+        });
+</script>
 }

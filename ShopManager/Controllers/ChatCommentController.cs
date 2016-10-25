@@ -10,8 +10,8 @@ namespace ShopManager.Controllers
     {
         public ActionResult Index()
         {
-            Session["ShopId"] = "1";
-            Session["CustId"] = "3";
+            //Session["ShopId"] = "1";
+            //Session["CustId"] = "3";
             return View();
         }
     }
