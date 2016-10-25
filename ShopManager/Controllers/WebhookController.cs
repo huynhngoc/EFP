@@ -139,6 +139,7 @@ namespace ShopManager.Controllers
             {
                 SignalRAlert.AlertHub.Send(shopId, detail);
                 conversationService.SetReadConversation(threadId, time);
+
             } else
             {
                 SignalRAlert.AlertHub.Send(shopId, detail);
