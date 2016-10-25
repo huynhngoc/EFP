@@ -113,7 +113,8 @@ namespace ShopManager.Controllers
                                     break;
                                 default: break;
                             }
-                            
+
+                            SignalRAlert.AlertHub.SendComment(shopId, value, intent);
                         }
                     } else if (field.Equals(WebhookField.Conversations)){
                         string threadId = value.thread_id;
@@ -135,17 +136,17 @@ namespace ShopManager.Controllers
             param.limit = 1;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
+            
             if (shopId.Equals(detail.from.id))
             {
-                SignalRAlert.AlertHub.Send(shopId, detail);
+                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, 0);
                 conversationService.SetReadConversation(threadId, time);
-
             } else
             {
-                SignalRAlert.AlertHub.Send(shopId, detail);
+                int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
-                //chatbot api here
-                int intent = (int) DefaultIntent.UNKNOWN;
+                //chatbot api here                
+                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
         }

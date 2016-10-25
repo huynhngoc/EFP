@@ -9,10 +9,16 @@ namespace ShopManager.SignalRAlert
 {
     public class AlertHub: Hub
     {
-        public static void Send(string shopId, object message)
+        public static void SendMessage(string shopId, object message, string threadId, int intent)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<AlertHub>();
-            context.Clients.Group(shopId).sendToPage(message);                        
+            context.Clients.Group(shopId).sendMessageToPage(message, threadId, intent);                        
+        }
+
+        public static void SendComment(string shopId, object comment, int intent)
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<AlertHub>();
+            context.Clients.Group(shopId).sendCommentToPage(comment, intent);
         }
 
         public override Task OnConnected()
