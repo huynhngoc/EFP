@@ -63,8 +63,9 @@ namespace ShopManager.Controllers
                     var result = m_cloudinary.Upload(new ImageUploadParams()
                     {
                         File = new CloudinaryDotNet.Actions.FileDescription(file.FileName,
-                            file.InputStream),
-                        Transformation = new Transformation().Height(400).Width(400).Crop("fit")
+                            file.InputStream)
+                            ,
+                        Transformation = new Transformation().Crop("pad").Width(800).Height(600)
                     });
 
                     service.AddPicture(id, result.Uri.AbsoluteUri);

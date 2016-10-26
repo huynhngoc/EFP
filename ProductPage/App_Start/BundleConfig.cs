@@ -66,9 +66,12 @@ namespace ProductPage
             //Custom and plugin javascript
             bundles.Add(new ScriptBundle("~/Custom-and-plugin-javascript").Include(
                       "~/Content/js/inspinia.js"));
-            //jQuery UI
-            bundles.Add(new ScriptBundle("~/jQuery-UI").Include(
+            //jQuery UI JS
+            bundles.Add(new ScriptBundle("~/jQuery-UI-JS").Include(
                       "~/Content/js/plugins/jquery-ui/jquery-ui.min.js"));
+            //jQuery UI CSS
+            bundles.Add(new StyleBundle("~/jQuery-UI-CSS").Include(
+                      "~/Content/js/plugins/jquery-UI/jquery-ui.min.css"));
             //GITTER
             bundles.Add(new ScriptBundle("~/GITTER").Include(
                       "~/Content/js/plugins/gritter/jquery.gritter.min.js"));
@@ -103,6 +106,9 @@ namespace ProductPage
             //TouchSpin
             bundles.Add(new ScriptBundle("~/TouchSpin-JS").Include(
                       "~/Content/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"));
+            //Typeahead
+            bundles.Add(new ScriptBundle("~/Typeahead-JS").Include(
+                      "~/Content/js/plugins/typehead/bootstrap3-typeahead.min.js"));
         }
     }
 }

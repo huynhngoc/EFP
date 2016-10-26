@@ -1563,6 +1563,7 @@
     <Content Include="Content\js\plugins\tinycon\tinycon.min.js" />
     <Content Include="Content\js\plugins\toastr\toastr.min.js" />
     <Content Include="Content\js\plugins\touchspin\jquery.bootstrap-touchspin.min.js" />
+    <Content Include="Content\js\plugins\typehead\bootstrap3-typeahead.min.js" />
     <Content Include="Content\js\plugins\validate\jquery.validate.min.js" />
     <Content Include="Content\js\plugins\video\responsible-video.js" />
     <Content Include="Content\js\plugins\wow\wow.min.js" />
@@ -1645,6 +1646,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\CheckOut.cshtml" />
     <Content Include="Views\Home\ViewProfile.cshtml" />
+    <Content Include="Views\Home\NotAuhorize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

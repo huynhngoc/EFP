@@ -46,7 +46,7 @@
                                         <textarea id="address" class="form-control" placeholder="Địa chỉ" rows="4" style="resize:vertical"></textarea>
                                     </div>
                                     <div class="form-group text-center">
-                                        <a class="btn btn-default" href="/Home/Index"><i class="fa fa-long-arrow-left"></i> Quay về</a>
+                                        <a class="btn btn-default" href="/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId""><i class="fa fa-long-arrow-left"></i> Quay về</a>
                                         <button class="btn btn-primary" onclick="updateCustomer()">Cập nhật</button>
                                     </div>
                                     <input id="CustomerId" type="hidden" />
@@ -151,8 +151,7 @@
 
             </div>
             <div class="footer">
-                <div class="pull-right"> 10GB of <strong>250GB</strong> Free. </div>
-                <div> <strong>Copyright</strong> Example Company &copy; 2014-2015 </div>
+                <div> <strong>Copyright</strong> EFP &copy; 2016 </div>
             </div>
         </div>
     </div>
@@ -215,6 +214,8 @@
             return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
         }
 
+
+        //Show Detail of order
         function showOrderDetail(orderId, receiver, phone, address, note){
             $('#orderDetailReceiver').text('');
             $('#orderDetailReceiver').text(receiver);
@@ -251,6 +252,7 @@
             $('#viewOrderDetailModal').modal('show');
         }
 
+        // Update Customer info
         function updateCustomer(){
             if($('#customerName').val().length==0){
                 $('#divInputName').addClass('has-error');
@@ -264,14 +266,19 @@
                     data:{
                         fbId:fbId,
                         Name: $('#customerName').val(),
-                        Address:$('#address').text(),
+                        Address:$('#address').val(),
                         Description:$('#Description').val(),
                         Phone:$('#phone').val(),
                         Email:$('#email').val(),
-                        ShopId:$('#ShopId').val()
+                        ShopId:shopId
                     },
                     success:function(data){
-                        toastr.success("Cập nhật thông tin thành công", "Thành công");
+                        if(data==true){
+                            toastr.success("Cập nhật thông tin thành công", "Thành công");
+                        }else{
+                            toastr.error("Cập nhật thông tin thất bại", "Thất bại");
+                        }
+                        
                     },
                     error: function(){
                         toastr.error("Cập nhật thông tin thất bại", "Thất bại");
@@ -294,7 +301,11 @@
                     data=result.data;
                     customer=result.customer;
                     $('#customerName').val('');
-                    $('#customerName').val(customer.Name);
+                    if(customer.Name.length!=0){
+                        $('#customerName').val(customer.Name);
+                    }else{
+                        $('#customerName').val('@Html.Raw(ViewBag.PageInfo.UserName)');
+                    }
                     $('#phone').val('');
                     $('#phone').val(customer.Phone);
                     $('#email').val('');
@@ -307,7 +318,8 @@
 
                 },
                 error: function(){
-                    alert("That bai");
+                    console.log("That bai");
+                    $('#customerName').val('@Html.Raw(ViewBag.PageInfo.UserName)');
                 }
             });
             $('#tableListOrder').DataTable({

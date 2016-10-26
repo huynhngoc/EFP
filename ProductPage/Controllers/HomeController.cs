@@ -18,9 +18,23 @@ namespace ProductPage.Controllers
     {
 
         ShopService shopService = new ShopService();
-        public ActionResult Index(string signed_request)
+        public ActionResult Index(string signed_request, string FBId, string shopId)
         {
-            FacebookPageViewModel pageInformation = getInfoFromSignedRequest(signed_request);
+            FacebookPageViewModel pageInformation = null;
+            if (signed_request != null)
+            {
+                pageInformation = getInfoFromSignedRequest(signed_request);
+            }
+            if (FBId != null)
+            {
+                pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
+            }
+
+            if (pageInformation.FBId == null || pageInformation.FBId == "")
+            {
+                Response.Redirect("/Home/NotAuhorize");
+            }
+
             ViewBag.PageInfo = pageInformation;
 
             //Get Category list by shop id
@@ -28,22 +42,23 @@ namespace ProductPage.Controllers
             List<CategoryViewModel> listCategory = new List<CategoryViewModel>();
             listCategory = categoryService.GetCategoryByShopId(pageInformation.ShopId);
             ViewBag.Category = listCategory;
-            Session["PageInfo"+pageInformation.FBId] = pageInformation;
+            Session["PageInfo" + pageInformation.FBId + pageInformation.ShopId] = pageInformation;
+            Session["username"] = pageInformation.UserName;
 
             return View();
         }
 
-        public ActionResult CheckOut(string FBId)
+        public ActionResult CheckOut(string FBId, string shopId)
         {
-            FacebookPageViewModel pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId];
+            FacebookPageViewModel pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
             ViewBag.PageInfo = pageInformation;
             return View();
         }
 
-        public ActionResult ViewProfile(string FBId)
+        public ActionResult ViewProfile(string FBId, string shopId)
         {
 
-            FacebookPageViewModel pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId];
+            FacebookPageViewModel pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
             ViewBag.PageInfo = pageInformation;
             return View();
         }
@@ -57,11 +72,16 @@ namespace ProductPage.Controllers
             if (signed_request != null)
             {
                 string strSignedRequest = hashSigned_request(signed_request);
+                Debug.WriteLine("signed: " + strSignedRequest);
                 dynamic signedRequest = System.Web.Helpers.Json.Decode(strSignedRequest);
                 shopId = signedRequest.page.id.ToString();
-                userId = signedRequest.user_id.ToString();
+                if (signedRequest["user_id"] != null)
+                {
+                    userId = signedRequest.user_id;
+                    Debug.WriteLine("user id: " + userId);
+                }
                 ShopViewModel shop = shopService.GetShop(shopId);
-                if (shop != null)
+                if (shop != null && userId != null)
                 {
                     FacebookClient fbApp = new FacebookClient(shop.FbToken);
                     dynamic userInfo = System.Web.Helpers.Json.Decode(fbApp.Get(userId).ToString());
@@ -75,6 +95,7 @@ namespace ProductPage.Controllers
             pageInformation.FBId = userId;
             return pageInformation;
         }
+
 
         // Hash signed_request
         public string hashSigned_request(string signed_request)
@@ -124,6 +145,11 @@ namespace ProductPage.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+        public ActionResult NotAuhorize()
+        {
 
             return View();
         }

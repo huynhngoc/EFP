@@ -19,10 +19,8 @@
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu" style="display: block;">
-                    <!--User Information-->
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <!--User name-->
                             <a>
                                 <span class="clear">
                                     <span class="block m-t-xs">
@@ -35,19 +33,26 @@
                     </li>
                     <!--./User Information-->
                     <!--Generate Category menu-->
+                    <li>
+                        <a href="#" onclick="loadNewestProductByShop(@ViewBag.PageInfo.FBId, @ViewBag.PageInfo.ShopId, 0, 12, 0)">Sản phẩm mới</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="loadSaleProductByShop(@ViewBag.PageInfo.FBId, @ViewBag.PageInfo.ShopId, 0, 12, 0)">Khuyến mãi</a>
+                    </li>
                     @foreach (var item in ViewBag.Category)
                     {
                         //Parent category
                         <li>
-                            <a href="#" id="parentcate-@item.CategoryId" onclick="loadProductOfParentCategory(@ViewBag.PageInfo.ShopId,@item.CategoryId,0,12,'@item.CategoryName',0)">
+                            <a href="#" id="parentcate-@item.CategoryId" onclick="loadProductOfParentCategory(@ViewBag.PageInfo.FBId,@ViewBag.PageInfo.ShopId,@item.CategoryId,0,12,'@item.CategoryName',0)">
                                 <span class="nav-label">@item.CategoryName</span><span class="fa arrow"></span>
                             </a>
 
                             @*Child category*@
+
                             @foreach (var subItem in item.ChildCategory)
                             {
                                 <ul class="nav nav-second-level collapse">
-                                    <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,9,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
+                                    <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.FBId,@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,9,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
                                 </ul>
                             }
                         </li>
@@ -65,9 +70,9 @@
                     <!--Form search-->
                     <div class="navbar-header">
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "><i class="fa fa-bars"></i> </a>
-                        <form role="search" class="navbar-form-custom">
+                        <form class="navbar-form-custom" id="search-form">
                             <div class="form-group">
-                                <input type="text" placeholder="Tìm kiếm" class="form-control" name="top-search" id="top-search">
+                                <input type="text" data-provide="typeahead" autocomplete="off" placeholder="Tìm kiếm" class="form-control" id="top-search">
                             </div>
                         </form>
                     </div>
@@ -76,7 +81,7 @@
                     <ul class="nav navbar-top-links navbar-right">
                         <!--Cart icon-->
                         <li class="dropdown">
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="javascript:void(0)" id="cart">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="javascript:void(0)" id="cart" onclick="getCart(@ViewBag.PageInfo.FBId,@ViewBag.PageInfo.ShopId)">
                                 <i class="fa fa-shopping-cart" style="font-size:20px"></i>
                                 <span class="label label-danger" id="cartQuantity"></span>
                             </a>
@@ -85,11 +90,11 @@
                         <!--User info-->
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
-                                <strong class="font-bold">@ViewBag.PageInfo.UserName</strong><b class="caret"></b>
+                                <strong class="font-bold">@HttpContext.Current.Session["username"]</strong><b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu dropdown-alerts">
                                 <li>
-                                    <a href="/Home/ViewProfile?FBId=@ViewBag.PageInfo.FBId">
+                                    <a href="/Home/ViewProfile?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId">
                                         Xem thông tin của bạn
                                     </a>
                                 </li>
@@ -120,9 +125,9 @@
                                         <span class="product-price" style="background-color:orangered">
                                         </span>
                                         <a href="javascript:void(0)" class="product-name"></a>
-                                        <div class="small m-t-xs">
+                                        <div class="small m-t-xs" style="height:43px">
                                             <s class="text-muted"></s>
-                                            <h4 style="color:red;font-size:20px; display: inline"></h4>
+                                            <h4 style="color:red;font-size:16px;display: inline"></h4><span style="display: inline"> &#8363;</span>
                                         </div>
                                         <div class="m-t text-righ"></div>
                                     </div>
@@ -176,15 +181,15 @@
                                                     <hr>
                                                     <div class="col-md-12">
                                                         <div class="row">
-                                                            <div class="col-sm-7" id="productPriceDiv">
-                                                                <s class="text-muted" id="mainPrice"></s><h2 class="product-main-price inline" style="color:red" id="promotionPrice"></h2>
+                                                            <div class="col-sm-6" id="productPriceDiv">
+                                                                <s class="text-muted" id="mainPrice"></s><h2 class="product-main-price inline" style="color:red" id="promotionPrice"></h2>&#8363;
                                                             </div>
                                                             <div id="quantityAndAddToCart">
                                                                 <div class="col-sm-3" style="width:150px">
-                                                                    <input class="text-center" type="number" id="quantity" value="1" readonly>
+                                                                    <input class="text-center" type="number" min="1" max="100" id="quantity" value="1" readonly>
                                                                 </div>
-                                                                <div class="col-sm-2 pull-right">
-                                                                    <button class="btn btn-primary" id="addToCartOnViewDetail"><i class="fa fa-cart-plus"></i> Add to cart</button>
+                                                                <div class="col-sm-3 pull-right">
+                                                                    <button class="btn btn-primary" id="addToCartOnViewDetail"><i class="fa fa-cart-plus"></i> Thêm vào giỏ hàng</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -227,7 +232,7 @@
                                                             <td class="col-sm-2" style="vertical-align:middle"><div class="cart-product-imitation"></div></td>
                                                             <td class="desc col-sm-5" style="vertical-align:middle"><h3><a href="#" class="text-navy">Desktop publishing software</a></h3></td>
                                                             <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
-                                                            <td class="col-sm-2" style="vertical-align:middle"><input type="number" class="form-control" min="1"></td>
+                                                            <td class="col-sm-2" style="vertical-align:middle"><input type="number" class="form-control" min="1" max="100"></td>
                                                             <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
                                                             <td class="col-sm-1" style="vertical-align:middle"><a href="#" class="text-muted"><i class="fa fa-trash" style="font-size:20px"></i></a></td>
                                                         </tr>
@@ -257,7 +262,7 @@
 
                                 <div class="modal-footer">
                                     <button class="btn btn-white pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Tiếp tục mua hàng</button>
-                                    <a href="/Home/CheckOut?FBId=@ViewBag.PageInfo.FBId" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
+                                    <a href="/Home/CheckOut?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Đặt hàng</a>
                                 </div>
                             </div>
                         </div>
@@ -289,11 +294,42 @@
     @Scripts.Render("~/TouchSpin-JS")
     <!--Toastr JS-->
     @Scripts.Render("~/Toastr")
+    <!--Typeahead-JS-->
+    @Scripts.Render("~/Typeahead-JS")
+
     <script>
 
+        $('#search-form').submit(function () {
+            var productName = $('#top-search').val();
+            loadSearchResult(@ViewBag.PageInfo.FBId, @ViewBag.PageInfo.ShopId,productName, 0, 12, 0)
+            return false;
+        });
+
         $(document).ready(function () {
+
+            loadNewestProductByShop(@ViewBag.PageInfo.FBId, @ViewBag.PageInfo.ShopId, 0, 12, 0);
+
+            $.ajax({
+                url: "/GetData/GetListProductNameByShopId",
+                data:{shopId:@ViewBag.PageInfo.ShopId},
+                dataType: "json",
+                type: "post",
+                success: function(data){
+                    $('#top-search').typeahead({
+                        items: 10,
+                        autoSelect: false,
+                        source: data
+                    });
+                },
+                error: function(){
+
+                }
+            })
+
             $.ajax({
                 url: "/GetData/GetCart",
+                data:{FBId: @ViewBag.PageInfo.FBId,
+                    shopId: @ViewBag.PageInfo.ShopId},
                 dataType: "json",
                 success: function (data) {
                     $('#cartQuantity').text(data.length);
@@ -329,6 +365,8 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
+
+
         });
     </script>
 
