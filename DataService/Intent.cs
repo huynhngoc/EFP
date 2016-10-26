@@ -16,14 +16,16 @@ namespace DataService
     {
         public Intent()
         {
-            this.Responses = new HashSet<Respons>();
             this.Comments = new HashSet<Comment>();
+            this.Conversations = new HashSet<Conversation>();
+            this.Responses = new HashSet<Respons>();
         }
     
         public int Id { get; set; }
         public string IntentName { get; set; }
     
-        public virtual ICollection<Respons> Responses { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Conversation> Conversations { get; set; }
+        public virtual ICollection<Respons> Responses { get; set; }
     }
 }

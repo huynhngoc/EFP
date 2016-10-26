@@ -14,18 +14,12 @@ namespace DataService
     
     public partial class Respons
     {
-        public Respons()
-        {
-            this.Conversations = new HashSet<Conversation>();
-        }
-    
         public int Id { get; set; }
         public string ShopId { get; set; }
         public int IntentId { get; set; }
         public string RespondContent { get; set; }
     
         public virtual Intent Intent { get; set; }
-        public virtual ICollection<Conversation> Conversations { get; set; }
         public virtual Shop Shop { get; set; }
     }
 }

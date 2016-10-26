@@ -132,7 +132,7 @@
     <Compile Include="Repository\ShopRepository.cs" />
     <Compile Include="Service\ShopService.cs" />
     <Compile Include="Service\TemplateProductService.cs" />
-    <Compile Include="Service\Utility.cs" />
+    <Compile Include="Utils\Utility.cs" />
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>

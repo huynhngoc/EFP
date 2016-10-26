@@ -187,7 +187,7 @@
             Vũ Hoàng Long
         </div>
 
-        <div class="content" id="chat-content">
+        <div class="content slimScrollBar" id="chat-content">
             <li class="chat-date-separator"><abbr class="timestamp">19 Tháng 9</abbr></li>
             <div class="left">
                 <div class="author-name">
@@ -324,140 +324,121 @@
     <!--./Chat box-->
     <!--Customer Info-->
     <div class="col-lg-4 information" style="height: 85vh">
-
-        @*<div>
+        <div class="">
+            <div>
                 <h3 style="padding: 0 0 5px 15px">Thông tin khách hàng</h3>
-                <div class="col-lg-3" style="text-align:center;padding:0">
-                    <p>
-                        <img alt="image" class="img-circle" src="img/profile_small.jpg">
-                    </p>
-                    <div style="font-size:110%;"><a href="#" style=""> Chi tiết</a></div>
-                </div>
-                <div class="col-lg-9">
-                    <p><i class="fa fa-user"></i> Vũ Hoàng Long</p>
-                    <p><i class="fa fa-envelope"></i> long189b@facebook.com</p>
-                    <p><i class="fa fa-phone"></i> 01267708763</p>
-                    <p><i class="fa fa-home"></i> 189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</p>
-                </div>
-            </div>*@
-        <div>
-            <h3 style="padding: 0 0 5px 15px">Thông tin khách hàng</h3>
-            <div class="" style="padding:0">
-                <div>
-                    <div class="col-md-2">
-                        <img alt="image" class="img-circle" src="~/Content/img/profile_small.jpg" style="float:left">
-                    </div>
-                    <div class="col-md-9">
-                        <a class="btn btn-info">Chỉnh sửa</a>
-                        <a class="btn btn-info">Lưu</a>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
-                </div>
-                <div class="col-md-5">
-                    <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763">
-                </div>
-                <div class="col-md-12"><i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="long189b@facebook.com"></div>
-                <div class="col-md-12"><i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr">189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</textarea></div>
-
-            </div>
-        </div>
-    </div>
-    <div class="row" style="border-bottom: 2px solid #e7eaec;margin:0"></div>
-    <div style="text-align: center; margin-top:5px">
-        <div style="padding: 5px;">
-            <div id="order-form">
-                <div class="ibox-content">
-
-                    <div class="">
-                        <input type="text" placeholder="Tên sản phẩm" id="sp_input" class="sp_input form-control">
-                        <div class="col-md-6" style="padding:0">
-                            <input type="number" placeholder="Số lượng" id="quantity" class="quantity form-control col-md-3" min="1">
+                <div class="info" id="" style="padding:0">
+                    <div>
+                        <div class="col-md-2">
+                            <img alt="image" class="img-circle" src="~/Content/img/profile_small.jpg" style="float:left">
                         </div>
-
-                        <a onclick="fnClickAddRow();" href="javascript:void(0);" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</a>
+                        @*<div class="col-md-9">
+                                <a class="btn btn-info">Chỉnh sửa</a>
+                                <a class="btn btn-info">Lưu</a>
+                            </div>*@
                     </div>
-
-                    <table class="table table-striped table-bordered table-hover " id="cart">
-                        <thead>
-                            <tr>
-                                <th>Sản phẩm</th>
-                                <th>SL</th>
-                                <th>Thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Tổng cộng</th>
-                                <th colspan="2"><strong>100.000 VND</strong></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <a onclick="fnClickAddRow();" href="javascript:void(0);" class="btn btn-primary ">Tạo đơn hàng mới</a>
+                    <div class="col-md-5" style="padding-right:0">
+                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long"  readonly>
+                    </div>
+                    <div class="col-md-5">
+                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763" readonly>
+                    </div>
+                    <div class="col-md-12">
+                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="long189b@facebook.com" readonly>
+                    </div>
+                    <div class="col-md-12">
+                        <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly>189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</textarea>
+                    </div>
                 </div>
             </div>
-            <!--                            <button type="button" class="btn btn-primary">Tạo đơn hàng mới</button>-->
+        </div>
+        <div class="row" style="border-bottom: 2px solid #e7eaec;margin:0"></div>
+        <div style="text-align: center; margin-top:5px">
+            <div style="padding: 5px;">
+                <div id="order-form">
+                    <div class="ibox-content">
+                        <button id="btn_addproduct" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</button>
 
+                        <div id="tbl_order" class="table-responsive col-md-12" style="overflow:auto;max-height: 40vh;position:relative;">
+                            <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="add_datatableproduct">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">Mã</th>
+                                        <th class="col-md-5">Sản phẩm</th>
+                                        <th class="col-md-1">Số lượng</th>
+                                        <th class="col-md-2">Đơn giá</th>
+                                        <th class="col-md-2">Tổng</th>
+                                        <th class=""></th>
+                                    </tr>
+                                </thead>
+                                @*<tfoot>
+                                        <tr>
+                                            <td colspan="4" style="font-weight:bold; text-align:right">Tổng cộng</td>
+                                            <td id="table_total" style="font-weight:bold; text-align:center">0</td>
+                                            <td style="font-weight:bold; text-align:center">VND</td>
+                                        </tr>
+                                    </tfoot>*@
+                            </table>
+                        </div>
+                        <div>
+                            <table id="total">
+                                <tr>
+                                    <td class="col-md-9" colspan="4" style="font-weight:bold; text-align:right">Tổng cộng</td>
+                                    <td class="col-md-2" id="table_total" style="font-weight:bold; text-align:center">0</td>
+                                    <td class="" style="font-weight:bold; text-align:center">VND</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button id="btn_addorder" class="btn btn-primary">Tạo đơn hàng</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-
-</div>
 </div>
 <!--./Customer Info-->
+<!--Order-->
+<div id="popover_product" hidden>
+    <div class="table-responsive col-md-12">
+        <table id="popover_datatable" class="table table-striped table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
+            <thead>
+                <tr>
+                    <th class="col-md-1">Mã</th>
+                    <th class="col-md-8">Sản phẩm</th>
+                    <th class="col-md-3">Đơn giá</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<!--./Order-->
+
 @section CustomCSS{
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     @Styles.Render("~/TouchSpin-CSS")
     @Styles.Render("~/ChatComment-CSS")
+    @Styles.Render("~/jQuery-UI-CSS")
+
+    <style>
+        table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
+            background-color: #B0BED9;
+        }
+
+        .search-left {
+            float: left;
+        }
+
+        .noTitleStuff {
+            height: 35vh !important;
+            width: 500px !important;
+        }
+
+            .noTitleStuff .ui-dialog-titlebar {
+                display: none;
+            }
+    </style>
 }
 
 @section CustomJS {
@@ -466,4 +447,249 @@
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
+    @Scripts.Render("~/jQuery-UI")
+
+    @*Default*@
+    <script>
+        $('#add_datatableproduct').DataTable({
+            "paging": false
+                , "searching": false
+                , "ordering": false
+            //, "scrollY": "40vh"
+            //, "scrollCollapse": true
+                , "bLengthChange": false
+                , "info": false
+                , "destroy": true
+                , "language": {
+                    "zeroRecords": "Chưa có sản phẩm"
+                }
+                , "fnInitComplete": function () {
+                    $('#tbl_order').slimScroll({
+                        height: "40vh",
+                        alwaysVisible: true
+                    });
+                }
+        });
+
+        $('.small-chat-bo .content').slimScroll({
+            height: "70vh",
+            start: 'bottom'
+        });
+
+        $("#btn_addproduct").click(function (evt) {
+            $("#popover_product").dialog({
+                autoOpen: false,
+                //appendTo: "#someElem",
+                draggable: true,
+                //height: 40vh,
+                //width: 700,
+                modal: true,
+                resizable: false,
+                dialogClass: 'noTitleStuff',
+                close: function (event, ui) { $('#wrap').show(); },
+                open: function (event, ui) {
+                    $('.ui-widget-overlay').bind('click', function () {
+                        $("#popover_product").dialog('close');
+                    });
+                    $('.ui-widget-overlay').css(
+                        "cssText", "background: none;"
+                    )
+                },
+                position: {
+                    my: "left bottom",
+                    at: "left top",
+                    of: "#btn_addproduct"
+                }
+            });
+            //$("#popover_product").bind('clickoutside', function () {
+            //    $("#popover_product").dialog('close');
+            //});
+
+            CreatePopoverDT();
+            $("#popover_product").dialog("open");
+        });
+
+        //Tạo thêm sp
+        function CreatePopoverDT() {
+
+            var table = $('#popover_datatable').DataTable({
+                "bProcessing": true
+                , "bServerSide": true
+                , "sAjaxSource": "/Product/GetAvailableProducts"
+                , "aoColumnDefs": [{ "aTargets": [0], "mData": "Id" }
+                        , { "aTargets": [1], "mData": "Name" }
+                        , { "aTargets": [2], "mData": "Price" }
+                ]
+                , "fnInitComplete": function () {
+                    $('div.dataTables_filter input').focus();
+
+                    //function row click
+                    $('#popover_datatable tbody').unbind("click");
+                    $('#popover_datatable tbody').on('click', 'tr', function () {
+                        if ($(this).hasClass('selected')) {
+                            //Do nothing
+                        }
+                        else {
+                            table.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        }
+
+                        var t = $('#add_datatableproduct').DataTable();
+                        var id = table.cell('.selected', 0).data();
+                        var tRow = t.row('#' + id);//table.cell('.selected', 0).data() + '');
+                        if (tRow.index() == undefined) {
+                            //Add row
+                            var rowNode = t.row.add([
+                                table.cell('.selected', 0).data(),
+                                table.cell('.selected', 1).data(),
+                                '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" />',
+                                table.cell('.selected', 2).data(),
+                                table.cell('.selected', 2).data(),
+                                '<button id="del_' + id + '" class="btn btn-danger btn-sm" type="button" style="padding:1px 4px"><i class="fa fa-trash-o"></i></button>'
+                            ]).draw(false).node();
+                            $(rowNode).attr('id', id);
+
+                            //Quantity
+                            $("input[id='" + id + "']").TouchSpin({
+                                min: 1,
+                                max: 100,
+                                initval: 1,
+                                verticalbuttons: true
+                            }).on('change', function () {
+                                var id = $(this).attr('id');
+                                CalculateTotal($(this).val(), id);
+                            });
+                            $(".input-group-btn-vertical").remove();
+
+                            //Delete button
+                            $("#del_" + id).click(function () {
+                                t.row('#' + id).remove().draw();
+                            });
+
+                            //Change total
+                            CalculateTotal(1, id);
+                        }
+                        else {
+                            //Increase quantity on click
+                            var val = $("input[id='" + id + "']").val();
+                            if (val <= 99) {
+                                $("input[id='" + id + "']").val(parseInt(val) + 1);
+                                CalculateTotal($("input[id='" + id + "']").val(), id);
+                            }
+                        }
+
+                        //Calculate total on row
+                        function CalculateTotal(q, id) {
+                            var index = '#' + t.cell('#' + id, 0).data();
+                            t.cell(index, 4).data(q * t.cell(index, 3).data());
+
+                            $("#total #table_total").text(t.column(4).data().reduce(function (a, b) {
+                                return a + b;
+                            }));
+                        }
+                    });
+                }
+                , "paging": false
+                , "searching": true
+                , "ordering": false
+                , "scrollY": "30vh"
+                //, "scrollX": "100%"
+                , "scrollCollapse": true
+                , "bLengthChange": false
+                , "language": {
+                    "loadingRecords": "Đang tải ...",
+                    "processing": "Đang xử lý...",
+                    "search": "Tìm kiếm:",
+                    "searchPlaceholder": "Tên sản phẩm...",
+                    "zeroRecords": "Không tìm thấy dữ liệu"
+                }
+                , "info": false
+                , "destroy": true
+                , "dom": "<'search-left'f>t"
+            })
+        }
+    </script>
+
+    @*Add Order*@
+    <script>
+        $("#btn_addorder").click(function (evt) {
+            var rs = "true";
+
+            var t = $('#add_datatableproduct').DataTable();
+            //details
+            var arDetail = [];
+            var rows = t.rows();
+            if (rows.count() > 0) {
+                for (i = 0; i < rows.count() ; i++) {
+                    var data = t.rows(i).data()[0];
+                    var productid = data[0];
+                    var properties = data[1];
+                    var quantity = $("input[id='" + productid + "']").val();
+                    var price = data[3];
+
+                    arDetail.push({ productid, properties, quantity, price});
+                }
+            }
+            else {
+                rs = "detail";
+                //alert no detail
+            }
+            var status = 1;
+            //var note = $('#add_note').val();
+            //var address = $('#add_address').val();
+            //var receiver = $('#add_receiver').val();
+            //var phone = $('#add_phone').val();
+
+            //check customer đã chọn
+            var custid = $(".info").attr("id");
+            if (custid.length <= 0) {
+                rs = "customer";
+            }
+
+            if (rs == "true") {
+                $.post('/Order/CreateOrder'
+                    , {
+                        note: null
+                        , status: status
+                        , address: null
+                        , receiver: null
+                        , phone: null
+                        , listDetail: arDetail
+                    }
+                    , function (data, status) {
+                        if (data == "True") {
+                            $("#add_modal").modal("hide");
+                            swal({
+                                title: "Thêm thành công",
+                                animation: "slide-from-top",
+                                type: "success",
+                                timer: 1000,
+                                showConfirmButton: false
+                            })
+                        }
+                        else {
+                            swal({
+                                title: "Cảnh báo",
+                                animation: "slide-from-top",
+                                text: "Thêm đơn hàng thất bại",
+                                type: "warning",
+                                timer: 1000,
+                                showConfirmButton: false
+                            });
+                        }
+                    }
+                )
+            }
+            else {
+                swal({
+                    title: "Cảnh báo",
+                    animation: "slide-from-top",
+                    text: "Chưa có chọn " + (rs == "detail" ? "sản phẩm" : "khách hàng") + " kìa",
+                    type: "warning",
+                    timer: 1000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    </script>
 }
