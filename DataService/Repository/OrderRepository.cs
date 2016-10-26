@@ -64,6 +64,25 @@ namespace DataService.Repository
 
             return o;
         }
+
+        //Andnd Get all order by shop and customer id
+        public List<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId)
+        {
+            return dbSet.Where(q => (q.ShopId == shopId) && (q.CustomerId == customerId)).Select(q => new OrderViewModel()
+            {
+                Id = q.Id,
+                CustomerId = q.CustomerId,
+                CustomerName = q.Customer.Name,
+                DateCreated = q.DateCreated,
+                DateModified = q.DateModified,
+                Note = q.UserNote,
+                Total = 0,
+                Status = q.Status,
+                ShippingAddress = q.ShippingAddress,
+                Receiver = q.Receiver,
+                Phone = q.Phone
+            }).ToList();
+        }
     }
 
     public class OrderDetailRepository : BaseRepository<OrderDetail>

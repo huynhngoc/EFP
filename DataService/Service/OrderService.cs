@@ -102,5 +102,13 @@ namespace DataService.Service
             
             return rs;
         }
+
+        //Andnd get order by shop and customer id
+        public List<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId)
+        {
+            var listOrders = orderRepo.GetOrderByShopIdAndCustomerId(shopId, customerId);
+
+            return listOrders;
+        }
     }
 }

@@ -657,6 +657,7 @@
             $("#addProductModal input").each(function () {
                 $(this).val("");
             });
+            $("#addProductModal textarea").val("");
             //("#addProductModal input[name='templateId']").val(null);
             addDropzone.removeAllFiles();
             initAttr(null, "______");
@@ -1255,7 +1256,7 @@
             $(".price-input").TouchSpin({
                 min: 0,
                 max: 100000000000,
-                step: 1000,                
+                step: 1000,
                 boostat: 100000,
                 postfix: 'đồng',
                 verticalbuttons: true,

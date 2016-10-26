@@ -159,6 +159,11 @@ namespace ShopManager
             //ChatComment CSS
             bundles.Add(new StyleBundle("~/ChatComment-CSS").Include(
                 "~/Content/css/CustomCSS/ChatComment.css"));
+
+            //signalR
+            bundles.Add(new ScriptBundle("~/SignalR-JS").Include(
+                "~/Scripts/jquery.signalR-2.2.1.js",
+                "~/Scripts/jquery.signalR-2.2.1.min.js"));
         }
     }
 }

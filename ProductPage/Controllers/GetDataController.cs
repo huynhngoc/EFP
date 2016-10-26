@@ -1,5 +1,6 @@
 ﻿using DataService;
 using DataService.Service;
+using DataService.Utils;
 using DataService.ViewModel;
 using ProductPage.Models;
 using System;
@@ -135,7 +136,7 @@ namespace ProductPage.Controllers
         }
 
         // Add an order
-        public bool AddOrder(string shopId, string note, string custId, string address, string receiver, string phone)
+        public bool AddOrder(string shopId, string note, string fbId, string address, string receiver, string phone)
         {
             if (Session["Cart"] != null)
             {
@@ -151,10 +152,16 @@ namespace ProductPage.Controllers
                     orderDetailModel.Quantity = listCart[i].quantity;
                     listOrderDetail.Add(orderDetailModel);
                 }
-                string status = OrderStatus.PROCESSING;
+                int status = (int) OrderStatus.PROCESSING;
                 bool result;
 
-                Customer customer = customerService.GetCustomerByFacebookId(custId, shopId);
+                Customer customer = customerService.GetCustomerByFacebookId(fbId, shopId);
+                if (customer == null)
+                {
+                    customerService.AddCustomer(fbId, receiver, address, null, phone, null, shopId);
+                    customer = customerService.GetCustomerByFacebookId(fbId, shopId);
+                }
+                
                 // sua thanh lay id tu facebook --> kiem id tu database r them vao
                 result = orderService.AddOrder(shopId, note, customer.Id, status, address, receiver, phone, listOrderDetail);
                 if (result)
@@ -174,7 +181,7 @@ namespace ProductPage.Controllers
         }
 
         //Get Check out information
-        public ActionResult GetCheckOutInfo(string customerId, string shopId)
+        public ActionResult GetCheckOutInfo(string FBId, string shopId)
         {
             //Get Cart
             List<CartModel> listCart = (List<CartModel>)Session["Cart"];
@@ -184,7 +191,7 @@ namespace ProductPage.Controllers
 
                 //replace bang get customer by facebook Id dung chung vs shopId
                 //Customer customer = customerService.GetCustomerByCustomerId(customerId);
-                Customer customer = customerService.GetCustomerByFacebookId(customerId, shopId);
+                Customer customer = customerService.GetCustomerByFacebookId(FBId, shopId);
 
                 //Create checkout view model
                 CheckOutViewModel checkOutViewModel = new CheckOutViewModel();
@@ -197,5 +204,29 @@ namespace ProductPage.Controllers
             return null;
         }
 
+        //Get order By shop and User
+        public JsonResult GetOrdersByShopAndUser(string shopId, string fbId)
+        {
+            //Get customer
+            Customer customer = customerService.GetCustomerByFacebookId(fbId,shopId);
+            var listOrders = orderService.GetOrderByShopIdAndCustomerId(shopId, customer.Id);
+            return Json(new { customer = customer, data = listOrders }, JsonRequestBehavior.AllowGet);
+        }
+
+        //Update Customer
+        public JsonResult UpdateCustomer(string fbId, string Name, string Address, string Description, string Phone, string Email, string ShopId)
+        {
+            bool result = false;
+            Customer customer = customerService.GetCustomerByFacebookId(fbId, ShopId);
+            result = customerService.EditCustomer(customer.Id, Name, Address, Description, Phone, Email, ShopId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        //Get order detail by order id
+        public JsonResult GetOrderDetailByOrderId(int orderId)
+        {
+            var result = orderService.GetOrderDetailsFromOrderId(orderId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }
