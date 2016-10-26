@@ -60,8 +60,9 @@ namespace DataService.Repository
                 entites.SaveChanges();
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                System.Diagnostics.Debug.WriteLine(e);
                 return false;
             }
         }

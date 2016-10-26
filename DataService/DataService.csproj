@@ -147,6 +147,7 @@
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\DefaultEntity.cs" />
+    <Compile Include="Utils\DefaultIntent.cs" />
     <Compile Include="Utils\StatusAndMode.cs" />
     <Compile Include="Utils\WebhookObject.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />

@@ -28,7 +28,7 @@ namespace DataService
         public string Email { get; set; }
         public string ShopId { get; set; }
     
-        public virtual ICollection<Order> Orders { get; set; }
         public virtual Shop Shop { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

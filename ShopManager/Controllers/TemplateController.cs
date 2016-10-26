@@ -7,6 +7,7 @@ using DataService.Service;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class TemplateController : Controller
     {
         // GET: Template
@@ -17,6 +18,7 @@ namespace ShopManager.Controllers
 
         public JsonResult All(string shopId)
         {
+            shopId = (string)Session["ShopId"];
             TemplateProductService service = new TemplateProductService();
             return Json(new { aaData = service.GetTemplate(shopId) }, JsonRequestBehavior.AllowGet);
         }

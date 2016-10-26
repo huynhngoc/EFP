@@ -33,6 +33,7 @@ namespace DataService.Utils
         public const string Edit = "edited";
         public const string Remove = "remove";
         public const string Hide = "hide";
+        public const string Unhide = "unhide";
     }
     
 }
