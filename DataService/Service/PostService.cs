@@ -7,47 +7,53 @@ using DataService.Repository;
 
 namespace DataService.Service
 {
-    public class CommentService
+    public class PostService
     {
-        CommentRepository repository = new CommentRepository();
-        public bool AddComment(string id, string SenderFbId, long date, int intentId, int status, string parentId, string postId)
+        PostRepository repository = new PostRepository();
+
+        public bool AddPost(string id, string SenderFbId, long date, int? intentId,bool isRead, int status, string shopId)
         {
-            Comment c = repository.FindByKey(id);
+            Post c = repository.FindByKey(id);
             if (c == null)
             {
-                c = new Comment()
+                c = new Post()
                 {
                     Id = id,
                     SenderFbId = SenderFbId,
-                    DateCreated = (new DateTime(1970,1,1) + TimeSpan.FromSeconds(date)).ToLocalTime(),
+                    DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime(),
                     IntentId = intentId,
-                    Status = status,
-                    ParentId = parentId,
-                    PostId = postId
+                    IsRead = isRead,
+                    Status = status,                    
+                    ShopId = shopId
                 };
                 return repository.Create(c);
-            } else
+            }
+            else
             {
                 //c.Id = id;
                 c.SenderFbId = SenderFbId;
                 c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
                 c.IntentId = intentId;
-                c.PostId = postId;
+                c.IsRead = isRead;
+                c.Status = status;
+                c.ShopId = shopId;
                 return repository.Update(c);
-            }                       
+            }
         }
 
         public bool SetStatus(string commentId, int status)
         {
-            Comment c = repository.FindByKey(commentId);
+            Post c = repository.FindByKey(commentId);
             if (c != null)
             {
-                c.Status = status;                
+                c.Status = status;
                 return repository.Update(c);
-            } else
+            }
+            else
             {
                 return false;
             }
         }
+
     }
 }

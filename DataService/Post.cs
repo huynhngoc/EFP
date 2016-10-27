@@ -12,22 +12,23 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class Intent
+    public partial class Post
     {
-        public Intent()
+        public Post()
         {
             this.Comments = new HashSet<Comment>();
-            this.Conversations = new HashSet<Conversation>();
-            this.Posts = new HashSet<Post>();
-            this.Responses = new HashSet<Respons>();
         }
     
-        public int Id { get; set; }
-        public string IntentName { get; set; }
+        public string Id { get; set; }
+        public string SenderFbId { get; set; }
+        public string ShopId { get; set; }
+        public bool IsRead { get; set; }
+        public int Status { get; set; }
+        public Nullable<int> IntentId { get; set; }
+        public System.DateTime DateCreated { get; set; }
     
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<Conversation> Conversations { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
-        public virtual ICollection<Respons> Responses { get; set; }
+        public virtual Intent Intent { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

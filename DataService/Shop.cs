@@ -17,11 +17,11 @@ namespace DataService
         public Shop()
         {
             this.Categories = new HashSet<Category>();
-            this.Comments = new HashSet<Comment>();
             this.Conversations = new HashSet<Conversation>();
             this.Customers = new HashSet<Customer>();
             this.Entities = new HashSet<Entity>();
             this.Orders = new HashSet<Order>();
+            this.Posts = new HashSet<Post>();
             this.Products = new HashSet<Product>();
             this.Responses = new HashSet<Respons>();
             this.TemplateProducts = new HashSet<TemplateProduct>();
@@ -36,11 +36,11 @@ namespace DataService
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Conversation> Conversations { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }
         public virtual ICollection<Entity> Entities { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Respons> Responses { get; set; }
         public virtual ICollection<TemplateProduct> TemplateProducts { get; set; }

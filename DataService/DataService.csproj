@@ -103,6 +103,9 @@
     <Compile Include="OrderDetail.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Post.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Product.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -117,6 +120,7 @@
     <Compile Include="Repository\OrderRepository.cs" />
     <Compile Include="Repository\EntityRepository.cs" />
     <Compile Include="Repository\PictureRepository.cs" />
+    <Compile Include="Repository\PostRepository.cs" />
     <Compile Include="Repository\ProductPicturesRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\TemplateProductRepository.cs" />
@@ -132,6 +136,7 @@
     <Compile Include="Service\CustomerService.cs" />
     <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\PictureService.cs" />
+    <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Repository\ShopRepository.cs" />
     <Compile Include="Service\ShopService.cs" />

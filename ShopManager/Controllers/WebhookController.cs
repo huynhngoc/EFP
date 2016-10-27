@@ -18,6 +18,7 @@ namespace ShopManager.Controllers
     {        
         ShopService shopService = new ShopService();
         CommentService commentService = new CommentService();
+        PostService postService = new PostService();
         ConversationService conversationService = new ConversationService();
         FacebookClient fbApp = new FacebookClient();
         // GET: Webhook
@@ -43,21 +44,33 @@ namespace ShopManager.Controllers
         [ActionName("Subscribe")]
         public void SubscribeData()
         {
+            this.Request.InputStream.Position = 0;
+            var reader = new StreamReader(this.Request.InputStream).ReadToEnd();
+            //unescape utf-8
+            this.Request.InputStream.Position = 0;
             String jsonData = Regex.Unescape(new StreamReader(this.Request.InputStream, this.Request.ContentEncoding).ReadToEnd());
             System.Diagnostics.Debug.WriteLine(jsonData);
+            System.Diagnostics.Debug.WriteLine(reader);
             System.Diagnostics.Debug.WriteLine("header");
             System.Diagnostics.Debug.WriteLine(this.Request.Headers["X-Hub-Signature"]);
-            //verify signature
-            var hmac = SignWithHmac(UTF8Encoding.UTF8.GetBytes(jsonData), UTF8Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["FbAppSecret"]));
+
+            //verify signature            
+            // read without unescape
+            var hmac = SignWithHmac(UTF8Encoding.UTF8.GetBytes(reader), UTF8Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["FbAppSecret"]));
             var hmacHex = ConvertToHexadecimal(hmac);
             System.Diagnostics.Debug.WriteLine(hmacHex);
             string signature = this.Request.Headers["X-Hub-Signature"];
             bool isValid = signature.Split('=')[1] == hmacHex;
-            System.Diagnostics.Debug.WriteLine(isValid);
-            //only process when valid
+
+            
+
+            //Decode to json data
+            dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
+
+            System.Diagnostics.Debug.WriteLine(isValid);            
+            //only process when valid            
             if (isValid)
             {
-                dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
                 try
                 {
                     ProcessItem(fbJson);
@@ -113,15 +126,18 @@ namespace ShopManager.Controllers
                     dynamic value = change.value;
                     if (field.Equals(WebhookField.Feed))
                     {
-                        string commentId = value.comment_id;
+                        
                         string item = value.item;
+                        string verb = value.verb;                        
+                        string customerId = Convert.ToString(value.sender_id);
+                        string parentId = Convert.ToString(value.parent_id);
+                        string postId = Convert.ToString(value.post_id);
+                        int? intent = (int)DefaultIntent.UNKNOWN;
+                        int status = (int)CommentStatus.SHOWING;
                         if (item.Equals(WebhookItem.Comment))
                         {
-                            string verb = value.verb;                            
                             long createTime = value.created_time;
-                            string customerId = Convert.ToString(value.sender_id);
-                            int intent = (int)DefaultIntent.UNKNOWN;
-                            int status = (int)CommentStatus.SHOWING;
+                            string commentId = value.comment_id;
                             switch (verb)
                             {
                                 case WebhookVerb.Add:                                                                                                                                                
@@ -141,7 +157,7 @@ namespace ShopManager.Controllers
                                         string message = value.message;
                                         //chatbot api for message here
                                     }                                    
-                                    commentService.AddComment(commentId, customerId, createTime, intent, status, shopId);
+                                    commentService.AddComment(commentId, customerId, createTime, intent.Value, status, parentId.Equals(postId)? null : parentId, postId);
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
@@ -153,10 +169,71 @@ namespace ShopManager.Controllers
                                     commentService.SetStatus(commentId, (int)CommentStatus.DELETED);
                                     break;
                                 default: break;
+                            }                                                         
+                        } else if (item.Equals(WebhookItem.Post))
+                        {
+                            //string postId = value.comment_id;
+                            switch (verb)
+                            {
+                                case WebhookVerb.Add:
+                                case WebhookVerb.Edit:
+                                    if (HasProperty(value, "photo"))
+                                    {
+                                        //chatbot api intent photo here
+                                        intent = (int)DefaultIntent.PHOTO_EMO;
+                                    }
+                                    //if (CheckTagOthers(postId, shopId))
+                                    //{
+                                    //    //chatbot api intent tag other here
+                                    //    intent = (int)DefaultIntent.TAG;
+                                    //}
+                                    if (HasProperty(value, "message"))
+                                    {
+                                        string message = value.message;
+                                        //chatbot api for message here
+                                    }
+                                    if (customerId.Equals(shopId))
+                                    {
+                                        intent = null; 
+                                    }
+                                    postService.AddPost(postId, customerId, time, intent, false, status, shopId);
+                                    break;
+                                case WebhookVerb.Hide:
+                                    postService.SetStatus(postId, (int)CommentStatus.HIDDEN);
+                                    break;
+                                case WebhookVerb.Unhide:
+                                    postService.SetStatus(postId, (int)CommentStatus.SHOWING);
+                                    break;
+                                case WebhookVerb.Remove:
+                                    postService.SetStatus(postId, (int)CommentStatus.DELETED);
+                                    break;
+                                default: break;
                             }
-
-                            SignalRAlert.AlertHub.SendComment(shopId, value, intent);
                         }
+                        else if (item.Equals(WebhookItem.Status))
+                        {
+                            //string postId = value.comment_id;
+                            switch (verb)
+                            {
+                                case WebhookVerb.Add:
+                                case WebhookVerb.Edit:
+                                    intent = null;         
+                                    postService.AddPost(postId, customerId, time, null, true, status, shopId);
+                                    break;
+                                case WebhookVerb.Hide:
+                                    postService.SetStatus(postId, (int)CommentStatus.HIDDEN);
+                                    break;
+                                case WebhookVerb.Unhide:
+                                    postService.SetStatus(postId, (int)CommentStatus.SHOWING);
+                                    break;
+                                case WebhookVerb.Remove:
+                                    postService.SetStatus(postId, (int)CommentStatus.DELETED);
+                                    break;
+                                default: break;
+                            }
+                        }
+
+                        SignalRAlert.AlertHub.SendComment(shopId, value, intent.HasValue ? intent.Value: 0);
                     } else if (field.Equals(WebhookField.Conversations)){
                         string threadId = value.thread_id;
                         checkLast(threadId, shopId, time);
