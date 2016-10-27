@@ -25,6 +25,7 @@ namespace ShopManager.Controllers
         [Authorize(Roles = "ShopOwner")]
         public ActionResult ChooseShop()
         {
+            ViewBag.Title = "Chọn cửa hàng";
             return View();
         }
 

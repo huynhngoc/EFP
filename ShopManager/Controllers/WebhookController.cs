@@ -9,7 +9,8 @@ using DataService.Utils;
 using System.Dynamic;
 using DataService.Service;
 using Facebook;
-
+using System.Configuration;
+using System.Text;
 
 namespace ShopManager.Controllers
 {
@@ -30,8 +31,12 @@ namespace ShopManager.Controllers
             string param1 = this.Request.QueryString["hub.challenge"];
             string param2 = this.Request.QueryString["hub.mode"];
             string param3 = this.Request.QueryString["hub.verify_token"];
-
-            return param1;
+            // check if facebook request
+            if (param3.Equals(ConfigurationManager.AppSettings["WebhookPassword"]))
+            {
+                return param1;
+            }
+            else return "You are not request from facebook";
         }
 
         [HttpPost]
@@ -40,24 +45,53 @@ namespace ShopManager.Controllers
         {
             String jsonData = Regex.Unescape(new StreamReader(this.Request.InputStream, this.Request.ContentEncoding).ReadToEnd());
             System.Diagnostics.Debug.WriteLine(jsonData);
-            
-            dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
-            try
-            {
-                ProcessItem(fbJson);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.StackTrace);
-            }            
-
             System.Diagnostics.Debug.WriteLine("header");
             System.Diagnostics.Debug.WriteLine(this.Request.Headers["X-Hub-Signature"]);
+            //verify signature
+            var hmac = SignWithHmac(UTF8Encoding.UTF8.GetBytes(jsonData), UTF8Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["FbAppSecret"]));
+            var hmacHex = ConvertToHexadecimal(hmac);
+            System.Diagnostics.Debug.WriteLine(hmacHex);
+            string signature = this.Request.Headers["X-Hub-Signature"];
+            bool isValid = signature.Split('=')[1] == hmacHex;
+            System.Diagnostics.Debug.WriteLine(isValid);
+            //only process when valid
+            if (isValid)
+            {
+                dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
+                try
+                {
+                    ProcessItem(fbJson);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.StackTrace);
+                }
 
-            var reader = new System.IO.StreamReader(this.HttpContext.Request.InputStream);
-            System.Diagnostics.Debug.WriteLine(reader.ReadToEnd());
+            }
+
             return;
         }
+
+
+        private static byte[] SignWithHmac(byte[] dataToSign, byte[] keyBody)
+        {
+            using (var hmacAlgorithm = new System.Security.Cryptography.HMACSHA1(keyBody))
+            {
+                return hmacAlgorithm.ComputeHash(dataToSign);
+            }
+        }
+
+        private static string ConvertToHexadecimal(IEnumerable<byte> bytes)
+        {
+            var builder = new StringBuilder();
+            foreach (var b in bytes)
+            {
+                builder.Append(b.ToString("x2"));
+            }
+
+            return builder.ToString();
+        }
+
 
         private void ProcessItem(dynamic fbObj)
         {
@@ -196,5 +230,7 @@ namespace ShopManager.Controllers
                 return false;
             }
         }
+
+
     }
 }
