@@ -151,7 +151,7 @@
 
             </div>
             <div class="footer">
-                <div> <strong>Copyright</strong> EFP &copy; 2016 </div>
+                <div class="text-center"> <strong>Copyright</strong> EFP &copy; 2016 | <a>Powered by EFP</a> </div>
             </div>
         </div>
     </div>
@@ -233,17 +233,18 @@
                 success: function(data){
                     var total = 0;
                     var totalPrice = 0;
+                    $('#listOrderDetail').empty();
                     for(var i=0;i<data.length;i++){
                         totalPrice = data[i].Price*data[i].Quantity;
                         total = total + totalPrice;
                         $('#listOrderDetail').append("<tr>"+
                             "<td>"+data[i].Properties+"</td>"+
                             "<td>"+data[i].Quantity+"</td>"+
-                            "<td>"+data[i].Price+"</td>"+
-                            "<td>"+totalPrice+"</td>"+
+                            "<td>"+data[i].Price.formatMoney()+"</td>"+
+                            "<td>"+totalPrice.formatMoney()+"</td>"+
                             "</tr>");
                     };
-                    $('#total').append(total);
+                    $('#total').text(total.formatMoney());
                 },
                 error: function(){
 
@@ -329,7 +330,20 @@
                 "columnDefs": [
                     {"data":"Id","targets": [ 0 ]},
                     {"data": function (source) { return FormatDateVN(source.DateCreated) },"targets": [ 1 ]},
-                    {"data":"Status","targets": [ 2 ]},
+                    {"data": function (source) { 
+                        if(source.Status == 1){
+                            return "Đang xử lý"
+                        };
+                        if(source.Status == 2){
+                            return "Đang giao hàng"
+                        };
+                        if(source.Status == 3){
+                            return "Đã xong"
+                        };
+                        if(source.Status == 4){
+                            return "Đã hủy"
+                        }
+                    },"targets": [ 2 ]},
                     {"data":"Receiver","targets": [ 3 ]},
                     {"targets": [ 4 ],"data": function(source){
                         return "<button class='btn btn-xs btn-outline btn-success' onclick='showOrderDetail("+source.Id+",\""+source.Receiver+"\",\""+source.Phone+"\",\""+source.ShippingAddress+"\",\""+source.Note+"\")'>Chi tiết</button>"
@@ -343,6 +357,19 @@
 
 
         });
+
+        //Format money
+        Number.prototype.formatMoney = function (c, d, t) {
+            var n = this,
+                c = isNaN(c = Math.abs(c)) ? 0 : c,
+                d = d == undefined ? "," : d,
+                t = t == undefined ? "." : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
     </script>
 
 

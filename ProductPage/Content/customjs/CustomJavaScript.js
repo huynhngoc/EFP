@@ -732,13 +732,14 @@ function viewDetail(FBId, shopId, categoryId, productId) {
         },
         dataType: "json",
         success: function (data) {
-            $('#divProductImage').slick('slickRemove', null, null, true);
+            $('#divProductImage').empty();
             if (data.Urls.length != 0) {
-                for (var i = 0; i < data.Urls.length; i++) {
-                    $('#divProductImage').slick('slickAdd', "<div class='product-imitation' style='height:420px;background: url(\"" + data.Urls[i] + "\") center no-repeat;background-size: contain'></div>");
+                $('#divProductImage').append("<div class='item active' style='height:546px;background: url(\""+data.Urls[0]+"\") center no-repeat;background-size: contain'></div>");
+                for (var i = 1; i < data.Urls.length; i++) {
+                    $('#divProductImage').append("<div class='item' style='height:546px;background: url(\"" + data.Urls[i] + "\") center no-repeat;background-size: contain'></div>");
                 };
             } else {
-                $('#divProductImage').slick('slickAdd', "<div style='width:500px'><h2>Slide 1</h2></div>");
+                $('#divProductImage').append("<div class='item active'><div style='height:200px; display: block;margin: 0 auto;' class='img-responsive text-center'><h2 style='margin-top:100px'>Chưa có hình ảnh</h2></div></div>");
             }
             // Set Product name
             $('#productName').append(data.Name);
