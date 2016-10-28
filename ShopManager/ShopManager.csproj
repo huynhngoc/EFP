@@ -194,6 +194,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnalysisController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ChatCommentController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -908,6 +909,7 @@
     <Content Include="Views\Template\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\ChatComment\Index.cshtml" />
+    <Content Include="Views\Analysis\Commnent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

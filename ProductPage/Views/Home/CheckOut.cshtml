@@ -52,11 +52,12 @@
                                     <div id="receiverDiv" class="form-group">
                                         <label>Người nhận</label>
                                         <input id="orderReceiver" type="text" placeholder="Người nhận" class="form-control">
-                                        <p id="errorCustomerName" style="color:red; display:none">Vui lòng điền tên của ban!</p>
+                                        <p id="errorCustomerName" style="color:red; display:none">Vui lòng điền tên của bạn!</p>
                                     </div>
-                                    <div class="form-group">
+                                    <div id="phoneDiv" class="form-group">
                                         <label>Số điện thoại</label>
-                                        <input id="phone" type="tel" placeholder="Số điện thoại" class="form-control">
+                                        <input id="orderPhone" type="tel" placeholder="Số điện thoại" class="form-control">
+                                        <p id="errorCustomerPhone" style="color:red; display:none">Vui lòng điền số điện thoại của bạn!</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Địa chỉ nhận hàng</label>
@@ -152,7 +153,7 @@
             var userNote = $('#userNote').val();
             var shippingAddress = $('#shippingAddress').val();
             var receiver = $('#orderReceiver').val();
-            var phone = $('#phone').val();
+            var phone = $('#orderPhone').val();
             if($('#receiverDiv > label').text()=="Tên khách hàng"){
                 if($('#orderReceiver').val().length==0){
                     $('#receiverDiv').addClass('has-error');
@@ -160,10 +161,22 @@
                 }else{
                     $('#receiverDiv').removeClass('has-error');
                     $('#errorCustomerName').hide();
-                    callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                    if($('#orderPhone').val().length==0){
+                        $('#phoneDiv').addClass('has-error');
+                        $('#errorCustomerPhone').show();
+                    }else{
+                        $('#phoneDiv').removeClass('has-error');
+                        $('#errorCustomerPhone').hide();
+                        callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                    }
                 }
             }else{
-                callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                if($('#orderPhone').val().length==0){
+                    $('#phoneDiv').addClass('has-error');
+                    $('#errorCustomerPhone').show();
+                }else{
+                    callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                }
             }
         };
         // Ajax add order

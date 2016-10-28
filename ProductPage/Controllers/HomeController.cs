@@ -25,15 +25,26 @@ namespace ProductPage.Controllers
             {
                 pageInformation = getInfoFromSignedRequest(signed_request);
             }
-            if (FBId != null)
+            else
             {
-                pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
+                if (FBId != null && shopId != null)
+                {
+                    pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
+                }
             }
 
-            if (pageInformation.FBId == null || pageInformation.FBId == "")
+            if (pageInformation != null)
+            {
+                if (pageInformation.FBId == null || pageInformation.FBId == "")
+                {
+                    Response.Redirect("/Home/NotAuhorize");
+                }
+            }
+            else
             {
                 Response.Redirect("/Home/NotAuhorize");
             }
+            
 
             ViewBag.PageInfo = pageInformation;
 
