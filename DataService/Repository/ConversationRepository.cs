@@ -12,5 +12,10 @@ namespace DataService.Repository
         {
 
         }
+
+        public IEnumerable<Conversation> GetConversationsByShopId(string shopId)
+        {
+            return dbSet.Where(q => q.ShopId == shopId).OrderByDescending(q => q.LastUpdate);
+        }
     }
 }

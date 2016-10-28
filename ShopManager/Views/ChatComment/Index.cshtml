@@ -27,63 +27,6 @@
                                     </div>
                                     <div class="ibox-content ibox-scroll">
                                         <div class="feed-activity-list">
-
-                                            <div class="feed-element-active">
-                                                <div>
-                                                    <small class="pull-right">1p trước</small>
-                                                    <strong>Vũ Hoàng Long</strong>
-                                                    <div>Xin chào shop ^^ have pussy italy believe people vcl</div>
-                                                    <!--                                                                <small class="text-muted">Hôm nay 5:60 pm - 12.06.2014</small>-->
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">2m ago</small>
-                                                    <strong>Jogn Angel</strong>
-                                                    <div>There are many variations of passages of Lorem Ipsum available</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Jesica Ocean</strong>
-                                                    <div>Contrary to popular belief, Lorem Ipsum</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Monica Jackson</strong>
-                                                    <div>The generated Lorem Ipsum is therefore </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Anna Legend</strong>
-                                                    <div>All the Lorem Ipsum generators on the Internet tend to repeat </div>
-                                                </div>
-                                            </div>
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Damian Nowak</strong>
-                                                    <div>The standard chunk of Lorem Ipsum used </div>
-                                                </div>
-                                            </div>
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Gary Smith</strong>
-                                                    <div>200 Latin words, combined with a handful</div>
-                                                </div>
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -91,6 +34,7 @@
                         </div>
                     </div>
                 </div>
+                @*Comment*@
                 <div id="tab-comment" class="tab-pane">
                     <div class="panel-body" style="padding: 10px 20px 0 20px">
                         <div class="row">
@@ -103,7 +47,7 @@
                                     <div class="ibox-content ibox-scroll" style="padding-left: 10px">
                                         <div class="feed-activity-list">
 
-                                            <div class="feed-element-selected">
+                                            <div class="feed-element selected">
                                                 <div>
                                                     <small class="pull-right">1p trước</small>
                                                     <strong>Vũ Hoàng Long</strong>
@@ -338,7 +282,7 @@
                             </div>*@
                     </div>
                     <div class="col-md-5" style="padding-right:0">
-                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long"  readonly>
+                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
                     </div>
                     <div class="col-md-5">
                         <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763" readonly>
@@ -448,6 +392,40 @@
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
     @Scripts.Render("~/jQuery-UI")
+    @Scripts.Render("~/Utility-JS")
+    @Scripts.Render("~/SignalR-JS")
+    @Scripts.Render("/signalr/hubs")
+    <script type="text/javascript">
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var chat = $.connection.alertHub;
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.sendMessageToPage = function (message, threadId, intent) {
+                console.log(threadId);
+                console.log(message);
+            };
+
+            chat.client.sendCommentToPage = function (comment, intent) {
+                console.log(comment);
+                console.log(intent);
+            };
+
+            // Get the user name and store it to prepend to messages.
+            //$('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    // Call the Send method on the hub.
+                    chat.server.send($('#displayname').val(), $('#message').val());
+                    // Clear text box and reset focus for next comment.
+                    $('#message').val('').focus();
+                });
+            });
+        });
+    </script>
 
     @*Default*@
     <script>
@@ -475,7 +453,12 @@
             height: "70vh",
             start: 'bottom'
         });
+        $('.ibox-scroll').slimScroll({
+            height: "70vh"
+        });
 
+
+        //"Thêm sản phẩm" function
         $("#btn_addproduct").click(function (evt) {
             $("#popover_product").dialog({
                 autoOpen: false,
@@ -608,6 +591,49 @@
                 , "dom": "<'search-left'f>t"
             })
         }
+
+        // Get ConversationPreview
+        $.get('/ChatComment/GetConversationPreviews', function (data) {
+            for (i=0;i<data.length;i++){
+                console.log(data[i].ThreadId);
+                var id='#'+data[i].ThreadId;
+                //var tid=(data[i].ThreadId).replace(":","_");
+                $('<div id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(i==0? ' selected':'')+'">'+
+                                '<div style="float:left; margin-right: 7px">'+
+                                    '<div size="50" style="width: 50px; height: 50px;">'+
+                                        '<img src="'+data[i].AvatarUrl+'" width="50" height="50" alt="" class="img fb_avatar">'+
+                                    '</div>'+
+                                 '</div>'+
+                                '<div>'+
+                                    '<small class="mess_time pull-right">'+GetDateAgo(data[i].CreatedTime)+'</small>'+
+                                    '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+data[i].UserName+'</strong>'+
+                                    '<div class="mess_preview" style="overflow: hidden;">'+data[i].RecentMess+'</div>'+
+                                '</div>'+
+                            '</div>').click(function() {
+                                alert(id);
+                                if ($(id).hasClass("selected")){
+                                    //Do nothing
+                                }
+                                else{
+                                    $('.feed-activity-list').find('.selected').removeClass('selected');
+                                    $(id).addClass('selected');
+                                    console.log($(id));
+                                }
+                            }).appendTo('.feed-activity-list');
+                //Left menu click
+                //var id="#"+tid;
+                //$('.feed-activity-list').on('click', id , function() {
+                //    alert(id);
+                //    if ($(id).hasClass("selected")){
+                //        //Do nothing
+                //    }
+                //    else{
+                //        $('.feed-activity-list').find('.selected').removeClass('selected');
+                //        $(id).addClass('selected');
+                //    }
+                //});
+            }
+        });
     </script>
 
     @*Add Order*@
@@ -628,7 +654,7 @@
                     var price = data[3];
 
                     arDetail.push({ productid, properties, quantity, price});
-                }
+                    }
             }
             else {
                 rs = "detail";

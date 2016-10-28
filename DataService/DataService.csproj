@@ -103,6 +103,9 @@
     <Compile Include="OrderDetail.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Post.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Product.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -152,6 +155,7 @@
     <Compile Include="Utils\WebhookObject.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
+    <Compile Include="ViewModel\ConversationPreviewViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork.cs" />

@@ -38,6 +38,7 @@ namespace DataService
         public virtual DbSet<Intent> Intents { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<ProductPicture> ProductPictures { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Respons> Responses { get; set; }
