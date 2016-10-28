@@ -10,28 +10,30 @@ namespace DataService.Service
     public class CommentService
     {
         CommentRepository repository = new CommentRepository();
-        public bool AddComment(string id, string fbUserId, long date, int intentId, int status, string shopId)
+        public bool AddComment(string id, string SenderFbId, long date, int intentId, int status, string parentId, string postId)
         {
+            
             Comment c = repository.FindByKey(id);
             if (c == null)
             {
                 c = new Comment()
                 {
                     Id = id,
-                    FbUserId = fbUserId,
+                    SenderFbId = SenderFbId,
                     DateCreated = (new DateTime(1970,1,1) + TimeSpan.FromSeconds(date)).ToLocalTime(),
                     IntentId = intentId,
                     Status = status,
-                    ShopId = shopId
+                    ParentId = parentId,
+                    PostId = postId
                 };
                 return repository.Create(c);
             } else
             {
                 //c.Id = id;
-                c.FbUserId = fbUserId;
+                c.SenderFbId = SenderFbId;
                 c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
                 c.IntentId = intentId;
-                c.ShopId = shopId;
+                c.PostId = postId;
                 return repository.Update(c);
             }                       
         }

@@ -25,6 +25,7 @@ namespace ShopManager.Controllers
         [Authorize(Roles = "ShopOwner")]
         public ActionResult ChooseShop()
         {
+            ViewBag.Title = "Chọn cửa hàng";
             return View();
         }
 
@@ -63,7 +64,7 @@ namespace ShopManager.Controllers
 
             //get name
             dynamic nameParam = new ExpandoObject();
-            nameParam.field = "name";
+            nameParam.fields = "name";
             var fbName = fbApp.Get(id, nameParam);
             string name = fbName["name"];
 

@@ -215,7 +215,7 @@ namespace DataService.Repository
             {
                 Product p = FindByKey(id);
                 p.IsInStock = inStock;
-                p.DateModified = DateTime.Now;      
+                p.DateModified = DateTime.Now;
                 return Update(p);
             }
             catch (Exception e)
@@ -224,7 +224,7 @@ namespace DataService.Repository
                 return false;
             }
         }
-        
+
         //Long
         public IQueryable<ProductViewModel> GetAvailableProducts(JQueryDataTableParamModel param, string shopId)
         {
@@ -255,17 +255,43 @@ namespace DataService.Repository
         }
         public TemplateProduct GetTemplateProduct(int id)
         {
-            return dbSet.Where(q => q.Id == id).Select(q=>q.TemplateProduct).First();
+            return dbSet.Where(q => q.Id == id).Select(q => q.TemplateProduct).First();
         }
 
-        //Ân
+        //ANDND get product by shop and category
         public IEnumerable<Product> GetProductByShopAndCategory(string shopId, int categoryId)
         {
             return dbSet.Where(q => q.ShopId == shopId && q.CategoryId == categoryId && q.Status == true);
         }
+
+        //ANDND get product by product id
         public IEnumerable<Product> GetProductByProductId(string shopId, int categoryId, int Id)
         {
             return dbSet.Where(q => q.ShopId == shopId && q.CategoryId == categoryId && q.Id == Id && q.Status == true);
+        }
+
+        //ANDND get list product name
+        public string[] GetAllProductNameByShopId(string shopId)
+        {
+            return dbSet.Where(q => (q.ShopId == shopId) && (q.Status == true)).Select(q => q.Name).ToArray();
+        }
+
+        //ANDND get product by shop and product name
+        public IQueryable<Product> GetProductByShopAndName(string shopId, string name)
+        {
+            return dbSet.Where(q => (q.ShopId == shopId) && (q.Status == true) && (q.Name.Contains(name)));
+        }
+
+        //ANDND get newest product by shop
+        public IQueryable<Product> GetNewestProductByShop(string shopId)
+        {
+            return dbSet.Where(q => q.ShopId == shopId).OrderByDescending(q => q.DateCreated);
+        }
+
+        //ANDND get sale product by shop
+        public IQueryable<Product> GetSaleProductByShop(string shopId)
+        {
+            return dbSet.Where(q => (q.ShopId == shopId) && (q.PromotionPrice != null) && (q.PromotionPrice <= q.Price)).OrderByDescending(q => q.DateCreated);
         }
     }
 }

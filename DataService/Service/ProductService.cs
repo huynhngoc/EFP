@@ -23,7 +23,7 @@ namespace DataService.Service
         CategoryService categoryService = new CategoryService();
         TemplateProductService templateProductService = new TemplateProductService();
 
-        // Get a number of product by shop, category
+        //ANDND Get a number of product by shop, category
         public List<ProductItemViewModel> GetProductByShopAndCategory(string shopId, int categoryId, int start, int quantity)
         {
             //Tao List product theo shop va category (chua chinh sua)
@@ -85,7 +85,7 @@ namespace DataService.Service
 
         }
 
-        // Get single product by product id
+        //ANDND Get single product by product id
         public ProductItemViewModel GetProductByProductId(string shopId, int categoryId, int productId)
         {
             //Tao product view model
@@ -129,7 +129,7 @@ namespace DataService.Service
             
         }
 
-        //Get all product of child category
+        //ANDND Get all product of child category
         public List<ProductItemViewModel> GetAllProductOfChildCategory(string shopId, int parentCategoryId, int start, int quantity)
         {
             //Tao List product theo shop va category (chua chinh sua)
@@ -200,6 +200,190 @@ namespace DataService.Service
             }
 
         }
+
+        // ANDND get product by shop id and product name
+        public List<ProductItemViewModel> GetProductByShopAndName(string shopId, string productName, int start, int quantity)
+        {
+            // Tao List product item tra ve (chinh sua)
+            List<ProductItemViewModel> listProductItemViewModel = new List<ProductItemViewModel>();
+            //Tao product view model
+            ProductItemViewModel model;
+            //Get product  by product id
+            List<Product> listProduct = productRepository.GetProductByShopAndName(shopId, productName).ToList();
+
+            if (start >= 0 && start < listProduct.Count())
+            {
+                var end = start + quantity;
+                if ((start + quantity) > listProduct.Count())
+                {
+                    end = listProduct.Count();
+                }
+                for (int i = start; i < end; i++)
+                {
+                    //Tao moi modal de add vao list viewmodel
+                    model = new ProductItemViewModel();
+                    //Add cac thong tin tung product vao viewmodel
+                    model.Id = listProduct[i].Id;
+                    model.ShopId = listProduct[i].ShopId;
+                    model.Name = listProduct[i].Name;
+                    model.CategoryId = listProduct[i].CategoryId;
+                    model.Attr1 = listProduct[i].Attr1;
+                    model.Attr2 = listProduct[i].Attr2;
+                    model.Attr3 = listProduct[i].Attr3;
+                    model.Attr4 = listProduct[i].Attr4;
+                    model.Attr5 = listProduct[i].Attr5;
+                    model.Attr6 = listProduct[i].Attr6;
+                    model.Attr7 = listProduct[i].Attr7;
+                    model.Description = listProduct[i].Description;
+                    model.IsInStock = listProduct[i].IsInStock;
+                    model.Price = listProduct[i].Price;
+                    model.PromotionPrice = listProduct[i].PromotionPrice;
+                    model.TemplateId = listProduct[i].TemplateId;
+
+                    //Get list product picture url
+                    List<ProductPicture> listUrl = productPicturesRepository.GetUrlByProductId(listProduct[i].Id).ToList();
+                    //Set list url vao model
+                    for (int j = 0; j < listUrl.Count(); j++)
+                    {
+                        model.Urls.Add(listUrl[j].Urls);
+                    }
+
+                    //Add model vao list model
+                    listProductItemViewModel.Add(model);
+                }
+
+                //Return List product item view model
+                return listProductItemViewModel;
+            }
+            else
+            {
+                return null;
+            }
+
+
+
+        }
+
+        //ANDND get newest product by shop
+        public List<ProductItemViewModel> GetNewestProductByShop(string shopId, int start, int quantity)
+        {
+            // Tao List product item tra ve (chinh sua)
+            List<ProductItemViewModel> listProductItemViewModel = new List<ProductItemViewModel>();
+            //Tao product view model
+            ProductItemViewModel model;
+            //Get product  by product id
+            List<Product> listProduct = productRepository.GetNewestProductByShop(shopId).ToList();
+
+            if (start >= 0 && start < listProduct.Count())
+            {
+                var end = start + quantity;
+                if ((start + quantity) > listProduct.Count())
+                {
+                    end = listProduct.Count();
+                }
+                for (int i = start; i < end; i++)
+                {
+                    //Tao moi modal de add vao list viewmodel
+                    model = new ProductItemViewModel();
+                    //Add cac thong tin tung product vao viewmodel
+                    model.Id = listProduct[i].Id;
+                    model.ShopId = listProduct[i].ShopId;
+                    model.Name = listProduct[i].Name;
+                    model.CategoryId = listProduct[i].CategoryId;
+                    model.Attr1 = listProduct[i].Attr1;
+                    model.Attr2 = listProduct[i].Attr2;
+                    model.Attr3 = listProduct[i].Attr3;
+                    model.Attr4 = listProduct[i].Attr4;
+                    model.Attr5 = listProduct[i].Attr5;
+                    model.Attr6 = listProduct[i].Attr6;
+                    model.Attr7 = listProduct[i].Attr7;
+                    model.Description = listProduct[i].Description;
+                    model.IsInStock = listProduct[i].IsInStock;
+                    model.Price = listProduct[i].Price;
+                    model.PromotionPrice = listProduct[i].PromotionPrice;
+                    model.TemplateId = listProduct[i].TemplateId;
+
+                    //Get list product picture url
+                    List<ProductPicture> listUrl = productPicturesRepository.GetUrlByProductId(listProduct[i].Id).ToList();
+                    //Set list url vao model
+                    for (int j = 0; j < listUrl.Count(); j++)
+                    {
+                        model.Urls.Add(listUrl[j].Urls);
+                    }
+
+                    //Add model vao list model
+                    listProductItemViewModel.Add(model);
+                }
+
+                //Return List product item view model
+                return listProductItemViewModel;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        //ANDND get sale product by shop
+        public List<ProductItemViewModel> GetSaleProductByShop(string shopId, int start, int quantity)
+        {
+            // Tao List product item tra ve (chinh sua)
+            List<ProductItemViewModel> listProductItemViewModel = new List<ProductItemViewModel>();
+            //Tao product view model
+            ProductItemViewModel model;
+            //Get product  by product id
+            List<Product> listProduct = productRepository.GetSaleProductByShop(shopId).ToList();
+
+            if (start >= 0 && start < listProduct.Count())
+            {
+                var end = start + quantity;
+                if ((start + quantity) > listProduct.Count())
+                {
+                    end = listProduct.Count();
+                }
+                for (int i = start; i < end; i++)
+                {
+                    //Tao moi modal de add vao list viewmodel
+                    model = new ProductItemViewModel();
+                    //Add cac thong tin tung product vao viewmodel
+                    model.Id = listProduct[i].Id;
+                    model.ShopId = listProduct[i].ShopId;
+                    model.Name = listProduct[i].Name;
+                    model.CategoryId = listProduct[i].CategoryId;
+                    model.Attr1 = listProduct[i].Attr1;
+                    model.Attr2 = listProduct[i].Attr2;
+                    model.Attr3 = listProduct[i].Attr3;
+                    model.Attr4 = listProduct[i].Attr4;
+                    model.Attr5 = listProduct[i].Attr5;
+                    model.Attr6 = listProduct[i].Attr6;
+                    model.Attr7 = listProduct[i].Attr7;
+                    model.Description = listProduct[i].Description;
+                    model.IsInStock = listProduct[i].IsInStock;
+                    model.Price = listProduct[i].Price;
+                    model.PromotionPrice = listProduct[i].PromotionPrice;
+                    model.TemplateId = listProduct[i].TemplateId;
+
+                    //Get list product picture url
+                    List<ProductPicture> listUrl = productPicturesRepository.GetUrlByProductId(listProduct[i].Id).ToList();
+                    //Set list url vao model
+                    for (int j = 0; j < listUrl.Count(); j++)
+                    {
+                        model.Urls.Add(listUrl[j].Urls);
+                    }
+
+                    //Add model vao list model
+                    listProductItemViewModel.Add(model);
+                }
+
+                //Return List product item view model
+                return listProductItemViewModel;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public IQueryable<Product> GetAllMasterProductByShopId(string shopId)
         {
             return productRepository.GetProductByShopId(shopId);
@@ -336,5 +520,11 @@ namespace DataService.Service
             return rs;
         }
 
+        //ANDND Get list product name by shop
+        public string[] GetListProductNameByShopId(string shopId)
+        {
+            string[] listProductName = productRepository.GetAllProductNameByShopId(shopId);
+            return listProductName;
+        }
     }
 }
