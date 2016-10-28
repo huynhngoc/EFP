@@ -250,7 +250,7 @@ namespace ShopManager.Controllers
             string accessToken = shopService.GetShop(shopId).FbToken;
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
-            param.fields = "from,created_time,message";
+            param.fields = "from,created_time,message,attachments";
             param.limit = 1;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
