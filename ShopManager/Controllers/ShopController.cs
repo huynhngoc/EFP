@@ -13,5 +13,10 @@ namespace ShopManager.Controllers
         {
             return View();
         }
+
+        public ActionResult Setting()
+        {
+            return View();
+        }
     }
 }

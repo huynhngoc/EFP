@@ -909,7 +909,11 @@
     <Content Include="Views\Template\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\ChatComment\Index.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Analysis\Commnent.cshtml" />
+=======
+    <Content Include="Views\Shop\Setting.cshtml" />
+>>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

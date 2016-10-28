@@ -25,6 +25,8 @@ namespace DataService.Utils
         public const string Comment = "comment";
         public const string Reaction = "reaction";
         public const string Like = "like";
+        public const string Post = "post";
+        public const string Status = "status";
     }
 
     public static class WebhookVerb
