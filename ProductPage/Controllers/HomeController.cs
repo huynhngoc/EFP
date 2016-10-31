@@ -38,12 +38,12 @@ namespace ProductPage.Controllers
             {
                 if (pageInformation.FBId == null || pageInformation.FBId == "")
                 {
-                    Response.Redirect("/Home/NotAuhorize");
+                    Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
                 }
             }
             else
             {
-                Response.Redirect("/Home/NotAuhorize");
+                Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
             }
             
 

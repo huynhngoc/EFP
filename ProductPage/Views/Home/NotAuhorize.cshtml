@@ -18,14 +18,55 @@
         <div>
             <h2 style="margin-top:100px">Chưa đăng nhập</h2>
             <h3>Bạn chưa đăng nhập vào Facebook. Vui lòng đăng nhập để sử dụng dịch vụ</h3>
-           
+           <button onclick="Login()">Login</button>
         </div>
     </div>
 
     
     <!-- Mainly scripts -->
     @Scripts.Render("~/Mainly-scripts")
-    
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '161282120980764',
+                xfbml: true,
+                version: 'v2.7'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        function Login() {
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    var access_token = FB.getAuthResponse()['accessToken'];
+                    console.log('Access Token = ' + access_token);
+                    
+                    var pageId;
+                    
+                    top.location.href = "http://www.facebook.com/"+@Request.QueryString["shopId"]+"/app/"+"@System.Configuration.ConfigurationManager.AppSettings["FbAppId"]";
+                    //console.log(window.parent.location.href);
+                    //window.parent.location = document.referrer;
+                    //window.parent.location.reload();
+
+                    var pageToken = respond.data[0].access_token;
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, { scope: '' });
+        }
+        
+    </script>
+    <script>
+        $(document).ready(function () {
+            
+        });
+    </script>
 </body>
 
 </html>
