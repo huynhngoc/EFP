@@ -43,7 +43,7 @@ namespace ProductPage.Controllers
             }
             else
             {
-                Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
+                Response.Redirect("/Home/NotAuhorize");
             }
             
 
