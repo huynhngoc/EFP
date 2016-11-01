@@ -41,7 +41,7 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
             }            
         }
 
@@ -59,7 +59,7 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -77,24 +77,24 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
             }
         }
 
         public JsonResult DeleteComment(string commentId)
         {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+            fbApp.AccessToken = accessToken;
             dynamic param = new ExpandoObject();
             try
-            {
-                param.access_token = accessToken;
+            {                
                 var result = fbApp.Delete(commentId);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -113,7 +113,7 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
             }
         }        
     }
