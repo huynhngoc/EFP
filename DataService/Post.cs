@@ -12,27 +12,25 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class TemplateProduct
+    public partial class Post
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TemplateProduct()
+        public Post()
         {
-            this.Products = new HashSet<Product>();
+            this.Comments = new HashSet<Comment>();
         }
     
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string Id { get; set; }
+        public string SenderFbId { get; set; }
         public string ShopId { get; set; }
-        public string Attr1 { get; set; }
-        public string Attr2 { get; set; }
-        public string Attr3 { get; set; }
-        public string Attr4 { get; set; }
-        public string Attr5 { get; set; }
-        public string Attr6 { get; set; }
-        public string Attr7 { get; set; }
+        public bool IsRead { get; set; }
+        public int Status { get; set; }
+        public Nullable<int> IntentId { get; set; }
+        public System.DateTime DateCreated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual Intent Intent { get; set; }
         public virtual Shop Shop { get; set; }
     }
 }

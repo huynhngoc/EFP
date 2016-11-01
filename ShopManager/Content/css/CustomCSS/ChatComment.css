@@ -171,3 +171,54 @@
 .dataTables_wrapper {
     padding-bottom: 0;
 }
+
+#feedback {
+        font-size: 1.4em;
+    }
+
+    #selectable .ui-selecting {
+        background: transparent;
+    }
+
+    .feed-element:hover {
+        background: #365899 !important;
+        color: white;
+    }
+
+    #selectable .ui-selected {
+        background-color: #365899;
+        color: white;
+    }
+
+    #selectable {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        #selectable li {
+            margin: 0px;
+        }
+
+    .feed-activity-list .feed-element {
+        border-bottom: 0px solid;
+    }
+
+    .media-body, .social-body {
+        font-size: 14px;
+    }
+
+    .feed-element:hover {
+        background-color: transparent;
+    }
+
+    .ibox-scroll {
+        height: 75vh;
+    }
+
+    .fbImage {
+        max-height: 100%;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }

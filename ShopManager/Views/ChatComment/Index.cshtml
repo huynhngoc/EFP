@@ -10,13 +10,13 @@
         <div class="tabs-container">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a data-toggle="tab" href="#tab-inbox" class="cust-tab"> <i class="fa fa-inbox big-ic"></i></a>
+                    <a data-toggle="tab" href="#tab-inbox" class="cust-tab" onclick="comment_tab_check('chat')"> <i class="fa fa-inbox big-ic"></i></a>
                 </li>
-                <li class=""><a data-toggle="tab" href="#tab-comment" class="cust-tab"><i class="fa fa-comments big-ic"></i></a></li>
+                <li class=""><a data-toggle="tab" href="#tab-comment" class="cust-tab" onclick="comment_tab_check('comment')"><i class="fa fa-comments big-ic"></i></a></li>
                 <li class=""><a data-toggle="tab" href="#tab-unf" class="cust-tab"><i class="fa fa-database big-ic"></i></a></li>
             </ul>
             <div class="tab-content" style="height: 90vh">
-                <div id="tab-inbox" class="tab-pane active">
+                <div id="tab-inbox" class="tab-pane active" onlick="if (tabMode != 1) { }">
                     <div class="panel-body" style="padding: 0px 15px 0 15px;">
                         <div class="row">
                             <div class="col-lg-12" style="padding:0px 0 00px 0">
@@ -92,73 +92,20 @@
                     </div>
                 </div>
                 <div id="tab-comment" class="tab-pane">
-                    <div class="panel-body" style="padding: 10px 20px 0 20px">
+                    <div class="panel-body" style="padding: 0px 15px 0 15px">
                         <div class="row">
-                            <div class="col-lg-12" style="padding:0px 0 20px 0">
+                            <div class="col-lg-12" style="padding:0px 0 0px 0">
                                 <div class="ibox" style="margin-bottom: 0">
                                     <div class="ibox-content ibox-heading">
-                                        <h3><i class="fa fa-comment-o"></i> Bình luận</h3>
+                                        <h3><i class="fa fa-comment-o"></i>Bình luận mới nhất</h3>
                                         <!--                                                    <small><i class="fa fa-tim"></i> Bạn có <strong>22 tin nhắn mới</strong></small>-->
                                     </div>
-                                    <div class="ibox-content ibox-scroll" style="padding-left: 10px">
+                                    <div class="ibox-content ibox-scroll" id="scrollPostList">
+                                        <div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 60% auto; display:none;" id="postLoader">
+                                            <img src="~/Content/image/loader.gif" />
+                                        </div>
                                         <div class="feed-activity-list">
-
-                                            <div class="feed-element-selected">
-                                                <div>
-                                                    <small class="pull-right">1p trước</small>
-                                                    <strong>Vũ Hoàng Long</strong>
-                                                    <div>Xin chào shop ^^ have pussy italy believe people vcl</div>
-                                                    <!--                                                                <small class="text-muted">Hôm nay 5:60 pm - 12.06.2014</small>-->
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">2m ago</small>
-                                                    <strong>Jogn Angel</strong>
-                                                    <div>There are many variations of passages of Lorem Ipsum available</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Jesica Ocean</strong>
-                                                    <div>Contrary to popular belief, Lorem Ipsum</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Monica Jackson</strong>
-                                                    <div>The generated Lorem Ipsum is therefore </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Anna Legend</strong>
-                                                    <div>All the Lorem Ipsum generators on the Internet tend to repeat </div>
-                                                </div>
-                                            </div>
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Damian Nowak</strong>
-                                                    <div>The standard chunk of Lorem Ipsum used </div>
-                                                </div>
-                                            </div>
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Gary Smith</strong>
-                                                    <div>200 Latin words, combined with a handful</div>
-                                                </div>
-                                            </div>
-
+                                            <ol id="selectable"></ol>
                                         </div>
                                     </div>
                                 </div>
@@ -180,290 +127,1071 @@
     </div>
     <!--./Tab column-->
     <!--Chat box-->
-    <div class="small-chat-bo fadeInRight animated col-lg-5" style="padding: 0">
+    <div class="small-chat-bo fadeInLeft animated col-lg-5" style="padding: 0">
 
-        <div class="heading" draggable="true">
-            <!--                        <small class="chat-date pull-right">02.19.2015</small> -->
-            Vũ Hoàng Long
-        </div>
+        <div id="chatSection">
+            <div class="heading" draggable="true">
+                <!--                        <small class="chat-date pull-right">02.19.2015</small> -->
+                Vũ Hoàng Long
+            </div>
 
-        <div class="content" id="chat-content">
-            <li class="chat-date-separator"><abbr class="timestamp">19 Tháng 9</abbr></li>
-            <div class="left">
-                <div class="author-name">
-                    Vũ Hoàng Long
-                    <small class="chat-date">19.09.2016 10:02 am</small>
-                </div>
-                <div class="chat-message active">
-                    Hi
-                </div>
-
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Mick Smith
-                    <small class="chat-date">
-                        19.09.2016 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    Lorem Ipsum is simpl.
-                </div>
-            </div>
-            <li class="chat-date-separator"><abbr class="timestamp">Hôm qua</abbr></li>
-            <div class="left">
-                <div class="author-name">
-                    Alice Novak
-                    <small class="chat-date">
-                        Hôm qua 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Check this stock char.
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-        </div>
-        <div class="form-chat">
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control"> <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button">
-                        Send
-                    </button>
-                </span>
-            </div>
-        </div>
-    </div>
-    <!--./Chat box-->
-    <!--Customer Info-->
-    <div class="col-lg-4 information" style="height: 85vh">
-
-        @*<div>
-                <h3 style="padding: 0 0 5px 15px">Thông tin khách hàng</h3>
-                <div class="col-lg-3" style="text-align:center;padding:0">
-                    <p>
-                        <img alt="image" class="img-circle" src="img/profile_small.jpg">
-                    </p>
-                    <div style="font-size:110%;"><a href="#" style=""> Chi tiết</a></div>
-                </div>
-                <div class="col-lg-9">
-                    <p><i class="fa fa-user"></i> Vũ Hoàng Long</p>
-                    <p><i class="fa fa-envelope"></i> long189b@facebook.com</p>
-                    <p><i class="fa fa-phone"></i> 01267708763</p>
-                    <p><i class="fa fa-home"></i> 189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</p>
-                </div>
-            </div>*@
-        <div>
-            <h3 style="padding: 0 0 5px 15px">Thông tin khách hàng</h3>
-            <div class="" style="padding:0">
-                <div>
-                    <div class="col-md-2">
-                        <img alt="image" class="img-circle" src="~/Content/img/profile_small.jpg" style="float:left">
+            <div class="content" id="chat-content">
+                <li class="chat-date-separator"><abbr class="timestamp">19 Tháng 9</abbr></li>
+                <div class="left">
+                    <div class="author-name">
+                        Vũ Hoàng Long
+                        <small class="chat-date">19.09.2016 10:02 am</small>
                     </div>
-                    <div class="col-md-9">
-                        <a class="btn btn-info">Chỉnh sửa</a>
-                        <a class="btn btn-info">Lưu</a>
+                    <div class="chat-message active">
+                        Hi
+                    </div>
+
+                </div>
+                <div class="right">
+                    <div class="author-name">
+                        Mick Smith
+                        <small class="chat-date">
+                            19.09.2016 11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        Lorem Ipsum is simpl.
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
+                <li class="chat-date-separator"><abbr class="timestamp">Hôm qua</abbr></li>
+                <div class="left">
+                    <div class="author-name">
+                        Alice Novak
+                        <small class="chat-date">
+                            Hôm qua 08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        Check this stock char.
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763">
+                <div class="right">
+                    <div class="author-name">
+                        Anna Lamson
+                        <small class="chat-date">
+                            Hôm qua 11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        The standard chunk of Lorem Ipsum
+                    </div>
                 </div>
-                <div class="col-md-12"><i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="long189b@facebook.com"></div>
-                <div class="col-md-12"><i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr">189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</textarea></div>
-
+                <div class="left">
+                    <div class="author-name">
+                        Mick Lane
+                        <small class="chat-date">
+                            Hôm nay 08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        Xin chào shop ^^ have pussy italy believe people vcl
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="author-name">
+                        Anna Lamson
+                        <small class="chat-date">
+                            Hôm qua 11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        The standard chunk of Lorem Ipsum
+                    </div>
+                </div>
+                <div class="left">
+                    <div class="author-name">
+                        Mick Lane
+                        <small class="chat-date">
+                            Hôm nay 08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        Xin chào shop ^^ have pussy italy believe people vcl
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="author-name">
+                        Anna Lamson
+                        <small class="chat-date">
+                            Hôm qua 11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        The standard chunk of Lorem Ipsum
+                    </div>
+                </div>
+                <div class="left">
+                    <div class="author-name">
+                        Mick Lane
+                        <small class="chat-date">
+                            Hôm nay 08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        Xin chào shop ^^ have pussy italy believe people vcl
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="author-name">
+                        Anna Lamson
+                        <small class="chat-date">
+                            Hôm qua 11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        The standard chunk of Lorem Ipsum
+                    </div>
+                </div>
+                <div class="left">
+                    <div class="author-name">
+                        Mick Lane
+                        <small class="chat-date">
+                            Hôm nay 08:45 pm
+                        </small>
+                    </div>
+                    <div class="chat-message active">
+                        Xin chào shop ^^ have pussy italy believe people vcl
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row" style="border-bottom: 2px solid #e7eaec;margin:0"></div>
-    <div style="text-align: center; margin-top:5px">
-        <div style="padding: 5px;">
-            <div id="order-form">
-                <div class="ibox-content">
+            <div class="form-chat">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control"> <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">
+                            Send
+                        </button>
+                    </span>
+                </div>
+            </div>
 
-                    <div class="">
-                        <input type="text" placeholder="Tên sản phẩm" id="sp_input" class="sp_input form-control">
-                        <div class="col-md-6" style="padding:0">
-                            <input type="number" placeholder="Số lượng" id="quantity" class="quantity form-control col-md-3" min="1">
+        </div>
+        <!--./Chat box-->
+
+        <div class="ibox" style="margin-bottom: 0 ; display:none;" id="commentSection">
+            <div class="ibox-content ibox-scroll" style="max-height:200%" id="comment_div">
+                <!--
+                 <div class="social-feed-box" id="postDetail">
+
+                    <div class="pull-right social-action dropdown">
+                        <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu m-t-xs">
+                            <li><a href="#">Config</a></li>
+                        </ul>
+                    </div>
+                    <div class="social-avatar" id="1" onclick="alert(this.id); alert(document.getElementById('namex').textContent);  alert('sdfsdf');">
+                        <a href="" class="pull-left">
+                            <img alt="image" src="~/Content/img/a1.jpg">
+                        </a>
+                        <div class="media-body">
+                            <a href="#">
+                                <div id="namex">Andrew Williams</div>
+                            </a>
+                            <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                        </div>
+                    </div>
+                    <div class="social-body">
+                        <p>
+                            Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                            default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                            in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                            default model text.
+                        </p>
+                        <img src="~/Content/img/gallery/9.jpg" class="img-responsive fbImage">
+                        <div class="btn-group">
+                            <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                        </div>
+                    </div>
+
+                    <div class="social-footer" id="postDetail_Comment">
+                        <div class="social-comment">
+                            <div class="pull-right social-action dropdown" style="padding-left: 10px;">
+                                <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                                    <i class="fa fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu m-t-xs" style="width:20%;">
+                                    <li><a href="#">Config</a></li>
+                                </ul>
+                            </div>
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a1.jpg">
+                            </a>
+
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                                <small class="text-muted">12.06.2014</small>
+                            </div>
                         </div>
 
-                        <a onclick="fnClickAddRow();" href="javascript:void(0);" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</a>
+                        <div class="social-comment">
+                            <div class="pull-right social-action dropdown">
+                                <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                                    <i class="fa fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu m-t-xs">
+                                    <li><a href="#">Config</a></li>
+                                </ul>
+                            </div>
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+
+                        <div class="social-comment">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-comment">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-comment">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-comment">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-comment">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+                        <div class="social-comment">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="~/Content/img/a4.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br>
+                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+
+                            <div class="social-comment">
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="~/Content/img/a7.jpg">
+                                </a>
+                                <div class="pull-right social-action dropdown">
+                                    <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu m-t-xs">
+                                        <li><a href="#">Config</a></li>
+                                    </ul>
+                                </div>
+                                <div class="pull-right social-action dropdown">
+                                    <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu m-t-xs">
+                                        <li><a href="#">Config</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="media-body">
+                                    <a href="#">
+                                        Andrew Williams
+                                    </a>
+                                    Making this the first true generator on the Internet. It uses a dictionary of.
+                                    <br>
+                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                    <small class="text-muted">10.07.2014</small>
+                                </div>
+                            </div>
+                            <div class="social-comment">
+
+                                <a href="" class="pull-left">
+                                    <img alt="image" src="~/Content/img/a8.jpg">
+                                </a>
+                                <div class="media-body">
+                                    <textarea class="form-control" style="height: 100%;" placeholder="Write comment..."></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                !-->
+                <div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;" id="commentSelect">
+                    <div class="panel panel-primary" style="height:70%; background-color: lightblue; color:white; font-size:20px;">
+                        <div class="panel-body" style="height:100%; text-align:center">
+                            Xin chọn post
+                        </div>
+                    </div>
+                </div>
 
-                    <table class="table table-striped table-bordered table-hover " id="cart">
-                        <thead>
-                            <tr>
-                                <th>Sản phẩm</th>
-                                <th>SL</th>
-                                <th>Thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-                            <tr class="">
-                                <td>Áo</td>
-                                <td>5</td>
-                                <td>100.000 VND</td>
-                            </tr>
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Tổng cộng</th>
-                                <th colspan="2"><strong>100.000 VND</strong></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <a onclick="fnClickAddRow();" href="javascript:void(0);" class="btn btn-primary ">Tạo đơn hàng mới</a>
+                <div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;" id="commentLoader">
+                    <img src="~/Content/image/loader.gif" />
                 </div>
             </div>
-            <!--                            <button type="button" class="btn btn-primary">Tạo đơn hàng mới</button>-->
-
+            <div class="social-comment">
+                <div class="media-body">
+                    <textarea class="form-control" id="replyInputTxt" disabled style="resize:none;height:100%;" placeholder="Nhập bình luận..."></textarea>
+                </div>
+            </div>
         </div>
+
+
+
     </div>
 
+
+
+    @* Comment box *@
+    @*<div class="small-chat-bo fadeInLeft animated col-lg-6" style="padding: 0; margin-top:2.8%; display:none;" id="comment_div">*@
+
+
+
+
+
+    <!--Customer Info-->
+    
+    <div class="col-lg-4 information" style="height: 85vh">
+        <div class="">
+            <div>
+                <div>
+                    <h3 style="padding: 0 0 5px 15px;display:inline-block;">Thông tin khách hàng</h3>
+                    <span style="padding: 5px 15px 0 0;float:right">
+                        <a id="btn_add" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></a>
+                        <a id="btn_edit" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
+                        <a id="btn_ok_add" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
+                        <a id="btn_ok_edit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a> 
+                        <a id="btn_cancel" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                    </span>
+                </div>
+                <div class="cust_info" id="" style="padding:0">
+                    <div>
+                        <div class="col-md-2">
+                            @*~/Content/img/profile_small.jpg*@
+                            <img id="cust_avatar" alt="image" class="img-circle" src="" style="float:left" width="50" height="50">
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="padding-right:0">
+                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
+                    </div>
+                    <div class="col-md-5">
+                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763" readonly>
+                    </div>
+                    <div class="col-md-12">
+                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="long189b@facebook.com" readonly>
+                    </div>
+                    <div class="col-md-12">
+                        <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly>189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="border-bottom: 2px solid #e7eaec;margin:0"></div>
+        <div style="text-align: center; margin-top:5px">
+            <div style="padding: 5px;">
+                <div id="order-form">
+                    <div class="ibox-content">
+                        <button id="btn_addproduct" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</button>
+
+                        <div id="tbl_order" class="table-responsive col-md-12" style="overflow:auto;max-height: 40vh;position:relative;">
+                            <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="add_datatableproduct">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">Mã</th>
+                                        <th class="col-md-5">Sản phẩm</th>
+                                        <th class="col-md-1">Số lượng</th>
+                                        <th class="col-md-2">Đơn giá</th>
+                                        <th class="col-md-2">Tổng</th>
+                                        <th class=""></th>
+                                    </tr>
+                                </thead>
+                                @*<tfoot>
+                                        <tr>
+                                            <td colspan="4" style="font-weight:bold; text-align:right">Tổng cộng</td>
+                                            <td id="table_total" style="font-weight:bold; text-align:center">0</td>
+                                            <td style="font-weight:bold; text-align:center">VND</td>
+                                        </tr>
+                                    </tfoot>*@
+                            </table>
+                        </div>
+                        <div>
+                            <table id="total">
+                                <tr>
+                                    <td class="col-md-9" colspan="4" style="font-weight:bold; text-align:right">Tổng cộng</td>
+                                    <td class="col-md-2" id="table_total" style="font-weight:bold; text-align:center">0</td>
+                                    <td class="" style="font-weight:bold; text-align:center">VND</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button id="btn_addorder" class="btn btn-primary">Tạo đơn hàng</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @* hidden customer name and avatar url *@
+    <input type="hidden" value="" id="cusName" />
+    @*<input type="hidden" value="" id="cusAvatar"/>*@
 </div>
-</div>
+
 <!--./Customer Info-->
 @section CustomCSS{
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     @Styles.Render("~/TouchSpin-CSS")
     @Styles.Render("~/ChatComment-CSS")
+
+    @* tooltip *@
+    <style>
+        /* Tooltip container */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+            color: mediumaquamarine;
+            opacity: 100;
+        }
+
+            /* Tooltip text */
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 200%;
+                height: 200%;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                padding: 5px 0;
+                border-radius: 6px;
+                /* Position the tooltip text */
+                position: absolute;
+                z-index: 1;
+                bottom: 125%;
+                left: 200%;
+                margin-left: -60px;
+                /* Fade in tooltip */
+                opacity: 0;
+                transition: opacity 1s;
+            }
+
+                /* Tooltip arrow */
+                .tooltip .tooltiptext::after {
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: #555 transparent transparent transparent;
+                }
+
+            /* Show the tooltip text when you mouse over the tooltip container */
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+                opacity: 1;
+            }
+
+        .fbImage {
+            margin-right: auto !important;
+        }
+
+        .new_comment {
+            border: 3px solid blue;
+        }
+        .commentImage {
+            width: 40% !important;
+            margin-right:100% !important;
+        }
+        .postImage {
+            width:40%;
+        }
+    </style>
+
 }
 
 @section CustomJS {
 
     <!-- Bundle -->
+    @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
+    @Scripts.Render("~/Utility-JS")
+    <script>
+        var refresh = false;
+        var pagemode = "chat";
+
+        $(document).ready(function () {
+            loadPosts();
+            $(function () {
+                $("#selectable").selectable({
+                    selecting: function (event, ui) {
+                        if ($(".ui-selected, .ui-selecting").length > 1) {
+                            $(ui.selecting).removeClass("ui-selecting");
+                        }
+                    }
+                });
+            });
+        });
+
+        var oTable = $('#cart').DataTable({
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "searching": false,
+            "scrollY": "15vh"
+        });
+        $(function () {
+            $("#selectable").selectable({
+                stop: function () {
+                    var result = $("#select-result").empty();
+                    $(".ui-selected", this).each(function () {
+                        var index = $("#selectable li").index(this);
+                        result.append(" #" + (index + 1));
+                        loadPostDetail(this.id);
+                    });
+                }
+            });
+        });
+
+        function comment_tab_check(mode) {
+            //if ($('#comment_div').contents().length != 0)
+            //{
+            //    alert("not empty"); $('#comment_div').empty();
+            //}
+            //if (!refresh)
+            //{
+            //    loadPosts(); refresh = true;
+            //}
+            //else alert('Refresh');
+            if (mode == "comment") {
+                $('#chatSection').css('display', 'none');
+                $('#commentSection').css('display', 'block').fadeIn();
+            }
+            else {
+                $('#chatSection').css('display', 'block').fadeIn();
+                $('#commentSection').css('display', 'none');
+            }
+            pagemode = mode;
+        }
+
+        function fnClickAddRow() {
+
+            $('#cart').dataTable().fnAddData([
+                $('#sp_input').val(),
+                $('#quantity').val(),
+
+            ]);
+
+            var $scrollBody = $(oTable.table().node()).parent();
+            $scrollBody.scrollTop($scrollBody.get(0).scrollHeight);
+        }
+
+        function showDiv(Id) {
+            document.getElementById("reply_" + Id).style.display = "block";
+            location.href = "#reply_" + Id;
+            document.getElementById("reply_" + Id).focus();
+        }
+
+        var Viewskip = 0;
+
+        //load all post with lastest unread comment(s)
+        function loadPosts() {
+            $.ajax({
+                url: "/ChatComment/GetAllPosts",
+                method: 'get',
+                data: ({
+                    skip: Viewskip,
+                    take: 12,
+                }),
+                processing: 'true',
+                success: function (data) {
+                    //alert(data.length);
+                    var html = "";
+                    if (data != null) {
+                        for (var i = 0; i < data.length; i++) {
+                            //alert(data[i].message.length);
+                            //if (data[i].message.length > 30) data[i].message = data[i].message.substring(0, 30);
+                            $("#postLoader").hide();
+                            html = "<li class='ui-widget-content' id='" + data[i].post.Id + "'>\n" +
+                                                "<div class='feed-element'>\n" +
+                                                "<div id='" + data[i].post.Id + "_contentDiv'>\n" +
+                                                "<small class='pull-right'>" + FormatDateTimeVN(data[i].post.LastUpdate) + "</small>\n" +
+                                                "<strong>" + data[i].from + "</strong>\n  <div>";
+
+                            if (data[i].message != "" && data[i].message != null && data[i].message != "null") html += data[i].message;
+                            if (data[i].imageContent != "" && data[i].imageContent != null && data[i].imageContent != "null") {
+                                html += " <div class='tooltip'>(hình)" +
+                                "<span class='tooltiptext'><img src='" + data[i].imageContent + "' heigh='64px;'></span></div>";
+                            }
+                            html += "</div>\n";
+                            html += "</div>\n" + "</div></li>\n";
+                            $("#selectable").append(html);
+
+                        }
+                        //alert(Viewskip);
+                        Viewskip = Viewskip + 13;
+                        //alert(Viewskip);
+                    }
+                },
+                beforeSend: function () {
+                    $("#postLoader").show();
+                },
+            })
+
+        }
+        //check userinfo
+        function GetUserFromDb(fbid) {
+            var rs = null;
+            $.ajax({
+                async: false,
+                url: '/ChatComment/GetUserFromDb',
+                data: { "userFbId": fbid },
+                success: function (data) {
+                    if (data == false) {
+                        //Do nothing
+                    }
+                    else {
+                        rs = data;
+                    }
+                }
+            });
+            return rs;
+        }
+        function ProcessUserInfo(userfbid) {
+            var cust = GetUserFromDb(userfbid);
+            console.log(cust);
+            if (cust != null) {
+                $('.cust_info').attr('id', cust.Id);
+
+                $('#cus_name').attr('value', cust.Name);
+                $('#cus_phone').attr('value', cust.Phone);
+                $('#cus_mail').attr('value', cust.Email);
+                document.getElementById("cus_addr").defaultValue = cust.Address;
+                $('#cus_name').val($('#cus_name').attr('value'));
+                $('#cus_phone').val($('#cus_phone').attr('value'));
+                $('#cus_mail').val($('#cus_mail').attr('value'));
+                $('#cus_addr').val(document.getElementById("cus_addr").defaultValue);
+
+                $('#btn_add').hide();
+                $('#btn_edit').show();
+                $('#btn_ok_add').hide();
+                $('#btn_ok_edit').hide();
+                $('#btn_cancel').hide();
+            }
+            else {
+                $('.cust_info').attr('id', '');
+
+                $('#cus_name').attr('value', 'Chưa có dữ liệu');
+                $('#cus_phone').attr('value', '');
+                $('#cus_mail').attr('value', '');
+                document.getElementById("cus_addr").defaultValue = "";
+                $('#cus_name').val($('#cus_name').attr('value'));
+                $('#cus_phone').val($('#cus_phone').attr('value'));
+                $('#cus_mail').val($('#cus_mail').attr('value'));
+                $('#cus_addr').val(document.getElementById("cus_addr").defaultValue);
+
+                $('#btn_add').show();
+                $('#btn_edit').hide();
+                $('#btn_ok_add').hide();
+                $('#btn_ok_edit').hide();
+                $('#btn_cancel').hide();
+            }
+            $("#cus_name").prop('readonly', true);
+            $("#cus_phone").prop('readonly', true);
+            $("#cus_mail").prop('readonly', true);
+            $("#cus_addr").prop('readonly', true);
+        }
+
+        $('#btn_add').click(function () {
+            $("#cus_name").prop('readonly', false);
+            $("#cus_phone").prop('readonly', false);
+            $("#cus_mail").prop('readonly', false);
+            $("#cus_addr").prop('readonly', false);
+
+            if (pagemode == "chat") {
+                $('#cus_name').val($('.ui-selected .fb_name').html());
+            }
+            else {
+                $('#cus_name').val($('#cusName').val());
+            }
+            
+            $('#cus_phone').val('');
+            $('#cus_mail').val('');
+            $('#cus_addr').val('');
+
+            $('#btn_add').hide();
+            $('#btn_edit').hide();
+            $('#btn_ok_add').show();
+            $('#btn_ok_edit').hide();
+            $('#btn_cancel').show();
+        });
+
+        $('#btn_edit').click(function () {
+            $("#cus_name").prop('readonly', false);
+            $("#cus_phone").prop('readonly', false);
+            $("#cus_mail").prop('readonly', false);
+            $("#cus_addr").prop('readonly', false);
+
+            $('#btn_add').hide();
+            $('#btn_edit').hide();
+            $('#btn_ok_add').hide();
+            $('#btn_ok_edit').show();
+            $('#btn_cancel').show();
+        });
+
+        $('#btn_ok_add').click(function () {
+            $.get('/Customer/AddCustomer', {
+                "Id": $('.ui-selected .fb_avatar').attr('id'),
+                "Name": $('#cus_name').val(),
+                "Addr": $('#cus_addr').val(),
+                "Desc": null,
+                "Phone": $('#cus_phone').val(),
+                "Email": $('#cus_mail').val()
+            }, function (data) {
+                console.log('Add customer status: ' + data);
+
+                if (data == "True") {
+                    toastr.success("", "Thêm thành công");
+
+                    $("#cus_name").prop('readonly', true);
+                    $("#cus_phone").prop('readonly', true);
+                    $("#cus_mail").prop('readonly', true);
+                    $("#cus_addr").prop('readonly', true);
+
+                    $('#cus_name').attr('value', $('#cus_name').val());
+                    $('#cus_phone').attr('value', $('#cus_phone').val());
+                    $('#cus_mail').attr('value', $('#cus_mail').val());
+                    document.getElementById("cus_addr").defaultValue = $('#cus_addr').val();
+
+                    $('#btn_add').hide();
+                    $('#btn_edit').show();
+                    $('#btn_ok_add').hide();
+                    $('#btn_ok_edit').hide();
+                    $('#btn_cancel').hide();
+                }
+                else {
+                    toastr.error("Xin điền đầy đủ các ô bắt buộc", "Thất bại");
+                }
+            });
+        });
+
+        $('#btn_ok_edit').click(function () {
+            $.get('/Customer/EditCustomer', {
+                "Id": $('.cust_info').attr('id'),
+                "Name": $('#cus_name').val(),
+                "Addr": $('#cus_addr').val(),
+                "Desc": null,
+                "Phone": $('#cus_phone').val(),
+                "Email": $('#cus_mail').val(),
+                "ShopId": null
+            }, function (data) {
+                console.log('Edit customer status: ' + data);
+
+                if (data == "True") {
+                    toastr.success("", "Đã lưu thành công");
+                    $("#cus_name").prop('readonly', true);
+                    $("#cus_phone").prop('readonly', true);
+                    $("#cus_mail").prop('readonly', true);
+                    $("#cus_addr").prop('readonly', true);
+
+                    $('#cus_name').attr('value', $('#cus_name').val());
+                    $('#cus_phone').attr('value', $('#cus_phone').val());
+                    $('#cus_mail').attr('value', $('#cus_mail').val());
+                    document.getElementById("cus_addr").defaultValue = $('#cus_addr').val();
+
+                    $('#btn_add').hide();
+                    $('#btn_edit').show();
+                    $('#btn_ok_add').hide();
+                    $('#btn_ok_edit').hide();
+                    $('#btn_cancel').hide();
+                }
+                else {
+                    toastr.error("Có lỗi xảy ra", "Thất bại");
+                }
+            });
+        });
+
+        $('#btn_cancel').click(function () {
+            $("#cus_name").prop('readonly', true);
+            $("#cus_phone").prop('readonly', true);
+            $("#cus_mail").prop('readonly', true);
+            $("#cus_addr").prop('readonly', true);
+
+            $('#cus_name').val($('#cus_name').attr('value'));
+            $('#cus_phone').val($('#cus_phone').attr('value'));
+            $('#cus_mail').val($('#cus_mail').attr('value'));
+            $('#cus_addr').val(document.getElementById("cus_addr").defaultValue);
+
+            if ($('#btn_ok_add').is(":visible")) {
+                $('#btn_add').show();
+            }
+            else {
+                $('#btn_add').hide();
+            }
+            if ($('#btn_ok_edit').is(":visible")) {
+                $('#btn_edit').show();
+            }
+            else {
+                $('#btn_edit').hide();
+            }
+            $('#btn_ok_add').hide();
+            $('#btn_ok_edit').hide();
+            $('#btn_cancel').hide();
+        });
+
+        //load clicked post's content
+        function loadPostDetail(postid) {
+            var postId = postid;
+            $.ajax({
+                url: "/ChatComment/GetPostDetail",
+                method: 'get',
+                data: ({
+                    postId: postid,
+                }),
+                processing: 'true',
+                success: function (data) {
+                    //alert(data.length);
+                    //post returned as data
+                    $('#commentLoader').hide();
+                    if (data != null) {
+                        var html = null;
+                        $("#comment_div").empty();
+                        html = "<div class='social-feed-box' id='postDetail'>" +
+                                                    "<div class='pull-right social-action dropdown'>" +
+                                                        "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>" +
+                                                        "<i class='fa fa-angle-down'></i></button>" +
+                                                        "<ul class='dropdown-menu m-t-xs'>" +
+                                                        "<li onclick=''></li></ul>" +
+                                                    "</div>" +
+                                                    "<div class='social-avatar' id=" + data.from_userId + ">" +
+                                                    "<div class = 'clickable'>" +
+                                                        "<a href='' class='pull-left'>" +
+                                                        "<img alt='image' src='" + data.fromAvatar + "'> </a>" + 
+                                                        "<div class='media-body'>" +
+                                                            "<a href=" + "https://www.facebook.com/" + data.from_userId + " id='" + data.from_userId + "' target='_blank' style='display:inline'>" + data.from + "</a>\n <br>" +
+                                                            
+                                                            "<small class='text-muted'><a href='" + data.toUrl + "' target='_blank' style='display:inline'>" + FormatDateVN_fix(data.LastUpdate) + "</a></small>" +
+                                                        "</div></div>" +
+                                                    "</div>" +
+                                                     "<div class='social-body'>";
+                        if (data.storyContent != null && data.storyContent != "" && data.storyContent != "null") {
+                            var dummyString1 = data.storyContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                            html += "<p>" + dummyString1 + "</p>";
+                        }
+                        if (data.postContent != null && data.postContent != "" && data.postContent != "null") {
+                            var dummyString2 = data.postContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                            html += "<p>" + dummyString2 + "</p>";
+                        }
+                        if (data.postImageContent != "" && data.postImageContent != null) {
+                            html += "<img src='" + data.postImageContent + "' class='img-responsive fbImage postImage'>" +
+                                                    "<div class='btn-group'>" +
+                                                    "<button class='btn btn-white btn-xs'><i class='fa fa-thumbs-up'></i> Like this!</button>" +
+                                                    "</div>" +
+                                                    "</div>";
+
+                        }
+                        $("#comment_div").append(html);
+                        html = "<div class='social-footer'>";
+                        if (data.comments.length != 0) {
+                            for (var i = 0; i < data.comments.length; i++) {
+                                //alert(data[i].message.length);
+                                html = html + "<div class='social-comment' id='" + data.comments[i].id + "'> \n" +
+                                               "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                        "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
+                                                                            "<i class='fa fa-angle-down'></i>\n" +
+                                                                        "</button>\n" +
+                                                                        "<ul class='dropdown-menu m-t-xs' style='width:20%;'>\n" +
+                                                                            "<li></li>\n" +
+                                                                        "</ul>\n" +
+                                                                    "</div>\n" +
+                                                                     "<div class = 'clickable'>" +
+                                                                    "<a href='' class='pull-left'>\n" +
+                                                                        "<img alt='image' src='" + data.comments[i].avatarUrl + "'>\n" +
+                                                                    "</a>\n" +
+                                                                    "<div class='media-body'>\n" +
+                                                                        "<a href=" + "https://www.facebook.com/" + data.comments[i].fromId + " id='" + data.comments[i].fromId + "' target='_blank'>\n" +
+                                                                            data.comments[i].from +
+                                                                        "</a>\n";
+
+                                if (data.comments[i].commentContent != "" && data.comments[i].commentContent != null && data.comments[i].commentContent != "null") {
+                                    console.log(data.comments[i].commentContent);
+                                    var dummyString3 = data.comments[i].commentContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                                    //html= html+data.comments[i].commentContent;
+                                    html += dummyString3 + "</div>";
+                                }
+                                if (data.comments[i].commentImageContent != "" && data.comments[i].commentImageContent != null && data.comments[i].commentImageContent != "null") {
+                                    html += "<img src='" + data.comments[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
+
+                                }
+                                html = html + "<br>" +
+                                                         "<button class='btn btn-white btn-xs' id= " + data.comments[i].id + " onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+                                                         "<small class='text-muted'>" + FormatDateVN_fix(data.comments[i].datacreated) + "</small>\n" +
+                                                     "</div><div class='social-comment' id='reply_" + data.comments[i].id + "' style='display:none'>" +
+                                                     "<div class='media-body'>" +
+                                                     "<textarea class='form-control' id='reply_" + data.comments[i].id + "_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                                                     "</div></div>\n";
+                            }
+                        }
+                        $("#postDetail").append(html + "</div>");
+                        $("#comment_div").append("<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>" +
+                            "<img src='/Content/image/loader.gif' />" + "<input type='hidden' value='"+postId+"' id='hiddenPostId'>"+
+                            "</div>");
+
+                        if (data.nestedComments.length != 0)
+                        {
+                            for (var i = 0; i < data.nestedComments.length; i++) {
+                                //alert(data.nestedComments[i].parentId);
+                                $('#reply_' + data.nestedComments[i].parentId).remove();
+                                    var html1 = "</div><div class='social-comment' id='" + data.nestedComments[i].id + "'> \n" +
+                                               "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                        "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
+                                                                            "<i class='fa fa-angle-down'></i>\n" +
+                                                                        "</button>\n" +
+                                                                        "<ul class='dropdown-menu m-t-xs' style='width:20%;'>\n" +
+                                                                            "<li></li>\n" +
+                                                                        "</ul>\n" +
+                                                                    "</div>\n" +
+                                                                    "<div class = 'clickable'>" +
+                                                                    "<a href='' class='pull-left'>\n" +
+                                                                        "<img alt='image' src='" + data.nestedComments[i].avatarUrl + "'>\n" +
+                                                                    "</a>\n" +
+                                                                    
+                                                                    "<div class='media-body'>\n" +
+                                                                        "<a href=" + "https://www.facebook.com/" + data.nestedComments[i].fromId + " id='" + data.nestedComments[i].fromId + "' target='_blank'>\n" +
+                                                                            data.nestedComments[i].from +
+                                                                        "</a>\n";
+
+                                    if (data.nestedComments[i].commentContent != "" && data.nestedComments[i].commentContent != null && data.nestedComments[i].commentContent != "null") {
+                                        console.log(data.nestedComments[i].commentContent);
+                                        var dummyString4 = data.nestedComments[i].commentContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                                        //html= html+data.comments[i].commentContent;
+                                        html1 += dummyString4 +"</div>";
+                                    }
+                                    if (data.nestedComments[i].commentImageContent != "" && data.nestedComments[i].commentImageContent != null && data.nestedComments[i].commentImageContent != "null") {
+                                        html1 += "<img src='" + data.nestedComments[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
+
+                                    }
+                                    html1 = html1 + "<br>" +
+                                                             "<button class='btn btn-white btn-xs' id= " + data.nestedComments[i].parentId + " onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+                                                             "<small class='text-muted'>" + FormatDateVN_fix(data.nestedComments[i].datacreated) + "</small>\n" +
+                                                         "</div><div class='social-comment' id='reply_" + data.nestedComments[i].parentId + "' style='display:none'>" +
+                                                         "<div class='media-body'>" +
+                                                         "<textarea class='form-control' id='reply_" + data.nestedComments[i].parentId + "_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                                                         "</div>";
+                                    //alert(data.nestedComments[i].parentId);
+
+                                    $('#' + data.nestedComments[i].parentId).append(html1);
+
+                                }
+                             }
+                        //alert(Viewskip);
+                        //Viewskip = Viewskip + 13;
+                        //alert(Viewskip);
+                        document.getElementById("replyInputTxt").disabled = false;
+                        $(".clickable").on("click", function () {
+                            var curElement = $($(this).children(".media-body")[0]);
+                            var curImage = $($(this).children(".pull-left")[0]);
+                            var userfbid = curElement.find("a").attr("id");
+                            var cust = GetUserFromDb(userfbid);
+                            //alert(curElement.find("img").attr("src"));
+                            $('#cust_avatar').attr('src',curImage.find("img").attr('src'));
+                            $('#cusName').val(curElement.find("a").html());
+                            //$('#cusAvatar').val(curElement.find("img").attr('src'));
+                            ProcessUserInfo(userfbid);
+                            event.stopPropagation();
+                        })
+                        
+                    }
+                },
+                beforeSend: function () {
+                    //$('#processingDelete').show();
+                    $("#postDetail").hide();
+                    $('#commentSelect').hide();
+                    $('#commentLoader').show();
+                },
+            })
+            
+        }
+        
+        jQuery(function ($) {
+            $('#scrollPostList').on('scroll', function () {
+                if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                    alert('end reached');
+                    //alert(Viewskip);
+                    //loadPost();
+                }
+            })
+        });
+    </script>
 }
