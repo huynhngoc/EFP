@@ -147,6 +147,9 @@
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ShopUser.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="sysdiagram.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
