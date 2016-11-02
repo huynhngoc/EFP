@@ -11,6 +11,7 @@ using DataService.Service;
 using Facebook;
 using System.Configuration;
 using System.Text;
+using ApiAiSDK;
 
 namespace ShopManager.Controllers
 {
@@ -21,6 +22,7 @@ namespace ShopManager.Controllers
         PostService postService = new PostService();
         ConversationService conversationService = new ConversationService();
         FacebookClient fbApp = new FacebookClient();
+        ApiAi apiAi = new ApiAi(new AIConfiguration(ConfigurationManager.AppSettings["ApiAiClient"], SupportedLanguage.English));        
         // GET: Webhook
         public ActionResult Index()
         {
@@ -126,9 +128,9 @@ namespace ShopManager.Controllers
                     dynamic value = change.value;
                     if (field.Equals(WebhookField.Feed))
                     {
-                        
+
                         string item = value.item;
-                        string verb = value.verb;                        
+                        string verb = value.verb;
                         string customerId = Convert.ToString(value.sender_id);
                         string parentId = Convert.ToString(value.parent_id);
                         string postId = Convert.ToString(value.post_id);
@@ -140,8 +142,8 @@ namespace ShopManager.Controllers
                             string commentId = value.comment_id;
                             switch (verb)
                             {
-                                case WebhookVerb.Add:                                                                                                                                                
-                                case WebhookVerb.Edit:                                    
+                                case WebhookVerb.Add:
+                                case WebhookVerb.Edit:
                                     if (HasProperty(value, "photo"))
                                     {
                                         //chatbot api intent photo here
@@ -156,8 +158,11 @@ namespace ShopManager.Controllers
                                     {
                                         string message = value.message;
                                         //chatbot api for message here
-                                    }                                    
-                                    commentService.AddComment(commentId, customerId, createTime, intent.Value, status, parentId.Equals(postId)? null : parentId, postId);
+                                        var respond = apiAi.TextRequest(message);
+                                        var intentRespond = respond.Result.Metadata.IntentName;
+                                        intent = intentRespond == null ? (int)DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                                    }
+                                    commentService.AddComment(commentId, customerId, createTime, intent.Value, status, parentId.Equals(postId) ? null : parentId, postId);
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
@@ -169,8 +174,8 @@ namespace ShopManager.Controllers
                                     commentService.SetStatus(commentId, (int)CommentStatus.DELETED);
                                     break;
                                 default: break;
-                            }                                                         
-                        } else if (item.Equals(WebhookItem.Post))
+                            }
+                        } else if (item.Equals(WebhookItem.Post)|| item.Equals(WebhookItem.Photo))
                         {
                             //string postId = value.comment_id;
                             switch (verb)
@@ -191,6 +196,9 @@ namespace ShopManager.Controllers
                                     {
                                         string message = value.message;
                                         //chatbot api for message here
+                                        var respond = apiAi.TextRequest(message);
+                                        var intentRespond = respond.Result.Metadata.IntentName;
+                                        intent = intentRespond == null ? (int)DefaultIntent.UNKNOWN : int.Parse(intentRespond);
                                     }
                                     if (customerId.Equals(shopId))
                                     {
@@ -263,7 +271,10 @@ namespace ShopManager.Controllers
             {
                 int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
-                //chatbot api here                
+                //chatbot api here              
+                var respond = apiAi.TextRequest(message);
+                var intentRespond = respond.Result.Metadata.IntentName;
+                intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
                 SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
