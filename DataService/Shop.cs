@@ -24,6 +24,7 @@ namespace DataService
             this.Posts = new HashSet<Post>();
             this.Products = new HashSet<Product>();
             this.Responses = new HashSet<Respons>();
+            this.ShopUsers = new HashSet<ShopUser>();
             this.TemplateProducts = new HashSet<TemplateProduct>();
         }
     
@@ -32,9 +33,9 @@ namespace DataService
         public string FbToken { get; set; }
         public string BannerImg { get; set; }
         public System.DateTime DateCreated { get; set; }
-        public string UserId { get; set; }
+        public int ReplyMode { get; set; }
+        public int CommentMode { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Conversation> Conversations { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }
@@ -43,6 +44,7 @@ namespace DataService
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Respons> Responses { get; set; }
+        public virtual ICollection<ShopUser> ShopUsers { get; set; }
         public virtual ICollection<TemplateProduct> TemplateProducts { get; set; }
     }
 }
