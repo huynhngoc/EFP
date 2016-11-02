@@ -61,6 +61,7 @@
                     <table class="table table-striped table-bordered table-hover" id="tblAnalysisByComment">
                         <thead>
                             <tr>
+                                <th><div class="checkbox"><input id="checkbox1" type="checkbox"><label for="checkbox1"></label></div></th>
                                 <th>Bình luận</th>
                                 <th>Bài đăng</th>
                                 <th>Người đăng</th>
@@ -74,6 +75,9 @@
                         <tbody></tbody>
                         <tfoot>
                             <tr>
+                                <th>
+                                    <div class="checkbox"><input id="checkbox1" type="checkbox"><label for="checkbox1"></label></div>
+                                </th>
                                 <th>Bình luận</th>
                                 <th>Bài đăng</th>
                                 <th>Người đăng</th>
@@ -96,9 +100,10 @@
 
 @section CustomCSS
 {
+    @Styles.Render("~/Toastr-style")
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/Data-picker-CSS")
-
+    @Styles.Render("~/Awesome-bootstrap-checkbox-CSS")
 }
 
 @section CustomJS
@@ -187,8 +192,9 @@
                 },
                 "sDom": 'lrtip',
                 "aoColumnDefs": [
-                        { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [0], "width": "15%" },
-                        { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [1], "width": "15%" },
+                        { "mData": function (source) { return "<div class='checkbox'><input id='checkbox1' type='checkbox'><label for='checkbox1'></label></div>" }, "aTargets": [0], "width": "1%" },
+                        { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%" },
+                        { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [2], "width": "15%" },
                         {
                             "mData": function (source) {
                                 var rs = "<a href='https://www.facebook.com/" + source.SenderFbId + "' target='_blank'>" + source.SenderName + "</a>";
@@ -197,7 +203,7 @@
                                 };
                                 return rs;
 
-                            }, "aTargets": [2], "width": "15%"
+                            }, "aTargets": [3], "width": "15%"
                         },
                         {
                             "mData": function (source) {
@@ -209,11 +215,11 @@
                                 };
                                 rs = rs + "</select>";
                                 return rs;
-                            }, "aTargets": [3], "width": "5%"
+                            }, "aTargets": [4], "width": "7%"
                         },
-                        { "mData": function (source) { return FormatDateVN(source.DateCreated) }, "aTargets": [4], "width": "10%" },
-                        { "mData": function (source) { return statusArray[source.Status - 1] }, "aTargets": [5], "width": "7%" },
-                        { "mData": function (source) { if (source.IsRead == true) { return "<button class='btn btn-sm btn-primary col-sm-12' type='button'>Đã đọc</button>" } else { return "<button class='btn btn-sm btn-warning col-sm-12' type='button'>Chưa đọc</button>" } }, "aTargets": [6], "width": "8%" },
+                        { "mData": function (source) { return FormatDateVN(source.DateCreated) }, "aTargets": [5], "width": "10%" },
+                        { "mData": function (source) { return statusArray[source.Status - 1] }, "aTargets": [6], "width": "7%" },
+                        { "mData": function (source) { if (source.IsRead == true) { return "<button class='btn btn-sm btn-primary col-sm-12' type='button'>Đã đọc</button>" } else { return "<button class='btn btn-sm btn-warning col-sm-12' type='button'>Chưa đọc</button>" } }, "aTargets": [7], "width": "8%" },
                         {
                             "mData": function (source) {
                                 var rs = "<div class='btn-group' style='height:100%'>";
@@ -231,7 +237,7 @@
                                 }
                                 rs = rs + "</div>";
                                 return rs;
-                            }, "aTargets": [7], "width": "10%"
+                            }, "aTargets": [8], "width": "10%"
                         },
                 ],
                 "fnInitComplete": function (oSetting, json) {
