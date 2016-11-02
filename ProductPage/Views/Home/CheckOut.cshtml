@@ -12,6 +12,13 @@
     <title>Thanh toán</title>
     @Styles.Render("~/Header-CSS")
     @Styles.Render("~/Sweet-Alert-CSS")
+    <style>
+        .no-spin::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+            -moz-appearance: textfield !important;
+        }
+    </style>
 </head>
 
 <body class="gray-bg">
@@ -56,7 +63,7 @@
                                     </div>
                                     <div id="phoneDiv" class="form-group">
                                         <label>Số điện thoại</label>
-                                        <input id="orderPhone" type="tel" placeholder="Số điện thoại" class="form-control">
+                                        <input id="orderPhone" type="number" placeholder="Số điện thoại" class="form-control no-spin">
                                         <p id="errorCustomerPhone" style="color:red; display:none">Vui lòng điền số điện thoại của bạn!</p>
                                     </div>
                                     <div class="form-group">

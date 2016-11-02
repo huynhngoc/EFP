@@ -31,6 +31,7 @@ function loadProductOfParentCategory(FBId, shopId, parentId, start, quantity, ca
                     } else {
                         productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
                     }
+                    productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
                     // If product has promotion
                     if (data[i].PromotionPrice != null && data[i].PromotionPrice < data[i].Price) {
@@ -175,6 +176,7 @@ function loadProductByShopAndCategory(FBId, shopId, categoryId, start, quantity,
                     } else {
                         productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
                     }
+                    productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
                     // Set tag sale and price
                     // If product has promotion
@@ -319,6 +321,7 @@ function loadSearchResult(FBId, shopId, productName, start, quantity, loadMore) 
                     } else {
                         productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
                     }
+                    productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
                     // If product has promotion
                     if (data[i].PromotionPrice != null && data[i].PromotionPrice < data[i].Price) {
@@ -462,6 +465,7 @@ function loadNewestProductByShop(FBId, shopId, start, quantity, loadMore) {
                     } else {
                         productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
                     }
+                    productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
                     // If product has promotion
                     if (data[i].PromotionPrice != null && data[i].PromotionPrice < data[i].Price) {
@@ -605,6 +609,7 @@ function loadSaleProductByShop(FBId, shopId, start, quantity, loadMore) {
                     } else {
                         productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
                     }
+                    productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
                     // If product has promotion
                     if (data[i].PromotionPrice != null && data[i].PromotionPrice < data[i].Price) {
