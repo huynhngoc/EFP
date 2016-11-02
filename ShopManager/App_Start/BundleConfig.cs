@@ -31,6 +31,7 @@ namespace ShopManager
             bundles.Add(new StyleBundle("~/Header-CSS").Include(
                       "~/Content/css/bootstrap.min.css",
                       "~/Content/font-awesome/css/font-awesome.css",
+                      "~/Content/css/plugins/toastr/toastr.min.css",
                       "~/Content/css/animate.css",
                       "~/Content/css/style.css"));
             //Toastr style
@@ -161,6 +162,12 @@ namespace ShopManager
             bundles.Add(new ScriptBundle("~/SignalR-JS").Include(
                 "~/Scripts/jquery.signalR-2.2.1.js",
                 "~/Scripts/jquery.signalR-2.2.1.min.js"));
+            //Data picker JS
+            bundles.Add(new ScriptBundle("~/Data-picker-JS").Include(
+                "~/Content/js/plugins/datapicker/bootstrap-datepicker.js"));
+            //Data picker CSS
+            bundles.Add(new StyleBundle("~/Data-picker-CSS").Include(
+                "~/Content/css/plugins/datapicker/datepicker3.css"));
         }
     }
 }
