@@ -117,6 +117,7 @@
     <Compile Include="Repository\CommentRepository.cs" />
     <Compile Include="Repository\ConversationRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
+    <Compile Include="Repository\IntentRepository.cs" />
     <Compile Include="Repository\OrderRepository.cs" />
     <Compile Include="Repository\EntityRepository.cs" />
     <Compile Include="Repository\PictureRepository.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Service\EntitiyService.cs" />
     <Compile Include="JqueryDataTable\JQueryDataTableParamModel.cs" />
     <Compile Include="Service\CustomerService.cs" />
+    <Compile Include="Service\IntentService.cs" />
     <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\PictureService.cs" />
     <Compile Include="Service\PostService.cs" />
@@ -157,6 +159,7 @@
     <Compile Include="Utils\DefaultIntent.cs" />
     <Compile Include="Utils\StatusAndMode.cs" />
     <Compile Include="Utils\WebhookObject.cs" />
+    <Compile Include="ViewModel\AnalysisCommentViewModel.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
