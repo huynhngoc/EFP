@@ -22,7 +22,7 @@ namespace ShopManager.Controllers
         CustomerService customerService = new CustomerService();
         PostService postService = new PostService();
         // GET: Analysis
-        public ActionResult Commnent()
+        public ActionResult Comment()
         {
             return View();
         }

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Commnent";
+    ViewBag.Title = "Comment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -185,6 +185,7 @@
                     aoData.push({ "name": "startDate", "value": $('#startDate').val() });
                     aoData.push({ "name": "endDate", "value": $('#endDate').val().concat(" 23:59:59.000") });
                 },
+                "sDom": 'lrtip',
                 "aoColumnDefs": [
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [0], "width": "15%" },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [1], "width": "15%" },
