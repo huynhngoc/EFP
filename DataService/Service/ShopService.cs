@@ -22,18 +22,10 @@ namespace DataService.Service
         }
 
         public bool CreateShop(string shopId, string name, string token, string userId)
-        {
+        {                        
             try
             {
-                Shop s = new Shop()
-                {
-                    Id = shopId,
-                    ShopName = name,
-                    FbToken = token,
-                    UserId = userId,
-                    DateCreated = DateTime.Now
-                };
-                return repository.Create(s);
+                return repository.CreateShop(shopId, name, token, userId);
             }
             catch (Exception)
             {
@@ -41,6 +33,17 @@ namespace DataService.Service
             }
         }
 
+        public bool CreateConnection(string shopId, string userId)
+        {
+            try
+            {
+                return repository.CreateConnection(shopId, userId);
+            }
+            catch
+            {
+                return false;
+            }            
+        }
         public ShopViewModel GetShop(string shopId)
         {
             Shop s = repository.FindByKey(shopId);
@@ -51,7 +54,7 @@ namespace DataService.Service
                     Id = s.Id,
                     ShopName = s.ShopName,
                     DateCreated = s.DateCreated,
-                    FbToken = s.FbToken
+                    FbToken = s.FbToken,                    
                 };
             }
             return null;
@@ -59,14 +62,7 @@ namespace DataService.Service
 
         public bool CheckShopUser(string shopId, string userId)
         {
-            Shop s = repository.FindByKey(shopId);
-            if (s != null)
-            {
-                return s.UserId == userId;
-            } else
-            {
-                return false;
-            }
+            return repository.CheckShopUser(shopId, userId);
         }
 
     }

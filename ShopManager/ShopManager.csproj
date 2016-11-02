@@ -910,7 +910,7 @@
     <Content Include="Views\Template\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\ChatComment\Index.cshtml" />
-    <Content Include="Views\Analysis\Commnent.cshtml" />
+    <Content Include="Views\Analysis\Comment.cshtml" />
     <Content Include="Views\Shop\Setting.cshtml" />
   </ItemGroup>
   <ItemGroup>

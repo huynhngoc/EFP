@@ -8,7 +8,6 @@
         <EntityTypeShape EntityType="EFPModel.AspNetRole" Width="1.5" PointX="0.75" PointY="17.875" />
         <EntityTypeShape EntityType="EFPModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="9.25" />
         <EntityTypeShape EntityType="EFPModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="12" />
-        <EntityTypeShape EntityType="EFPModel.AspNetUser" Width="1.5" PointX="3" PointY="16.625" />
         <EntityTypeShape EntityType="EFPModel.Category" Width="1.5" PointX="7.5" PointY="18.625" />
         <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="14.75" PointY="18.625" />
         <EntityTypeShape EntityType="EFPModel.Conversation" Width="1.5" PointX="10.5" PointY="23.125" />
@@ -21,32 +20,35 @@
         <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="12" PointY="16" />
         <EntityTypeShape EntityType="EFPModel.Product" Width="1.5" PointX="9.75" PointY="16.125" />
         <EntityTypeShape EntityType="EFPModel.Respons" Width="1.5" PointX="7.5" PointY="22.25" />
-        <EntityTypeShape EntityType="EFPModel.Shop" Width="1.5" PointX="5.25" PointY="19.25" />
         <EntityTypeShape EntityType="EFPModel.TemplateProduct" Width="1.5" PointX="7.5" PointY="14.5" />
-        <AssociationConnector Association="EFPModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
-        <AssociationConnector Association="EFPModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
-        <AssociationConnector Association="EFPModel.FK_Shops_AspNetUsers" />
         <AssociationConnector Association="EFPModel.FK_Categories_Categories" />
-        <AssociationConnector Association="EFPModel.FK_Categories_Shops" />
         <AssociationConnector Association="EFPModel.FK_MasterProducts_Categories" />
         <AssociationConnector Association="EFPModel.FK_Comments_Comments" />
         <AssociationConnector Association="EFPModel.FK_Comments_Intents" />
         <AssociationConnector Association="EFPModel.FK_Comments_Posts" />
         <AssociationConnector Association="EFPModel.FK_Conversations_Intents" />
-        <AssociationConnector Association="EFPModel.FK_Conversations_Shops" />
-        <AssociationConnector Association="EFPModel.FK_Customers_Shops" />
         <AssociationConnector Association="EFPModel.FK_Orders_Customers" />
-        <AssociationConnector Association="EFPModel.FK_Entities_Shops" />
         <AssociationConnector Association="EFPModel.FK_Posts_Intents" />
         <AssociationConnector Association="EFPModel.FK_Responses_Intents" />
         <AssociationConnector Association="EFPModel.FK_OrderDetails_MasterProducts" />
         <AssociationConnector Association="EFPModel.FK_OrderDetails_Orders" />
+        <AssociationConnector Association="EFPModel.FK_ProductPictures_MasterProducts" />
+        <AssociationConnector Association="EFPModel.FK_MasterProducts_TemplateProduct" />
+        <EntityTypeShape EntityType="EFPModel.AspNetUser" Width="1.5" PointX="3" PointY="16.625" />
+        <EntityTypeShape EntityType="EFPModel.Shop" Width="1.5" PointX="5.25" PointY="24" />
+        <EntityTypeShape EntityType="EFPModel.ShopUser" Width="1.5" PointX="12.5" PointY="26.5" />
+        <AssociationConnector Association="EFPModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="EFPModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="EFPModel.FK_ShopUser_AspNetUsers" />
+        <AssociationConnector Association="EFPModel.FK_Categories_Shops" />
+        <AssociationConnector Association="EFPModel.FK_Conversations_Shops" />
+        <AssociationConnector Association="EFPModel.FK_Customers_Shops" />
+        <AssociationConnector Association="EFPModel.FK_Entities_Shops" />
         <AssociationConnector Association="EFPModel.FK_Orders_Shops" />
         <AssociationConnector Association="EFPModel.FK_Posts_Shops" />
-        <AssociationConnector Association="EFPModel.FK_ProductPictures_MasterProducts" />
         <AssociationConnector Association="EFPModel.FK_MasterProducts_Shops" />
-        <AssociationConnector Association="EFPModel.FK_MasterProducts_TemplateProduct" />
         <AssociationConnector Association="EFPModel.FK_Responses_Shops" />
+        <AssociationConnector Association="EFPModel.FK_ShopUser_Shops" />
         <AssociationConnector Association="EFPModel.FK_TemplateProduct_Shops" />
         <AssociationConnector Association="EFPModel.AspNetUserRoles" />
       </Diagram>
