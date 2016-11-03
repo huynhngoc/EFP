@@ -11,8 +11,9 @@ namespace DataService.Service
     public class CommentService
     {
         CommentRepository repository = new CommentRepository();
-        public bool AddComment(string id, string SenderFbId, long date, int intentId, string shopId)
+        public bool AddComment(string id, string SenderFbId, long date, int intentId, int status, string parentId, string postId)
         {
+            
             Comment c = repository.FindByKey(id);
             if (c == null)
             {
@@ -20,36 +21,39 @@ namespace DataService.Service
                 {
                     Id = id,
                     SenderFbId = SenderFbId,
-                    DateCreated = new DateTime(date),
+                    DateCreated = (new DateTime(1970,1,1) + TimeSpan.FromSeconds(date)).ToLocalTime(),
                     IntentId = intentId,
-                    PostId = shopId + id.Split('_')[0],
+                    Status = status,
+                    ParentId = parentId,
+                    PostId = postId
                 };
                 return repository.Create(c);
             } else
             {
                 //c.Id = id;
                 c.SenderFbId = SenderFbId;
-                c.DateCreated = new DateTime(date);
+                c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
                 c.IntentId = intentId;
-                c.PostId = shopId + id.Split('_')[0];
+                c.PostId = postId;
                 return repository.Update(c);
             }                       
         }
 
-        public bool HideComment(string commentId)
+        public bool SetStatus(string commentId, int status)
         {
             Comment c = repository.FindByKey(commentId);
             if (c != null)
-            {                
-                return true;
+            {
+                c.Status = status;                
+                return repository.Update(c);
             } else
             {
                 return false;
             }
         }
-        public IQueryable<PostWithLastestComment> GetAllPost(string shopId, int from, int quantity)
+        public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
         {
-            return repository.GetAllPost(shopId, from, quantity);
+            return repository.GetAllPost(shopId);
         }
         public IEnumerable<Comment> GetCommentsOfPost(string postId)
         {

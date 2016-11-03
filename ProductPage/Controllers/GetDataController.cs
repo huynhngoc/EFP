@@ -53,7 +53,7 @@ namespace ProductPage.Controllers
         }
 
         // Add to cart
-        public int AddToCart(int productId, string properties, string url, decimal price, int quantity)
+        public int AddToCart(int productId, string properties, string url, decimal price, int quantity, string FBId, string shopId)
         {
             CartModel cart = new CartModel();
             cart.productId = productId;
@@ -62,56 +62,56 @@ namespace ProductPage.Controllers
             cart.price = price;
             cart.quantity = quantity;
 
-            if (Session["Cart"] == null)
+            if (Session["Cart" + FBId + shopId] == null)
             {
                 List<CartModel> listCart = new List<CartModel>();
                 listCart.Add(cart);
-                Session["Cart"] = listCart;
+                Session["Cart" + FBId + shopId] = listCart;
                 return listCart.Count();
             }
             else
             {
-                List<CartModel> listCart = (List<CartModel>)Session["Cart"];
+                List<CartModel> listCart = (List<CartModel>)Session["Cart" + FBId + shopId];
                 for (int i = 0; i < listCart.Count; i++)
                 {
                     if (listCart[i].productId == productId)
                     {
                         var a = listCart[i].quantity + quantity;
                         listCart[i].quantity = a;
-                        Session["Cart"] = listCart;
+                        Session["Cart" + FBId + shopId] = listCart;
                         return listCart.Count();
                     }
                 }
                 listCart.Add(cart);
-                Session["Cart"] = listCart;
+                Session["Cart" + FBId + shopId] = listCart;
                 return listCart.Count();
             }
         }
 
         // Get cart object
-        public JsonResult GetCart()
+        public JsonResult GetCart(string FBId, string shopId)
         {
-            if (Session["Cart"] == null)
+            if (Session["Cart" + FBId + shopId] == null)
             {
                 return null;
             }
             else
             {
-                List<CartModel> listCart = (List<CartModel>)Session["Cart"];
+                List<CartModel> listCart = (List<CartModel>)Session["Cart" + FBId + shopId];
                 return Json(listCart, JsonRequestBehavior.AllowGet);
             }
         }
 
         // Delete a item in cart
-        public int DeleteItemCart(int productId)
+        public int DeleteItemCart(int productId, string FBId, string shopId)
         {
-            List<CartModel> listCart = (List<CartModel>)Session["Cart"];
+            List<CartModel> listCart = (List<CartModel>)Session["Cart" + FBId + shopId];
             for (int i = 0; i < listCart.Count; i++)
             {
                 if (listCart[i].productId == productId)
                 {
                     listCart.Remove(listCart[i]);
-                    Session["Cart"] = listCart;
+                    Session["Cart" + FBId + shopId] = listCart;
                     return listCart.Count();
                 }
             }
@@ -119,16 +119,16 @@ namespace ProductPage.Controllers
         }
 
         // Update cart
-        public decimal UpdateItemCart(int productId, int quantity)
+        public decimal UpdateItemCart(int productId, int quantity, string FBId, string shopId)
         {
             decimal totalPrice = 0;
-            List<CartModel> listCart = (List<CartModel>)Session["Cart"];
+            List<CartModel> listCart = (List<CartModel>)Session["Cart" + FBId + shopId];
             for (int i = 0; i < listCart.Count; i++)
             {
                 if (listCart[i].productId == productId)
                 {
                     listCart[i].quantity = quantity;
-                    Session["Cart"] = listCart;
+                    Session["Cart" + FBId + shopId] = listCart;
                 }
                 totalPrice = totalPrice + (listCart[i].price * listCart[i].quantity);
             }
@@ -138,9 +138,9 @@ namespace ProductPage.Controllers
         // Add an order
         public bool AddOrder(string shopId, string note, string fbId, string address, string receiver, string phone)
         {
-            if (Session["Cart"] != null)
+            if (Session["Cart" + fbId + shopId] != null)
             {
-                List<CartModel> listCart = (List<CartModel>)Session["Cart"];
+                List<CartModel> listCart = (List<CartModel>)Session["Cart" + fbId + shopId];
                 OrderDetailViewModel orderDetailModel;
                 List<OrderDetailViewModel> listOrderDetail = new List<OrderDetailViewModel>();
                 for (int i = 0; i < listCart.Count(); i++)
@@ -152,7 +152,7 @@ namespace ProductPage.Controllers
                     orderDetailModel.Quantity = listCart[i].quantity;
                     listOrderDetail.Add(orderDetailModel);
                 }
-                int status = (int) OrderStatus.PROCESSING;
+                int status = (int)OrderStatus.PROCESSING;
                 bool result;
 
                 Customer customer = customerService.GetCustomerByFacebookId(fbId, shopId);
@@ -161,12 +161,12 @@ namespace ProductPage.Controllers
                     customerService.AddCustomer(fbId, receiver, address, null, phone, null, shopId);
                     customer = customerService.GetCustomerByFacebookId(fbId, shopId);
                 }
-                
+
                 // sua thanh lay id tu facebook --> kiem id tu database r them vao
                 result = orderService.AddOrder(shopId, note, customer.Id, status, address, receiver, phone, listOrderDetail);
                 if (result)
                 {
-                    Session["Cart"] = null;
+                    Session["Cart" + fbId + shopId] = null;
                     return true;
                 }
                 else
@@ -184,7 +184,7 @@ namespace ProductPage.Controllers
         public ActionResult GetCheckOutInfo(string FBId, string shopId)
         {
             //Get Cart
-            List<CartModel> listCart = (List<CartModel>)Session["Cart"];
+            List<CartModel> listCart = (List<CartModel>)Session["Cart" + FBId + shopId];
             if (listCart != null)
             {
                 //Create list Customer
@@ -208,7 +208,7 @@ namespace ProductPage.Controllers
         public JsonResult GetOrdersByShopAndUser(string shopId, string fbId)
         {
             //Get customer
-            Customer customer = customerService.GetCustomerByFacebookId(fbId,shopId);
+            Customer customer = customerService.GetCustomerByFacebookId(fbId, shopId);
             var listOrders = orderService.GetOrderByShopIdAndCustomerId(shopId, customer.Id);
             return Json(new { customer = customer, data = listOrders }, JsonRequestBehavior.AllowGet);
         }
@@ -218,7 +218,23 @@ namespace ProductPage.Controllers
         {
             bool result = false;
             Customer customer = customerService.GetCustomerByFacebookId(fbId, ShopId);
-            result = customerService.EditCustomer(customer.Id, Name, Address, Description, Phone, Email, ShopId);
+            if (customer != null) {
+                result = customerService.EditCustomer(customer.Id, Name, Address, Description, Phone, Email, ShopId);
+            }
+            else
+            {
+                int customerResult = customerService.AddCustomer(fbId, Name, Address, null, Phone, Email, ShopId);
+                customer = customerService.GetCustomerByFacebookId(fbId, ShopId);
+                if (customer != null)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -227,6 +243,38 @@ namespace ProductPage.Controllers
         {
             var result = orderService.GetOrderDetailsFromOrderId(orderId);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        //Get list product by shop id
+        public JsonResult GetListProductNameByShopId(string shopId)
+        {
+            string[] listProduct = productService.GetListProductNameByShopId(shopId);
+            return Json(listProduct,JsonRequestBehavior.AllowGet);
+        }
+
+        //Get product by shop and product name
+        public JsonResult GetProductByShopAndProductName(string shopId, string productName, int start, int quantity)
+        {
+            // Tao List product item tra ve
+            List<ProductItemViewModel> listProductItemViewModel = productService.GetProductByShopAndName(shopId, productName, start,quantity);
+
+            return Json(listProductItemViewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        //Get newest product by shop
+        public JsonResult GetNewestProductByShop(string shopId, int start, int quantity)
+        {
+            // Tao List product item tra ve
+            List<ProductItemViewModel> listProductItemViewModel = productService.GetNewestProductByShop(shopId, start, quantity);
+            return Json(listProductItemViewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        //Get newest product by shop
+        public JsonResult GetSaleProductByShop(string shopId, int start, int quantity)
+        {
+            // Tao List product item tra ve
+            List<ProductItemViewModel> listProductItemViewModel = productService.GetSaleProductByShop(shopId, start, quantity);
+            return Json(listProductItemViewModel, JsonRequestBehavior.AllowGet);
         }
     }
 }

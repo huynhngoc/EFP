@@ -6,15 +6,10 @@ using System.Web.Mvc;
 
 namespace ShopManager.Controllers
 {
-    public class ShopController : Controller
+    public class AnalysisController : Controller
     {
-        // GET: Shop
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Setting()
+        // GET: Analysis
+        public ActionResult Commnent()
         {
             return View();
         }

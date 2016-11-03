@@ -2,51 +2,78 @@
 using DataService.Service;
 using DataService.ViewModel;
 using Facebook;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class ChatCommentController: Controller
     {
-        string PageId = "1198116243573212";
+        //string PageId = "685524511603937";
         CustomerService custService = new CustomerService();
         //var NumberofFeeds = 10;
-        string token = "EAACSr2uHmRwBAIGm1Rb9oaHCmg8i2eoswZBFrZCUgr6F21gLgh60LwIU70mQLslj7kScnsZApUjZBxuguM8C1qNqePfOhk3NSguDZBQbZCQxywafEq58sBN87n9TwbppEtNMHywrpO6Xb8PbEz6rg7oH43mHhfXy8kp1j6yMovvQZDZD";
+        string token = "EAAC1A8DIKmYBAEbxcQUGVQjsBoMCZAcPDzsBJNHviC7KnZCElb8lYYi62LlZAgLjQJbkUxCUS5hgPmCZCca9mokZAIOuDCZAeUoZAww8pmY70O47qGnHoE3ZBi2zsNG6nZA6tsFWc5ATBRt3GhJvDtZAuRzp5f573t8Q7FL2H89RB1ZCwZDZD";
+
 
         public ActionResult Index()
         {
-            Session["ShopId"] = "1";
-            Session["CustId"] = "3";
+            //Session["ShopId"] = "1";
+            //Session["CustId"] = "3";
+            dynamic shopOwnerParam = new ExpandoObject();
+            shopOwnerParam.fields = "picture,name";
+            FacebookClient fbApp = new FacebookClient("EAAC1A8DIKmYBAEbxcQUGVQjsBoMCZAcPDzsBJNHviC7KnZCElb8lYYi62LlZAgLjQJbkUxCUS5hgPmCZCca9mokZAIOuDCZAeUoZAww8pmY70O47qGnHoE3ZBi2zsNG6nZA6tsFWc5ATBRt3GhJvDtZAuRzp5f573t8Q7FL2H89RB1ZCwZDZD");
+            dynamic shopFBUser = fbApp.Get((string)Session["ShopId"], shopOwnerParam);
+            Session["ShopOwner"] = shopFBUser.name;
+            Session["ShopAvatar"] = shopFBUser.picture.data.url;
+            Session["ShopId"] = (string)Session["ShopId"];
             return View();
         }
 
         public JsonResult GetAllPosts(int skip, int take)
         { //string shopId, int from, int quantity
             CommentService commentservice = new CommentService();
-            
             //shopid = 685524511603937
+            string shopId = (string)Session["ShopId"];
+            //Session["ShopId"] = "1744339729172581";
             FacebookClient fbApp = new FacebookClient(token);
+            
+
+            //dynamic shopOwnerParam = new ExpandoObject();
+            //shopOwnerParam.fields = "picture,name";
+            //dynamic shopFBUser = fbApp.Get(shopId, shopOwnerParam);
+            //Session["ShopOwner"] = shopFBUser.name;
+            //Session["ShopAvatar"] = shopFBUser.picture.data.url;
+
             dynamic postParam = new ExpandoObject();
             postParam.fields = "message,from,full_picture,story";
-            Debug.WriteLine("service " + DateTime.Now);
-            List<PostWithLastestComment> postlist = commentservice.GetAllPost("1744339729172581", skip,take).ToList();
-            Debug.WriteLine("end service " + DateTime.Now);
+            Debug.WriteLine("service " + DateTime.Now + " "+shopId);
+            var rawPostList = commentservice.GetAllPost(shopId);
+            List <PostWithLastestComment> postlist = rawPostList.Skip(skip).Take(take).ToList();
+
+           
+
+
+            Debug.WriteLine(postlist.Count() + " end service " + DateTime.Now);
             if (postlist != null)
             {
                 List<PostViewModel> postviewlist = new List<PostViewModel>();
+                PostListViewModel postlistviewmodel = new PostListViewModel();
                 PostViewModel postmodel;
+                postlistviewmodel.postQuan = rawPostList.Count();
+                //Debug.WriteLine("sdf " + postlistviewmodel.postQuan);
                 foreach (PostWithLastestComment post in postlist)
                 {
                     postmodel = new PostViewModel();
                     postmodel.post = post;
-                    Debug.WriteLine(post.Id + " start  fb "  + DateTime.Now);
+                    Debug.WriteLine(post.Id + " start  fb " + DateTime.Now);
                     dynamic fbPost = fbApp.Get(post.Id, postParam);
                     Debug.WriteLine(post.Id + DateTime.Now);
                     //string test = fbPost.sdfsdfds;
@@ -57,7 +84,7 @@ namespace ShopManager.Controllers
                     //message = null => picture or activity
                     else
                     {
-                        
+
                         postmodel.message = fbPost.story;
                         Debug.WriteLine("story post " + postmodel.message);
                     }
@@ -66,20 +93,42 @@ namespace ShopManager.Controllers
                     Debug.WriteLine("test post " + postmodel.message);
                     postviewlist.Add(postmodel);
                 }
-                return Json(postviewlist, JsonRequestBehavior.AllowGet);
+                postlistviewmodel.postviewlist = postviewlist;
+                return Json(postlistviewmodel, JsonRequestBehavior.AllowGet);
             }
             else return null;
         }
 
+        //private Thread thread = null;
+        //public JsonResult GetPostDetail(string postId)
+        //{
+        //    object value = null;
+        //    if (thread!=null)
+        //    { 
+        //           thread.Abort();
+        //    }
+        //    thread = new Thread(
+        //        () =>
+        //        {
+        //            value = GetPostDetailFunction(postId); // Publish the return value
+        //        });
+        //        thread.Start();
+        //    Debug.WriteLine(value);
+        //    thread.Join();
+        //    Debug.WriteLine(value.ToString());
+        //    return Json(value, JsonRequestBehavior.AllowGet);
+        //}
+
         public JsonResult GetPostDetail(string postId)
         { //string shopId, int from, int quantity
+            Debug.WriteLine("GetPostDetailFunction");
             CommentService commentservice = new CommentService();
             //shopid = 685524511603937
             FacebookClient fbApp = new FacebookClient(token);
             dynamic commentParam = new ExpandoObject();
             dynamic postParam = new ExpandoObject();
 
-            postParam.fields = "full_picture,created_time,message,from{picture,name},link,story";
+            postParam.fields = "full_picture,created_time,message,from{picture,name},story";
             commentParam.fields = "attachment,from{picture,name,id},message,created_time";
 
             //commentParam.field = "from";
@@ -90,14 +139,13 @@ namespace ShopManager.Controllers
             PostDetailModel post = new PostDetailModel();
             post.Id = postId;
             post.LastUpdate = fbPost.created_time;
-            post.toUrl = fbPost.link;
             post.from = fbPost.from.name;
             post.fromAvatar = fbPost.from.picture.data.url;
             post.postContent = fbPost.message;
             post.storyContent = fbPost.story;
             //posted photo
             post.postImageContent = fbPost.full_picture;
-            post.from_userId = fbPost.from.id;
+            post.SenderFbId = fbPost.from.id;
 
             //get comments info
             List<Comment> commentList = commentservice.GetCommentsOfPost(postId).ToList();
@@ -123,7 +171,7 @@ namespace ShopManager.Controllers
                     if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
                     else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
                     //Debug.WriteLine("commentdetailmodel.commentImageContent      " + commentdetailmodel.commentImageContent);
-                    commentdetailmodel.fromId = fbComment.from.id;
+                    commentdetailmodel.SenderFbId = fbComment.from.id;
                     if (comment.ParentId != null && comment.ParentId != "")
                     {
                         commentdetailmodel.parentId = comment.ParentId;

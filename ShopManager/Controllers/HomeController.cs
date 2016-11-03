@@ -22,13 +22,14 @@ namespace ShopManager.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "ShopOwner")]
         public ActionResult ChooseShop()
         {
+            ViewBag.Title = "Chọn cửa hàng";
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "ShopOwner")]
         public JsonResult GetShop()
         {
             ShopService service = new ShopService();
@@ -36,7 +37,7 @@ namespace ShopManager.Controllers
             return Json(service.GetShopByUserId(userId));
         }
 
-        [Authorize]
+        [Authorize(Roles = "ShopOwner")]
         public JsonResult AddShop(string id, string token)
         {
             FacebookClient fbApp = new FacebookClient(token);
@@ -63,7 +64,7 @@ namespace ShopManager.Controllers
 
             //get name
             dynamic nameParam = new ExpandoObject();
-            nameParam.field = "name";
+            nameParam.fields = "name";
             var fbName = fbApp.Get(id, nameParam);
             string name = fbName["name"];
 
@@ -83,13 +84,12 @@ namespace ShopManager.Controllers
             return Json(new { addTab = fbResult, subscribe = fbWebhook, longtoken = longToken, name = name, result = result });
         }
 
-        [Authorize]
+        [Authorize(Roles = "ShopOwner")]
         public ActionResult GoToShop(string shopId)
         {
             ShopService service = new ShopService();
             if (service.CheckShopUser(shopId, User.Identity.GetUserId()))
             {
-                Session["ShopId"] = shopId;
                 return RedirectToAction("Index", "Shop");
             }            
             else

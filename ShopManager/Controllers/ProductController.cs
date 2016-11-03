@@ -18,6 +18,8 @@ using System.Configuration;
 
 namespace ShopManager.Controllers
 {
+    //[Authorize(Roles = "ShopOwner", Order = 1)]
+    [SessionRequiredFilter]
     public class ProductController : Controller
     {
         static Cloudinary m_cloudinary = new Cloudinary(new Account(
@@ -63,8 +65,9 @@ namespace ShopManager.Controllers
                     var result = m_cloudinary.Upload(new ImageUploadParams()
                     {
                         File = new CloudinaryDotNet.Actions.FileDescription(file.FileName,
-                            file.InputStream),
-                        Transformation = new Transformation().Height(400).Width(400).Crop("fit")
+                            file.InputStream)
+                            ,
+                        Transformation = new Transformation().Crop("pad").Width(800).Height(600)
                     });
 
                     service.AddPicture(id, result.Uri.AbsoluteUri);
@@ -142,7 +145,7 @@ namespace ShopManager.Controllers
         public JsonResult Add(string name, string description, int categoryId, decimal price, decimal? promotion, bool status, bool isInStock, int? templateId, string[] attr)
         {
             ProductService service = new ProductService();
-            string shopId = "1";
+            string shopId = (string) Session["ShopId"];
             try
             {
                 return Json(new { Id = service.AddProduct(name, description, categoryId, price, promotion, status, isInStock, templateId, attr, shopId).Id }, JsonRequestBehavior.AllowGet);
@@ -184,6 +187,7 @@ namespace ShopManager.Controllers
 
         public JsonResult GetProduct(JQueryDataTableParamModel param, string shopId, bool sName, bool sCate, bool sDesc)
         {
+            shopId = (string) Session["ShopId"];
             ProductService service = new ProductService();
             try
             {

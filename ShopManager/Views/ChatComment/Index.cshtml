@@ -100,13 +100,14 @@
                                         <h3><i class="fa fa-comment-o"></i>Bình luận mới nhất</h3>
                                         <!--                                                    <small><i class="fa fa-tim"></i> Bạn có <strong>22 tin nhắn mới</strong></small>-->
                                     </div>
-                                    <div class="ibox-content ibox-scroll" id="scrollPostList">
+                                    <div class="ibox-content ibox-scroll" id="scrollPostList" style="position: relative;">
                                         <div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 60% auto; display:none;" id="postLoader">
                                             <img src="~/Content/image/loader.gif" />
                                         </div>
                                         <div class="feed-activity-list">
                                             <ol id="selectable"></ol>
                                         </div>
+                                        <div id="newPostLoader" style="text-align:center; display:none; background:rgba(225, 225, 225, .4);"><img src="~/Content/image/loader.gif" height="40" /></div>
                                     </div>
                                 </div>
                             </div>
@@ -272,224 +273,17 @@
         </div>
         <!--./Chat box-->
 
-        <div class="ibox" style="margin-bottom: 0 ; display:none;" id="commentSection">
+        <div class="ibox" style="display:none;" id="commentSection">
+            <div class="heading" draggable="true">
+                <!--                        <small class="chat-date pull-right">02.19.2015</small> -->
+                Nội dung
+            </div>
             <div class="ibox-content ibox-scroll" style="max-height:200%" id="comment_div">
-                <!--
-                 <div class="social-feed-box" id="postDetail">
 
-                    <div class="pull-right social-action dropdown">
-                        <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                            <i class="fa fa-angle-down"></i>
-                        </button>
-                        <ul class="dropdown-menu m-t-xs">
-                            <li><a href="#">Config</a></li>
-                        </ul>
-                    </div>
-                    <div class="social-avatar" id="1" onclick="alert(this.id); alert(document.getElementById('namex').textContent);  alert('sdfsdf');">
-                        <a href="" class="pull-left">
-                            <img alt="image" src="~/Content/img/a1.jpg">
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                <div id="namex">Andrew Williams</div>
-                            </a>
-                            <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
-                        </div>
-                    </div>
-                    <div class="social-body">
-                        <p>
-                            Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                            default model text, and a search for 'lorem ipsum' will uncover many web sites still
-                            in their infancy. Packages and web page editors now use Lorem Ipsum as their
-                            default model text.
-                        </p>
-                        <img src="~/Content/img/gallery/9.jpg" class="img-responsive fbImage">
-                        <div class="btn-group">
-                            <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
-                        </div>
-                    </div>
-
-                    <div class="social-footer" id="postDetail_Comment">
-                        <div class="social-comment">
-                            <div class="pull-right social-action dropdown" style="padding-left: 10px;">
-                                <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                                    <i class="fa fa-angle-down"></i>
-                                </button>
-                                <ul class="dropdown-menu m-t-xs" style="width:20%;">
-                                    <li><a href="#">Config</a></li>
-                                </ul>
-                            </div>
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a1.jpg">
-                            </a>
-
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
-                                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
-                                <small class="text-muted">12.06.2014</small>
-                            </div>
-                        </div>
-
-                        <div class="social-comment">
-                            <div class="pull-right social-action dropdown">
-                                <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                                    <i class="fa fa-angle-down"></i>
-                                </button>
-                                <ul class="dropdown-menu m-t-xs">
-                                    <li><a href="#">Config</a></li>
-                                </ul>
-                            </div>
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a2.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-                        </div>
-
-                        <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a2.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a2.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a2.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a2.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a2.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-                        </div>
-                        <div class="social-comment">
-                            <a href="" class="pull-left">
-                                <img alt="image" src="~/Content/img/a4.jpg">
-                            </a>
-                            <div class="media-body">
-                                <a href="#">
-                                    Andrew Williams
-                                </a>
-                                Making this the first true generator on the Internet. It uses a dictionary of.
-                                <br>
-                                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                <small class="text-muted">10.07.2014</small>
-                            </div>
-
-                            <div class="social-comment">
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Content/img/a7.jpg">
-                                </a>
-                                <div class="pull-right social-action dropdown">
-                                    <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                                        <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu m-t-xs">
-                                        <li><a href="#">Config</a></li>
-                                    </ul>
-                                </div>
-                                <div class="pull-right social-action dropdown">
-                                    <button data-toggle="dropdown" class="dropdown-toggle btn-white">
-                                        <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu m-t-xs">
-                                        <li><a href="#">Config</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="media-body">
-                                    <a href="#">
-                                        Andrew Williams
-                                    </a>
-                                    Making this the first true generator on the Internet. It uses a dictionary of.
-                                    <br>
-                                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
-                                    <small class="text-muted">10.07.2014</small>
-                                </div>
-                            </div>
-                            <div class="social-comment">
-
-                                <a href="" class="pull-left">
-                                    <img alt="image" src="~/Content/img/a8.jpg">
-                                </a>
-                                <div class="media-body">
-                                    <textarea class="form-control" style="height: 100%;" placeholder="Write comment..."></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                !-->
                 <div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;" id="commentSelect">
                     <div class="panel panel-primary" style="height:70%; background-color: lightblue; color:white; font-size:20px;">
                         <div class="panel-body" style="height:100%; text-align:center">
-                            Xin chọn post
+                            Xin chọn bài đăng
                         </div>
                     </div>
                 </div>
@@ -511,15 +305,9 @@
 
 
 
-    @* Comment box *@
-    @*<div class="small-chat-bo fadeInLeft animated col-lg-6" style="padding: 0; margin-top:2.8%; display:none;" id="comment_div">*@
-
-
-
-
 
     <!--Customer Info-->
-    
+
     <div class="col-lg-4 information" style="height: 85vh">
         <div class="">
             <div>
@@ -527,30 +315,30 @@
                     <h3 style="padding: 0 0 5px 15px;display:inline-block;">Thông tin khách hàng</h3>
                     <span style="padding: 5px 15px 0 0;float:right">
                         <a id="btn_add" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></a>
-                        <a id="btn_edit" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
-                        <a id="btn_ok_add" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
-                        <a id="btn_ok_edit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a> 
-                        <a id="btn_cancel" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                        <a id="btn_edit" class="btn btn-info btn-xs" style="display:none"><i class="fa fa-edit"></i></a>
+                        <a id="btn_ok_add" class="btn btn-primary btn-xs" style="display:none"><i class="fa fa-check"></i></a>
+                        <a id="btn_ok_edit" class="btn btn-primary btn-xs" style="display:none"><i class="fa fa-check"></i></a>
+                        <a id="btn_cancel" class="btn btn-danger btn-xs" style="display:none"><i class="fa fa-times"></i></a>
                     </span>
                 </div>
                 <div class="cust_info" id="" style="padding:0">
                     <div>
                         <div class="col-md-2">
                             @*~/Content/img/profile_small.jpg*@
-                            <img id="cust_avatar" alt="image" class="img-circle" src="" style="float:left" width="50" height="50">
+                            <img id="cust_avatar" alt="avatar" class="img-circle" src="" style="float:left" width="50" height="50">
                         </div>
                     </div>
                     <div class="col-md-5" style="padding-right:0">
-                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
+                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly>
                     </div>
                     <div class="col-md-5">
-                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763" readonly>
+                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="" readonly>
                     </div>
                     <div class="col-md-12">
-                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="long189b@facebook.com" readonly>
+                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly>
                     </div>
                     <div class="col-md-12">
-                        <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly>189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</textarea>
+                        <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -601,11 +389,13 @@
     </div>
     @* hidden customer name and avatar url *@
     <input type="hidden" value="" id="cusName" />
+    <input type="hidden" value="" id="commentIdList" />
     @*<input type="hidden" value="" id="cusAvatar"/>*@
 </div>
 
 <!--./Customer Info-->
 @section CustomCSS{
+
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     @Styles.Render("~/TouchSpin-CSS")
@@ -668,12 +458,14 @@
         .new_comment {
             border: 3px solid blue;
         }
+
         .commentImage {
             width: 40% !important;
-            margin-right:100% !important;
+            margin-right: 100% !important;
         }
+
         .postImage {
-            width:40%;
+            width: 40%;
         }
     </style>
 
@@ -686,10 +478,46 @@
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
+    @Scripts.Render("~/SignalR-JS")
     @Scripts.Render("~/Utility-JS")
-    <script>
+    @Scripts.Render("/signalr/hubs")
+
+    <script type="text/javascript">
+
+
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var chat = $.connection.alertHub;
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.sendMessageToPage = function (message, threadId, intent) {
+                console.log(threadId);
+                console.log(message);
+            };
+
+            chat.client.sendCommentToPage = function (comment, intent) {
+                console.log(comment);
+                console.log(intent);
+            };
+
+            // Get the user name and store it to prepend to messages.
+            //$('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    // Call the Send method on the hub.
+                    chat.server.send($('#displayname').val(), $('#message').val());
+                    // Clear text box and reset focus for next comment.
+                    $('#message').val('').focus();
+                });
+            });
+        });
+
         var refresh = false;
         var pagemode = "chat";
+        var splittedCommentId ="";
 
         $(document).ready(function () {
             loadPosts();
@@ -699,10 +527,147 @@
                         if ($(".ui-selected, .ui-selecting").length > 1) {
                             $(ui.selecting).removeClass("ui-selecting");
                         }
+                    },
+                    stop: function () {
+                        var result = $("#select-result").empty();
+                        $(".ui-selected", this).each(function () {
+                            var index = $("#selectable li").index(this);
+                            result.append(" #" + (index + 1));
+                            loadPostDetail(this.id);
+                        });
                     }
                 });
             });
+
+
+            jQuery(function ($) {
+                $('#scrollPostList').on('scroll', function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                        //alert('end reached');
+                        //alert(Viewskip);
+                        //alert ("dsf " + Viewskip + " dgsdf " + post_quan);
+                        if (Viewskip <= post_quan && loading_post_flag==0)(loadPosts());
+                    }
+                })
+            });
+            $('#replyInputTxt').on('keyup', function(e) {
+                if (e.which == 13 && ! e.shiftKey) {
+                    var postId = $('#hiddenPostId').val();
+                    var newMessage = $('#replyInputTxt').val();
+                    $('#replyInputTxt').val('');
+                    var html = "";
+                    html = html + "<div class='social-comment' id='id'> \n" +
+                                               "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                        "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
+                                                                            "<i class='fa fa-angle-down'></i>\n" +
+                                                                        "</button>\n" +
+                                                                        "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
+                                                                             "<li onclick=''><a>Ẩn</a></li>" +
+                                                                              "<li onclick=''><a>Xoá</a></li></ul>" +
+                                                                        "</ul>\n" +
+                                                                    "</div>\n" +
+                                                                     "<div class = 'clickable'>" +
+                                                                    "<a href='' class='pull-left'>\n" +
+                                                                        "<img alt='image' src='@Session["shopAvatar"].ToString()'>\n" +
+                                                                    "</a>\n" +
+                                                                    "<div class='media-body'>\n" +
+                                                                        "<a href='https://www.facebook.com/@Session["shopId"].ToString()' id='fromId' target='_blank'>@Session["shopOwner"].ToString()\n"+
+                                                                            "</a>\n";
+                    var date = currentDate.getDate() + "/"
+                    + (currentDate.getMonth()+1)  + "/"
+                    + currentDate.getFullYear() + " @@ "
+                    + currentDate.getHours() + ":"
+                    + currentDate.getMinutes() + ":"
+                    + currentDate.getSeconds();
+                        //html += "<img src='' class='img-responsive fbImage commentImage'>";
+                        html+= newMessage+"</div>";
+                html = html + "<br>" +
+                                         "<button class='btn btn-white btn-xs' id= 'id' onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+                                         "<small class='text-muted'> <a href='https://www.facebook.com/' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+                                     "</div>"+
+                                     "<div id='reply_to_parent_id'></div>"+
+                                     "<div class='social-comment' id='reply_id' style='display:none'>" +
+                                     "<a href='' class='pull-left'>\n" +
+                                                                        "<img alt='image' src='@Session["shopAvatar"].ToString()'>\n" +
+                                                                    "</a>\n" +
+                                     "<div class='media-body'>" +
+                                     "<textarea class='form-control' id='reply_id_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                                     "</div></div>\n";
+            }
+
+                    $('#'+postId+'_Comments').append(html + "</div>"); ;
+        }
+            );
+
+
         });
+
+        
+       
+
+        //$('#commentIdList').change(function(){
+        //    //alert("changed");
+        //    var tokens = this.value.split(',');
+        //    for (var i = 0; i< tokens.length-1; i++)
+        //    {
+        //        splittedCommentId = tokens[i];
+        //        alert(splittedCommentId);
+        //        //alert ("splittedCommentId" + splittedCommentId);
+        //        $('#reply_' + tokens[i] + '_content').on('keyup', function(e) {
+        //            if (e.which == 13 && ! e.shiftKey) {
+        //                var commentId = splittedCommentId;
+        //                alert(splittedCommentId);
+        //                splittedCommentId="";
+                        
+        //                var newMessage = this.value;
+        //                this.value="";
+        //                var html = "";
+        //                html = html + "<div class='social-comment' id='id'> \n" +
+        //                                           "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+        //                                                                    "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
+        //                                                                        "<i class='fa fa-angle-down'></i>\n" +
+        //                                                                    "</button>\n" +
+        //                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
+        //                                                                         "<li onclick=''><a>Ẩn</a></li>" +
+        //                                                                          "<li onclick=''><a>Xoá</a></li></ul>" +
+        //                                                                    "</ul>\n" +
+        //                                                                "</div>\n" +
+        //                                                                 "<div class = 'clickable'>" +
+        //                                                                "<a href='' class='pull-left'>\n" +
+        //                                                                    "<img alt='image' src='https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.0-9/14264111_1189424544458701_3919242839679664936_n.jpg?oh=5e75f19be586373cd59756a79abd731d&oe=588C5FA2'>\n" +
+        //                                                                "</a>\n" +
+        //                                                                "<div class='media-body'>\n" +
+        //                                                                    "<a href='https://www.facebook.com/' id='fromId' target='_blank'>Trí's\n"+
+        //                                                                        "</a>\n";
+        //                var date = currentDate.getDate() + "/"
+        //                + (currentDate.getMonth()+1)  + "/"
+        //                + currentDate.getFullYear() + " @@ "
+        //                + currentDate.getHours() + ":"
+        //                + currentDate.getMinutes() + ":"
+        //                + currentDate.getSeconds();
+        //                //html += "<img src='' class='img-responsive fbImage commentImage'>";
+        //                html+= newMessage+"</div>";
+        //                html = html + "<br>" +
+        //                                         "<button class='btn btn-white btn-xs' id= 'id' onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+        //                                         "<small class='text-muted'> <a href='https://www.facebook.com/' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+        //                                     "</div>"+
+        //                                     "</div>\n";
+        //                //alert(tokens[i]);
+        //                //alert(commentId);
+        //                $('#reply_to_'+commentId).append(html + "</div>");
+        //            }
+                    
+        //        }
+                
+        //    );
+        //        //alert("sdfsd" + commentId);
+        //    }
+        //    commentIdList = "";
+            
+        //})
+        
+
+
 
         var oTable = $('#cart').DataTable({
             "paging": false,
@@ -711,19 +676,8 @@
             "searching": false,
             "scrollY": "15vh"
         });
-        $(function () {
-            $("#selectable").selectable({
-                stop: function () {
-                    var result = $("#select-result").empty();
-                    $(".ui-selected", this).each(function () {
-                        var index = $("#selectable li").index(this);
-                        result.append(" #" + (index + 1));
-                        loadPostDetail(this.id);
-                    });
-                }
-            });
-        });
 
+        var currentDate = new Date();
         function comment_tab_check(mode) {
             //if ($('#comment_div').contents().length != 0)
             //{
@@ -764,35 +718,51 @@
         }
 
         var Viewskip = 0;
+        //total number of post
+        var post_quan = 0;
+        //1 = init load, 2 = append
+        var loader_flag = 1;
+        //prevent appending new post while getting current post list
+        var loading_post_flag = 0;
+        //prevent getting new post detail while loading current post
+        var loading_post_detail_flag = 0;
+        // list of comment's id
+        var commentIdList = "";
 
         //load all post with lastest unread comment(s)
         function loadPosts() {
+            loading_post_flag = 1;
             $.ajax({
                 url: "/ChatComment/GetAllPosts",
                 method: 'get',
                 data: ({
                     skip: Viewskip,
-                    take: 12,
+                    take: 11,
                 }),
                 processing: 'true',
                 success: function (data) {
-                    //alert(data.length);
+                    
+                    post_quan = data.postQuan;
+                    //alert(data.postQuan);
                     var html = "";
                     if (data != null) {
-                        for (var i = 0; i < data.length; i++) {
+                        $("#postLoader").hide();
+                        $("#newPostLoader").hide();
+                        for (var i = 0; i < data.postviewlist.length; i++) {
                             //alert(data[i].message.length);
                             //if (data[i].message.length > 30) data[i].message = data[i].message.substring(0, 30);
-                            $("#postLoader").hide();
-                            html = "<li class='ui-widget-content' id='" + data[i].post.Id + "'>\n" +
-                                                "<div class='feed-element'>\n" +
-                                                "<div id='" + data[i].post.Id + "_contentDiv'>\n" +
-                                                "<small class='pull-right'>" + FormatDateTimeVN(data[i].post.LastUpdate) + "</small>\n" +
-                                                "<strong>" + data[i].from + "</strong>\n  <div>";
 
-                            if (data[i].message != "" && data[i].message != null && data[i].message != "null") html += data[i].message;
-                            if (data[i].imageContent != "" && data[i].imageContent != null && data[i].imageContent != "null") {
+                            html = "<li class='ui-widget-content' id='" + data.postviewlist[i].post.Id + "'>\n" +
+                                                "<div class='feed-element'>\n" +
+                                                "<div id='" + data.postviewlist[i].post.Id + "_contentDiv'>\n" +
+                                                "<small class='pull-right'>" + FormatDateTimeVN(data.postviewlist[i].post.LastUpdate) + "</small>\n" +
+                                                "<strong>" + data.postviewlist[i].from + "</strong>\n  <div>";
+
+                            if (data.postviewlist[i].message != "" && data.postviewlist[i].message != null && data.postviewlist[i].message != "null") html += data.postviewlist[i].message;
+                            if (data.postviewlist[i].imageContent != "" && data.postviewlist[i].imageContent != null && data.postviewlist[i].imageContent != "null") {
                                 html += " <div class='tooltip'>(hình)" +
-                                "<span class='tooltiptext'><img src='" + data[i].imageContent + "' heigh='64px;'></span></div>";
+                                "<span class='tooltiptext'><img src='" + data.postviewlist[i].imageContent +"' heigh='64px;'></span></div>";
+
                             }
                             html += "</div>\n";
                             html += "</div>\n" + "</div></li>\n";
@@ -800,12 +770,15 @@
 
                         }
                         //alert(Viewskip);
-                        Viewskip = Viewskip + 13;
+                        loader_flag = 2;
+                        Viewskip = Viewskip + 11;
+                        loading_post_flag = 0;
                         //alert(Viewskip);
                     }
                 },
                 beforeSend: function () {
-                    $("#postLoader").show();
+                    if (loader_flag == 1)$("#postLoader").show();
+                    else $("#newPostLoader").show();
                 },
             })
 
@@ -817,6 +790,7 @@
                 async: false,
                 url: '/ChatComment/GetUserFromDb',
                 data: { "userFbId": fbid },
+                async: false,
                 success: function (data) {
                     if (data == false) {
                         //Do nothing
@@ -885,7 +859,7 @@
             else {
                 $('#cus_name').val($('#cusName').val());
             }
-            
+
             $('#cus_phone').val('');
             $('#cus_mail').val('');
             $('#cus_addr').val('');
@@ -1012,6 +986,7 @@
 
         //load clicked post's content
         function loadPostDetail(postid) {
+            loading_post_detail_flag = 1;
             var postId = postid;
             $.ajax({
                 url: "/ChatComment/GetPostDetail",
@@ -1024,25 +999,30 @@
                     //alert(data.length);
                     //post returned as data
                     $('#commentLoader').hide();
+
                     if (data != null) {
+                        //alert(data.from_userId);
                         var html = null;
                         $("#comment_div").empty();
                         html = "<div class='social-feed-box' id='postDetail'>" +
                                                     "<div class='pull-right social-action dropdown'>" +
                                                         "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>" +
                                                         "<i class='fa fa-angle-down'></i></button>" +
-                                                        "<ul class='dropdown-menu m-t-xs'>" +
-                                                        "<li onclick=''></li></ul>" +
+                                                        "<ul class='dropdown-menu m-t-xs' style='min-width:0px'>";
+                        if (data.SenderFbId == @Session["shopId"].ToString()) html +="<li onclick=''><a>Sửa</a></li>";
+                        html+="<li onclick='alert('sdfds');'><a>Ẩn</a></li>"+
+                                                        "<li onclick=''><a>Xoá</a></li></ul>" +
                                                     "</div>" +
-                                                    "<div class='social-avatar' id=" + data.from_userId + ">" +
+                                                    "<div class='social-avatar' id=" + data.SenderFbId + ">" +
                                                     "<div class = 'clickable'>" +
                                                         "<a href='' class='pull-left'>" +
-                                                        "<img alt='image' src='" + data.fromAvatar + "'> </a>" + 
+                                                        "<img alt='image' src='" + data.fromAvatar + "'> </a>" +
                                                         "<div class='media-body'>" +
-                                                            "<a href=" + "https://www.facebook.com/" + data.from_userId + " id='" + data.from_userId + "' target='_blank' style='display:inline'>" + data.from + "</a>\n <br>" +
-                                                            
-                                                            "<small class='text-muted'><a href='" + data.toUrl + "' target='_blank' style='display:inline'>" + FormatDateVN_fix(data.LastUpdate) + "</a></small>" +
-                                                        "</div></div>" +
+                                                            "<a href='" + "https://www.facebook.com/" + data.SenderFbId + "' id='" + data.SenderFbId + "' target='_blank' style='display:inline'>" + data.from + "</a>\n <br>" +
+
+                                                            "<small class='text-muted'><a href='" + "https://www.facebook.com/"+ data.Id + "' target='_blank' style='display:inline'>" + FormatDateVN_fix(data.LastUpdate) + "</a></small>" +
+                                                        "</div>"+
+                                                        "</div>" +
                                                     "</div>" +
                                                      "<div class='social-body'>";
                         if (data.storyContent != null && data.storyContent != "" && data.storyContent != "null") {
@@ -1054,15 +1034,14 @@
                             html += "<p>" + dummyString2 + "</p>";
                         }
                         if (data.postImageContent != "" && data.postImageContent != null) {
-                            html += "<img src='" + data.postImageContent + "' class='img-responsive fbImage postImage'>" +
-                                                    "<div class='btn-group'>" +
+                            html += "<img src='" + data.postImageContent + "' class='img-responsive fbImage postImage'>";
+                        }
+                        html+="<div class='btn-group'>" +
                                                     "<button class='btn btn-white btn-xs'><i class='fa fa-thumbs-up'></i> Like this!</button>" +
                                                     "</div>" +
                                                     "</div>";
-
-                        }
                         $("#comment_div").append(html);
-                        html = "<div class='social-footer'>";
+                        html = "<div class='social-footer' id='"+data.Id+"_Comments'>";
                         if (data.comments.length != 0) {
                             for (var i = 0; i < data.comments.length; i++) {
                                 //alert(data[i].message.length);
@@ -1071,8 +1050,10 @@
                                                                         "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
                                                                             "<i class='fa fa-angle-down'></i>\n" +
                                                                         "</button>\n" +
-                                                                        "<ul class='dropdown-menu m-t-xs' style='width:20%;'>\n" +
-                                                                            "<li></li>\n" +
+                                                                        "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                if (data.comments[i].SenderFbId == @Session["shopId"].ToString()) html +="<li onclick=''><a>Sửa</a></li>";
+                                html+="<li onclick='alert('sdfds');'><a>Ẩn</a></li>"+
+                                                                              "<li onclick=''><a>Xoá</a></li></ul>" +
                                                                         "</ul>\n" +
                                                                     "</div>\n" +
                                                                      "<div class = 'clickable'>" +
@@ -1080,7 +1061,7 @@
                                                                         "<img alt='image' src='" + data.comments[i].avatarUrl + "'>\n" +
                                                                     "</a>\n" +
                                                                     "<div class='media-body'>\n" +
-                                                                        "<a href=" + "https://www.facebook.com/" + data.comments[i].fromId + " id='" + data.comments[i].fromId + "' target='_blank'>\n" +
+                                                                        "<a href='"+"https://www.facebook.com/" + data.comments[i].SenderFbId + "' id='" + data.comments[i].SenderFbId + "' target='_blank'>\n" +
                                                                             data.comments[i].from +
                                                                         "</a>\n";
 
@@ -1095,15 +1076,21 @@
 
                                 }
                                 html = html + "<br>" +
-                                                         "<button class='btn btn-white btn-xs' id= " + data.comments[i].id + " onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
-                                                         "<small class='text-muted'>" + FormatDateVN_fix(data.comments[i].datacreated) + "</small>\n" +
-                                                     "</div><div class='social-comment' id='reply_" + data.comments[i].id + "' style='display:none'>" +
-                                                     "<div class='media-body'>" +
-                                                     "<textarea class='form-control' id='reply_" + data.comments[i].id + "_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                                                         "<button class='btn btn-white btn-xs' id= '" + data.comments[i].id + "' onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+                                                         "<small class='text-muted'> <a href='"+"https://www.facebook.com/" + data.comments[i].id + "' target='_blank' style='display:inline'>" + FormatDateVN_fix(data.comments[i].datacreated) + "</a></small>\n" +
+                                                     "</div>"+
+                                                     "<div id='reply_to_"+data.comments[i].id+"'></div>"+
+                                                     "<div class='social-comment' id='reply_" + data.comments[i].id + "' style='display:none'>" +
+                                                     "<a href class='pull-left'> <img src='@Session["shopAvatar"].ToString()'></a><div class='media-body'>" +
+                                                     //reply to a comment
+                                                     "<textarea class='form-control replyComment' id='reply_" + data.comments[i].id + "_content' placeholder='Nhập bình luận...'></textarea></div>" +
+                                                     //
                                                      "</div></div>\n";
+                                commentIdList += data.comments[i].id+",";
                             }
                         }
                         $("#postDetail").append(html + "</div>");
+                        //saveCommentIdListToHidden(commentIdList);
                         $("#comment_div").append("<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>" +
                             "<img src='/Content/image/loader.gif' />" + "<input type='hidden' value='"+postId+"' id='hiddenPostId'>"+
                             "</div>");
@@ -1112,52 +1099,53 @@
                         {
                             for (var i = 0; i < data.nestedComments.length; i++) {
                                 //alert(data.nestedComments[i].parentId);
-                                $('#reply_' + data.nestedComments[i].parentId).remove();
-                                    var html1 = "</div><div class='social-comment' id='" + data.nestedComments[i].id + "'> \n" +
-                                               "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
-                                                                        "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
-                                                                            "<i class='fa fa-angle-down'></i>\n" +
-                                                                        "</button>\n" +
-                                                                        "<ul class='dropdown-menu m-t-xs' style='width:20%;'>\n" +
-                                                                            "<li></li>\n" +
-                                                                        "</ul>\n" +
-                                                                    "</div>\n" +
-                                                                    "<div class = 'clickable'>" +
-                                                                    "<a href='' class='pull-left'>\n" +
-                                                                        "<img alt='image' src='" + data.nestedComments[i].avatarUrl + "'>\n" +
-                                                                    "</a>\n" +
-                                                                    
-                                                                    "<div class='media-body'>\n" +
-                                                                        "<a href=" + "https://www.facebook.com/" + data.nestedComments[i].fromId + " id='" + data.nestedComments[i].fromId + "' target='_blank'>\n" +
-                                                                            data.nestedComments[i].from +
-                                                                        "</a>\n";
+                                //$('#reply_' + data.nestedComments[i].parentId).remove();
+                                var html1 = "</div><div class='social-comment' id='" + data.nestedComments[i].id + "'> \n" +
+                                           "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                    "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
+                                                                        "<i class='fa fa-angle-down'></i>\n" +
+                                                                    "</button>\n" +
+                                                                    "<ul class='dropdown-menu m-t-xs' style='width:20%;'>\n" +
+                                                                        "<li></li>\n" +
+                                                                    "</ul>\n" +
+                                                                "</div>\n" +
+                                                                "<div class = 'clickable'>" +
+                                                                "<a href='' class='pull-left'>\n" +
+                                                                    "<img alt='image' src='" + data.nestedComments[i].avatarUrl + "'>\n" +
+                                                                "</a>\n" +
 
-                                    if (data.nestedComments[i].commentContent != "" && data.nestedComments[i].commentContent != null && data.nestedComments[i].commentContent != "null") {
-                                        console.log(data.nestedComments[i].commentContent);
-                                        var dummyString4 = data.nestedComments[i].commentContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
-                                        //html= html+data.comments[i].commentContent;
-                                        html1 += dummyString4 +"</div>";
-                                    }
-                                    if (data.nestedComments[i].commentImageContent != "" && data.nestedComments[i].commentImageContent != null && data.nestedComments[i].commentImageContent != "null") {
-                                        html1 += "<img src='" + data.nestedComments[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
+                                                                "<div class='media-body'>\n" +
+                                                                    "<a href='" + "https://www.facebook.com/" + data.nestedComments[i].fromId + "' id='" + data.nestedComments[i].fromId + "' target='_blank'>\n" +
+                                                                        data.nestedComments[i].from +
+                                                                    "</a>\n";
 
-                                    }
-                                    html1 = html1 + "<br>" +
-                                                             "<button class='btn btn-white btn-xs' id= " + data.nestedComments[i].parentId + " onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
-                                                             "<small class='text-muted'>" + FormatDateVN_fix(data.nestedComments[i].datacreated) + "</small>\n" +
-                                                         "</div><div class='social-comment' id='reply_" + data.nestedComments[i].parentId + "' style='display:none'>" +
-                                                         "<div class='media-body'>" +
-                                                         "<textarea class='form-control' id='reply_" + data.nestedComments[i].parentId + "_content' placeholder='Nhập bình luận...'></textarea> </div>" +
-                                                         "</div>";
-                                    //alert(data.nestedComments[i].parentId);
-
-                                    $('#' + data.nestedComments[i].parentId).append(html1);
+                                if (data.nestedComments[i].commentContent != "" && data.nestedComments[i].commentContent != null && data.nestedComments[i].commentContent != "null") {
+                                    console.log(data.nestedComments[i].commentContent);
+                                    var dummyString4 = data.nestedComments[i].commentContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                                    //html= html+data.comments[i].commentContent;
+                                    html1 += dummyString4 +"</div>";
+                                }
+                                if (data.nestedComments[i].commentImageContent != "" && data.nestedComments[i].commentImageContent != null && data.nestedComments[i].commentImageContent != "null") {
+                                    html1 += "<img src='" + data.nestedComments[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
 
                                 }
-                             }
-                        //alert(Viewskip);
-                        //Viewskip = Viewskip + 13;
-                        //alert(Viewskip);
+                                html1 = html1 + "<br>" +
+                                                         "<button class='btn btn-white btn-xs' id= " + data.nestedComments[i].parentId + " onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+                                                         "<small class='text-muted'><a href='"+"https://www.facebook.com/" + data.nestedComments[i].id + "' target='_blank' style='display:inline'>"  + FormatDateVN_fix(data.nestedComments[i].datacreated) + "</small>\n" +
+                                                     "</div>";
+                                                     //"<div class='social-comment' id='reply_" + data.nestedComments[i].parentId + "' style='display:none'>" +
+                                                     //"<a href class='pull-left'><img src='https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/14264111_1189424544458701_3919242839679664936_n.jpg?oh=1132d03ab1238d05e68d776cc4a3f884&oe=589ACC50'></a>"+
+                                                     //"<div class='media-body'>" +
+                                                     //"<textarea class='form-control' id='reply_" + data.nestedComments[i].parentId + "_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                                                     //"</div>";
+                                //alert(data.nestedComments[i].parentId);
+
+                                $('#reply_to_' + data.nestedComments[i].parentId).append(html1);
+
+
+                            }
+                        }
+
                         document.getElementById("replyInputTxt").disabled = false;
                         $(".clickable").on("click", function () {
                             var curElement = $($(this).children(".media-body")[0]);
@@ -1171,7 +1159,7 @@
                             ProcessUserInfo(userfbid);
                             event.stopPropagation();
                         })
-                        
+
                     }
                 },
                 beforeSend: function () {
@@ -1181,17 +1169,63 @@
                     $('#commentLoader').show();
                 },
             })
-            
+
         }
-        
-        jQuery(function ($) {
-            $('#scrollPostList').on('scroll', function () {
-                if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                    alert('end reached');
-                    //alert(Viewskip);
-                    //loadPost();
-                }
-            })
-        });
+
+
+        $(document).on('keyup', '.replyComment', function(e) {
+            if (e.which == 13 && ! e.shiftKey) 
+                {
+                //var postId = $('#hiddenPostId').val();
+                //var newMessage = this.val;
+                //$('#replyInputTxt').val('');
+                //alert(this.id);
+                alert(this.id);
+                var tokens = this.id.split('_');
+                var commentId = tokens[1] + "_" + tokens[2];
+                //alert(commentId);
+                var html = "";
+                html = html + "<div class='social-comment' id='id'> \n" +
+                                       "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                "<button data-toggle='dropdown' class='dropdown-toggle btn-white'>\n" +
+                                                                    "<i class='fa fa-angle-down'></i>\n" +
+                                                                "</button>\n" +
+                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
+                                                                     "<li onclick=''><a>Ẩn</a></li>" +
+                                                                      "<li onclick=''><a>Xoá</a></li></ul>" +
+                                                                "</ul>\n" +
+                                                            "</div>\n" +
+                                                             "<div class = 'clickable'>" +
+                                                            "<a href='' class='pull-left'>\n" +
+                                                                "<img alt='image' src='@Session["shopAvatar"].ToString()'>\n" +
+                                                            "</a>\n" +
+                                                            "<div class='media-body'>\n" +
+                                                                "<a href='https://www.facebook.com/@Session["shopId"].ToString()' id='@Session["shopId"].ToString()' target='_blank'>@Session["shopOwner"].ToString()\n"+
+                                                                    "</a>\n";
+            var date = currentDate.getDate() + "/"
+            + (currentDate.getMonth()+1)  + "/"
+            + currentDate.getFullYear() + " @@ "
+            + currentDate.getHours() + ":"
+            + currentDate.getMinutes() + ":"
+            + currentDate.getSeconds();
+            //html += "<img src='' class='img-responsive fbImage commentImage'>";
+            html+=  $('#reply_'+commentId+'_content').val();+"</div>";
+            html = html + "<br>" +
+                                     "<button class='btn btn-white btn-xs' id= 'id' onclick='showDiv(this.id)'><i class='fa fa-comments'></i> Reply</button>\n" +
+                                     "<small class='text-muted'> <a href='https://www.facebook.com/' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+                                 "</div>"+
+                                 "<div id='reply_to_parent_id'></div>"+
+                                 "<div class='social-comment' id='reply_id' style='display:none'>" +
+                                 "<a href='' class='pull-left'>\n" +
+                                                                    "<img alt='image' src='@Session["shopAvatar"].ToString()'>\n" +
+                                                                "</a>\n" +
+                                 "<div class='media-body'>" +
+                                 "<textarea class='form-control' id='reply_'"+commentId+"_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                                 "</div></div>\n";
+            $('#reply_to_'+commentId).append(html + "</div>");
+            }
+        }); 
+
+
     </script>
 }

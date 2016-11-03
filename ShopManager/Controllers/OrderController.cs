@@ -10,6 +10,7 @@ using DataService.JqueryDataTable;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class OrderController : Controller
     {
         //public ActionResult GetOrderFromShopId(string shopId)
@@ -20,8 +21,8 @@ namespace ShopManager.Controllers
         //}
         public ActionResult Index()
         {
-            Session["ShopId"] = "1";
-            Session["CustId"] = "3";
+            //Session["ShopId"] = "1";
+            //Session["CustId"] = "3";
             return View("All");
         }
 

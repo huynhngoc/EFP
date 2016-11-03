@@ -16,15 +16,27 @@ namespace DataService.Service
         }
         public bool AddConversation(string id, int intent, long time, string shopId)
         {
-            Conversation c = new Conversation()
+
+            Conversation c = repository.FindByKey(id);
+            if (c == null)
             {
-                Id = id,
-                IntentId = intent,
-                LastUpdate = new DateTime(time),
-                ShopId = shopId,
-                IsRead = false
-            };
-            return repository.Create(c);
+                c = new Conversation()
+                {
+                    Id = id,
+                    IntentId = intent,
+                    LastUpdate = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(time)).ToLocalTime(),                    
+                    ShopId = shopId,
+                    IsRead = false
+                };
+                return repository.Create(c);
+            } else
+            {
+                c.IntentId = intent;
+                c.LastUpdate = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(time)).ToLocalTime();
+                c.IsRead = false;
+                return repository.Update(c);
+            }
+                
 
         }
 
@@ -32,6 +44,13 @@ namespace DataService.Service
         {
             Conversation c = repository.FindByKey(id);
             c.IsRead = true;
+            return repository.Update(c);
+        }
+        public bool SetReadConversation(string id, long time)
+        {
+            Conversation c = repository.FindByKey(id);
+            c.IsRead = true;
+            c.LastUpdate = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(time)).ToLocalTime();
             return repository.Update(c);
         }
     }

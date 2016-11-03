@@ -12,6 +12,13 @@
     <title>Thanh toán</title>
     @Styles.Render("~/Header-CSS")
     @Styles.Render("~/Sweet-Alert-CSS")
+    <style>
+        .no-spin::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+            -moz-appearance: textfield !important;
+        }
+    </style>
 </head>
 
 <body class="gray-bg">
@@ -51,12 +58,13 @@
                                     </div>
                                     <div id="receiverDiv" class="form-group">
                                         <label>Người nhận</label>
-                                        <input id="receiver" type="text" placeholder="Người nhận" class="form-control">
-                                        <p id="errorCustomerName" style="color:red; display:none">Vui lòng điền tên của ban!</p>
+                                        <input id="orderReceiver" type="text" placeholder="Người nhận" class="form-control">
+                                        <p id="errorCustomerName" style="color:red; display:none">Vui lòng điền tên của bạn!</p>
                                     </div>
-                                    <div class="form-group">
+                                    <div id="phoneDiv" class="form-group">
                                         <label>Số điện thoại</label>
-                                        <input id="phone" type="tel" placeholder="Số điện thoại" class="form-control">
+                                        <input id="orderPhone" type="number" placeholder="Số điện thoại" class="form-control no-spin">
+                                        <p id="errorCustomerPhone" style="color:red; display:none">Vui lòng điền số điện thoại của bạn!</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Địa chỉ nhận hàng</label>
@@ -67,7 +75,7 @@
                                         <textarea id="userNote" style="resize:none" placeholder="Ghi chú" class="form-control"> </textarea>
                                     </div>
                                     <div class="text-right">
-                                        <button class="btn btn-default pull-left" onclick="window.location.href = '~/../Index';"><i class="fa fa-long-arrow-left"></i> Quay về</button>
+                                        <a class="btn btn-default pull-left" href="/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId"><i class="fa fa-long-arrow-left"></i> Quay về</a>
                                         <button id="checkOutBtn" class="btn btn-primary" onclick="addOrder()"><i class="fa fa-dollar"></i> Đặt hàng</button>
                                     </div>
                                 </div>
@@ -82,88 +90,102 @@
     @Scripts.Render("~/Mainly-scripts")
     @Scripts.Render("~/Sweet-Alert-JS")
 
-    <script>
+    <script type="text/javascript" charset="utf-8">
         var fbId = @ViewBag.PageInfo.FBId;
         var shopId = @ViewBag.PageInfo.ShopId;
+        var FBName = "@Html.Raw(ViewBag.PageInfo.UserName)";
+
+        $(document).ready(function(){
+            // Load data cart and customer
+            $.ajax({
+                url:"/GetData/GetCheckOutInfo",
+                data:{
+                    FBId:fbId,
+                    shopId: shopId
+                },
+                dataType:"json",
+                success:function(result){
+                    if(result!=null&&result.listCart!=null&&result.listCart.length!=0){
+                        if(result.userName != null){
+                            $('#userNameDiv').show();
+                            $('#receiverDiv > label').text("Người nhận");
+                            $('#userName').text('');
+                            $('#userName').text(result.userName);
+                            $('#orderReceiver').val('');
+                        }else{
+                            $('#userNameDiv').hide();
+                            $('#receiverDiv > label').text("Tên khách hàng");
+                            $('#orderReceiver').val("@Html.Raw(ViewBag.PageInfo.UserName)");
+                        }
+                        $('#checkOutInfo').find("div.ibox-content.p-xl").removeAttr("style");
+                        var total = 0;
+                        for(var i=0;i<result.listCart.length;i++){
+                            total = total + (result.listCart[i].quantity*result.listCart[i].price)
+                            $('#checkOutInfo').find("table.table.invoice-table > tbody").append("<tr>"+
+                                            "<td>"+
+                                                " <div><strong>"+result.listCart[i].properties+"</strong></div>"+
+                                            "</td>"+
+                                            "<td>"+result.listCart[i].quantity+"</td>"+
+                                            "<td>"+result.listCart[i].price.formatMoney()+"</td>"+
+                                            "<td>"+(result.listCart[i].quantity*result.listCart[i].price).formatMoney()+" &#8363;</td>"+
+                                            "</tr>")
+                        }
+                        $('#checkOutInfo').find("table.table.invoice-total > tbody > tr > td:nth-child(2) > h3").text(total.formatMoney());
+                        $('#phone').val('');
+                        $('#phone').val(result.phone);
+                        $('#shippingAddress').val('');
+                        $('#shippingAddress').val(result.shippingAddress);
+                        $('#userNote').val('');
 
 
-        // Load data cart and customer
-        $.ajax({
-            url:"/GetData/GetCheckOutInfo",
-            data:{
-                FBId:fbId,
-                shopId: shopId
-            },
-            dataType:"json",
-            success:function(result){
-                if(result!=null&&result.listCart!=null&&result.listCart.length!=0){
-                    if(result.userName != null){
-                        $('#userNameDiv').show();
-                        $('#receiverDiv > label').text("Người nhận");
-                        $('#userName').text('');
-                        $('#userName').text(result.userName);
+
                     }else{
-                        $('#userNameDiv').hide();
-                        $('#receiverDiv > label').text("Tên khách hàng");
-
+                        $('#checkOutInfo').find("div.ibox-content.p-xl").attr("style","display:none");
+                        $('#checkOutInfo').append("<h2 class='text-center'>Chưa có sản phẩm trong giỏ hàng</h2>");
+                        $('#checkOutInfo').append("<a href='/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId'><h3 class='text-center'>Quay về trang chủ</h3></a>");
                     }
-                    $('#checkOutInfo').find("div.ibox-content.p-xl").removeAttr("style");
-                    var total = 0;
-                    for(var i=0;i<result.listCart.length;i++){
-                        total = total + (result.listCart[i].quantity*result.listCart[i].price)
-                        $('#checkOutInfo').find("table.table.invoice-table > tbody").append("<tr>"+
-                                        "<td>"+
-                                            " <div><strong>"+result.listCart[i].properties+"</strong></div>"+
-                                        "</td>"+
-                                        "<td>"+result.listCart[i].quantity+"</td>"+
-                                        "<td>"+result.listCart[i].price+"</td>"+
-                                        "<td>"+(result.listCart[i].quantity*result.listCart[i].price)+" (VND)</td>"+
-                                        "</tr>")
-                    }
-
-                    $('#receiver').val('');
-                    $('#checkOutInfo').find("table.table.invoice-total > tbody > tr > td:nth-child(2) > h3").text(total);
-                    $('#phone').val('');
-                    $('#phone').val(result.phone);
-                    $('#shippingAddress').val('');
-                    $('#shippingAddress').val(result.shippingAddress);
-                    $('#userNote').val('');
-
-
-
-                }else{
+                },
+                error:function(){
                     $('#checkOutInfo').find("div.ibox-content.p-xl").attr("style","display:none");
                     $('#checkOutInfo').append("<h2 class='text-center'>Chưa có sản phẩm trong giỏ hàng</h2>");
-                    $('#checkOutInfo').append("<a href='/Home/Index'><h3 class='text-center'>Quay về trang chủ</h3></a>");
+                    $('#checkOutInfo').append("<a href='/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId'><h3 class='text-center'>Quay về trang chủ</h3></a>");
                 }
-            },
-            error:function(){
-                $('#checkOutInfo').find("div.ibox-content.p-xl").attr("style","display:none");
-                $('#checkOutInfo').append("<h2 class='text-center'>Chưa có sản phẩm trong giỏ hàng</h2>");
-                $('#checkOutInfo').append("<a href='/Home/Index'><h3 class='text-center'>Quay về trang chủ</h3></a>");
-            }
+            })
+
+
         })
 
         // Function Add order
         function addOrder(){
             var userNote = $('#userNote').val();
             var shippingAddress = $('#shippingAddress').val();
-            var receiver = $('#receiver').val();
-            var phone = $('#phone').val();
+            var receiver = $('#orderReceiver').val();
+            var phone = $('#orderPhone').val();
             if($('#receiverDiv > label').text()=="Tên khách hàng"){
-                if($('#receiver').val().length==0){
+                if($('#orderReceiver').val().length==0){
                     $('#receiverDiv').addClass('has-error');
                     $('#errorCustomerName').show();
                 }else{
                     $('#receiverDiv').removeClass('has-error');
                     $('#errorCustomerName').hide();
-                    callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                    if($('#orderPhone').val().length==0){
+                        $('#phoneDiv').addClass('has-error');
+                        $('#errorCustomerPhone').show();
+                    }else{
+                        $('#phoneDiv').removeClass('has-error');
+                        $('#errorCustomerPhone').hide();
+                        callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                    }
                 }
             }else{
-                callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                if($('#orderPhone').val().length==0){
+                    $('#phoneDiv').addClass('has-error');
+                    $('#errorCustomerPhone').show();
+                }else{
+                    callAjaxAddOrder(userNote,shippingAddress,receiver,phone);
+                }
             }
         };
-
         // Ajax add order
         function callAjaxAddOrder(userNote,shippingAddress,receiver,phone){
             $.ajax({
@@ -185,7 +207,7 @@
                         },
                         function (isConfirm) {
                             if(isConfirm){
-                                window.location.href = "~/../Index";
+                                window.location.href = "/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId";
                             }
                         }
                         );
@@ -199,7 +221,17 @@
             })
         }
 
-
+        //Format money
+        Number.prototype.formatMoney = function (c, d, t) {
+            var n = this,
+                c = isNaN(c = Math.abs(c)) ? 0 : c,
+                d = d == undefined ? "," : d,
+                t = t == undefined ? "." : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
 
     </script>
 

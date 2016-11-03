@@ -52,6 +52,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -1559,6 +1563,7 @@
     <Content Include="Content\js\plugins\tinycon\tinycon.min.js" />
     <Content Include="Content\js\plugins\toastr\toastr.min.js" />
     <Content Include="Content\js\plugins\touchspin\jquery.bootstrap-touchspin.min.js" />
+    <Content Include="Content\js\plugins\typehead\bootstrap3-typeahead.min.js" />
     <Content Include="Content\js\plugins\validate\jquery.validate.min.js" />
     <Content Include="Content\js\plugins\video\responsible-video.js" />
     <Content Include="Content\js\plugins\wow\wow.min.js" />
@@ -1641,6 +1646,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\CheckOut.cshtml" />
     <Content Include="Views\Home\ViewProfile.cshtml" />
+    <Content Include="Views\Home\NotAuhorize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,6 +7,7 @@ using DataService.Service;
 
 namespace ShopManager.Controllers
 {
+    [SessionRequiredFilter]
     public class CategoryController : Controller
     {
         // GET: Category
@@ -17,8 +18,9 @@ namespace ShopManager.Controllers
 
         public JsonResult Parent()
         {
+            string shopId = (string)Session["ShopId"];
             CategoryService service = new CategoryService();
-            return Json(service.GetParentCategory("1"), JsonRequestBehavior.AllowGet);
+            return Json(service.GetParentCategory(shopId), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Children(int parentId)
@@ -29,6 +31,7 @@ namespace ShopManager.Controllers
 
         public JsonResult All(string shopId)
         {
+            shopId = (string)Session["ShopId"];
             CategoryService service = new CategoryService();
             return Json(service.GetAllCategory(shopId), JsonRequestBehavior.AllowGet);
         }
@@ -53,7 +56,7 @@ namespace ShopManager.Controllers
 
         public JsonResult Add(string name, string description, int? parentId)
         {
-            var shopId = "1";
+            string shopId = (string) Session["ShopId"];
             CategoryService service = new CategoryService();
             return Json(service.AddNewCategory(name,description,parentId, shopId), JsonRequestBehavior.AllowGet);
         }
