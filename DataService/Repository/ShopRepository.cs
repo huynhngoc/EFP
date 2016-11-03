@@ -33,7 +33,7 @@ namespace DataService.Service
             }
         }
         
-        public bool CreateShop(string shopId, string name, string token, string userId)
+        public bool CreateShop(string shopId, string name, string token, string userId, string picture)
         {
             entites.Configuration.ProxyCreationEnabled = true;
             Shop s = FindByKey(shopId);
@@ -44,7 +44,8 @@ namespace DataService.Service
                     Id = shopId,
                     ShopName = name,
                     FbToken = token,
-                    DateCreated = DateTime.Now,
+                    BannerImg = picture,
+                    DateCreated = DateTime.Now
                 };
                 if (Create(s))
                 {

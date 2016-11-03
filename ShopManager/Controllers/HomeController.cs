@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using Facebook;
 using System.Dynamic;
 using System.Configuration;
+using DataService.ViewModel;
 
 namespace ShopManager.Controllers
 {
@@ -68,15 +69,15 @@ namespace ShopManager.Controllers
 
                 //get name
                 dynamic nameParam = new ExpandoObject();
-                nameParam.fields = "name";
-                var fbName = fbApp.Get(id, nameParam);
+                nameParam.fields = "name,picture";
+                dynamic fbName = fbApp.Get(id, nameParam);
                 string name = fbName["name"];
-
+                string picture = fbName.picture.data.url;
                 string userId = User.Identity.GetUserId();
                 bool result = false;
                 if (shopService.GetShop(id) == null)
                 {
-                    shopService.CreateShop(id, name, longToken, userId);
+                    shopService.CreateShop(id, name, longToken, userId, picture);
 
                     EntityService entityService = new EntityService();
                     entityService.InitEntity(id);
@@ -99,8 +100,11 @@ namespace ShopManager.Controllers
         {
             ShopService service = new ShopService();
             if (service.CheckShopUser(shopId, User.Identity.GetUserId()))
-            {                
+            {
+                ShopViewModel s = service.GetShop(shopId);
                 Session["ShopId"] = shopId;
+                Session["ShopName"] = s.ShopName;
+                Session["ShopImg"] = s.BannerImg;
                 return RedirectToAction("Index", "Shop");
             }            
             else

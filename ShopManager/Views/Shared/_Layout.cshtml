@@ -18,13 +18,13 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                             <span>
-                                <img alt="image" class="img-circle" src="~/Content/img/profile.jpg" />
+                                <img alt="image" class="img-circle" src="@HttpContext.Current.Session["ShopImg"] " />
                             </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                     <span class="block m-t-xs">
                                         <strong class="font-bold">@User.Identity.GetUserName()</strong>
-                                    </span> <span class="text-muted text-xs block">Quản trị viên <b class="caret"></b></span>
+                                    </span> <span class="text-muted text-xs block">@HttpContext.Current.Session["ShopName"]  <b class="caret"></b></span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
