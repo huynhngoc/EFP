@@ -53,7 +53,13 @@ namespace DataService.Service
             {
                 return false;
             }
-        }        
+        }
+
+        //ANDND Set post is read
+        public bool SetPostIsRead(string postId)
+        {
+            return (repository.SetPostIsRead(postId));
+        }
 
     }
 }

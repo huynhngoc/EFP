@@ -1618,6 +1618,12 @@
     <Content Include="Content\js\plugins\chartist\chartist.min.js.map" />
     <Content Include="Content\js\plugins\diff_match_patch\COPYING" />
     <Content Include="Content\js\plugins\justified-gallery\README.md" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.svg" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.woff2" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1630,7 +1636,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

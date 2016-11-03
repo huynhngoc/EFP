@@ -27,6 +27,7 @@ namespace DataService.Utils
         public const string Like = "like";
         public const string Post = "post";
         public const string Status = "status";
+        public const string Photo = "photo";
     }
 
     public static class WebhookVerb

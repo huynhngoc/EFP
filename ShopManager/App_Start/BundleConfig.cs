@@ -30,9 +30,14 @@ namespace ShopManager
             //Header CSS
             bundles.Add(new StyleBundle("~/Header-CSS").Include(
                       "~/Content/css/bootstrap.min.css",
-                      "~/Content/font-awesome/css/font-awesome.css",
+                      "~/Content/font-awesome/css/font-awesome.css"));
+            //Animate and style CSS
+            bundles.Add(new StyleBundle("~/Animate-and-style-CSS").Include(
                       "~/Content/css/animate.css",
                       "~/Content/css/style.css"));
+            //awesome - bootstrap - checkbox CSS
+            bundles.Add(new StyleBundle("~/Awesome-bootstrap-checkbox-CSS").Include(
+                      "~/Content/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"));
             //Toastr style
             bundles.Add(new StyleBundle("~/Toastr-style").Include(
                       "~/Content/css/plugins/toastr/toastr.min.css"));
@@ -164,6 +169,12 @@ namespace ShopManager
             bundles.Add(new ScriptBundle("~/SignalR-JS").Include(
                 "~/Scripts/jquery.signalR-2.2.1.js",
                 "~/Scripts/jquery.signalR-2.2.1.min.js"));
+            //Data picker JS
+            bundles.Add(new ScriptBundle("~/Data-picker-JS").Include(
+                "~/Content/js/plugins/datapicker/bootstrap-datepicker.js"));
+            //Data picker CSS
+            bundles.Add(new StyleBundle("~/Data-picker-CSS").Include(
+                "~/Content/css/plugins/datapicker/datepicker3.css"));
         }
     }
 }
