@@ -160,7 +160,20 @@ namespace ShopManager.Controllers
                                         //chatbot api for message here
                                         var respond = apiAi.TextRequest(message);
                                         var intentRespond = respond.Result.Metadata.IntentName;
-                                        intent = intentRespond == null ? (int)DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                                        if (intentRespond != null)
+                                        {
+                                            try
+                                            {
+                                                if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                                                {
+                                                    intent = int.Parse(intentRespond);
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                
+                                            }                                            
+                                        }
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent.Value, status, parentId.Equals(postId) ? null : parentId, postId);
                                     break;
@@ -198,7 +211,20 @@ namespace ShopManager.Controllers
                                         //chatbot api for message here
                                         var respond = apiAi.TextRequest(message);
                                         var intentRespond = respond.Result.Metadata.IntentName;
-                                        intent = intentRespond == null ? (int)DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                                        if (intentRespond != null)
+                                        {
+                                            try
+                                            {
+                                                if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                                                {
+                                                    intent = int.Parse(intentRespond);
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
                                     }
                                     if (customerId.Equals(shopId))
                                     {
@@ -274,7 +300,21 @@ namespace ShopManager.Controllers
                 //chatbot api here              
                 var respond = apiAi.TextRequest(message);
                 var intentRespond = respond.Result.Metadata.IntentName;
-                intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                if (intentRespond != null)
+                {
+                    try
+                    {
+                        if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                        {
+                            intent = int.Parse(intentRespond);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
                 SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
