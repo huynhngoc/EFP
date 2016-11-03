@@ -178,3 +178,7 @@
 .unread {
     background-color: #ecf0f7;
 }
+.feed-activity-list .ui-selected {
+    background-color: #365899;
+    color: white;
+  }

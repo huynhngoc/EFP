@@ -159,6 +159,7 @@
     <Compile Include="Utils\WebhookObject.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
+    <Compile Include="ViewModel\ConversationContentViewModel.cs" />
     <Compile Include="ViewModel\ConversationPreviewViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

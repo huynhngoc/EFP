@@ -9,7 +9,7 @@ namespace DataService.ViewModel
     public class ConversationPreviewViewModel
     {
         public string ThreadId { get; set; }
-        public string UserId { get; set; }
+        public string UserFbId { get; set; }
         public string UserName { get; set; }
         public string AvatarUrl { get; set; }
         public string RecentMess { get; set; }

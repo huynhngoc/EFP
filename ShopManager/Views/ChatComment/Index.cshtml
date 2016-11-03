@@ -126,134 +126,34 @@
     <!--Chat box-->
     <div class="small-chat-bo fadeInRight animated col-lg-5" style="padding: 0">
 
-        <div class="heading" draggable="true">
-            <!--                        <small class="chat-date pull-right">02.19.2015</small> -->
+        <div id="receiver_name" class="heading" draggable="true">
             Vũ Hoàng Long
         </div>
 
-        <div class="content slimScrollBar" id="chat-content">
-            <li class="chat-date-separator"><abbr class="timestamp">19 Tháng 9</abbr></li>
-            <div class="left">
-                <div class="author-name">
-                    Vũ Hoàng Long
-                    <small class="chat-date">19.09.2016 10:02 am</small>
+        <div id="chat_box_content" class="content slimScrollBar">
+            @*<li class="chat-date-separator"><abbr class="timestamp">19 Tháng 9</abbr></li>
+                <div class="left" id="">
+                    <img alt="image" class="img-circle user_ava" src="" style="float:left; margin-right:7px" width="50" height="50">
+                    <div class="author-name">
+                        Vũ Hoàng Long
+                        <small class="chat-date">19.09.2016 10:02 am</small>
+                    </div>
+                    <div class="chat-message active">
+                        Hi
+                    </div>
                 </div>
-                <div class="chat-message active">
-                    Hi
-                </div>
-
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Mick Smith
-                    <small class="chat-date">
-                        19.09.2016 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    Lorem Ipsum is simpl.
-                </div>
-            </div>
-            <li class="chat-date-separator"><abbr class="timestamp">Hôm qua</abbr></li>
-            <div class="left">
-                <div class="author-name">
-                    Alice Novak
-                    <small class="chat-date">
-                        Hôm qua 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Check this stock char.
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        Hôm qua 11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        Hôm nay 08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Xin chào shop ^^ have pussy italy believe people vcl
-                </div>
-            </div>
+                <div class="right">
+                    <img alt="image" class="img-circle shop_ava" src="" style="float:right; margin-left:7px" width="50" height="50">
+                    <div class="author-name">
+                        Mick Smith
+                        <small class="chat-date">
+                            19.09.2016 11:24 am
+                        </small>
+                    </div>
+                    <div class="chat-message">
+                        Lorem Ipsum is simpl.
+                    </div>
+                </div>*@
         </div>
         <div class="form-chat">
             <div class="input-group input-group-sm">
@@ -270,16 +170,21 @@
     <div class="col-lg-4 information" style="height: 85vh">
         <div class="">
             <div>
-                <h3 style="padding: 0 0 5px 15px">Thông tin khách hàng</h3>
-                <div class="info" id="" style="padding:0">
+                <div>
+                    <h3 style="padding: 0 0 5px 15px;display:inline-block;">Thông tin khách hàng</h3>
+                    <span style="padding: 5px 15px 0 0;float:right">
+                        <a id="btn_add" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></a>
+                        <a id="btn_edit" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
+                        <a id="btn_ok_add" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
+                        <a id="btn_ok_edit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
+                        <a id="btn_cancel" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                    </span>
+                </div>
+                <div class="cust_info" id="" style="padding:0">
                     <div>
                         <div class="col-md-2">
-                            <img alt="image" class="img-circle" src="~/Content/img/profile_small.jpg" style="float:left">
+                            <img id="cust_avatar" alt="image" class="img-circle" src="" style="float:left" width="50" height="50">
                         </div>
-                        @*<div class="col-md-9">
-                                <a class="btn btn-info">Chỉnh sửa</a>
-                                <a class="btn btn-info">Lưu</a>
-                            </div>*@
                     </div>
                     <div class="col-md-5" style="padding-right:0">
                         <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
@@ -364,6 +269,7 @@
     @Styles.Render("~/TouchSpin-CSS")
     @Styles.Render("~/ChatComment-CSS")
     @Styles.Render("~/jQuery-UI-CSS")
+    @Styles.Render("~/Toastr-style")
 
     <style>
         table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
@@ -393,9 +299,20 @@
     @Scripts.Render("~/TouchSpin-JS")
     @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Utility-JS")
+    @Scripts.Render("~/Toastr")
     @Scripts.Render("~/SignalR-JS")
     @Scripts.Render("/signalr/hubs")
     <script type="text/javascript">
+        var shopId= @HttpContext.Current.Session["ShopId"];
+        var page_ava_url="";
+        $.ajax({
+            async: false,
+            url: '/ChatComment/GetPageAvatar',
+            success: function (data) {
+                page_ava_url=data;
+            }
+        });
+
         $(function () {
             // Declare a proxy to reference the hub.
             var chat = $.connection.alertHub;
@@ -403,6 +320,50 @@
             chat.client.sendMessageToPage = function (message, threadId, intent) {
                 console.log(threadId);
                 console.log(message);
+
+                var thread=document.getElementById(threadId);
+
+                //$('.mess_preview').text(message.message);
+                $(thread).find('.mess_preview').text(message.message);
+
+                //check if new mess in current clicked conversation
+                if (threadId == $('.ui-selected').attr('id')){
+                    if (shopId != message.from.id){
+                        $('#chat_box_content').append('<div class="left">'+
+                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
+                            '<div class="author-name">'+
+                                message.from.name+
+                                '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                            '</div>'+
+                            '<div class="chat-message active">'+
+                                message.message+
+                            '</div>'+
+                        '</div>');
+                    }
+                    else {
+                        $('#chat_box_content').append('<div class="right">'+
+                            '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
+                            '<div class="author-name">'+
+                                message.from.name+
+                                '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                            '</div>'+
+                            '<div class="chat-message">'+
+                                message.message+
+                            '</div>'+
+                        '</div>');
+                    }
+                }
+
+                //Move conversation to top
+                console.log($(thread).attr('id'));
+                console.log($('.feed-activity-list .feed-element').first().attr('id'));
+                if($(thread).attr('id') == $('.feed-activity-list .feed-element').first().attr('id')){
+                    alert('True');
+                }
+                else{
+                    var select=  $(thread).detach();
+                    select.prependTo('.feed-activity-list');
+                }
             };
 
             chat.client.sendCommentToPage = function (comment, intent) {
@@ -592,16 +553,47 @@
             })
         }
 
+        $('.feed-activity-list').selectable({
+            selected: function( event, ui ) {
+                var thread_id=$('.feed-activity-list .ui-selected').attr('id');
+                var userfbid=$('.ui-selected .fb_avatar').attr('id');
+                if ($('.ui-selected .fb_avatar').attr('src') != $('#cust_avatar').attr('src')){
+                    $('#cust_avatar').attr('src',$('.ui-selected .fb_avatar').attr('src'));
+                    $('#receiver_name').text($('.ui-selected .fb_name').html());
+
+                    SetConversationRead(thread_id);
+
+                    ProcessUserInfo(userfbid);
+
+                    GetConversationContent(thread_id);
+                }
+            }
+        });
+
+        function SetConversationRead(t_id){
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/ChatComment/SetConversationRead',
+                data: {"conversationId": t_id},
+                success: function (data) {
+                    if (data ==true){
+                        if($('.ui-selected').hasClass('unread')){
+                            $('.ui-selected').removeClass('unread');
+                        }
+                    }
+                }
+            });
+        }
+
         // Get ConversationPreview
         $.get('/ChatComment/GetConversationPreviews', function (data) {
             for (i=0;i<data.length;i++){
                 console.log(data[i].ThreadId);
-                var id='#'+data[i].ThreadId;
-                //var tid=(data[i].ThreadId).replace(":","_");
-                $('<div id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(i==0? ' selected':'')+'">'+
+                $('.feed-activity-list').append('<div id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(i==0? ' ui-selected':'')+'">'+
                                 '<div style="float:left; margin-right: 7px">'+
                                     '<div size="50" style="width: 50px; height: 50px;">'+
-                                        '<img src="'+data[i].AvatarUrl+'" width="50" height="50" alt="" class="img fb_avatar">'+
+                                        '<img id="'+data[i].UserFbId+'" src="'+data[i].AvatarUrl+'" width="50" height="50" alt="" class="img fb_avatar">'+
                                     '</div>'+
                                  '</div>'+
                                 '<div>'+
@@ -609,35 +601,248 @@
                                     '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+data[i].UserName+'</strong>'+
                                     '<div class="mess_preview" style="overflow: hidden;">'+data[i].RecentMess+'</div>'+
                                 '</div>'+
-                            '</div>').click(function() {
-                                alert(id);
-                                if ($(id).hasClass("selected")){
-                                    //Do nothing
-                                }
-                                else{
-                                    $('.feed-activity-list').find('.selected').removeClass('selected');
-                                    $(id).addClass('selected');
-                                    console.log($(id));
-                                }
-                            }).appendTo('.feed-activity-list');
-                //Left menu click
-                //var id="#"+tid;
-                //$('.feed-activity-list').on('click', id , function() {
-                //    alert(id);
-                //    if ($(id).hasClass("selected")){
-                //        //Do nothing
-                //    }
-                //    else{
-                //        $('.feed-activity-list').find('.selected').removeClass('selected');
-                //        $(id).addClass('selected');
-                //    }
-                //});
+                            '</div>');
             }
         });
-    </script>
 
-    @*Add Order*@
-    <script>
+        function GetConversationContent(t_id){
+            $('#chat_box_content').empty();
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/ChatComment/GetConversationContent',
+                data: {"conversationId": t_id},
+                success: function (data) {
+                    console.log(data);
+
+                    // Chat box content
+                    for (i=0;i<data.Messages.length;i++){
+                        var mess=data.Messages[i];
+                        if (mess.UserId != shopId){
+                            $('#chat_box_content').prepend('<div class="left">'+
+                                    '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
+                                    '<div class="author-name">'+
+                                        mess.UserName+
+                                        '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
+                                    '</div>'+
+                                    '<div class="chat-message active">'+
+                                        mess.MessContent+
+                                    '</div>'+
+                                '</div>');
+                        }
+                        else {
+                            $('#chat_box_content').prepend('<div class="right">'+
+                                '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
+                                '<div class="author-name">'+
+                                    mess.UserName+
+                                    '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
+                                '</div>'+
+                                '<div class="chat-message">'+
+                                    mess.MessContent+
+                                '</div>'+
+                            '</div>');
+                        }
+                    }
+                }
+            });
+        }
+
+        function ProcessUserInfo(userfbid){
+            var cust = GetUserFromDb(userfbid);
+            console.log(cust);
+            if (cust !=null){
+                $('.cust_info').attr('id',cust.Id);
+
+                $('#cus_name').attr('value', cust.Name);
+                $('#cus_phone').attr('value', cust.Phone);
+                $('#cus_mail').attr('value', cust.Email);
+                document.getElementById("cus_addr").defaultValue=cust.Address;
+                $('#cus_name').val($('#cus_name').attr('value'));
+                $('#cus_phone').val($('#cus_phone').attr('value'));
+                $('#cus_mail').val($('#cus_mail').attr('value'));
+                $('#cus_addr').val(document.getElementById("cus_addr").defaultValue);
+
+                $('#btn_add').hide();
+                $('#btn_edit').show();
+                $('#btn_ok_add').hide();
+                $('#btn_ok_edit').hide();
+                $('#btn_cancel').hide();
+            }
+            else{
+                $('.cust_info').attr('id','');
+
+                $('#cus_name').attr('value', 'Chưa có dữ liệu');
+                $('#cus_phone').attr('value', '');
+                $('#cus_mail').attr('value', '');
+                document.getElementById("cus_addr").defaultValue="";
+                $('#cus_name').val($('#cus_name').attr('value'));
+                $('#cus_phone').val($('#cus_phone').attr('value'));
+                $('#cus_mail').val($('#cus_mail').attr('value'));
+                $('#cus_addr').val(document.getElementById("cus_addr").defaultValue);
+
+                $('#btn_add').show();
+                $('#btn_edit').hide();
+                $('#btn_ok_add').hide();
+                $('#btn_ok_edit').hide();
+                $('#btn_cancel').hide();
+            }
+            $("#cus_name").prop('readonly', true);
+            $("#cus_phone").prop('readonly', true);
+            $("#cus_mail").prop('readonly', true);
+            $("#cus_addr").prop('readonly', true);
+        }
+
+        $('#btn_add').click(function(){
+            $("#cus_name").prop('readonly', false);
+            $("#cus_phone").prop('readonly', false);
+            $("#cus_mail").prop('readonly', false);
+            $("#cus_addr").prop('readonly', false);
+
+            $('#cus_name').val($('.ui-selected .fb_name').html());
+            $('#cus_phone').val('');
+            $('#cus_mail').val('');
+            $('#cus_addr').val('');
+
+            $('#btn_add').hide();
+            $('#btn_edit').hide();
+            $('#btn_ok_add').show();
+            $('#btn_ok_edit').hide();
+            $('#btn_cancel').show();
+        });
+
+        $('#btn_edit').click(function(){
+            $("#cus_name").prop('readonly', false);
+            $("#cus_phone").prop('readonly', false);
+            $("#cus_mail").prop('readonly', false);
+            $("#cus_addr").prop('readonly', false);
+
+            $('#btn_add').hide();
+            $('#btn_edit').hide();
+            $('#btn_ok_add').hide();
+            $('#btn_ok_edit').show();
+            $('#btn_cancel').show();
+        });
+
+        $('#btn_ok_add').click(function(){
+            $.get('/Customer/AddCustomer', {
+                "Id": $('.ui-selected .fb_avatar').attr('id'),
+                "Name": $('#cus_name').val(),
+                "Addr": $('#cus_addr').val(),
+                "Desc": null,
+                "Phone": $('#cus_phone').val(),
+                "Email": $('#cus_mail').val()
+            }, function (data) {
+                console.log('Add customer status: '+data);
+
+                if (data=="True"){
+                    toastr.success("", "Thêm thành công");
+
+                    $("#cus_name").prop('readonly', true);
+                    $("#cus_phone").prop('readonly', true);
+                    $("#cus_mail").prop('readonly', true);
+                    $("#cus_addr").prop('readonly', true);
+
+                    $('#cus_name').attr('value', $('#cus_name').val());
+                    $('#cus_phone').attr('value', $('#cus_phone').val());
+                    $('#cus_mail').attr('value', $('#cus_mail').val());
+                    document.getElementById("cus_addr").defaultValue=$('#cus_addr').val();
+
+                    $('#btn_add').hide();
+                    $('#btn_edit').show();
+                    $('#btn_ok_add').hide();
+                    $('#btn_ok_edit').hide();
+                    $('#btn_cancel').hide();
+                }
+                else {
+                    toastr.error("Xin điền đầy đủ các ô bắt buộc", "Thất bại");
+                }
+            });
+        });
+
+        $('#btn_ok_edit').click(function(){
+            $.get('/Customer/EditCustomer', {
+                "Id": $('.cust_info').attr('id'),
+                "Name": $('#cus_name').val(),
+                "Addr": $('#cus_addr').val(),
+                "Desc": null,
+                "Phone": $('#cus_phone').val(),
+                "Email": $('#cus_mail').val(),
+                "ShopId": null
+            }, function (data) {
+                console.log('Edit customer status: '+data);
+
+                if (data=="True"){
+                    toastr.success("", "Đã lưu thành công");
+                    $("#cus_name").prop('readonly', true);
+                    $("#cus_phone").prop('readonly', true);
+                    $("#cus_mail").prop('readonly', true);
+                    $("#cus_addr").prop('readonly', true);
+
+                    $('#cus_name').attr('value', $('#cus_name').val());
+                    $('#cus_phone').attr('value', $('#cus_phone').val());
+                    $('#cus_mail').attr('value', $('#cus_mail').val());
+                    document.getElementById("cus_addr").defaultValue=$('#cus_addr').val();
+
+                    $('#btn_add').hide();
+                    $('#btn_edit').show();
+                    $('#btn_ok_add').hide();
+                    $('#btn_ok_edit').hide();
+                    $('#btn_cancel').hide();
+                }
+                else {
+                    toastr.error("Có lỗi xảy ra", "Thất bại");
+                }
+            });
+        });
+
+        $('#btn_cancel').click(function(){
+            $("#cus_name").prop('readonly', true);
+            $("#cus_phone").prop('readonly', true);
+            $("#cus_mail").prop('readonly', true);
+            $("#cus_addr").prop('readonly', true);
+
+            $('#cus_name').val($('#cus_name').attr('value'));
+            $('#cus_phone').val($('#cus_phone').attr('value'));
+            $('#cus_mail').val($('#cus_mail').attr('value'));
+            $('#cus_addr').val(document.getElementById("cus_addr").defaultValue);
+
+            if($('#btn_ok_add').is(":visible")){
+                $('#btn_add').show();
+            }
+            else {
+                $('#btn_add').hide();
+            }
+            if($('#btn_ok_edit').is(":visible")){
+                $('#btn_edit').show();
+            }
+            else {
+                $('#btn_edit').hide();
+            }
+            $('#btn_ok_add').hide();
+            $('#btn_ok_edit').hide();
+            $('#btn_cancel').hide();
+        });
+
+        //Check user is in the system - Input: UserFbId - Return Customer obj
+        function GetUserFromDb(fbid){
+            var rs=null;
+            $.ajax({
+                async: false,
+                url: '/ChatComment/GetUserFromDb',
+                data: {"userFbId": fbid},
+                success: function (data) {
+                    if (data==false){
+                        //Do nothing
+                    }
+                    else {
+                        rs=data;
+                    }
+                }
+            });
+            return rs;
+        }
+
+        @*Add Order*@
         $("#btn_addorder").click(function (evt) {
             var rs = "true";
 
@@ -655,8 +860,8 @@
 
                     arDetail.push({ productid, properties, quantity, price});
                     }
-            }
-            else {
+                    }
+                    else {
                 rs = "detail";
                 //alert no detail
             }

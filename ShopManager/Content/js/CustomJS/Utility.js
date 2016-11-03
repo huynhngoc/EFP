@@ -8,11 +8,27 @@ function FormatDateTimeVN(date) {
 
 //Input: C# DateTime - Output: string "21/07/1995"
 function FormatDateVN(date) {
+    console.log(date);
     var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
     var d = new Date(parseInt(milli));
     return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
 }
 
+//Input: C# DateTime - Output: string "21/07 18:52"
+function FormatChatDateTimeVN(date) {
+    var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
+    var d = new Date(parseInt(milli));
+    return d.getDate() + "/" + (d.getMonth() + 1) + " " + d.getHours() + ":" + d.getMinutes();
+}
+
+//For realtime message
+//Input: millisecond - Output: string "21/07 18:52"
+function FormatChatDateRealtimeVN(milli) {
+    var d = new Date(milli);
+    return d.getDate() + "/" + (d.getMonth() + 1) + " " + d.getHours() + ":" + d.getMinutes();
+}
+
+// ... minutes ago
 function GetDateAgo(d) {
     var milli = d.replace(/\/Date\((-?\d+)\)\//, '$1');
     var date = new Date(parseInt(milli));
