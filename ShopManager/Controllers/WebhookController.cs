@@ -355,7 +355,7 @@ namespace ShopManager.Controllers
                         //respond message
                     }
                 }
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
         }
