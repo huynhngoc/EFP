@@ -86,8 +86,11 @@ namespace ShopManager.Controllers
                             data[i].CommentContent = "Bình luận không tồn tại.";
                             Debug.WriteLine(e.Message);
                         }
-                        data[i].IntentId = data[i].IntentId;
-                        data[i].IntentName = intentService.GetIntentNameById(data[i].IntentId);
+                        if (data[i].IntentId != null)
+                        {
+                            data[i].IntentId = data[i].IntentId;
+                            data[i].IntentName = intentService.GetIntentNameById(data[i].IntentId.Value);
+                        }
                         var customer = customerService.GetCustomerByFacebookId(data[i].SenderFbId, shopId);
                         if (customer != null && customer.CustomerFbId == data[i].SenderFbId)
                         {
@@ -160,40 +163,45 @@ namespace ShopManager.Controllers
         }
 
         //ANDND Hide a comment by comment id
-        public JsonResult HideComment(string commentId, bool isHide)
+        public JsonResult HideComment(string[] commentId, bool isHide)
         {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
             FacebookClient fbApp = new FacebookClient(accessToken);
             dynamic param = new ExpandoObject();
-            try
+            param.access_token = accessToken;
+            param.is_hidden = isHide;
+            List<string> hideFailed = null;
+            for (int i = 0; i < commentId.Length; i++)
             {
-                param.access_token = accessToken;
-                param.is_hidden = isHide;
-                var result = fbApp.Post(commentId, param);
-                if (result.success)
+                try
                 {
-                    bool rs;
-                    if (isHide)
+                    dynamic result = fbApp.Post(commentId[i], param);
+                    if (result.success)
                     {
-                        rs = commentService.SetCommentStatus(commentId, (int)CommentStatus.HIDDEN);
-                    }
-                    else
-                    {
-                        rs = commentService.SetCommentStatus(commentId, (int)CommentStatus.APPROVED);
-                    }
-                    
-                    if (rs)
-                    {
-                        return Json(result, JsonRequestBehavior.AllowGet);
+                        bool rs;
+                        if (isHide)
+                        {
+                            rs = commentService.SetCommentStatus(commentId[i], (int)CommentStatus.HIDDEN);
+                        }
+                        else
+                        {
+                            rs = commentService.SetCommentStatus(commentId[i], (int)CommentStatus.APPROVED);
+                        }
+
+                        if (!rs)
+                        {
+                            hideFailed.Add(commentId[i]);
+                        }
                     }
                 }
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
-            }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.StackTrace);
+                    hideFailed.Add(commentId[i]);
+                }
+            };
+            return Json(hideFailed, JsonRequestBehavior.AllowGet);
+
         }
 
         //ANDND Set post is read
@@ -204,7 +212,7 @@ namespace ShopManager.Controllers
 
         public JsonResult SetCommentStatus(string commentId, int statusId)
         {
-            return Json(commentService.SetCommentStatus(commentId,statusId), JsonRequestBehavior.AllowGet);
+            return Json(commentService.SetCommentStatus(commentId, statusId), JsonRequestBehavior.AllowGet);
         }
 
         //Cut long string
