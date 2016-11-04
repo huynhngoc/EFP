@@ -32,6 +32,22 @@ namespace DataService.Service
           Debug.WriteLine("addcus: " + success);
           return success;
       }
+        public Customer AddCustomerReturnCustomer(string Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
+        {
+            Customer _customer = new Customer();
+            _customer.CustomerFbId = Id;
+            _customer.Name = Name;
+            _customer.Address = Addr;
+            _customer.Description = Desc;
+            _customer.Phone = Phone;
+            _customer.Email = Email;
+            _customer.ShopId = ShopId;
+
+            var success = repository.AddCustomerReturnCustomer(_customer);
+            Debug.WriteLine("addcus: " + success);
+            return success;
+        }
+        
 
       public IQueryable<CustomerViewModel> GetAllCustomer(JQueryDataTableParamModel param, string shopId)
      {

@@ -259,13 +259,14 @@ namespace ShopManager.Controllers
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
             param.fields = "from,created_time,message,attachments";
-            param.limit = 1;
+            param.limit = 5;
+            param.until = time;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
             
             if (shopId.Equals(detail.from.id))
             {
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, 0);
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, 0);
                 conversationService.SetReadConversation(threadId, time);
             } else
             {
@@ -275,7 +276,7 @@ namespace ShopManager.Controllers
                 var respond = apiAi.TextRequest(message);
                 var intentRespond = respond.Result.Metadata.IntentName;
                 intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
         }

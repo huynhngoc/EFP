@@ -16,17 +16,17 @@
 }
 
 .ibox-content {
-    padding: 0;
+    padding: 0 !important;
 }
 
 .ibox-heading {
-    padding: 5px 30px;
+    padding: 5px 30px !important;
 }
 
 .feed-element {
-    padding: 7px 7px 7px 5px;
-    margin: 0;
-    max-height: 65px;
+    padding: 7px 7px 7px 5px !important;
+    margin: 0 !important;
+    max-height: 65px !important;
 }
 
 .feed-activity-list .selected {

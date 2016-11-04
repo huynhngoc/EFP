@@ -9,10 +9,12 @@ namespace DataService.ViewModel
     public class ConversationContentViewModel
     {
         public List<MessageContentViewModel> Messages { get; set; }
+        public string NextUrl { get; set; }
 
         public ConversationContentViewModel()
         {
             Messages = new List<MessageContentViewModel>();
+            NextUrl = "null";
         }
     }
 

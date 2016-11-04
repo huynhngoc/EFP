@@ -131,34 +131,12 @@
         </div>
 
         <div id="chat_box_content" class="content slimScrollBar">
-            @*<li class="chat-date-separator"><abbr class="timestamp">19 Tháng 9</abbr></li>
-                <div class="left" id="">
-                    <img alt="image" class="img-circle user_ava" src="" style="float:left; margin-right:7px" width="50" height="50">
-                    <div class="author-name">
-                        Vũ Hoàng Long
-                        <small class="chat-date">19.09.2016 10:02 am</small>
-                    </div>
-                    <div class="chat-message active">
-                        Hi
-                    </div>
-                </div>
-                <div class="right">
-                    <img alt="image" class="img-circle shop_ava" src="" style="float:right; margin-left:7px" width="50" height="50">
-                    <div class="author-name">
-                        Mick Smith
-                        <small class="chat-date">
-                            19.09.2016 11:24 am
-                        </small>
-                    </div>
-                    <div class="chat-message">
-                        Lorem Ipsum is simpl.
-                    </div>
-                </div>*@
         </div>
         <div class="form-chat">
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control"> <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button">
+                <input id="messreply_textbox" type="text" class="form-control">
+                <span class="input-group-btn">
+                    <button id="btn_sendmess" class="btn btn-primary" type="button">
                         Send
                     </button>
                 </span>
@@ -267,9 +245,11 @@
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     @Styles.Render("~/TouchSpin-CSS")
-    @Styles.Render("~/ChatComment-CSS")
     @Styles.Render("~/jQuery-UI-CSS")
     @Styles.Render("~/Toastr-style")
+}
+@section MyCSS{
+    @Styles.Render("~/ChatComment-CSS")
 
     <style>
         table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
@@ -317,53 +297,10 @@
             // Declare a proxy to reference the hub.
             var chat = $.connection.alertHub;
             // Create a function that the hub can call to broadcast messages.
-            chat.client.sendMessageToPage = function (message, threadId, intent) {
+            chat.client.sendMessageToPage = function (data, threadId, intent) {
                 console.log(threadId);
-                console.log(message);
-
-                var thread=document.getElementById(threadId);
-
-                //$('.mess_preview').text(message.message);
-                $(thread).find('.mess_preview').text(message.message);
-
-                //check if new mess in current clicked conversation
-                if (threadId == $('.ui-selected').attr('id')){
-                    if (shopId != message.from.id){
-                        $('#chat_box_content').append('<div class="left">'+
-                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
-                            '<div class="author-name">'+
-                                message.from.name+
-                                '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
-                            '</div>'+
-                            '<div class="chat-message active">'+
-                                message.message+
-                            '</div>'+
-                        '</div>');
-                    }
-                    else {
-                        $('#chat_box_content').append('<div class="right">'+
-                            '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
-                            '<div class="author-name">'+
-                                message.from.name+
-                                '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
-                            '</div>'+
-                            '<div class="chat-message">'+
-                                message.message+
-                            '</div>'+
-                        '</div>');
-                    }
-                }
-
-                //Move conversation to top
-                console.log($(thread).attr('id'));
-                console.log($('.feed-activity-list .feed-element').first().attr('id'));
-                if($(thread).attr('id') == $('.feed-activity-list .feed-element').first().attr('id')){
-                    alert('True');
-                }
-                else{
-                    var select=  $(thread).detach();
-                    select.prependTo('.feed-activity-list');
-                }
+                console.log(data);
+                ProcessIncomingMessage(data, threadId);
             };
 
             chat.client.sendCommentToPage = function (comment, intent) {
@@ -386,10 +323,149 @@
                 });
             });
         });
-    </script>
 
-    @*Default*@
-    <script>
+
+        function ProcessIncomingMessage(data, threadId){
+            var thread=document.getElementById(threadId);
+            var mess=data[0];
+
+            if (thread !=null){
+
+                $(thread).find('.mess_preview').text(mess.message);
+                $(thread).find('.mess_time').text(GetDateAgoRealTime(Date.parse(mess.created_time)));
+
+                //check if new mess in current clicked conversation
+                if (threadId == $('.ui-selected').attr('id')){
+                    for (var i=data.length-1;i>=0;i--){
+                        var message = data[i];
+                        console.log(message);
+                        var m=document.getElementById(message.id);
+                        
+                        if (m){
+                            //Do nothing
+                        }
+                        else{
+                            //User's mess
+                            if (shopId != message.from.id){
+                                $('#chat_box_content').append('<div id="'+message.id+'" class="left">'+
+                                    '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
+                                    '<div class="author-name">'+
+                                        message.from.name+
+                                        '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                                    '</div>'+
+                                    '<div class="chat-message active">'+
+                                        message.message+
+                                    '</div>'+
+                                '</div>');
+                            }
+                                //Page's mess
+                            else {
+                                $('#chat_box_content').append('<div id="'+message.id+'" class="right">'+
+                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
+                                    '<div class="author-name">'+
+                                        message.from.name+
+                                        '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                                    '</div>'+
+                                    '<div class="chat-message">'+
+                                        message.message+
+                                    '</div>'+
+                                '</div>');
+                            }
+                        }
+                    }
+                    ChatboxScrollToBottom();
+                }
+
+                //Move conversation to top
+                var isSelecting=false;
+                if($(thread).hasClass('ui-selected')){
+                    isSelecting=true;
+                }
+
+                var select= $(thread).detach();
+                select.prependTo('.feed-activity-list');
+                if (isSelecting == false){
+                    select.addClass("unread");
+                }
+                else {
+                    SetConversationRead(threadId);
+                }
+            }
+            else {
+                console.l
+                //create new thread
+                var u_ava="";
+                $.ajax({
+                    async: false,
+                    method: 'GET',
+                    url: '/ChatComment/GetUserAvatar',
+                    data: {"uid": mess.from.id},
+                    success: function (data) {
+                        u_ava=data;
+                    }
+                });
+
+                $('.feed-activity-list').prepend('<div id="'+threadId+'" class="feed-element unread">'+
+                    '<div style="float:left; margin-right: 7px">'+
+                        '<div size="50" style="width: 50px; height: 50px;">'+
+                            '<img id="'+mess.from.id+'" src="'+u_ava+'" width="50" height="50" alt="" class="img fb_avatar">'+
+                        '</div>'+
+                    '</div>'+
+                    '<div>'+
+                        '<small class="mess_time pull-right">'+GetDateAgoRealTime(Date.parse(mess.created_time))+'</small>'+
+                        '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+mess.from.name+'</strong>'+
+                        '<div class="mess_preview" style="overflow: hidden;">'+mess.message+'</div>'+
+                    '</div>'+
+                '</div>');
+            }
+        }
+
+        @*Default*@
+        $('.small-chat-bo .content').slimScroll({
+            height: "70vh",
+            start: 'bottom'
+        });
+        $('.ibox-scroll').slimScroll({
+            height: "70vh"
+        });
+
+        $('#messreply_textbox').keypress(function(e){
+            if(e.keyCode==13)
+                $('#btn_sendmess').click();
+        });
+
+        $('#btn_sendmess').click(function (){
+            var tid=$('.ui-selected').attr('id');
+            var mess= $('#messreply_textbox').val();
+
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/ChatComment/SendMessage',
+                data: {
+                    "threadId": tid,
+                    "message": mess
+                },
+                success: function (data) {
+                    console.log(data);
+                    if(data.success == true){
+                        $('#messreply_textbox').val('');
+                    }
+                    else{
+                        //alert("Có lỗi! Không gửi được");
+                    }
+                }
+            });
+
+        });
+
+        function ChatboxScrollToBottom(){
+            //var scrollTo_val = $('.small-chat-bo .content').prop('scrollHeight') + 'px';
+            //alert(scrollTo_val);
+            //$('.small-chat-bo .content').slimScroll({ scrollTo: scrollTo_val });
+        }
+
+        //Datatable list order
         $('#add_datatableproduct').DataTable({
             "paging": false
                 , "searching": false
@@ -409,15 +485,6 @@
                     });
                 }
         });
-
-        $('.small-chat-bo .content').slimScroll({
-            height: "70vh",
-            start: 'bottom'
-        });
-        $('.ibox-scroll').slimScroll({
-            height: "70vh"
-        });
-
 
         //"Thêm sản phẩm" function
         $("#btn_addproduct").click(function (evt) {
@@ -561,12 +628,15 @@
                     $('#cust_avatar').attr('src',$('.ui-selected .fb_avatar').attr('src'));
                     $('#receiver_name').text($('.ui-selected .fb_name').html());
 
-                    SetConversationRead(thread_id);
+                    if ($('.ui-selected').hasClass('unread')){
+                        SetConversationRead(thread_id);
+                    }
 
                     ProcessUserInfo(userfbid);
 
                     GetConversationContent(thread_id);
                 }
+                ClearOrder();
             }
         });
 
@@ -578,9 +648,7 @@
                 data: {"conversationId": t_id},
                 success: function (data) {
                     if (data ==true){
-                        if($('.ui-selected').hasClass('unread')){
-                            $('.ui-selected').removeClass('unread');
-                        }
+                        $('.ui-selected').removeClass('unread');
                     }
                 }
             });
@@ -588,8 +656,12 @@
 
         // Get ConversationPreview
         $.get('/ChatComment/GetConversationPreviews', function (data) {
+            var first = "";
             for (i=0;i<data.length;i++){
                 console.log(data[i].ThreadId);
+                if (i==0){
+                    first=data[i].ThreadId;
+                }
                 $('.feed-activity-list').append('<div id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(i==0? ' ui-selected':'')+'">'+
                                 '<div style="float:left; margin-right: 7px">'+
                                     '<div size="50" style="width: 50px; height: 50px;">'+
@@ -603,8 +675,11 @@
                                 '</div>'+
                             '</div>');
             }
+
+            $('#'+first).click();
         });
 
+        //Get conversation content
         function GetConversationContent(t_id){
             $('#chat_box_content').empty();
             $.ajax({
@@ -615,36 +690,80 @@
                 success: function (data) {
                     console.log(data);
 
-                    // Chat box content
-                    for (i=0;i<data.Messages.length;i++){
-                        var mess=data.Messages[i];
-                        if (mess.UserId != shopId){
-                            $('#chat_box_content').prepend('<div class="left">'+
-                                    '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
-                                    '<div class="author-name">'+
-                                        mess.UserName+
-                                        '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
-                                    '</div>'+
-                                    '<div class="chat-message active">'+
-                                        mess.MessContent+
-                                    '</div>'+
-                                '</div>');
-                        }
-                        else {
-                            $('#chat_box_content').prepend('<div class="right">'+
-                                '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
-                                '<div class="author-name">'+
-                                    mess.UserName+
-                                    '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
-                                '</div>'+
-                                '<div class="chat-message">'+
-                                    mess.MessContent+
-                                '</div>'+
-                            '</div>');
-                        }
-                    }
+                    DisplayChatContent(data);
+
+                    ChatboxScrollToBottom();
                 }
             });
+        }
+
+        // Chat box content
+        function DisplayChatContent(data){
+            for (i=0;i<data.Messages.length;i++){
+                var mess=data.Messages[i];
+                if (mess.UserId != shopId){
+                    $('#chat_box_content').prepend('<div id="'+mess.MessId+'" class="left">'+
+                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
+                            '<div class="author-name">'+
+                                mess.UserName+
+                                '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
+                            '</div>'+
+                            '<div class="chat-message active">'+
+                                mess.MessContent+
+                            '</div>'+
+                        '</div>');
+                }
+                else {
+                    $('#chat_box_content').prepend('<div id="'+mess.MessId+'" class="right">'+
+                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
+                        '<div class="author-name">'+
+                            mess.UserName+
+                            '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
+                        '</div>'+
+                        '<div class="chat-message">'+
+                            mess.MessContent+
+                        '</div>'+
+                    '</div>');
+                }
+            }
+
+            console.log("next: "+data.NextUrl);
+            if (data.NextUrl != "null"){
+                $('#chat_box_content').prepend('<button id="btn_next" class="form-control"><i id="next_icon" class="fa fa-caret-down"></i></button>');
+                $('#btn_next').unbind('click');
+
+                $('#btn_next').click(function (){
+                    var arrow=$('#next_icon').detach();
+                    $('#btn_next').append('<div class="sk-spinner sk-spinner-fading-circle">'+
+                            '<div class="sk-circle1 sk-circle"></div>'+
+                            '<div class="sk-circle2 sk-circle"></div>'+
+                            '<div class="sk-circle3 sk-circle"></div>'+
+                            '<div class="sk-circle4 sk-circle"></div>'+
+                            '<div class="sk-circle5 sk-circle"></div>'+
+                            '<div class="sk-circle6 sk-circle"></div>'+
+                            '<div class="sk-circle7 sk-circle"></div>'+
+                            '<div class="sk-circle8 sk-circle"></div>'+
+                            '<div class="sk-circle9 sk-circle"></div>'+
+                            '<div class="sk-circle10 sk-circle"></div>'+
+                            '<div class="sk-circle11 sk-circle"></div>'+
+                            '<div class="sk-circle12 sk-circle"></div>'+
+                        '</div>');
+                    $('#btn_next').attr('disabled',true);
+                    $.ajax({
+                        async: false,
+                        method: 'POST',
+                        url: '/ChatComment/GetConversationNext',
+                        data: {"url": data.NextUrl},
+                        success: function (data) {
+                            console.log("next data: "+data);
+                            $('#btn_next').remove();
+                            if (data!=null){
+                                DisplayChatContent(data);
+                            }
+                        }
+                    });
+                });
+            }
         }
 
         function ProcessUserInfo(userfbid){
@@ -724,7 +843,7 @@
         });
 
         $('#btn_ok_add').click(function(){
-            $.get('/Customer/AddCustomer', {
+            $.get('/Customer/AddCustomerReturnId', {
                 "Id": $('.ui-selected .fb_avatar').attr('id'),
                 "Name": $('#cus_name').val(),
                 "Addr": $('#cus_addr').val(),
@@ -734,8 +853,9 @@
             }, function (data) {
                 console.log('Add customer status: '+data);
 
-                if (data=="True"){
+                if (data!=null){
                     toastr.success("", "Thêm thành công");
+                    $('.cust_info').attr('id',data.Id);
 
                     $("#cus_name").prop('readonly', true);
                     $("#cus_phone").prop('readonly', true);
@@ -843,7 +963,7 @@
         }
 
         @*Add Order*@
-        $("#btn_addorder").click(function (evt) {
+        $("#btn_addorder").click(function () {
             var rs = "true";
 
             var t = $('#add_datatableproduct').DataTable();
@@ -866,21 +986,18 @@
                 //alert no detail
             }
             var status = 1;
-            //var note = $('#add_note').val();
-            //var address = $('#add_address').val();
-            //var receiver = $('#add_receiver').val();
-            //var phone = $('#add_phone').val();
 
             //check customer đã chọn
-            var custid = $(".info").attr("id");
+            var custid = $(".cust_info").attr("id");
+            console.log(custid);
             if (custid.length <= 0) {
                 rs = "customer";
             }
 
             if (rs == "true") {
                 $.post('/Order/CreateOrder'
-                    , {
-                        note: null
+                    , { custId: custid
+                        , note: null
                         , status: status
                         , address: null
                         , receiver: null
@@ -890,13 +1007,15 @@
                     , function (data, status) {
                         if (data == "True") {
                             $("#add_modal").modal("hide");
+                            ClearOrder();
                             swal({
                                 title: "Thêm thành công",
                                 animation: "slide-from-top",
                                 type: "success",
                                 timer: 1000,
                                 showConfirmButton: false
-                            })
+                            });
+                            
                         }
                         else {
                             swal({
@@ -922,5 +1041,10 @@
                 });
             }
         });
+
+        function ClearOrder(){
+            var t = $('#add_datatableproduct').DataTable();
+            t.clear().draw();
+        }
     </script>
 }

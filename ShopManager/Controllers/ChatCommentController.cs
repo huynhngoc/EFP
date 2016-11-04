@@ -25,6 +25,7 @@ namespace ShopManager.Controllers
 
         public ActionResult Index()
         {
+            ViewData["MessageNext"] = "null";
             //Session["ShopId"] = "1802287933384032";
             //Session["CustId"] = "3";
             return View();
@@ -40,11 +41,6 @@ namespace ShopManager.Controllers
 
             //calling fb
             string accessToken = shopService.GetShop(shopId).FbToken;
-            //dynamic param = new ExpandoObject();
-            //param.access_token = accessToken;
-            //param.fields = "from,created_time,message";
-            //param.limit = 1;
-            //dynamic result = fbApp.Get(threadId + "/messages", param);
 
             foreach (var c in listConversation)
             {
@@ -58,6 +54,7 @@ namespace ShopManager.Controllers
                 dynamic result = fbApp.Get(c.Id + "/messages", param);
 
                 int i = 0;
+                dynamic first = result.data[0];
                 dynamic detail;
                 while (true)
                 {
@@ -71,10 +68,8 @@ namespace ShopManager.Controllers
 
                 preview.UserName = detail.from.name;
                 preview.UserFbId = detail.from.id;
-                preview.CreatedTime = DateTime.Parse(detail.created_time);
-                preview.RecentMess = detail.message;
-
-                Console.WriteLine("UserID=" + preview.UserFbId);
+                preview.CreatedTime = DateTime.Parse(first.created_time);
+                preview.RecentMess = first.message;
 
                 param = new ExpandoObject();
                 param.access_token = accessToken;
@@ -126,7 +121,58 @@ namespace ShopManager.Controllers
                 conversationContent.Messages.Add(mc);
             }
 
+            if (conversationContent.Messages.Count == 25)
+            {
+                conversationContent.NextUrl = result.paging.next;
+            }
+
             return Json(conversationContent, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult GetConversationNext(string url)
+        {
+            var conversationContent = new ConversationContentViewModel();
+            string shopId = (string)Session["ShopId"];
+            string accessToken = shopService.GetShop(shopId).FbToken;
+
+            dynamic param = new ExpandoObject();
+            param.access_token = accessToken;
+            dynamic result = fbApp.Get(url, param);
+            if (result.data.Count != 0)
+            {
+                foreach (var mess in result.data)
+                {
+                    var mc = new MessageContentViewModel();
+                    mc.MessId = mess.id;
+                    mc.MessContent = mess.message;
+                    mc.DateCreated = DateTime.Parse(mess.created_time);
+                    mc.UserId = mess.from.id;
+                    mc.UserName = mess.from.name;
+
+                    conversationContent.Messages.Add(mc);
+                }
+
+                if (conversationContent.Messages.Count == 25)
+                {
+                    conversationContent.NextUrl = result.paging.next;
+                }
+            }
+            else
+            {
+                conversationContent.NextUrl = "null";
+            }
+
+            return Json(conversationContent, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetUserAvatar(string uid)
+        {
+            string shopId = (string)Session["ShopId"];
+            string accessToken = shopService.GetShop(shopId).FbToken;
+
+            dynamic param = new ExpandoObject();
+            param.access_token = accessToken;
+            dynamic result = fbApp.Get(uid + "/picture?type=normal&redirect=false", param);
+            return Content(result.data.url);
         }
 
         public ActionResult GetPageAvatar()
@@ -141,7 +187,7 @@ namespace ShopManager.Controllers
         }
         public ActionResult SetConversationRead(string conversationId)
         {
-            var rs=conversationService.SetReadConversation(conversationId);
+            var rs = conversationService.SetReadConversation(conversationId);
 
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
@@ -156,13 +202,13 @@ namespace ShopManager.Controllers
                 param.access_token = accessToken;
                 param.message = message;
                 var result = fbApp.Post(threadId + "/messages", param);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
-            }            
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult ReplyComment(string commentId, string message)
@@ -179,7 +225,7 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -197,7 +243,7 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -207,14 +253,14 @@ namespace ShopManager.Controllers
             fbApp.AccessToken = accessToken;
             dynamic param = new ExpandoObject();
             try
-            {                
+            {
                 var result = fbApp.Delete(commentId);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -233,8 +279,8 @@ namespace ShopManager.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message}, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
-        }        
+        }
     }
 }
