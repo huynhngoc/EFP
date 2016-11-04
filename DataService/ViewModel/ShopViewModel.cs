@@ -13,6 +13,6 @@ namespace DataService.ViewModel
         public string FbToken { get; set; }
         public string BannerImg { get; set; }
         public System.DateTime DateCreated { get; set; }
-        public string UserId { get; set; }
+        public string UserId { get; set; }        
     }
 }

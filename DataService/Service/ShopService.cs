@@ -55,10 +55,37 @@ namespace DataService.Service
                     ShopName = s.ShopName,
                     DateCreated = s.DateCreated,
                     FbToken = s.FbToken,
-                    BannerImg = s.BannerImg
+                    BannerImg = s.BannerImg,                    
                 };
             }
             return null;
+        }
+
+        public int GetReplyMode(string shopId)
+        {
+            try
+            {
+                return repository.FindByKey(shopId).ReplyMode;
+            }
+            catch (Exception)
+            {
+                return 0;
+                
+            }
+            
+        }
+        public int GetCommentMode(string shopId)
+        {
+            try
+            {
+                return repository.FindByKey(shopId).CommentMode;
+            }
+            catch (Exception)
+            {
+                return 0;
+
+            }
+
         }
 
         public bool CheckShopUser(string shopId, string userId)

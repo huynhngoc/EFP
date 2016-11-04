@@ -79,5 +79,12 @@ namespace DataService.Service
         {
             return repository.SetIntent(commentId, intentId);
         }
+
+        // ANDND Get Comment by comment id
+        public Comment GetCommentById(string commentId)
+        {
+            Comment comment = repository.FindByKey(commentId);
+            return comment;
+        }
     }
 }
