@@ -89,7 +89,7 @@ namespace ShopManager.Controllers
                         if (data[i].IntentId != null)
                         {
                             data[i].IntentId = data[i].IntentId;
-                            data[i].IntentName = intentService.GetIntentNameById(data[i].IntentId);
+                            data[i].IntentName = intentService.GetIntentNameById(data[i].IntentId.Value);
                         }
                         var customer = customerService.GetCustomerByFacebookId(data[i].SenderFbId, shopId);
                         if (customer != null && customer.CustomerFbId == data[i].SenderFbId)
