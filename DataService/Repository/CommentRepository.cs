@@ -23,7 +23,7 @@ namespace DataService.Repository
             var rs = dbSet.Where(q => (q.Post.ShopId == shopId) && (q.IntentId == intentId || intentId == null) && (q.Status == status || status == null) && (q.IsRead == isRead || isRead == null) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null));
             switch (param.iSortCol_0)
             {
-                case 1:
+                case 2:
                     if (param.sSortDir_0 == "asc")
                     {
                         rs = rs.OrderBy(q => q.PostId);
@@ -33,7 +33,7 @@ namespace DataService.Repository
                         rs = rs.OrderByDescending(q => q.PostId);
                     }
                     break;
-                case 2:
+                case 3:
                     if (param.sSortDir_0 == "asc")
                     {
                         rs = rs.OrderBy(q => q.SenderFbId);
@@ -43,7 +43,7 @@ namespace DataService.Repository
                         rs = rs.OrderByDescending(q => q.SenderFbId);
                     }
                     break;
-                case 3:
+                case 4:
                     if (param.sSortDir_0 == "asc")
                     {
                         rs = rs.OrderBy(q => q.IntentId);
@@ -53,7 +53,7 @@ namespace DataService.Repository
                         rs = rs.OrderByDescending(q => q.IntentId);
                     }
                     break;
-                case 4:
+                case 5:
                     if (param.sSortDir_0 == "asc")
                     {
                         rs = rs.OrderBy(q => q.DateCreated);
@@ -63,7 +63,7 @@ namespace DataService.Repository
                         rs = rs.OrderByDescending(q => q.DateCreated);
                     }
                     break;
-                case 5:
+                case 6:
                     if (param.sSortDir_0 == "asc")
                     {
                         rs = rs.OrderBy(q => q.Status);
@@ -86,7 +86,7 @@ namespace DataService.Repository
                 PostId = q.PostId,
                 IsRead = q.IsRead,
                 Status = q.Status,
-                IntentId = q.IntentId,
+                IntentId = q.IntentId.Value,
                 DateCreated = q.DateCreated,
                 ParentId = q.ParentId
             });

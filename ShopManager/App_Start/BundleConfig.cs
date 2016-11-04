@@ -30,10 +30,14 @@ namespace ShopManager
             //Header CSS
             bundles.Add(new StyleBundle("~/Header-CSS").Include(
                       "~/Content/css/bootstrap.min.css",
-                      "~/Content/font-awesome/css/font-awesome.css",
-                      "~/Content/css/plugins/toastr/toastr.min.css",
+                      "~/Content/font-awesome/css/font-awesome.css"));
+            //Animate and style CSS
+            bundles.Add(new StyleBundle("~/Animate-and-style-CSS").Include(
                       "~/Content/css/animate.css",
                       "~/Content/css/style.css"));
+            //awesome - bootstrap - checkbox CSS
+            bundles.Add(new StyleBundle("~/Awesome-bootstrap-checkbox-CSS").Include(
+                      "~/Content/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"));
             //Toastr style
             bundles.Add(new StyleBundle("~/Toastr-style").Include(
                       "~/Content/css/plugins/toastr/toastr.min.css"));
