@@ -180,18 +180,30 @@ namespace ShopManager.Controllers
 
                                                 }
                                             }
-                                        }
-
-                                        //autoresponse + autohide here
-                                        if (shopService.GetCommentMode(shopId).Equals(CommentMode.AUTOHIDE))
-                                        {
-                                            var response = responseService.GetResponse(shopId, intent.Value);
-                                            if (!string.IsNullOrEmpty(response))
-                                            {
-
-                                            }
-                                        }
+                                        }                                        
                                         
+                                        if (intent== (int)DefaultIntent.VANDAL)
+                                        {
+                                            //hide comment
+                                            if (shopService.GetCommentMode(shopId) == (int)CommentMode.AUTOHIDE)
+                                            {
+                                                //hide comment
+                                                var accessToken = shopService.GetShop(shopId).FbToken;
+                                                dynamic param = new ExpandoObject();
+                                                param.access_token = accessToken;
+                                                param.is_hidden = true;
+                                                try
+                                                {
+                                                    fbApp.Post(commentId, param);
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    
+                                                }
+                                                
+                                            }
+                                            status = (int) CommentStatus.WARNING;
+                                        }                                        
 
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
@@ -332,6 +344,14 @@ namespace ShopManager.Controllers
                     catch (Exception)
                     {
 
+                    }
+                }
+                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO)
+                {
+                    var response = responseService.GetResponse(shopId, intent);
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        //respond message
                     }
                 }
                 SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
