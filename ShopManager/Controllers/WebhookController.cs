@@ -143,39 +143,45 @@ namespace ShopManager.Controllers
                             switch (verb)
                             {
                                 case WebhookVerb.Add:
-                                case WebhookVerb.Edit:
-                                    if (HasProperty(value, "photo"))
+                                case WebhookVerb.Edit:                                    
+                                    if (customerId.Equals(shopId))
                                     {
-                                        //chatbot api intent photo here
-                                        intent = (int)DefaultIntent.PHOTO_EMO;
-                                    }
-                                    if (CheckTagOthers(commentId, shopId))
+                                        intent = null;
+                                    } else
                                     {
-                                        //chatbot api intent tag other here
-                                        intent = (int)DefaultIntent.TAG;
-                                    }
-                                    if (HasProperty(value, "message"))
-                                    {
-                                        string message = value.message;
-                                        //chatbot api for message here
-                                        var respond = apiAi.TextRequest(message);
-                                        var intentRespond = respond.Result.Metadata.IntentName;
-                                        if (intentRespond != null)
+                                        if (HasProperty(value, "photo"))
                                         {
-                                            try
+                                            //chatbot api intent photo here
+                                            intent = (int)DefaultIntent.PHOTO_EMO;
+                                        }
+                                        if (CheckTagOthers(commentId, shopId))
+                                        {
+                                            //chatbot api intent tag other here
+                                            intent = (int)DefaultIntent.TAG;
+                                        }
+                                        if (HasProperty(value, "message"))
+                                        {
+                                            string message = value.message;
+                                            //chatbot api for message here
+                                            var respond = apiAi.TextRequest(message);
+                                            var intentRespond = respond.Result.Metadata.IntentName;
+                                            if (intentRespond != null)
                                             {
-                                                if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                                                try
                                                 {
-                                                    intent = int.Parse(intentRespond);
+                                                    if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                                                    {
+                                                        intent = int.Parse(intentRespond);
+                                                    }
+                                                }
+                                                catch (Exception)
+                                                {
+
                                                 }
                                             }
-                                            catch (Exception)
-                                            {
-                                                
-                                            }                                            
                                         }
                                     }
-                                    commentService.AddComment(commentId, customerId, createTime, intent.Value, status, parentId.Equals(postId) ? null : parentId, postId);
+                                    commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);

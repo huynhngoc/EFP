@@ -24,7 +24,7 @@ namespace DataService
         public string PostId { get; set; }
         public bool IsRead { get; set; }
         public int Status { get; set; }
-        public int IntentId { get; set; }
+        public Nullable<int> IntentId { get; set; }
         public System.DateTime DateCreated { get; set; }
         public string ParentId { get; set; }
     

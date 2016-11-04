@@ -75,7 +75,7 @@
           <Property Name="PostId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="IsRead" Type="bit" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="IntentId" Type="int" Nullable="false" />
+          <Property Name="IntentId" Type="int" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="ParentId" Type="nvarchar" MaxLength="128" />
         </EntityType>
@@ -282,7 +282,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Comments_Intents">
-          <End Role="Intents" Type="Self.Intents" Multiplicity="1" />
+          <End Role="Intents" Type="Self.Intents" Multiplicity="0..1" />
           <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Intents">
@@ -734,11 +734,9 @@
           <EntitySet Name="AspNetUserClaims" EntityType="EFPModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="EFPModel.AspNetUserLogin" />
           <EntitySet Name="Categories" EntityType="EFPModel.Category" />
-          <EntitySet Name="Comments" EntityType="EFPModel.Comment" />
           <EntitySet Name="Conversations" EntityType="EFPModel.Conversation" />
           <EntitySet Name="Customers" EntityType="EFPModel.Customer" />
           <EntitySet Name="Entities" EntityType="EFPModel.Entity" />
-          <EntitySet Name="Intents" EntityType="EFPModel.Intent" />
           <EntitySet Name="OrderDetails" EntityType="EFPModel.OrderDetail" />
           <EntitySet Name="Orders" EntityType="EFPModel.Order" />
           <EntitySet Name="Posts" EntityType="EFPModel.Post" />
@@ -754,33 +752,9 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Comments_Comments" Association="EFPModel.FK_Comments_Comments">
-            <End Role="Comment" EntitySet="Comments" />
-            <End Role="Comment1" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comments_Intents" Association="EFPModel.FK_Comments_Intents">
-            <End Role="Intent" EntitySet="Intents" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comments_Posts" Association="EFPModel.FK_Comments_Posts">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Conversations_Intents" Association="EFPModel.FK_Conversations_Intents">
-            <End Role="Intent" EntitySet="Intents" />
-            <End Role="Conversation" EntitySet="Conversations" />
-          </AssociationSet>
           <AssociationSet Name="FK_Orders_Customers" Association="EFPModel.FK_Orders_Customers">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Posts_Intents" Association="EFPModel.FK_Posts_Intents">
-            <End Role="Intent" EntitySet="Intents" />
-            <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Responses_Intents" Association="EFPModel.FK_Responses_Intents">
-            <End Role="Intent" EntitySet="Intents" />
-            <End Role="Respons" EntitySet="Responses" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderDetails_MasterProducts" Association="EFPModel.FK_OrderDetails_MasterProducts">
             <End Role="Product" EntitySet="Products" />
@@ -857,6 +831,32 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Comments" EntityType="EFPModel.Comment" />
+          <EntitySet Name="Intents" EntityType="EFPModel.Intent" />
+          <AssociationSet Name="FK_Comments_Comments" Association="EFPModel.FK_Comments_Comments">
+            <End Role="Comment" EntitySet="Comments" />
+            <End Role="Comment1" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Intents" Association="EFPModel.FK_Comments_Intents">
+            <End Role="Intent" EntitySet="Intents" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Posts" Association="EFPModel.FK_Comments_Posts">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Conversations_Intents" Association="EFPModel.FK_Conversations_Intents">
+            <End Role="Intent" EntitySet="Intents" />
+            <End Role="Conversation" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Posts_Intents" Association="EFPModel.FK_Posts_Intents">
+            <End Role="Intent" EntitySet="Intents" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responses_Intents" Association="EFPModel.FK_Responses_Intents">
+            <End Role="Intent" EntitySet="Intents" />
+            <End Role="Respons" EntitySet="Responses" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -911,23 +911,6 @@
           <NavigationProperty Name="Products" Relationship="EFPModel.FK_MasterProducts_Categories" FromRole="Category" ToRole="Product" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Categories_Shops" FromRole="Category" ToRole="Shop" />
         </EntityType>
-        <EntityType Name="Comment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="SenderFbId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="PostId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="IsRead" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="IntentId" Type="Int32" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ParentId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Comments1" Relationship="EFPModel.FK_Comments_Comments" FromRole="Comment" ToRole="Comment1" />
-          <NavigationProperty Name="Comment1" Relationship="EFPModel.FK_Comments_Comments" FromRole="Comment1" ToRole="Comment" />
-          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Comments_Intents" FromRole="Comment" ToRole="Intent" />
-          <NavigationProperty Name="Post" Relationship="EFPModel.FK_Comments_Posts" FromRole="Comment" ToRole="Post" />
-        </EntityType>
         <EntityType Name="Conversation">
           <Key>
             <PropertyRef Name="Id" />
@@ -937,8 +920,8 @@
           <Property Name="IntentId" Type="Int32" Nullable="false" />
           <Property Name="IsRead" Type="Boolean" Nullable="false" />
           <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Conversations_Intents" FromRole="Conversation" ToRole="Intent" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Conversations_Shops" FromRole="Conversation" ToRole="Shop" />
+          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Conversations_Intents" FromRole="Conversation" ToRole="Intent" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -966,17 +949,6 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ShopId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Entities_Shops" FromRole="Entity" ToRole="Shop" />
-        </EntityType>
-        <EntityType Name="Intent">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IntentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Intents" FromRole="Intent" ToRole="Comment" />
-          <NavigationProperty Name="Conversations" Relationship="EFPModel.FK_Conversations_Intents" FromRole="Intent" ToRole="Conversation" />
-          <NavigationProperty Name="Posts" Relationship="EFPModel.FK_Posts_Intents" FromRole="Intent" ToRole="Post" />
-          <NavigationProperty Name="Responses" Relationship="EFPModel.FK_Responses_Intents" FromRole="Intent" ToRole="Respons" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -1020,9 +992,9 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="IntentId" Type="Int32" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Posts_Shops" FromRole="Post" ToRole="Shop" />
           <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Posts" FromRole="Post" ToRole="Comment" />
           <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Posts_Intents" FromRole="Post" ToRole="Intent" />
-          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Posts_Shops" FromRole="Post" ToRole="Shop" />
         </EntityType>
         <EntityType Name="ProductPicture">
           <Key>
@@ -1070,8 +1042,8 @@
           <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="IntentId" Type="Int32" Nullable="false" />
           <Property Name="RespondContent" Type="String" Nullable="false" MaxLength="420" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Responses_Intents" FromRole="Respons" ToRole="Intent" />
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Responses_Shops" FromRole="Respons" ToRole="Shop" />
+          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Responses_Intents" FromRole="Respons" ToRole="Intent" />
         </EntityType>
         <EntityType Name="TemplateProduct">
           <Key>
@@ -1114,54 +1086,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Comments_Comments">
-          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="0..1" />
-          <End Type="EFPModel.Comment" Role="Comment1" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Comment">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment1">
-              <PropertyRef Name="ParentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comments_Intents">
-          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
-          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Intent">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="IntentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comments_Posts">
-          <End Type="EFPModel.Post" Role="Post" Multiplicity="1" />
-          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="PostId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Conversations_Intents">
-          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
-          <End Type="EFPModel.Conversation" Role="Conversation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Intent">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Conversation">
-              <PropertyRef Name="IntentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Orders_Customers">
           <End Type="EFPModel.Customer" Role="Customer" Multiplicity="1" />
           <End Type="EFPModel.Order" Role="Order" Multiplicity="*" />
@@ -1171,30 +1095,6 @@
             </Principal>
             <Dependent Role="Order">
               <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Posts_Intents">
-          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="0..1" />
-          <End Type="EFPModel.Post" Role="Post" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Intent">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Post">
-              <PropertyRef Name="IntentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Responses_Intents">
-          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
-          <End Type="EFPModel.Respons" Role="Respons" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Intent">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Respons">
-              <PropertyRef Name="IntentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1464,6 +1364,106 @@
           <End Type="EFPModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="EFPModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="SenderFbId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="IntentId" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ParentId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Comments1" Relationship="EFPModel.FK_Comments_Comments" FromRole="Comment" ToRole="Comment1" />
+          <NavigationProperty Name="Comment1" Relationship="EFPModel.FK_Comments_Comments" FromRole="Comment1" ToRole="Comment" />
+          <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Comments_Intents" FromRole="Comment" ToRole="Intent" />
+          <NavigationProperty Name="Post" Relationship="EFPModel.FK_Comments_Posts" FromRole="Comment" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Intent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IntentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Intents" FromRole="Intent" ToRole="Comment" />
+          <NavigationProperty Name="Conversations" Relationship="EFPModel.FK_Conversations_Intents" FromRole="Intent" ToRole="Conversation" />
+          <NavigationProperty Name="Posts" Relationship="EFPModel.FK_Posts_Intents" FromRole="Intent" ToRole="Post" />
+          <NavigationProperty Name="Responses" Relationship="EFPModel.FK_Responses_Intents" FromRole="Intent" ToRole="Respons" />
+        </EntityType>
+        <Association Name="FK_Comments_Comments">
+          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="0..1" />
+          <End Type="EFPModel.Comment" Role="Comment1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Intents">
+          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="0..1" />
+          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Intent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Posts">
+          <End Type="EFPModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="EFPModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Conversations_Intents">
+          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
+          <End Type="EFPModel.Conversation" Role="Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Intent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversation">
+              <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Posts_Intents">
+          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="0..1" />
+          <End Type="EFPModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Intent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responses_Intents">
+          <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
+          <End Type="EFPModel.Respons" Role="Respons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Intent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Respons">
+              <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1519,20 +1519,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Comments">
-            <EntityTypeMapping TypeName="EFPModel.Comment">
-              <MappingFragment StoreEntitySet="Comments">
-                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IntentId" ColumnName="IntentId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-                <ScalarProperty Name="PostId" ColumnName="PostId" />
-                <ScalarProperty Name="SenderFbId" ColumnName="SenderFbId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Conversations">
             <EntityTypeMapping TypeName="EFPModel.Conversation">
               <MappingFragment StoreEntitySet="Conversations">
@@ -1566,14 +1552,6 @@
                 <ScalarProperty Name="IsDynamic" ColumnName="IsDynamic" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="EntityName" ColumnName="EntityName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Intents">
-            <EntityTypeMapping TypeName="EFPModel.Intent">
-              <MappingFragment StoreEntitySet="Intents">
-                <ScalarProperty Name="IntentName" ColumnName="IntentName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1727,6 +1705,28 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="EFPModel.Comment">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IntentId" ColumnName="IntentId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="SenderFbId" ColumnName="SenderFbId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Intents">
+            <EntityTypeMapping TypeName="EFPModel.Intent">
+              <MappingFragment StoreEntitySet="Intents">
+                <ScalarProperty Name="IntentName" ColumnName="IntentName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

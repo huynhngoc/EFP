@@ -86,7 +86,7 @@ namespace DataService.Repository
                 PostId = q.PostId,
                 IsRead = q.IsRead,
                 Status = q.Status,
-                IntentId = q.IntentId,
+                IntentId = q.IntentId.Value,
                 DateCreated = q.DateCreated,
                 ParentId = q.ParentId
             });
