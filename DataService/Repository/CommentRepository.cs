@@ -20,7 +20,7 @@ namespace DataService.Repository
         public IQueryable<AnalysisCommentViewModel> GetCommentByShopAndCondition(JQueryDataTableParamModel param, string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
         {
             var count = param.iDisplayStart + 1;
-            var rs = dbSet.Where(q => (q.Post.ShopId == shopId) && (q.IntentId == intentId || intentId == null) && (q.Status == status || status == null) && (q.IsRead == isRead || isRead == null) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null));
+            var rs = dbSet.Where(q => (q.Post.ShopId == shopId) && ((q.IntentId == intentId && q.IntentId != null) || intentId == null) && (q.Status == status || status == null) && (q.IsRead == isRead || isRead == null) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null));
             switch (param.iSortCol_0)
             {
                 case 2:
