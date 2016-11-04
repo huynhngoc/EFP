@@ -12,7 +12,7 @@ namespace DataService.Service
     public class CommentService
     {
         CommentRepository repository = new CommentRepository();
-        public bool AddComment(string id, string SenderFbId, long date, int intentId, int status, string parentId, string postId)
+        public bool AddComment(string id, string SenderFbId, long date, int? intentId, int status, string parentId, string postId)
         {
 
             Comment c = repository.FindByKey(id);
@@ -78,6 +78,13 @@ namespace DataService.Service
         public bool SetIntent(string commentId, int intentId)
         {
             return repository.SetIntent(commentId, intentId);
+        }
+
+        // ANDND Get Comment by comment id
+        public Comment GetCommentById(string commentId)
+        {
+            Comment comment = repository.FindByKey(commentId);
+            return comment;
         }
     }
 }

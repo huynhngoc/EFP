@@ -175,6 +175,12 @@ namespace ShopManager
             //Data picker CSS
             bundles.Add(new StyleBundle("~/Data-picker-CSS").Include(
                 "~/Content/css/plugins/datapicker/datepicker3.css"));
+            //iCheck CSS
+            bundles.Add(new StyleBundle("~/iCheck-CSS").Include(
+                      "~/Content/css/plugins/iCheck/custom.css"));
+            //iCheck JS
+            bundles.Add(new ScriptBundle("~/iCheck-JS").Include(
+                      "~/Content/js/plugins/iCheck/icheck.min.js"));
         }
     }
 }

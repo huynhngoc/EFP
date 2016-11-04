@@ -21,11 +21,11 @@ namespace DataService.Service
             }).ToList();
         }
 
-        public bool CreateShop(string shopId, string name, string token, string userId)
-        {                        
+        public bool CreateShop(string shopId, string name, string token, string userId, string picture)
+        {
             try
             {
-                return repository.CreateShop(shopId, name, token, userId);
+                return repository.CreateShop(shopId, name, token, userId, picture);
             }
             catch (Exception)
             {
@@ -42,7 +42,7 @@ namespace DataService.Service
             catch
             {
                 return false;
-            }            
+            }
         }
         public ShopViewModel GetShop(string shopId)
         {
@@ -54,10 +54,38 @@ namespace DataService.Service
                     Id = s.Id,
                     ShopName = s.ShopName,
                     DateCreated = s.DateCreated,
-                    FbToken = s.FbToken,                    
+                    FbToken = s.FbToken,
+                    BannerImg = s.BannerImg,                    
                 };
             }
             return null;
+        }
+
+        public int GetReplyMode(string shopId)
+        {
+            try
+            {
+                return repository.FindByKey(shopId).ReplyMode;
+            }
+            catch (Exception)
+            {
+                return 0;
+                
+            }
+            
+        }
+        public int GetCommentMode(string shopId)
+        {
+            try
+            {
+                return repository.FindByKey(shopId).CommentMode;
+            }
+            catch (Exception)
+            {
+                return 0;
+
+            }
+
         }
 
         public bool CheckShopUser(string shopId, string userId)
