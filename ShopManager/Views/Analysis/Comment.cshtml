@@ -57,11 +57,22 @@
                     </div>
 
                 </div>
+
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover" id="tblAnalysisByComment">
+                    <div class="btn-group">
+                        <button id="selectAllButton" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Đã chọn 0 bình luận<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0)" onclick="hideAllComment(true)">Ẩn những bình luận đã chọn</a></li>
+                            <li><a href="javascript:void(0)" onclick="hideAllComment(false)">Bỏ ẩn những bình luận đã chọn</a></li>
+                            <li><a href="#">Xóa những comment đã chọn</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                    <table class="table table-bordered table-hover" id="tblAnalysisByComment">
                         <thead>
                             <tr>
-                                <th><div class="checkbox"><input id="checkbox1" type="checkbox"><label for="checkbox1"></label></div></th>
+                                <th><input id="checkAll" type="checkbox" onchange="checkAllComment()"></th>
                                 <th>Bình luận</th>
                                 <th>Bài đăng</th>
                                 <th>Người đăng</th>
@@ -75,9 +86,7 @@
                         <tbody></tbody>
                         <tfoot>
                             <tr>
-                                <th>
-                                    <div class="checkbox"><input id="checkbox1" type="checkbox"><label for="checkbox1"></label></div>
-                                </th>
+                                <th></th>
                                 <th>Bình luận</th>
                                 <th>Bài đăng</th>
                                 <th>Người đăng</th>
@@ -103,7 +112,6 @@
     @Styles.Render("~/Toastr-style")
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/Data-picker-CSS")
-    @Styles.Render("~/Awesome-bootstrap-checkbox-CSS")
 }
 
 @section CustomJS
@@ -134,12 +142,14 @@
     </script>
     @Scripts.Render("~/Data-picker-JS")
     <script>
+
         $('#dateRange .input-daterange').datepicker({
             keyboardNavigation: false,
             forceParse: false,
             autoclose: true,
             format: "yyyy/mm/dd"
         });
+        var listSelectedComment = [];
         var statusArray = ["Đang hiện", "Cảnh báo", "Đã ẩn", "Đã duyệt", "Đã xóa"];
         var listIntent;
         var commentDataTable;
@@ -192,8 +202,8 @@
                 },
                 "sDom": 'lrtip',
                 "aoColumnDefs": [
-                        { "mData": function (source) { return "<div class='checkbox'><input id='checkbox1' type='checkbox'><label for='checkbox1'></label></div>" }, "aTargets": [0], "width": "1%" },
-                        { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%" },
+                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='checkBoxChecked(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
+                        { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [2], "width": "15%" },
                         {
                             "mData": function (source) {
@@ -391,6 +401,33 @@
             })
         }
 
+        //Hide / Unhide all Comment by Id
+        function hideAllComment(isHide) {
+            $.ajax({
+                url: "/Analysis/HideComment",
+                dataType: "json",
+                type: "post",
+                async: false,
+                data: {
+                    commentId: listSelectedComment,
+                    isHide: isHide
+                },
+                type: "post",
+                success: function (data) {
+                    if (data.length == 0) {
+                        toastr.success("Ẩn " + listSelectedComment.length + " bình luận thành công");
+                        commentDataTable.ajax.reload();
+                    } else {
+                        toastr.warning(data.length + " bình luận chưa được ẩn !");
+                        commentDataTable.ajax.reload();
+                    }
+                },
+                error: function () {
+                    toastr.error("Ẩn bình luận thất bại");
+                }
+            })
+        }
+
         //Approve comment
         function approveComment(commentId) {
             $.ajax({
@@ -411,6 +448,56 @@
                 }
             })
         }
+
+        //Function Selected comment
+        function checkBoxChecked(checkbox) {
+            if ($('#checkAll').is(':checked')) {
+                $('#checkAll').prop('checked', false);
+            }
+            if ($(checkbox).is(':checked')) {
+                $(checkbox).closest("tr").addClass("active");
+                listSelectedComment.push(checkbox.value);
+                console.log(listSelectedComment);
+            } else {
+                $(checkbox).closest("tr").removeClass("active");
+                for (var i = 0; i < listSelectedComment.length; i++) {
+                    if (listSelectedComment[i] == checkbox.value) {
+                        listSelectedComment.splice(i, 1);
+                    }
+                }
+                console.log(listSelectedComment);
+            }
+        }
+
+        // On page change unselect check box select all
+        $('#tblAnalysisByComment').on('page.dt', function () {
+            if ($('#checkAll').is(':checked')) {
+                $('#checkAll').prop('checked', false);
+            };
+            listSelectedComment.splice(0, listSelectedComment.length);
+        });
+
+        //Check all comment
+        function checkAllComment() {
+            $('#selectAllButton').empty();
+            if ($('#checkAll').is(':checked')) {
+                listSelectedComment.splice(0, listSelectedComment.length);
+                $('#tblAnalysisByComment').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().addClass("active");
+                    $(this).prop('checked', true);
+                    listSelectedComment.push($(this).val());
+                });
+            } else {
+                listSelectedComment.splice(0, listSelectedComment.length);
+                $('#tblAnalysisByComment').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().removeClass("active");
+                    $(this).prop('checked', false);
+                });
+            }
+            $('#selectAllButton').append("Đã chọn " + listSelectedComment.length + " bình luận <span class='caret'></span>");
+            console.log(listSelectedComment);
+        }
+
 
     </script>
 

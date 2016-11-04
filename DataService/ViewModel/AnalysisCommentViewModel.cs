@@ -17,7 +17,7 @@ namespace DataService.ViewModel
         public string PostContent { get; set; }
         public bool IsRead { get; set; }
         public int Status { get; set; }
-        public int IntentId { get; set; }
+        public int? IntentId { get; set; }
         public string IntentName { get; set; }
         public DateTime DateCreated { get; set; }
         public string ParentId { get; set; }
