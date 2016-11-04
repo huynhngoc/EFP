@@ -70,6 +70,9 @@ namespace ShopManager
             //jQuery UI
             bundles.Add(new ScriptBundle("~/jQuery-UI").Include(
                       "~/Content/js/plugins/jquery-ui/jquery-ui.min.js"));
+            bundles.Add(new StyleBundle("~/jQuery-UI-CSS").Include(
+                      "~/Content/css/plugins/jQueryUI/jquery-ui.css",
+                      "~/Content/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css"));
             //GITTER
             bundles.Add(new ScriptBundle("~/GITTER").Include(
                       "~/Content/js/plugins/gritter/jquery.gritter.min.js"));

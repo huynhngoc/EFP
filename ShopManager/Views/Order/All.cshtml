@@ -723,6 +723,7 @@
                 rs = "detail";
                 //alert no detail
             }
+            var cid=1;
             var note = $('#add_note').val();
             var status = ($.trim($("#add_status").find(".active").find("input").attr("id")));
             if (status.length <= 0) {
@@ -736,7 +737,8 @@
             if (rs == "true") {
                 $.post('/Order/CreateOrder'
                     , {
-                        note: note
+                        custId: cid
+                        , note: note
                         , status: status
                         , address: address
                         , receiver: receiver

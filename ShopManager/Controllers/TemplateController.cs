@@ -31,13 +31,14 @@ namespace ShopManager.Controllers
 
         public JsonResult AddTemplate(string name, string[] attr)
         {
+            var shopId = (string)Session["ShopId"];
             if (attr.Length < 7)
             {                
                 Array.Resize(ref attr, 7);                
 
             }
             TemplateProductService service = new TemplateProductService();
-            return Json(service.AddTemplate(name, attr, "1"), JsonRequestBehavior.AllowGet);
+            return Json(service.AddTemplate(name, attr, shopId), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UpdateTemplate(int id, string name, string[] attr)
