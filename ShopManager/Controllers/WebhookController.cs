@@ -22,7 +22,8 @@ namespace ShopManager.Controllers
         PostService postService = new PostService();
         ConversationService conversationService = new ConversationService();
         FacebookClient fbApp = new FacebookClient();
-        ApiAi apiAi = new ApiAi(new AIConfiguration(ConfigurationManager.AppSettings["ApiAiClient"], SupportedLanguage.English));        
+        ApiAi apiAi = new ApiAi(new AIConfiguration(ConfigurationManager.AppSettings["ApiAiClient"], SupportedLanguage.English));
+        ResponseService responseService = new ResponseService();
         // GET: Webhook
         public ActionResult Index()
         {
@@ -180,6 +181,18 @@ namespace ShopManager.Controllers
                                                 }
                                             }
                                         }
+
+                                        //autoresponse + autohide here
+                                        if (shopService.GetCommentMode(shopId).Equals(CommentMode.AUTOHIDE))
+                                        {
+                                            var response = responseService.GetResponse(shopId, intent.Value);
+                                            if (!string.IsNullOrEmpty(response))
+                                            {
+
+                                            }
+                                        }
+                                        
+
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
                                     break;

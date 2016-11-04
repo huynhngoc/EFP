@@ -29,5 +29,10 @@ namespace DataService.Service
             }
         }
 
+        public string GetResponse(string shopId, int intentId)
+        {
+            return repository.FindByShopAndIntent(shopId, intentId).RespondContent;
+        }
+
     }
 }
