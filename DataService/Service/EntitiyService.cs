@@ -53,5 +53,62 @@ namespace DataService.Service
             return repository.Create(e);
             
         }
+
+        public int AddEntity(string name, string value, string description, string shopId)
+        {
+            try
+            {
+                Entity e = new Entity()
+                {
+                    EntityName = name,
+                    Value = value,
+                    IsDynamic = false,
+                    Description = description,
+                    ShopId = shopId
+                };
+                return repository.CreateNew(e).Id;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            
+        }
+
+        public bool SetEntity(int id, string name, string value)
+        {
+            try
+            {
+                Entity e = repository.FindByKey(id);
+                e.EntityName = name;
+                e.Value = value;
+                return repository.Update(e);
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+
+        public bool DeleteEntity(int id)
+        {
+            try
+            {
+                Entity e = repository.FindByKey(id);
+                return repository.Delete(id);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public List<Entity> GetAll(string shopId)
+        {
+            return repository.GetAll(shopId);
+        }
+        
     }
 }

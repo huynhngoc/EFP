@@ -6,32 +6,37 @@
 
 
 @section CustomCSS {
-
+    @Styles.Render("~/Awesome-bootstrap-checkbox-CSS");
 }
 
 <div class="wrapper wrapper-content">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Những mẫu câu cơ bản</h5>
+                <div class="ibox-tools">
+                    <h5>Những mẫu câu cơ bản</h5>
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
             </div>
             <div class="ibox-content">
                 <fieldset class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Câu chào:</label>
-                        <div class="col-sm-10"><input type="text" id="chaohoi"  class="form-control" placeholder="Vd: Shop chúng tôi hoan nghênh bạn" /></div>
+                        <div class="col-sm-8"><input type="text" id="chaohoi" class="form-control" placeholder="Vd: Shop chúng tôi hoan nghênh bạn" /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Địa chỉ liên lạc:</label>
-                        <div class="col-sm-10"><input type="text" id="dcll" class="form-control" placeholder="Vd: Bạn có thể ghé thăm chúng tôi tại .." /></div>
+                        <div class="col-sm-8"><input type="text" id="dcll" class="form-control" placeholder="Vd: Bạn có thể ghé thăm chúng tôi tại .." /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Điện thoại:</label>
-                        <div class="col-sm-10"><input type="text" id="dt" class="form-control" placeholder="Vd: Bạn có thể liên lạc chúng tôi thông qua số ..." /></div>
+                        <div class="col-sm-8"><input type="text" id="dt" class="form-control" placeholder="Vd: Bạn có thể liên lạc chúng tôi thông qua số ..." /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Tài khoản ngân hàng:</label>
-                        <div class="col-sm-10"><input type="text" id="tk" class="form-control" placeholder="Vd: Bạn có thể chuyển tiền đến số tài khoản ..." /></div>
+                        <div class="col-sm-8"><input type="text" id="tk" class="form-control" placeholder="Vd: Bạn có thể chuyển tiền đến số tài khoản ..." /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Báo giá:</label>
@@ -40,13 +45,97 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Báo tình trạng:</label>
                         <div class="col-sm-10"><input type="text" id="sp.conhang" class="form-control" placeholder="Vd: Sản phẩm _sp_ _conhang_" /></div>
-                    </div>                    
+                    </div>
                 </fieldset>
+                <fieldset></fieldset>
+            </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <div class="ibox-tools">
+                    <h5>Cài đặt trả lời</h5>
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <fieldset class="form-horizontal">
+                    <div class=" form-group">
+                        <label class="col-sm-4 control-label">Chế độ ẩn bình luận khi phát hiện chống phá:</label>
+                        <div class="col-sm-8">
+                            <div class="radio radio-info radio-inline col-sm-6">
+                                <input type="radio" id="commentMode1" value="1" name="comment">
+                                <label for="commentMode1"> Chỉ cảnh báo </label>
+                            </div>
+                            <div class="radio radio-info radio-inline col-sm-6">
+                                <input type="radio" id="commentMode2" value="2" name="comment">
+                                <label for="commentMode2"> Ẩn bình luận </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Chế độ trả lời tin nhắn:</label>
+                        <div class="col-sm-8">
+                            <div class="radio radio-info radio-inline  col-sm-6">
+                                <input type="radio" id="replyMode1" value="1" name="reply">
+                                <label for="replyMode1"> Thủ công </label>
+                            </div>
+                            <div class="radio radio-info radio-inline col-sm-6">
+                                <input type="radio" id="replyMode2" value="2" name="reply">
+                                <label for="replyMode2"> Trả lời tự động</label>
+                            </div>
+                            </div>
+                        </div>
+                </fieldset>
+                <fieldset></fieldset>
             </div>
         </div>
     </div>
 </div>
 
 @section CustomJS {
+    <script>
+        function InitEntity(entities){
+            for(var entity in entities){
 
-}        
+            }
+        }
+
+        function EntityHtmlElement(){
+
+        }
+
+        $(document).ready(function(){
+            var entities =  @Html.Raw(Json.Encode(@ViewBag.Entities));
+            console.log(entities);
+            var responses = @Html.Raw(Json.Encode(@ViewBag.Responses));
+            console.log(responses);
+            $("#commentMode"+"@ViewBag.CommentMode").prop("checked","checked");
+            $("#replyMode"+@ViewBag.ReplyMode).prop("checked","checked");
+            $("input[name='comment'").on("change", function(){
+                if ($(this).is(":checked")){
+                    var mode = $(this).val();
+                    $.ajax({
+                        url: '../Shop/SetReplyMode',
+                        type: 'POST',
+                        data: {
+                            'mode': mode
+                        },
+                        success: function(data, textStatus, xhr){
+                            if (data.success){
+
+                            } else {
+
+                            }
+                        },
+                        error: function(){
+
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+}

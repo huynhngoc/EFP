@@ -9,9 +9,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using DataService;
-using DataService.Service;
-using Facebook;
 
 namespace ShopManager.Controllers
 {
