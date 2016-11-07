@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using Facebook;
 using System.Dynamic;
 using System.Configuration;
+using DataService.ViewModel;
 
 namespace ShopManager.Controllers
 {
@@ -40,48 +41,58 @@ namespace ShopManager.Controllers
         [Authorize(Roles = "ShopOwner")]
         public JsonResult AddShop(string id, string token)
         {
-            FacebookClient fbApp = new FacebookClient(token);
-            dynamic parameters = new ExpandoObject();
-            //parameters.access_token = token;
-            parameters.app_id = ConfigurationManager.AppSettings["FbAppId"];
-            
-
-            // add tab
-            Facebook.JsonObject fbResult = fbApp.Post(id + "/tabs", parameters);
-
-            // add webhook
-            var fbWebhook = fbApp.Post(id + "/subscribed_apps", parameters);
-
-            //get long-lived 
-            dynamic getAccessParam = new ExpandoObject();
-            getAccessParam.grant_type = "fb_exchange_token";
-            getAccessParam.client_id = ConfigurationManager.AppSettings["FbAppId"];
-            getAccessParam.client_secret = ConfigurationManager.AppSettings["FbAppSecret"];
-            getAccessParam.fb_exchange_token = token;
-
-            var fbToken = fbApp.Get("oauth/access_token", getAccessParam);
-            string longToken = fbToken["access_token"];            
-
-            //get name
-            dynamic nameParam = new ExpandoObject();
-            nameParam.fields = "name";
-            var fbName = fbApp.Get(id, nameParam);
-            string name = fbName["name"];
-
-            string userId = User.Identity.GetUserId();            
             ShopService shopService = new ShopService();
-            bool result = false;
-            if (shopService.GetShop(id) == null)
+            var shop = shopService.GetShop(id) == null;
+            if (shop)
             {
-                shopService.CreateShop(id, name, longToken, userId);
-
-                EntityService entityService = new EntityService();
-                entityService.InitEntity(id);
-                result = true;
-            }            
+                FacebookClient fbApp = new FacebookClient(token);
+                dynamic parameters = new ExpandoObject();
+                //parameters.access_token = token;
+                parameters.app_id = ConfigurationManager.AppSettings["FbAppId"];
 
 
-            return Json(new { addTab = fbResult, subscribe = fbWebhook, longtoken = longToken, name = name, result = result });
+                // add tab
+                Facebook.JsonObject fbResult = fbApp.Post(id + "/tabs", parameters);
+
+                // add webhook
+                var fbWebhook = fbApp.Post(id + "/subscribed_apps", parameters);
+
+                //get long-lived 
+                dynamic getAccessParam = new ExpandoObject();
+                getAccessParam.grant_type = "fb_exchange_token";
+                getAccessParam.client_id = ConfigurationManager.AppSettings["FbAppId"];
+                getAccessParam.client_secret = ConfigurationManager.AppSettings["FbAppSecret"];
+                getAccessParam.fb_exchange_token = token;
+
+                var fbToken = fbApp.Get("oauth/access_token", getAccessParam);
+                string longToken = fbToken["access_token"];
+
+                //get name
+                dynamic nameParam = new ExpandoObject();
+                nameParam.fields = "name,picture";
+                dynamic fbName = fbApp.Get(id, nameParam);
+                string name = fbName["name"];
+                string picture = fbName.picture.data.url;
+                string userId = User.Identity.GetUserId();
+                bool result = false;
+                if (shopService.GetShop(id) == null)
+                {
+                    shopService.CreateShop(id, name, longToken, userId, picture);
+
+                    EntityService entityService = new EntityService();
+                    entityService.InitEntity(id);
+                    result = true;
+                }
+
+
+                return Json(new { addTab = fbResult, subscribe = fbWebhook, longtoken = longToken, name = name, result = result });
+            } else
+            {
+                var result = shopService.CreateConnection(id, User.Identity.GetUserId());
+                return Json(new { result = result });
+            }
+
+            
         }
 
         [Authorize(Roles = "ShopOwner")]
@@ -90,7 +101,10 @@ namespace ShopManager.Controllers
             ShopService service = new ShopService();
             if (service.CheckShopUser(shopId, User.Identity.GetUserId()))
             {
+                ShopViewModel s = service.GetShop(shopId);
                 Session["ShopId"] = shopId;
+                Session["ShopName"] = s.ShopName;
+                Session["ShopImg"] = s.BannerImg;
                 return RedirectToAction("Index", "Shop");
             }            
             else

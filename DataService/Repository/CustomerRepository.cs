@@ -87,6 +87,26 @@ namespace DataService.Repository
             }
         }
 
+        public Customer AddCustomerReturnCustomer(Customer _cus)
+        {
+            try
+            {
+                if (FindByKey(_cus.Id) == null)
+                {
+                    var cust = CreateNew(_cus);
+                    this.Save();
+                    return cust;
+                }
+                else return null;
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
 
         public IQueryable<CustomerViewModel> GetAllCustomer(JQueryDataTableParamModel param, string shopId)
         {

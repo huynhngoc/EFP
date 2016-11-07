@@ -11,6 +11,7 @@ using DataService.Service;
 using Facebook;
 using System.Configuration;
 using System.Text;
+using ApiAiSDK;
 
 namespace ShopManager.Controllers
 {
@@ -21,6 +22,8 @@ namespace ShopManager.Controllers
         PostService postService = new PostService();
         ConversationService conversationService = new ConversationService();
         FacebookClient fbApp = new FacebookClient();
+        ApiAi apiAi = new ApiAi(new AIConfiguration(ConfigurationManager.AppSettings["ApiAiClient"], SupportedLanguage.English));
+        ResponseService responseService = new ResponseService();
         // GET: Webhook
         public ActionResult Index()
         {
@@ -126,9 +129,9 @@ namespace ShopManager.Controllers
                     dynamic value = change.value;
                     if (field.Equals(WebhookField.Feed))
                     {
-                        
+
                         string item = value.item;
-                        string verb = value.verb;                        
+                        string verb = value.verb;
                         string customerId = Convert.ToString(value.sender_id);
                         string parentId = Convert.ToString(value.parent_id);
                         string postId = Convert.ToString(value.post_id);
@@ -140,24 +143,70 @@ namespace ShopManager.Controllers
                             string commentId = value.comment_id;
                             switch (verb)
                             {
-                                case WebhookVerb.Add:                                                                                                                                                
+                                case WebhookVerb.Add:
                                 case WebhookVerb.Edit:                                    
-                                    if (HasProperty(value, "photo"))
+                                    if (customerId.Equals(shopId))
                                     {
-                                        //chatbot api intent photo here
-                                        intent = (int)DefaultIntent.PHOTO_EMO;
+                                        intent = null;
+                                    } else
+                                    {
+                                        if (HasProperty(value, "photo"))
+                                        {
+                                            //chatbot api intent photo here
+                                            intent = (int)DefaultIntent.PHOTO_EMO;
+                                        }
+                                        if (CheckTagOthers(commentId, shopId))
+                                        {
+                                            //chatbot api intent tag other here
+                                            intent = (int)DefaultIntent.TAG;
+                                        }
+                                        if (HasProperty(value, "message"))
+                                        {
+                                            string message = value.message;
+                                            //chatbot api for message here
+                                            var respond = apiAi.TextRequest(message);
+                                            var intentRespond = respond.Result.Metadata.IntentName;
+                                            if (intentRespond != null)
+                                            {
+                                                try
+                                                {
+                                                    if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                                                    {
+                                                        intent = int.Parse(intentRespond);
+                                                    }
+                                                }
+                                                catch (Exception)
+                                                {
+
+                                                }
+                                            }
+                                        }                                        
+                                        
+                                        if (intent== (int)DefaultIntent.VANDAL)
+                                        {
+                                            //hide comment
+                                            if (shopService.GetCommentMode(shopId) == (int)CommentMode.AUTOHIDE)
+                                            {
+                                                //hide comment
+                                                var accessToken = shopService.GetShop(shopId).FbToken;
+                                                dynamic param = new ExpandoObject();
+                                                param.access_token = accessToken;
+                                                param.is_hidden = true;
+                                                try
+                                                {
+                                                    fbApp.Post(commentId, param);
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    
+                                                }
+                                                
+                                            }
+                                            status = (int) CommentStatus.WARNING;
+                                        }                                        
+
                                     }
-                                    if (CheckTagOthers(commentId, shopId))
-                                    {
-                                        //chatbot api intent tag other here
-                                        intent = (int)DefaultIntent.TAG;
-                                    }
-                                    if (HasProperty(value, "message"))
-                                    {
-                                        string message = value.message;
-                                        //chatbot api for message here
-                                    }                                    
-                                    commentService.AddComment(commentId, customerId, createTime, intent.Value, status, parentId.Equals(postId)? null : parentId, postId);
+                                    commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
@@ -169,8 +218,8 @@ namespace ShopManager.Controllers
                                     commentService.SetStatus(commentId, (int)CommentStatus.DELETED);
                                     break;
                                 default: break;
-                            }                                                         
-                        } else if (item.Equals(WebhookItem.Post))
+                            }
+                        } else if (item.Equals(WebhookItem.Post)|| item.Equals(WebhookItem.Photo))
                         {
                             //string postId = value.comment_id;
                             switch (verb)
@@ -191,6 +240,22 @@ namespace ShopManager.Controllers
                                     {
                                         string message = value.message;
                                         //chatbot api for message here
+                                        var respond = apiAi.TextRequest(message);
+                                        var intentRespond = respond.Result.Metadata.IntentName;
+                                        if (intentRespond != null)
+                                        {
+                                            try
+                                            {
+                                                if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                                                {
+                                                    intent = int.Parse(intentRespond);
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
                                     }
                                     if (customerId.Equals(shopId))
                                     {
@@ -251,20 +316,46 @@ namespace ShopManager.Controllers
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
             param.fields = "from,created_time,message,attachments";
-            param.limit = 1;
+            param.limit = 5;
+            param.until = time;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
             
             if (shopId.Equals(detail.from.id))
             {
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, 0);
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, 0);
                 conversationService.SetReadConversation(threadId, time);
             } else
             {
                 int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
-                //chatbot api here                
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
+                //chatbot api here              
+                var respond = apiAi.TextRequest(message);
+                var intentRespond = respond.Result.Metadata.IntentName;
+                //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                if (intentRespond != null)
+                {
+                    try
+                    {
+                        if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
+                        {
+                            intent = int.Parse(intentRespond);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO)
+                {
+                    var response = responseService.GetResponse(shopId, intent);
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        //respond message
+                    }
+                }
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
         }

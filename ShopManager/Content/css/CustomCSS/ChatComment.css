@@ -16,31 +16,34 @@
 }
 
 .ibox-content {
-    padding: 0;
+    padding: 0 !important;
 }
 
 .ibox-heading {
-    padding: 5px 30px;
+    padding: 5px 30px !important;
 }
 
 .feed-element {
-    padding: 10px;
-    margin: 0;
+    padding: 7px 7px 7px 5px !important;
+    margin: 0 !important;
+    max-height: 65px !important;
 }
 
+.feed-activity-list .selected {
+    background-color: #365899;
+    color: white;
+}
+
+    .feed-activity-list .selected:hover {
+        background-color: #365899;
+    }
+
 .new-feed-element {
-    background-color: #cfc3c5
+    background-color: #cfc3c5;
 }
 
 .feed-element:hover {
     background-color: #eeecec;
-}
-
-.feed-element-active {
-    padding: 10px;
-    margin: 0;
-    background-color: #365899;
-    color: white;
 }
 
 .small-chat-bo {
@@ -97,7 +100,7 @@
     font-size: 11px;
 }
 
-.small-chat-bo .content>div {
+    .small-chat-bo .content > div {
     padding-bottom: 20px;
 }
 
@@ -222,3 +225,11 @@
         margin-right: auto;
     }
 
+
+.unread {
+    background-color: #ecf0f7;
+}
+.feed-activity-list .ui-selected {
+    background-color: #365899;
+    color: white;
+  }

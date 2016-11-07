@@ -58,5 +58,11 @@ namespace DataService.Service
         {
             return repository.GetPost(postId, shopId);
         }
+
+        //ANDND Set post is read
+        public bool SetPostIsRead(string postId)
+        {
+            return (repository.SetPostIsRead(postId));
+        }
     }
 }

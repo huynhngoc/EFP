@@ -29,4 +29,10 @@ namespace DataService.Utils
         DEFAULT = 1,
         AUTOHIDE = 2
     }
+
+    public enum ReplyMode
+    {
+        MANUAL = 1,
+        AUTO = 2
+    }
 }
