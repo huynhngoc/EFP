@@ -420,9 +420,9 @@
                                                                                 "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                                     "<i class='fa fa-chevron-down'></i>\n" +
                                                                                 "</a>\n" +
-                                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
-                                                                                     "<li onclick='HideComment(this.id)' id ="+ comment.id+"><a>Ẩn</a></li>" +
-                                                                                      "<li onclick='DeleteComment(this.id)' id ="+ comment.id+"><a>Xoá</a></li></ul>" +
+                                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                                                                     if (shopId_text != comment.sender_id) html+= "<li onclick='HideComment(this.id)' id ="+ comment.id+"><a>Ẩn</a></li>";
+                                                                                     html+= "<li onclick='DeleteComment(this.id)' id ="+ comment.id+"><a>Xoá</a></li></ul>" +
                                                                                 "</ul>\n" +
                                                                             "</div>\n" +
                                                                              "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
@@ -471,9 +471,9 @@
                                                                                 "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                                     "<i class='fa fa-chevron-down'></i>\n" +
                                                                                 "</a>\n" +
-                                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
-                                                                                     "<li onclick='HideComment(this.id)' id ='"+comment.comment_id+"'><a>Ẩn</a></li>" +
-                                                                                      "<li onclick='DeleteComment(this.id)' id ='"+comment.comment_id+"'><a>Xoá</a></li></ul>" +
+                                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                            if (shopId_text != comment.sender_id)html1+="<li onclick='HideComment(this.id)' id ='"+comment.comment_id+"'><a>Ẩn</a></li>";
+                            html1+="<li onclick='DeleteComment(this.id)' id ='"+comment.comment_id+"'><a>Xoá</a></li></ul>";
                                                                                 "</ul>\n" +
                                                                             "</div>\n" +
                                                                              "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
@@ -523,8 +523,8 @@
                                                                                 "<i class='fa fa-chevron-down'></i>\n" +
                                                                             "</a>\n" +
                                                                             "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
-                                            html2+="<li onclick='HideComment(this.id)' id ="+data.Id+"><a>Ẩn</a></li>"+
-                                                   "<li onclick='DeleteComment(this.id)' id ="+data.Id+"><a>Xoá</a></li></ul>" +
+                                            if (shopId_text != data.SenderFbId)html2+="<li onclick='HideComment(this.id)' id ="+data.Id+"><a>Ẩn</a></li>";
+                                                  html2+= "<li onclick='DeleteComment(this.id)' id ="+data.Id+"><a>Xoá</a></li></ul>" +
                                                                                     "</ul>\n" +
                                                                                 "</div>\n" +
                                                                                  "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
@@ -1073,8 +1073,8 @@
                                                             "<i class='fa fa-chevron-down'></i></a>" +
                                                             "<ul class='dropdown-menu m-t-xs' style='min-width:0px'>";
                             @*if (data.SenderFbId == @Session["shopId"].ToString()) html +="<li onclick=''><a>Sửa</a></li>";*@
-                            html+="<li onclick='HideComment(this.id)' id ="+data.Id+"'><a>Ẩn</a></li>"+
-                                                            "<li onclick='DeleteComment(this.id)' id ="+data.Id+"><a>Xoá</a></li></ul>" +
+                            if (shopId_text != data.SenderFbId)html+="<li onclick='HideComment(this.id)' id ="+data.Id+"'><a>Ẩn</a></li>";
+                                                            html+="<li onclick='DeleteComment(this.id)' id ="+data.Id+"><a>Xoá</a></li></ul>" +
                                                         "</div>" +
                                                         "<div class='social-avatar' id=" + data.SenderFbId + ">" +
                                                         "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
@@ -1126,8 +1126,8 @@
                                                                             "<i class='fa fa-chevron-down'></i>\n" +
                                                                         "</a>\n" +
                                                                         "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
-                                html+="<li onclick='DeleteComment(this.id)' id ="+data.Comments[i].Id+"><a>Ẩn</a></li>"+
-                                                                              "<li class = 'deleteCommentBtn' id ="+data.Comments[i].Id+"><a>Xoá</a></li></ul>" +
+                                if (shopId_text != data.Comments[i].SenderFbId)html+="<li onclick='DeleteComment(this.id)' id ="+data.Comments[i].Id+"><a>Ẩn</a></li>";
+                                                                              html+="<li class = 'deleteCommentBtn' id ="+data.Comments[i].Id+"><a>Xoá</a></li></ul>" +
                                                                         "</ul>\n" +
                                                                     "</div>\n" +
                                                                      "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
@@ -1179,9 +1179,9 @@
                                                                     "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                         "<i class='fa fa-chevron-down'></i>\n" +
                                                                     "</a>\n" +
-                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
-                                                                        "<li onclick='HideComment(this.id)' id ='"+ data.nestedComments[i].Id+"'><a>Ẩn</a></li>\n" +
-                                                                        "<li onclick='DeleteComment(this.id)' id ='"+ data.nestedComments[i].Id+"'><a>Xoá</a></li>\n" +
+                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                if (shopId_text != data.Comments[i].SenderFbId)html1+="<li onclick='DeleteComment(this.id)' id ="+data.Comments[i].Id+"><a>Ẩn</a></li>";"<li onclick='HideComment(this.id)' id ='"+ data.nestedComments[i].Id+"'><a>Ẩn</a></li>\n";
+                                                                       html1+= "<li onclick='DeleteComment(this.id)' id ='"+ data.nestedComments[i].Id+"'><a>Xoá</a></li>\n" +
                                                                     "</ul>\n" +
                                                                 "</div>\n" +
                                                                 "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
@@ -1331,9 +1331,9 @@
                                                     "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                         "<i class='fa fa-chevron-down'></i>\n" +
                                                     "</a>\n" +
-                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n" +
-                                                        "<li onclick='HideComment(this.id)' id ="+data[i].Id+"><a>Ẩn</a></li>\n" +
-                                                        "<li onclick='DeleteComment(this.id)' id ="+data[i].Id+"><a>Xoá</a></li>\n"+
+                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                            if (shopId_text != data.Comments[i].SenderFbId)tmphtml+="<li onclick='DeleteComment(this.id)' id ="+data.Comments[i].Id+"><a>Ẩn</a></li>";"<li onclick='HideComment(this.id)' id ="+data[i].Id+"><a>Ẩn</a></li>\n";
+                                                        tmphtml+="<li onclick='DeleteComment(this.id)' id ="+data[i].Id+"><a>Xoá</a></li>\n"+
                                                     "</ul>\n" +
                                                 "</div>\n" +
                                                 "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +

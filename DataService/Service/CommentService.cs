@@ -115,29 +115,17 @@ namespace DataService.Service
             return listModel;
         }
 
-        // ANDND Set is read
-        public bool SetIsRead(string commentId)
-        {
-            return repository.SetIsRead(commentId);
-        }
 
-        // ANDND Set status
-        public bool SetCommentStatus(string commentId, int statusId)
-        {
-            return repository.SetStatus(commentId, statusId);
-        }
-
-        // ANDND Set intent
-        public bool SetIntent(string commentId, int intentId)
-        {
-            return repository.SetIntent(commentId, intentId);
-        }
 
         // ANDND Get Comment by comment id
         public Comment GetCommentById(string commentId)
         {
             Comment comment = repository.FindByKey(commentId);
             return comment;
+        }
+        public bool SetCommentStatus(string commentId, int statusId)
+        {
+            return repository.SetStatus(commentId, statusId);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataService.ViewModel;
+﻿using DataService.JqueryDataTable;
+using DataService.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -222,65 +223,7 @@ namespace DataService.Repository
 
         }
 
-        // ANDND Set id read
-        public bool SetIsRead(string commentId)
-        {
-            try
-            {
-                var comment = dbSet.Where(q => q.Id == commentId).FirstOrDefault();
-                if (comment.IsRead == false)
-                {
-                    comment.IsRead = true;
-                    return Update(comment);
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
-
-        }
-
-        //ANDND Set intent
-        public bool SetIntent(string commentId, int intentId)
-        {
-            try
-            {
-                var comment = dbSet.Where(q => q.Id == commentId).FirstOrDefault();
-                comment.IntentId = intentId;
-                return Update(comment);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
-
-        }
-
-        //ANDND Set status
-        public bool SetStatus(string commentId, int statusId)
-        {
-            try
-            {
-                var comment = dbSet.Where(q => q.Id == commentId).FirstOrDefault();
-                comment.Status = statusId;
-                return Update(comment);
-
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
-
-        }
-
+        
         //public IQueryable<Post> GetPost(string shopId, int from, int quantity)
         //{
         //    var result = dbSet.Where(q => q.ShopId == shopId).Select(q => new Post_Comment()

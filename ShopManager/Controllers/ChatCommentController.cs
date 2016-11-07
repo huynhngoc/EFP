@@ -11,9 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using DataService;
-using DataService.Service;
-using Facebook;
+
 
 namespace ShopManager.Controllers
 {
@@ -23,14 +21,14 @@ namespace ShopManager.Controllers
         ConversationService conversationService = new ConversationService();
         ShopService shopService = new ShopService();
         CustomerService custService = new CustomerService();
-        FacebookClient fbApp = new FacebookClient();
+        //FacebookClient fbApp = new FacebookClient();
 
         //string PageId = "685524511603937";
-        CustomerService custService = new CustomerService();
+        //CustomerService custService = new CustomerService();
         //var NumberofFeeds = 10;
-        static string token = "EAAC1A8DIKmYBAEbxcQUGVQjsBoMCZAcPDzsBJNHviC7KnZCElb8lYYi62LlZAgLjQJbkUxCUS5hgPmCZCca9mokZAIOuDCZAeUoZAww8pmY70O47qGnHoE3ZBi2zsNG6nZA6tsFWc5ATBRt3GhJvDtZAuRzp5f573t8Q7FL2H89RB1ZCwZDZD";
+        static string token = "EAAC1A8DIKmYBANZAleY9H1hY3Tb85HvHMH4ZAg6mHOZCusTRmBzQAESZAxwiIlUC3KhH103OpvUcJynkZBZBascE4KDbaWj76e6HvDiYfgfsn7U0po7FsKx1JOYEhpie1LK6YpbhJJFHSE0dYqNaRRrNRTQMfesBHHry0XlT2ssgZDZD";
 
-        ShopService shopService = new ShopService();
+        //ShopService shopService = new ShopService();
         CommentService commentservice = new CommentService();
         FacebookClient fbApp = new FacebookClient(token);
         PostService postservice = new PostService();
@@ -41,7 +39,8 @@ namespace ShopManager.Controllers
             //Session["CustId"] = "3";
             dynamic shopOwnerParam = new ExpandoObject();
             shopOwnerParam.fields = "picture,name";
-
+            
+                
             dynamic shopFBUser = fbApp.Get((string)Session["ShopId"], shopOwnerParam);
             Session["ShopOwner"] = shopFBUser.name;
             Session["ShopAvatar"] = shopFBUser.picture.data.url;
@@ -267,26 +266,33 @@ namespace ShopManager.Controllers
             //postId = "685524511603937_713357638820624";
 
             //get post info
-            var fbPost = fbApp.Get(postId, postParam);
+            try
+                {   
+                var fbPost = fbApp.Get(postId, postParam);
 
 
-            PostViewModel postmodel = new PostViewModel();
-            //Debug.WriteLine(post.Id + DateTime.Now);
-            //string test = fbPost.sdfsdfds;
-            //Debug.WriteLine("PostWithLastestComment " + post.Id);
-            postmodel.from = fbPost.from.name;
-            //priority: message (attachment) > story (attachment) > attachment
-            if (fbPost.message != null && fbPost.message != "") postmodel.message = fbPost.message;
-            //message = null => picture or activity
-            else
-            {
-                postmodel.message = fbPost.story;
-                Debug.WriteLine("story post " + postmodel.message);
+                PostViewModel postmodel = new PostViewModel();
+                //Debug.WriteLine(post.Id + DateTime.Now);
+                //string test = fbPost.sdfsdfds;
+                //Debug.WriteLine("PostWithLastestComment " + post.Id);
+                postmodel.from = fbPost.from.name;
+                //priority: message (attachment) > story (attachment) > attachment
+                if (fbPost.message != null && fbPost.message != "") postmodel.message = fbPost.message;
+                //message = null => picture or activity
+                else
+                {
+                    postmodel.message = fbPost.story;
+                    Debug.WriteLine("story post " + postmodel.message);
+                }
+                if (fbPost.full_picture != null && fbPost.full_picture != "") postmodel.imageContent = fbPost.full_picture;
+
+                Debug.WriteLine("test post " + postmodel.message);
+                return Json(postmodel, JsonRequestBehavior.AllowGet);
             }
-            if (fbPost.full_picture != null && fbPost.full_picture != "") postmodel.imageContent = fbPost.full_picture;
+            catch(Exception e)
+            {
 
-            Debug.WriteLine("test post " + postmodel.message);
-            return Json(postmodel, JsonRequestBehavior.AllowGet);
+            }
         }
 
 
@@ -466,16 +472,6 @@ namespace ShopManager.Controllers
             return Json(listConversationPreview, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetUserFromDb(string userFbId)
-        {
-            string shopId = (string)Session["ShopId"];
-            Customer cust = custService.GetCustomerByFacebookId(userFbId, shopId);
-            if (cust == null)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-            return Json(cust, JsonRequestBehavior.AllowGet);
-        }
 
         public ActionResult GetConversationContent(string conversationId)
         {
@@ -590,58 +586,6 @@ namespace ShopManager.Controllers
             }
         }
 
-        public JsonResult ReplyComment(string commentId, string message)
-        {
-            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
-            dynamic param = new ExpandoObject();
-            try
-            {
-                param.access_token = accessToken;
-                param.message = message;
-                var result = fbApp.Post(commentId + "/comments", param);
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public JsonResult HideComment(string commentId)
-        {
-            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
-            dynamic param = new ExpandoObject();
-            try
-            {
-                param.access_token = accessToken;
-                param.is_hidden = true;
-                var result = fbApp.Post(commentId, param);
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public JsonResult DeleteComment(string commentId)
-        {
-            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
-            fbApp.AccessToken = accessToken;
-            dynamic param = new ExpandoObject();
-            try
-            {
-                var result = fbApp.Delete(commentId);
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.StackTrace);
-                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
 
 
         public JsonResult PrivateReplyComment(string commentId, string message)
