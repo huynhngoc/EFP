@@ -215,3 +215,15 @@ ModelManifest.xml
 ShopManager/Web.config
 DataService/App.config
 ProductPage/Web.config
+/DataService
+/DataService/Repository
+/ProductPage
+/DataService/Utils
+/DataService/Utils
+/ShopManager/Content/js/Comment_js/Comment_js.js
+/ShopManager/Scripts/jquery.signalR-2.2.1.js
+/ShopManager/Scripts/jquery.signalR-2.2.1.min.js
+/ShopManager/SignalRAlert/AlertHub.cs
+/ShopManager/Views/Analysis/Commnent.cshtml
+/ShopManager/Views/Shop/Setting.cshtml
+/ShopManager/SignalRAlert/AlertHub.cs
