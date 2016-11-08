@@ -79,5 +79,21 @@ namespace DataService.Service
             }            
         }
 
+        public bool EditResponse(int id, int intent, string resContent)
+        {
+            try
+            {
+                Respons r = repository.FindByKey(id);
+                r.RespondContent = resContent;
+                r.IntentId = intent;
+                return repository.Update(r);
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+
     }
 }

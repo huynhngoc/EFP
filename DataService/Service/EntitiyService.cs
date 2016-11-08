@@ -40,17 +40,26 @@ namespace DataService.Service
             }
         }
 
-        public bool AddEntity(string name, string value, bool isDynamic, string description, string shopId)
+        public int AddEntity(string name, string value, bool isDynamic, string description, string shopId)
         {
-            Entity e = new Entity()
+            try
             {
-                EntityName = name,
-                Value = value,
-                IsDynamic = isDynamic,
-                Description = description,
-                ShopId = shopId
-            };
-            return repository.Create(e);
+                Entity e = new Entity()
+                {
+                    EntityName = name,
+                    Value = value,
+                    IsDynamic = isDynamic,
+                    Description = description,
+                    ShopId = shopId
+                };
+                return repository.CreateNew(e).Id;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
             
         }
 
@@ -74,14 +83,16 @@ namespace DataService.Service
             }
             
         }
+        
 
-        public bool SetEntity(int id, string name, string value)
+        public bool SetEntity(int id, string name, string value, string description)
         {
             try
             {
                 Entity e = repository.FindByKey(id);
                 e.EntityName = name;
                 e.Value = value;
+                e.Description = description;
                 return repository.Update(e);
 
             }

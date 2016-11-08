@@ -6,7 +6,9 @@
 
 
 @section CustomCSS {
-    @Styles.Render("~/Awesome-bootstrap-checkbox-CSS");
+@Styles.Render("~/Awesome-bootstrap-checkbox-CSS")
+@Styles.Render("~/Toastr-style")
+@Styles.Render("~/SweetAlert-CSS")
 }
 
 <div class="wrapper wrapper-content">
@@ -21,33 +23,48 @@
                 </div>
             </div>
             <div class="ibox-content">
-                <fieldset class="form-horizontal">
+                <fieldset class="entity-form form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Câu chào:</label>
-                        <div class="col-sm-8"><input type="text" id="chaohoi" class="form-control" placeholder="Vd: Shop chúng tôi hoan nghênh bạn" /></div>
+                        <div class="col-sm-2"><label>Tên</label></div>
+                        <div class="col-sm-2"><label>Viết tắt</label></div>
+                        <div class="col-sm-6"><label>Nội dung</label></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Địa chỉ liên lạc:</label>
-                        <div class="col-sm-8"><input type="text" id="dcll" class="form-control" placeholder="Vd: Bạn có thể ghé thăm chúng tôi tại .." /></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Điện thoại:</label>
-                        <div class="col-sm-8"><input type="text" id="dt" class="form-control" placeholder="Vd: Bạn có thể liên lạc chúng tôi thông qua số ..." /></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Tài khoản ngân hàng:</label>
-                        <div class="col-sm-8"><input type="text" id="tk" class="form-control" placeholder="Vd: Bạn có thể chuyển tiền đến số tài khoản ..." /></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Báo giá:</label>
-                        <div class="col-sm-10"><input type="text" id="sp.gia" class="form-control" placeholder="Vd: Sản phẩm _sp_ có giá _gia_" /></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Báo tình trạng:</label>
-                        <div class="col-sm-10"><input type="text" id="sp.conhang" class="form-control" placeholder="Vd: Sản phẩm _sp_ _conhang_" /></div>
-                    </div>
+                    @foreach (var entity in ViewBag.Entities)
+                    {
+                        <div class="entity-group form-group">
+                            <input type="hidden" name="id" value="@entity.Id" />
+                            @if (entity.IsDynamic == false)
+                            {
+                                <div class="col-sm-2"><input name="des" type="text" readonly class="form-control" placeholder="Tên" value="@entity.Description"/></div>
+                                <div class="col-sm-2"><input name="name" type="text" readonly  class="form-control" placeholder="Viết tắt" value="@entity.EntityName" /></div>
+                                <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" value="@entity.Value" /></div>
+
+                                <div class="col-sm-2 btn-group">                                    
+                                    <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" /></div>
+                                <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" /></div>
+                                <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" /></div>
+
+                                <div class="col-sm-2 btn-group">
+                                    <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
+                                </div>
+                            }
+                            
+                        </div>
+                    }
+                    
+                    
                 </fieldset>
-                <fieldset></fieldset>
+                <fieldset>
+                    <div class=" pull-right"><button class="btn-add-entity btn btn-primary"><i class="fa fa-plus"></i></button></div>
+</fieldset>
             </div>
         </div>
 
@@ -61,15 +78,15 @@
                 </div>
             </div>
             <div class="ibox-content">
-                <fieldset class="form-horizontal">
+                <fieldset class="form-horizontal">                    
                     <div class=" form-group">
                         <label class="col-sm-4 control-label">Chế độ ẩn bình luận khi phát hiện chống phá:</label>
                         <div class="col-sm-8">
-                            <div class="radio radio-info radio-inline col-sm-6">
+                            <div class="radio radio-info radio-inline col-sm-4">
                                 <input type="radio" id="commentMode1" value="1" name="comment">
                                 <label for="commentMode1"> Chỉ cảnh báo </label>
                             </div>
-                            <div class="radio radio-info radio-inline col-sm-6">
+                            <div class="radio radio-info radio-inline col-sm-4"  style="margin-left:0px">
                                 <input type="radio" id="commentMode2" value="2" name="comment">
                                 <label for="commentMode2"> Ẩn bình luận </label>
                             </div>
@@ -78,11 +95,11 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Chế độ trả lời tin nhắn:</label>
                         <div class="col-sm-8">
-                            <div class="radio radio-info radio-inline  col-sm-6">
+                            <div class="radio radio-info radio-inline  col-sm-4">
                                 <input type="radio" id="replyMode1" value="1" name="reply">
                                 <label for="replyMode1"> Thủ công </label>
                             </div>
-                            <div class="radio radio-info radio-inline col-sm-6">
+                            <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
                                 <input type="radio" id="replyMode2" value="2" name="reply">
                                 <label for="replyMode2"> Trả lời tự động</label>
                             </div>
@@ -92,11 +109,430 @@
                 <fieldset></fieldset>
             </div>
         </div>
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <div class="ibox-tools">
+                    <h5>Các câu trả lời tự động</h5>
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">                
+                <fieldset class="res-form form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-4"><label>Mục đích</label></div>
+                        <div class="col-sm-7">Nội dung</div>
+                    </div>
+                    @foreach (var response in ViewBag.Responses)
+                    {                        
+                        <div class="intent-group form-group">
+                            <input type="hidden" name="id" value="@response.Id"/>
+                            <div class="col-sm-4">
+                                <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
+                                    <option>Chọn một mục đích khách hàng</option>
+                                    @foreach (var intent in ViewBag.Intents)
+                                    {
+                                        if (response.IntentId == intent.Id)
+                                        {
+                                            <option value="@intent.Id" selected>@intent.IntentName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@intent.Id">@intent.IntentName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-6"><input name="content" onkeydown="changeIntent(event)" type="text" class="form-control" value="@response.RespondContent" placeholder="" /></div>
+                            <div class="col-sm-2 btn-group">                            
+                                <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)" style="display:none"><i class="fa fa-check"></i></button>
+                                <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)" style="display:none"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    }                    
+                </fieldset>                    
+                <fieldset>
+                    <div class=" pull-right"><button class="btn-add-res btn btn-primary"><i class="fa fa-plus"></i></button>
+                    @*<button class="btn btn-success">Lưu</button>*@
+                    </div>                                   
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- template div area-->
+<div id="intentGroup" style="display:none">
+    <div class="intent-group form-group">
+        <input type="hidden" name="id" />
+        <div class="col-sm-4">
+            <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
+                <option>Chọn một mục đích khách hàng</option>
+                @foreach(var intent in ViewBag.Intents)
+                {
+                    <option value="@intent.Id">@intent.IntentName</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-6"><input name="content" onkeydowm="changeIntent(event)" type="text" class="form-control" placeholder="" /></div>
+        <div class="col-sm-2 btn-group">
+            <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)" style="display:none"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)" ><i class="fa fa-check"></i></button>
+            <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+</div>
+
+<div id="entityGroup" style="display:none">
+    <div class="entity-group form-group">
+        <input type="hidden" name="id" />
+        <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" /></div>
+        <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" /></div>
+        <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" /></div>
+        
+        <div class="col-sm-2 btn-group">
+            <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)" style="display:none"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" ><i class="fa fa-check"></i></button>
+            <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" ><i class="fa fa-times"></i></button>
+        </div>
     </div>
 </div>
 
 @section CustomJS {
+@Scripts.Render("~/Toastr")
+@Scripts.Render("~/SweetAlert-JS")
     <script>
+        var listEntity = {};
+        var list = {};
+
+        function changeEntity(event){
+            console.log(event);            
+            var remove = $(event.target).closest(".entity-group").find(".btn-remove-entity");
+            var clicked = event.target;
+            var div = $(clicked).closest(".entity-group");
+            var id = $($(div).find("input[name='id']")[0]).val();            
+            var name = $($(div).find("input[name='name']")[0]).val();
+            var value = $($(div).find("input[name='value']")[0]).val();
+            var des = $($(div).find("input[name='des']")[0]).val();
+            if ($(remove).length>0){
+                if ($(remove).is(":visible") && id!="undefined"){
+                    console.log(list);
+                    listEntity[id] = {
+                        name: name,
+                        value: value,
+                        des: des
+                    };
+                    console.log(listEntity);
+                }            
+                        
+                $(remove).hide();
+            }
+            
+            var save = $(event.target).closest(".entity-group").find(".btn-save-entity");
+            $(save).show();
+            var cancel = $(event.target).closest(".entity-group").find(".btn-cancel-entity");
+            $(cancel).show();            
+        }
+
+        function deleteEntity(event){
+            var clicked = event.target;
+            var div = $(clicked).closest(".entity-group");
+            var id = $($(div).find("input[name='id']")[0]).val();
+            //var Entity = $($(div).find("select[name='Entity']")[0]).val();
+            //var content = $($(div).find("input[name='content']")[0]).val();
+            swal({
+                title: "Xác nhận"
+                    , text: "Bạn có chắc chắn muốn xóa"
+                    , type: "warning"
+                    , showCancelButton: true
+                    , closeOnConfirm: true
+                    , showLoaderOnConfirm: true,
+            }, function () {
+                $.ajax({                
+                    url: '../Shop/DeleteEntity',
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    success: function (data){
+                        if (data.success == true){
+                            $(div).remove();
+                            toastr.success("Cập nhật thành công");
+                        } else {
+                            toastr.error("Cập nhật thất bại");   
+                        }
+                    },
+                    error: function(){
+                        toastr.error("Cập nhật thất bại");   
+                    }
+                    
+                });
+            });
+
+        }
+
+        function saveEntity(event){
+            var clicked = event.target;
+            var div = $(clicked).closest(".entity-group");
+            var id = $($(div).find("input[name='id']")[0]).val();            
+            var name = $($(div).find("input[name='name']")[0]).val();
+            var value = $($(div).find("input[name='value']")[0]).val();
+            var des = $($(div).find("input[name='des']")[0]).val();
+
+            if (id!="undefined" && id!=""){
+                $.ajax({                
+                    url: '../Shop/SetEntity',
+                    type: 'POST',
+                    data: {
+                        'id':id,
+                        'name': name,
+                        'value': value,
+                        'description':  des
+                    },
+                    success: function (data){
+                        if (data.success){                            
+                            toastr.success("Cập nhật thành công");
+                        } else {
+                            toastr.error("Cập nhật thất bại");   
+                        }
+                    },
+                    error: function(){
+                        toastr.error("Cập nhật thất bại");   
+                    }
+                    
+                });
+            } else {
+                $.ajax({                
+                    url: '../Shop/AddEntity',
+                    type: 'POST',
+                    data: {
+                        'name': name,
+                        'value': value,
+                        'description':  des
+                    },
+                    success: function (data){
+                        if (data.id>0){
+                            $($(div).find("input[name='id']")[0]).val(data.id);
+                            toastr.success("Cập nhật thành công");
+                        } else {
+                            $(div).remove();
+                            toastr.error("Cập nhật thất bại");   
+                        }
+                    },
+                    error: function(){
+                        $(div).remove();
+                        toastr.error("Cập nhật thất bại");   
+                    }
+                    
+                });
+            }
+
+            var remove = $(event.target).closest(".entity-group").find(".btn-remove-entity");
+            if ($(remove).length>0) {
+                $(remove).show();
+            }
+            var save = $(event.target).closest(".entity-group").find(".btn-save-entity");
+            $(save).hide();
+            var cancel = $(event.target).closest(".entity-group").find(".btn-cancel-entity");
+            $(cancel).hide();
+        }
+
+        function cancelEntity(event){
+            var clicked = event.target;
+            var div = $(clicked).closest(".entity-group");
+            var id = $($(div).find("input[name='id']")[0]).val();
+
+            if (id!="undefined" && id!=""){
+                console.log(list);
+                console.log($($(div).find("input[name='content']")[0]));
+                $($(div).find("select[name='name']")[0]).val(listEntity[id].name);
+                $($(div).find("input[name='value']")[0]).val(listEntity[id].value);
+                $($(div).find("input[name='des']")[0]).val(listEntity[id].des);
+                var remove = $(event.target).closest(".entity-group").find(".btn-remove-entity");
+                if($(remove).length>0){
+                    $(remove).show();
+                }
+                var save = $(event.target).closest(".entity-group").find(".btn-save-entity");
+                $(save).hide();
+                var cancel = $(event.target).closest(".entity-group").find(".btn-cancel-entity");
+                $(cancel).hide();
+            }
+            else {
+                $(div).remove();
+            }
+            
+        }
+
+        function changeIntent(event){
+            console.log(event);            
+            var remove = $(event.target).closest(".intent-group").find(".btn-remove-intent");
+            var clicked = event.target;
+            var div = $(clicked).closest(".intent-group");
+            var id = $($(div).find("input[name='id']")[0]).val();            
+            var intent = $($(div).find("select[name='intent']")[0]).val();
+            var content = $($(div).find("input[name='content']")[0]).val();
+            if ($(remove).is(":visible") && id!="undefined"){
+                console.log(list);
+                list[id] = {
+                    intent: intent,
+                    content: content
+                };
+                console.log(list);
+            }            
+            
+            
+            $(remove).hide();
+            var save = $(event.target).closest(".intent-group").find(".btn-save-intent");
+            $(save).show();
+            var cancel = $(event.target).closest(".intent-group").find(".btn-cancel-intent");
+            $(cancel).show();
+            var clicked = event.target;
+        }
+
+        function deleteIntent(event){
+            var clicked = event.target;
+            var div = $(clicked).closest(".intent-group");
+            var id = $($(div).find("input[name='id']")[0]).val();
+            //var intent = $($(div).find("select[name='intent']")[0]).val();
+            //var content = $($(div).find("input[name='content']")[0]).val();
+            swal({
+                title: "Xác nhận"
+                    , text: "Bạn có chắc chắn muốn xóa"
+                    , type: "warning"
+                    , showCancelButton: true
+                    , closeOnConfirm: true
+                    , showLoaderOnConfirm: true,
+            }, function () {
+                $.ajax({                
+                    url: '../Shop/DeleteResponse',
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    success: function (data){
+                        if (data.success == true){
+                            $(div).remove();
+                            toastr.success("Cập nhật thành công");
+                        } else {
+                            toastr.error("Cập nhật thất bại");   
+                        }
+                    },
+                    error: function(){
+                        toastr.error("Cập nhật thất bại");   
+                    }
+                    
+                });
+            });
+
+        }
+
+        function saveIntent(event){
+            var clicked = event.target;
+            var div = $(clicked).closest(".intent-group");
+            var id = $($(div).find("input[name='id']")[0]).val();
+            var intent = $($(div).find("select[name='intent']")[0]).val();
+            var content = $($(div).find("input[name='content']")[0]).val();
+
+            if (id!="undefined" && id!=""){
+                $.ajax({                
+                    url: '../Shop/EditResponse',
+                    type: 'POST',
+                    data: {
+                        'id':id,
+                        'intent': intent,
+                        'content': content
+                    },
+                    success: function (data){
+                        if (data.success){                            
+                            toastr.success("Cập nhật thành công");
+                        } else {
+                            toastr.error("Cập nhật thất bại");   
+                        }
+                    },
+                    error: function(){
+                        toastr.error("Cập nhật thất bại");   
+                    }
+                    
+                });
+            } else {
+                $.ajax({                
+                    url: '../Shop/AddResponse',
+                    type: 'POST',
+                    data: {
+                        'intent': intent,
+                        'content': content
+                    },
+                    success: function (data){
+                        if (data.id>0){
+                            $($(div).find("input[name='id']")[0]).val(data.id);
+                            toastr.success("Cập nhật thành công");
+                        } else {
+                            $(div).remove();
+                            toastr.error("Cập nhật thất bại");   
+                        }
+                    },
+                    error: function(){
+                        $(div).remove();
+                        toastr.error("Cập nhật thất bại");   
+                    }
+                    
+                });
+            }
+
+            var remove = $(event.target).closest(".intent-group").find(".btn-remove-intent");
+            $(remove).show();
+            var save = $(event.target).closest(".intent-group").find(".btn-save-intent");
+            $(save).hide();
+            var cancel = $(event.target).closest(".intent-group").find(".btn-cancel-intent");
+            $(cancel).hide();
+        }
+
+        function cancelIntent(event){
+            var clicked = event.target;
+            var div = $(clicked).closest(".intent-group");
+            var id = $($(div).find("input[name='id']")[0]).val();
+
+            if (id!="undefined" && id!=""){
+                console.log(list);
+                console.log($($(div).find("input[name='content']")[0]));
+                $($(div).find("select[name='intent']")[0]).val(list[id].intent);
+                $($(div).find("input[name='content']")[0]).val(list[id].content);
+                var remove = $(event.target).closest(".intent-group").find(".btn-remove-intent");
+                $(remove).show();
+                var save = $(event.target).closest(".intent-group").find(".btn-save-intent");
+                $(save).hide();
+                var cancel = $(event.target).closest(".intent-group").find(".btn-cancel-intent");
+                $(cancel).hide();
+            }
+            else {
+                $(div).remove();
+            }
+            
+        }
+
+        function InitRespondBtn(){
+            InitAddRespondBtn();
+
+        }
+
+        function InitAddRespondBtn(){
+            $(".btn-add-res").on("click", function(){
+                var div = $("#intentGroup").html();
+                $(".res-form").append(div);
+            });
+        }
+
+        function InitAddEntityBtn(){
+            $(".btn-add-entity").on("click", function(){
+                var div = $("#entityGroup").html();
+                $(".entity-form").append(div);
+            });
+        }
+
+
         function InitEntity(entities){
             for(var entity in entities){
 
@@ -114,7 +550,35 @@
             console.log(responses);
             $("#commentMode"+"@ViewBag.CommentMode").prop("checked","checked");
             $("#replyMode"+@ViewBag.ReplyMode).prop("checked","checked");
+
+            InitAddEntityBtn();
+            InitRespondBtn();
+
+            // onchange radio btn event
             $("input[name='comment'").on("change", function(){
+                if ($(this).is(":checked")){
+                    var mode = $(this).val();
+                    $.ajax({
+                        url: '../Shop/SetCommentMode',
+                        type: 'POST',
+                        data: {
+                            'mode': mode
+                        },
+                        success: function(data, textStatus, xhr){
+                            if (data.success){
+                                toastr.success("Cập nhật thành công");
+                            } else {
+                                toastr.error("Cập nhật thất bại");
+                            }
+                        },
+                        error: function(){
+                            toastr.error("Cập nhật thất bại");
+                        }
+                    });
+                }
+            });
+
+            $("input[name='reply'").on("change", function(){
                 if ($(this).is(":checked")){
                     var mode = $(this).val();
                     $.ajax({
@@ -125,17 +589,35 @@
                         },
                         success: function(data, textStatus, xhr){
                             if (data.success){
-
+                                toastr.success("Cập nhật thành công");
                             } else {
-
+                                toastr.error("Cập nhật thất bại");
                             }
                         },
                         error: function(){
-
+                            toastr.error("Cập nhật thất bại");
                         }
                     });
                 }
-            })
+            });
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "progressBar": false,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "100",
+                "hideDuration": "100",
+                "timeOut": "3000",
+                "extendedTimeOut": "500",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
         });
     </script>
 }
