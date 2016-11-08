@@ -18,14 +18,31 @@ function FormatDateVN(date) {
 function FormatChatDateTimeVN(date) {
     var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
     var d = new Date(parseInt(milli));
-    return d.getDate() + "/" + (d.getMonth() + 1) + " " + d.getHours() + ":" + d.getMinutes();
-}
 
-//For realtime message
-//Input: millisecond - Output: string "21/07 18:52"
-function FormatChatDateRealtimeVN(milli) {
-    var d = new Date(milli);
-    return d.getDate() + "/" + (d.getMonth() + 1) + " " + d.getHours() + ":" + d.getMinutes();
+    var now = new Date();
+    var day = "";
+    if (d.getDate() == now.getDate()) {
+        day = "Hôm nay";
+    }
+    else if (d.getDate() == now.getDate() - 1) {
+        day = "Hôm qua";
+    }
+    else {
+        day = d.getDate() + "/" + (d.getMonth() + 1);
+        if (now.getFullYear() != d.getFullYear()) {
+            day += "/" + d.getFullYear().toString().substr(2, 2);
+        }
+    }
+
+    var hours = d.getHours();
+    var minutes = d.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ampm;
+
+    return day + " " + strTime;
 }
 
 // ... minutes ago
@@ -57,6 +74,38 @@ function GetDateAgo(d) {
     }
     return Math.floor(seconds) + " giây trước";
 }
+
+//For realtime message
+//Input: millisecond - Output: string "21/07 18:52"
+function FormatChatDateRealtimeVN(milli) {
+    var d = new Date(milli);
+
+    var now = new Date();
+    var day = ""
+    if (d.getDate() == now.getDate()) {
+        day = "Hôm nay";
+    }
+    else if (d.getDate() == now.getDate() - 1) {
+        day = "Hôm qua";
+    }
+    else {
+        day = d.getDate() + "/" + (d.getMonth()+1);
+        if (now.getFullYear() != d.getFullYear()) {
+            day += "/" + d.getFullYear().toString().substr(2, 2);
+        }
+    }
+
+    var hours = d.getHours();
+    var minutes = d.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ampm;
+
+    return day + " " + strTime;
+}
+
 // ... minutes ago - Input: millisecond
 function GetDateAgoRealTime(milli) {
     var date = new Date(milli);
@@ -85,3 +134,5 @@ function GetDateAgoRealTime(milli) {
     }
     return Math.floor(seconds) + " giây trước";
 }
+
+// Output: string "Hôm nay 12:05am"
