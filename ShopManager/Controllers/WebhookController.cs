@@ -330,29 +330,41 @@ namespace ShopManager.Controllers
                 int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
                 //chatbot api here              
-                var respond = apiAi.TextRequest(message);
-                var intentRespond = respond.Result.Metadata.IntentName;
-                //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
-                if (intentRespond != null)
+                try
                 {
-                    try
-                    {
-                        if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
-                        {
-                            intent = int.Parse(intentRespond);
-                        }
-                    }
-                    catch (Exception)
-                    {
-
+                    var respond = apiAi.TextRequest(message);
+                    var intentRespond = respond.Result.Metadata.IntentName;
+                    //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                    if (intentRespond != null)
+                    {                        
+                       intent = int.Parse(intentRespond);                       
                     }
                 }
+                catch (Exception)
+                {                    
+                }
+                
                 if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO)
                 {
                     var response = responseService.GetResponse(shopId, intent);
                     if (!string.IsNullOrEmpty(response))
                     {
                         //respond message
+                        string res = responseService.GetResponse(shopId, intent);
+                        if (!string.IsNullOrEmpty(res))
+                        {
+                            dynamic replyParam = new ExpandoObject();
+                            param.access_token = accessToken;
+                            param.message = res;
+                            try
+                            {
+                                fbApp.Post(threadId + "/messages", param);
+                            }
+                            catch (Exception)
+                            {
+                                                                
+                            }
+                        }
                     }
                 }
                 SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, intent);
