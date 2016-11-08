@@ -4,30 +4,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row" style="padding:0 10px">
+<div class="fh-breadcrumb" style="padding:0 10px">
     <!--Tab column-->
-    <div class="col-lg-3" style="padding:0">
+    <div class="col-lg-3" style="padding:0;height:100%">
         <div class="tabs-container">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a data-toggle="tab" href="#tab-inbox" class="cust-tab"> <i class="fa fa-inbox big-ic"></i></a>
+                    <a data-toggle="tab" href="#tab-inbox" class="cust-tab"> <i class="fa fa-envelope-o big-ic"></i></a>
                 </li>
-                <li class=""><a data-toggle="tab" href="#tab-comment" class="cust-tab"><i class="fa fa-comments big-ic"></i></a></li>
-                <li class=""><a data-toggle="tab" href="#tab-unf" class="cust-tab"><i class="fa fa-database big-ic"></i></a></li>
+                <li class=""><a data-toggle="tab" href="#tab-comment" class="cust-tab"><i class="fa fa-comment big-ic"></i></a></li>
             </ul>
-            <div class="tab-content" style="height: 90vh">
+            <div class="tab-content" style="height: 100%">
                 <div id="tab-inbox" class="tab-pane active">
                     <div class="panel-body" style="padding: 0px 15px 0 15px;">
                         <div class="row">
-                            <div class="col-lg-12" style="padding:0px 0 00px 0">
+                            <div class="col-lg-12" style="padding:0px 0 0px 0">
                                 <div class="ibox" style="margin-bottom: 0">
-                                    <div class="ibox-content ibox-heading">
-                                        <h3><i class="fa fa-envelope-o"></i> Tin nhắn</h3>
-                                        <!--                                                    <small><i class="fa fa-tim"></i> Bạn có <strong>22 tin nhắn mới</strong></small>-->
+                                    <div class="ibox-search">
+                                        <span>
+                                            @*<h3><i class="fa fa-envelope-o"></i> Tin nhắn</h3>*@
+                                            <input id="txt_searchsender" type="text" class="form-control input-sm" placeholder="Tên người" style="width:90%" />
+                                            <button id="btn_searchsender" class="btn btn-default btn-xs" title="Search" place aria-label="Search"><span class="fa fa-search"></span></button>
+                                        </span>
                                     </div>
                                     <div class="ibox-content ibox-scroll">
-                                        <div class="feed-activity-list">
+                                        <div id="conv_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000">
+                                            <div class="sk-circle1 sk-circle"></div>
+                                            <div class="sk-circle2 sk-circle"></div>
+                                            <div class="sk-circle3 sk-circle"></div>
+                                            <div class="sk-circle4 sk-circle"></div>
+                                            <div class="sk-circle5 sk-circle"></div>
+                                            <div class="sk-circle6 sk-circle"></div>
+                                            <div class="sk-circle7 sk-circle"></div>
+                                            <div class="sk-circle8 sk-circle"></div>
+                                            <div class="sk-circle9 sk-circle"></div>
+                                            <div class="sk-circle10 sk-circle"></div>
+                                            <div class="sk-circle11 sk-circle"></div>
+                                            <div class="sk-circle12 sk-circle"></div>
                                         </div>
+                                        <div id="no_result" style="display:none">Không tìm thấy người này</div>
+                                        <ul id="list_conversation" class="list-group feed-activity-list" style="list-style-type: none;">
+                                            
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -35,90 +53,7 @@
                     </div>
                 </div>
                 @*Comment*@
-                <div id="tab-comment" class="tab-pane">
-                    <div class="panel-body" style="padding: 10px 20px 0 20px">
-                        <div class="row">
-                            <div class="col-lg-12" style="padding:0px 0 20px 0">
-                                <div class="ibox" style="margin-bottom: 0">
-                                    <div class="ibox-content ibox-heading">
-                                        <h3><i class="fa fa-comment-o"></i> Bình luận</h3>
-                                        <!--                                                    <small><i class="fa fa-tim"></i> Bạn có <strong>22 tin nhắn mới</strong></small>-->
-                                    </div>
-                                    <div class="ibox-content ibox-scroll" style="padding-left: 10px">
-                                        <div class="feed-activity-list">
-
-                                            <div class="feed-element selected">
-                                                <div>
-                                                    <small class="pull-right">1p trước</small>
-                                                    <strong>Vũ Hoàng Long</strong>
-                                                    <div>Xin chào shop ^^ have pussy italy believe people vcl</div>
-                                                    <!--                                                                <small class="text-muted">Hôm nay 5:60 pm - 12.06.2014</small>-->
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">2m ago</small>
-                                                    <strong>Jogn Angel</strong>
-                                                    <div>There are many variations of passages of Lorem Ipsum available</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Jesica Ocean</strong>
-                                                    <div>Contrary to popular belief, Lorem Ipsum</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Monica Jackson</strong>
-                                                    <div>The generated Lorem Ipsum is therefore </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Anna Legend</strong>
-                                                    <div>All the Lorem Ipsum generators on the Internet tend to repeat </div>
-                                                </div>
-                                            </div>
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Damian Nowak</strong>
-                                                    <div>The standard chunk of Lorem Ipsum used </div>
-                                                </div>
-                                            </div>
-                                            <div class="feed-element">
-                                                <div>
-                                                    <small class="pull-right">5m ago</small>
-                                                    <strong>Gary Smith</strong>
-                                                    <div>200 Latin words, combined with a handful</div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="tab-unf" class="tab-pane">
-                    <div class="panel-body">
-                        <strong>Donec quam felis</strong>
-
-                        <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
-
-                        <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -126,11 +61,25 @@
     <!--Chat box-->
     <div class="small-chat-bo fadeInRight animated col-lg-5" style="padding: 0">
 
-        <div id="receiver_name" class="heading" draggable="true">
-            Vũ Hoàng Long
+        <div id="" class="heading receiver_name" draggable="true">
+            (Chưa chọn)
         </div>
-
+        <div id="chat_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+        </div>
         <div id="chat_box_content" class="content slimScrollBar">
+            
         </div>
         <div class="form-chat">
             <div class="input-group input-group-sm">
@@ -145,48 +94,48 @@
     </div>
     <!--./Chat box-->
     <!--Customer Info-->
-    <div class="col-lg-4 information" style="height: 85vh">
+    <div class="col-lg-4 information" style="height: 100%">
         <div class="">
             <div>
                 <div>
                     <h3 style="padding: 0 0 5px 15px;display:inline-block;">Thông tin khách hàng</h3>
                     <span style="padding: 5px 15px 0 0;float:right">
-                        <a id="btn_add" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></a>
-                        <a id="btn_edit" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
-                        <a id="btn_ok_add" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
-                        <a id="btn_ok_edit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
-                        <a id="btn_cancel" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                        <a id="btn_add" class="btn btn-primary btn-xs" hidden><i class="fa fa-plus"></i></a>
+                        <a id="btn_edit" class="btn btn-info btn-xs" hidden><i class="fa fa-edit"></i></a>
+                        <a id="btn_ok_add" class="btn btn-primary btn-xs" hidden><i class="fa fa-check"></i></a>
+                        <a id="btn_ok_edit" class="btn btn-primary btn-xs" hidden><i class="fa fa-check"></i></a>
+                        <a id="btn_cancel" class="btn btn-danger btn-xs" hidden><i class="fa fa-times"></i></a>
                     </span>
                 </div>
                 <div class="cust_info" id="" style="padding:0">
                     <div>
                         <div class="col-md-2">
-                            <img id="cust_avatar" alt="image" class="img-circle" src="" style="float:left" width="50" height="50">
+                            <img id="cust_avatar" alt="image" class="img-circle" src="~/Content/img/ava_placeholder.png" style="float:left" width="50" height="50">
                         </div>
                     </div>
                     <div class="col-md-5" style="padding-right:0">
-                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="Vũ Hoàng Long" readonly>
+                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly>
                     </div>
                     <div class="col-md-5">
-                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="01267708763" readonly>
+                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="" readonly>
                     </div>
                     <div class="col-md-12">
-                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="long189b@facebook.com" readonly>
+                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly>
                     </div>
                     <div class="col-md-12">
-                        <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly>189B Quốc Lộ 1K, P.Linh Xuân, Q.Thủ Đức, TP.Hồ Chí Minh</textarea>
+                        <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly></textarea>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row" style="border-bottom: 2px solid #e7eaec;margin:0"></div>
+        <div class="row" style="border-bottom: 2px solid #e7eaec;margin:0; padding-bottom:10px"></div>
         <div style="text-align: center; margin-top:5px">
             <div style="padding: 5px;">
                 <div id="order-form">
                     <div class="ibox-content">
                         <button id="btn_addproduct" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</button>
 
-                        <div id="tbl_order" class="table-responsive col-md-12" style="overflow:auto;max-height: 40vh;position:relative;">
+                        <div id="tbl_order" class="table-responsive col-md-12" style="overflow:auto;position:relative;">
                             <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="add_datatableproduct">
                                 <thead>
                                     <tr>
@@ -261,7 +210,7 @@
         }
 
         .noTitleStuff {
-            height: 35vh !important;
+            height: 37% !important;
             width: 500px !important;
         }
 
@@ -286,7 +235,7 @@
         var shopId= @HttpContext.Current.Session["ShopId"];
         var page_ava_url="";
         $.ajax({
-            async: false,
+            async: true,
             url: '/ChatComment/GetPageAvatar',
             success: function (data) {
                 page_ava_url=data;
@@ -332,7 +281,7 @@
             if (thread !=null){
 
                 $(thread).find('.mess_preview').text(mess.message);
-                $(thread).find('.mess_time').text(GetDateAgoRealTime(Date.parse(mess.created_time)));
+                $(thread).find('.mess_time').text(FormatChatDateRealtimeVN(Date.parse(mess.created_time)));
 
                 //check if new mess in current clicked conversation
                 if (threadId == $('.ui-selected').attr('id')){
@@ -340,7 +289,7 @@
                         var message = data[i];
                         console.log(message);
                         var m=document.getElementById(message.id);
-                        
+
                         if (m){
                             //Do nothing
                         }
@@ -348,10 +297,10 @@
                             //User's mess
                             if (shopId != message.from.id){
                                 $('#chat_box_content').append('<div id="'+message.id+'" class="left">'+
-                                    '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
+                                    '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="40" height="40">'+
                                     '<div class="author-name">'+
                                         message.from.name+
-                                        '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                                        '<small class="chat-date" style="margin-left: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
                                     '</div>'+
                                     '<div class="chat-message active">'+
                                         message.message+
@@ -361,10 +310,10 @@
                                 //Page's mess
                             else {
                                 $('#chat_box_content').append('<div id="'+message.id+'" class="right">'+
-                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
+                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
                                     '<div class="author-name">'+
+                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
                                         message.from.name+
-                                        '<small class="chat-date">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
                                     '</div>'+
                                     '<div class="chat-message">'+
                                         message.message+
@@ -383,7 +332,7 @@
                 }
 
                 var select= $(thread).detach();
-                select.prependTo('.feed-activity-list');
+                select.prependTo('#list_conversation');
                 if (isSelecting == false){
                     select.addClass("unread");
                 }
@@ -392,11 +341,10 @@
                 }
             }
             else {
-                console.l
                 //create new thread
                 var u_ava="";
                 $.ajax({
-                    async: false,
+                    async: true,
                     method: 'GET',
                     url: '/ChatComment/GetUserAvatar',
                     data: {"uid": mess.from.id},
@@ -405,14 +353,14 @@
                     }
                 });
 
-                $('.feed-activity-list').prepend('<div id="'+threadId+'" class="feed-element unread">'+
+                $('#list_conversation').prepend('<div id="'+threadId+'" class="feed-element unread">'+
                     '<div style="float:left; margin-right: 7px">'+
                         '<div size="50" style="width: 50px; height: 50px;">'+
                             '<img id="'+mess.from.id+'" src="'+u_ava+'" width="50" height="50" alt="" class="img fb_avatar">'+
                         '</div>'+
                     '</div>'+
                     '<div>'+
-                        '<small class="mess_time pull-right">'+GetDateAgoRealTime(Date.parse(mess.created_time))+'</small>'+
+                        '<small class="mess_time pull-right">'+FormatChatDateRealtimeVN(Date.parse(mess.created_time))+'</small>'+
                         '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+mess.from.name+'</strong>'+
                         '<div class="mess_preview" style="overflow: hidden;">'+mess.message+'</div>'+
                     '</div>'+
@@ -421,6 +369,44 @@
         }
 
         @*Default*@
+        $('#chat_loading').hide();
+        function ShowConvLoading(){
+            $('#list_conversation').empty();
+            $('#no_result').hide();
+            $('#conv_loading').show();
+        }
+
+        function ShowChatLoading(){
+            $('#chat_box_content').empty();
+            $('#chat_loading').show();
+        }
+        
+        var ajax_searchsender;
+        //Search sender
+        $('#btn_searchsender').click(function (){
+            ShowConvLoading();
+            var txtsearch=$('#txt_searchsender').val().trim();
+            if (ajax_searchsender) ajax_searchsender.abort();
+            ajax_searchsender = $.ajax({
+                async: true,
+                method: 'GET',
+                url: '/ChatComment/SearchSender',
+                data: {
+                    "search": txtsearch
+                },
+                success: function (data) {
+                    console.log(data);
+                    DisplayConversationPreviews(data);
+                    $('#conv_loading').hide();
+                }
+            });
+
+        });
+        $('#txt_searchsender').keypress(function(e){
+            if(e.keyCode==13)
+                $('#btn_searchsender').click();
+        });
+
         $('.small-chat-bo .content').slimScroll({
             height: "70vh",
             start: 'bottom'
@@ -480,7 +466,7 @@
                 }
                 , "fnInitComplete": function () {
                     $('#tbl_order').slimScroll({
-                        height: "40vh",
+                        height: "34vh",
                         alwaysVisible: true
                     });
                 }
@@ -553,7 +539,7 @@
                             var rowNode = t.row.add([
                                 table.cell('.selected', 0).data(),
                                 table.cell('.selected', 1).data(),
-                                '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" />',
+                                '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" style="padding: 4px;text-align: center;" />',
                                 table.cell('.selected', 2).data(),
                                 table.cell('.selected', 2).data(),
                                 '<button id="del_' + id + '" class="btn btn-danger btn-sm" type="button" style="padding:1px 4px"><i class="fa fa-trash-o"></i></button>'
@@ -603,7 +589,7 @@
                 , "paging": false
                 , "searching": true
                 , "ordering": false
-                , "scrollY": "30vh"
+                , "scrollY": "23vh"
                 //, "scrollX": "100%"
                 , "scrollCollapse": true
                 , "bLengthChange": false
@@ -620,25 +606,34 @@
             })
         }
 
-        $('.feed-activity-list').selectable({
+        $('#list_conversation').selectable({
             selected: function( event, ui ) {
-                var thread_id=$('.feed-activity-list .ui-selected').attr('id');
-                var userfbid=$('.ui-selected .fb_avatar').attr('id');
-                if ($('.ui-selected .fb_avatar').attr('src') != $('#cust_avatar').attr('src')){
-                    $('#cust_avatar').attr('src',$('.ui-selected .fb_avatar').attr('src'));
-                    $('#receiver_name').text($('.ui-selected .fb_name').html());
-
-                    if ($('.ui-selected').hasClass('unread')){
-                        SetConversationRead(thread_id);
-                    }
-
-                    ProcessUserInfo(userfbid);
-
-                    GetConversationContent(thread_id);
-                }
-                ClearOrder();
+                ConversationSelect();
             }
         });
+        function ConversationSelect(){
+
+            var thread_id=$('#list_conversation .ui-selected').attr('id');
+            var userfbid=$('.ui-selected .fb_avatar').attr('id');
+            if ($('.ui-selected .fb_avatar').attr('id') != $('.receiver_name').attr('id')){
+                ShowChatLoading();
+
+                $('#cust_avatar').attr('src',$('.ui-selected .fb_avatar').attr('src'));
+                $('.receiver_name').text($('.ui-selected .fb_name').html());
+                $('.receiver_name').attr('id', $('.ui-selected .fb_avatar').attr('id'));
+
+                if ($('.ui-selected').hasClass('unread')){
+                    SetConversationRead(thread_id);
+                }
+
+                ProcessUserInfo(userfbid);
+
+                GetConversationContent(thread_id);
+
+                ClearOrder();
+            }
+
+        }
 
         function SetConversationRead(t_id){
             $.ajax({
@@ -656,34 +651,52 @@
 
         // Get ConversationPreview
         $.get('/ChatComment/GetConversationPreviews', function (data) {
-            var first = "";
-            for (i=0;i<data.length;i++){
-                console.log(data[i].ThreadId);
-                if (i==0){
-                    first=data[i].ThreadId;
-                }
-                $('.feed-activity-list').append('<div id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(i==0? ' ui-selected':'')+'">'+
-                                '<div style="float:left; margin-right: 7px">'+
-                                    '<div size="50" style="width: 50px; height: 50px;">'+
-                                        '<img id="'+data[i].UserFbId+'" src="'+data[i].AvatarUrl+'" width="50" height="50" alt="" class="img fb_avatar">'+
-                                    '</div>'+
-                                 '</div>'+
-                                '<div>'+
-                                    '<small class="mess_time pull-right">'+GetDateAgo(data[i].CreatedTime)+'</small>'+
-                                    '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+data[i].UserName+'</strong>'+
-                                    '<div class="mess_preview" style="overflow: hidden;">'+data[i].RecentMess+'</div>'+
-                                '</div>'+
-                            '</div>');
-            }
-
-            $('#'+first).click();
+            DisplayConversationPreviews(data);
         });
+        function ClickFirst(){
+            ConversationSelect();
+        }
+        function DisplayConversationPreviews(data){
+            if(data.success != false){
+                var first = "";
+                for (i=0;i<data.length;i++){
+                    console.log(data[i].ThreadId);
+                    if (i==0){
+                        first=data[i].ThreadId;
+                    }
+                    var isSelecting = false;
+                    if (data[i].UserFbId == $('.receiver_name').attr('id')){
+                        isSelecting=true;
+                    }
+                    $('#list_conversation').append('<li id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(isSelecting? ' ui-selected':'')+'">'+
+                                    '<div style="float:left; margin-right: 7px">'+
+                                        '<div size="50" style="width: 50px; height: 50px;">'+
+                                            '<img id="'+data[i].UserFbId+'" src="'+data[i].AvatarUrl+'" width="50" height="50" alt="" class="img fb_avatar">'+
+                                        '</div>'+
+                                     '</div>'+
+                                    '<div>'+
+                                        '<small class="mess_time pull-right">'+FormatChatDateTimeVN(data[i].CreatedTime)+'</small>'+
+                                        '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+data[i].UserName+'</strong>'+
+                                        '<div class="mess_preview" style="overflow: hidden;">'+data[i].RecentMess+'</div>'+
+                                    '</div>'+
+                                '</li>');
+                }
+            }
+            else{
+                $('#conv_loading').hide();
+                $('#no_result').unbind('click');
+                $('#no_result').show();
+            }
+            $('#conv_loading').hide();
+        }
 
         //Get conversation content
+        var ajax_GetConversationContent;
         function GetConversationContent(t_id){
-            $('#chat_box_content').empty();
-            $.ajax({
-                async: false,
+            if (ajax_GetConversationContent) ajax_GetConversationContent.abort();
+
+            ajax_GetConversationContent= $.ajax({
+                async: true,
                 method: 'GET',
                 url: '/ChatComment/GetConversationContent',
                 data: {"conversationId": t_id},
@@ -693,6 +706,7 @@
                     DisplayChatContent(data);
 
                     ChatboxScrollToBottom();
+                    $('#chat_loading').hide();
                 }
             });
         }
@@ -703,10 +717,10 @@
                 var mess=data.Messages[i];
                 if (mess.UserId != shopId){
                     $('#chat_box_content').prepend('<div id="'+mess.MessId+'" class="left">'+
-                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="50" height="50">'+
+                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="40" height="40">'+
                             '<div class="author-name">'+
                                 mess.UserName+
-                                '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
+                                '<small class="chat-date" style="margin-left: 5px;">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
                             '</div>'+
                             '<div class="chat-message active">'+
                                 mess.MessContent+
@@ -715,10 +729,10 @@
                 }
                 else {
                     $('#chat_box_content').prepend('<div id="'+mess.MessId+'" class="right">'+
-                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="50" height="50">'+
+                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
                         '<div class="author-name">'+
+                            '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
                             mess.UserName+
-                            '<small class="chat-date">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
                         '</div>'+
                         '<div class="chat-message">'+
                             mess.MessContent+
@@ -727,14 +741,13 @@
                 }
             }
 
-            console.log("next: "+data.NextUrl);
             if (data.NextUrl != "null"){
-                $('#chat_box_content').prepend('<button id="btn_next" class="form-control"><i id="next_icon" class="fa fa-caret-down"></i></button>');
-                $('#btn_next').unbind('click');
+                $('#chat_box_content').prepend('<button id="btn_chatnext" class="form-control center-block" style="width:50%;background-color: #e7eaec"><i id="next_icon" class="fa fa-caret-up big-ic"></i></button>');
+                $('#btn_chatnext').unbind('click');
 
-                $('#btn_next').click(function (){
+                $('#btn_chatnext').click(function (){
                     var arrow=$('#next_icon').detach();
-                    $('#btn_next').append('<div class="sk-spinner sk-spinner-fading-circle">'+
+                    $('#btn_chatnext').append('<div class="sk-spinner sk-spinner-fading-circle">'+
                             '<div class="sk-circle1 sk-circle"></div>'+
                             '<div class="sk-circle2 sk-circle"></div>'+
                             '<div class="sk-circle3 sk-circle"></div>'+
@@ -748,15 +761,15 @@
                             '<div class="sk-circle11 sk-circle"></div>'+
                             '<div class="sk-circle12 sk-circle"></div>'+
                         '</div>');
-                    $('#btn_next').attr('disabled',true);
+                    $('#btn_chatnext').attr('disabled',true);
                     $.ajax({
-                        async: false,
+                        async: true,
                         method: 'POST',
-                        url: '/ChatComment/GetConversationNext',
+                        url: '/ChatComment/GetConversationContentNext',
                         data: {"url": data.NextUrl},
                         success: function (data) {
                             console.log("next data: "+data);
-                            $('#btn_next').remove();
+                            $('#btn_chatnext').remove();
                             if (data!=null){
                                 DisplayChatContent(data);
                             }
@@ -765,6 +778,12 @@
                 });
             }
         }
+
+        $('#btn_add').hide();
+        $('#btn_edit').hide();
+        $('#btn_ok_add').hide();
+        $('#btn_ok_edit').hide();
+        $('#btn_cancel').hide();
 
         function ProcessUserInfo(userfbid){
             var cust = GetUserFromDb(userfbid);
@@ -1015,7 +1034,7 @@
                                 timer: 1000,
                                 showConfirmButton: false
                             });
-                            
+
                         }
                         else {
                             swal({

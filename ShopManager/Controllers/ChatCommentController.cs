@@ -26,8 +26,6 @@ namespace ShopManager.Controllers
         public ActionResult Index()
         {
             ViewData["MessageNext"] = "null";
-            //Session["ShopId"] = "1802287933384032";
-            //Session["CustId"] = "3";
             return View();
         }
 
@@ -44,40 +42,8 @@ namespace ShopManager.Controllers
 
             foreach (var c in listConversation)
             {
-                var preview = new ConversationPreviewViewModel();
-                preview.ThreadId = c.Id;
-                preview.IsRead = c.IsRead;
 
-                dynamic param = new ExpandoObject();
-                param.access_token = accessToken;
-                param.fields = "from,created_time,message";
-                dynamic result = fbApp.Get(c.Id + "/messages", param);
-
-                int i = 0;
-                dynamic first = result.data[0];
-                dynamic detail;
-                while (true)
-                {
-                    if (result.data[i].from.id != shopId)
-                    {
-                        detail = result.data[i];
-                        break;
-                    }
-                    i++;
-                }
-
-                preview.UserName = detail.from.name;
-                preview.UserFbId = detail.from.id;
-                preview.CreatedTime = DateTime.Parse(first.created_time);
-                preview.RecentMess = first.message;
-
-                param = new ExpandoObject();
-                param.access_token = accessToken;
-                param.fields = "";
-                param.limit = 1;
-                string url = preview.UserFbId + "/picture?type=normal&redirect=false";
-                dynamic result2 = fbApp.Get(url, param);
-                preview.AvatarUrl = result2.data.url;
+                var preview = GetConversationPreviewFromFb(accessToken, c);
 
                 Console.WriteLine("Preview: " + preview.ThreadId + " - time: " + preview.CreatedTime + " - Avatar: " + preview.AvatarUrl);
 
@@ -85,6 +51,47 @@ namespace ShopManager.Controllers
             }
 
             return Json(listConversationPreview, JsonRequestBehavior.AllowGet);
+        }
+
+        private ConversationPreviewViewModel GetConversationPreviewFromFb(string accessToken, Conversation c)
+        {
+            string shopId = (string)Session["ShopId"];
+            var preview = new ConversationPreviewViewModel();
+            preview.ThreadId = c.Id;
+            preview.IsRead = c.IsRead;
+
+            dynamic param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.fields = "from,created_time,message";
+            dynamic result = fbApp.Get(c.Id + "/messages", param);
+
+            int i = 0;
+            dynamic first = result.data[0];
+            dynamic detail;
+            while (true)
+            {
+                if (result.data[i].from.id != shopId)
+                {
+                    detail = result.data[i];
+                    break;
+                }
+                i++;
+            }
+
+            preview.UserName = detail.from.name;
+            preview.UserFbId = detail.from.id;
+            preview.CreatedTime = DateTime.Parse(first.created_time);
+            preview.RecentMess = first.message;
+
+            param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.fields = "";
+            param.limit = 1;
+            string url = preview.UserFbId + "/picture?type=normal&redirect=false";
+            dynamic result2 = fbApp.Get(url, param);
+            preview.AvatarUrl = result2.data.url;
+
+            return preview;
         }
 
         public ActionResult GetUserFromDb(string userFbId)
@@ -128,8 +135,9 @@ namespace ShopManager.Controllers
 
             return Json(conversationContent, JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
-        public ActionResult GetConversationNext(string url)
+        public ActionResult GetConversationContentNext(string url)
         {
             var conversationContent = new ConversationContentViewModel();
             string shopId = (string)Session["ShopId"];
@@ -192,6 +200,30 @@ namespace ShopManager.Controllers
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult SearchSender(string search)
+        {
+            string shopId = (string)Session["ShopId"];
+            var listConversation = conversationService.GetConversationsByShopId(shopId);
+            string accessToken = shopService.GetShop(shopId).FbToken;
+
+            var listSearched = new List<ConversationPreviewViewModel>();
+
+            foreach (var c in listConversation)
+            {
+                var preview = GetConversationPreviewFromFb(accessToken, c);
+
+                if (preview.UserName.ToLower().Contains(search.ToLower()))
+                {
+                    listSearched.Add(preview);
+                }
+            }
+
+            if (listSearched.Count > 0)
+            {
+                return Json(listSearched, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult SendMessage(string threadId, string message)
         {
