@@ -10,28 +10,89 @@ namespace DataService.Service
     public class ResponseService
     {
         ResponseRepository repository = new ResponseRepository();
-        public bool SetResponse(string shopId, int intentId, string content)
+        public int SetResponse(string shopId, int intentId, string content)
         {
-            Respons r = repository.FindByShopAndIntent(shopId, intentId);
-            if (r == null)
+            try
             {
-                r = new Respons()
+                Respons r = new Respons()
                 {
                     ShopId = shopId,
                     IntentId = intentId,
                     RespondContent = content
                 };
-                return repository.Create(r);
-            } else
-            {
-                r.RespondContent = content;
-                return repository.Update(r);
+                return repository.CreateNew(r).Id;
             }
+            catch (Exception)
+            {
+
+                return 0;
+            }                            
         }
 
         public string GetResponse(string shopId, int intentId)
         {
-            return repository.FindByShopAndIntent(shopId, intentId).RespondContent;
+            Respons response = repository.FindByShopAndIntent(shopId, intentId)
+                .OrderBy(x => Guid.NewGuid())
+                .FirstOrDefault();
+            if (response!=null)
+            {
+                return response.RespondContent;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<string> GetAllResponseContent(string shopId, int intentId)
+        {
+            return repository.FindByShopAndIntent(shopId,intentId).Select(q => q.RespondContent).ToList() ;
+        }
+
+        public List<Respons> GetAllResponseByIntent(string shopId, int intentId)
+        {
+            return repository.FindByShopAndIntent(shopId, intentId);
+        }
+
+        public List<Respons> GetAll(string shopId)
+        {
+            return repository.GetAll(shopId);
+        }
+
+        public bool DeleteResponse(int id)
+        {
+            return repository.Delete(id);
+        }
+
+        public bool EditResponse(int id, string resContent)
+        {
+            try
+            {
+                Respons r = repository.FindByKey(id);
+                r.RespondContent = resContent;
+                return repository.Update(r);
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }            
+        }
+
+        public bool EditResponse(int id, int intent, string resContent)
+        {
+            try
+            {
+                Respons r = repository.FindByKey(id);
+                r.RespondContent = resContent;
+                r.IntentId = intent;
+                return repository.Update(r);
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
 
     }

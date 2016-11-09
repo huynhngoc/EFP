@@ -74,6 +74,21 @@ namespace DataService.Service
             }
             
         }
+
+        public bool SetReplyMode(string shopId, int mode)
+        {
+            try
+            {
+                Shop s = repository.FindByKey(shopId);
+                s.ReplyMode = mode;
+                return repository.Update(s);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public int GetCommentMode(string shopId)
         {
             try
@@ -86,6 +101,20 @@ namespace DataService.Service
 
             }
 
+        }
+
+        public bool SetCommentMode(string shopId, int mode)
+        {
+            try
+            {
+                Shop s = repository.FindByKey(shopId);
+                s.CommentMode = mode;
+                return repository.Update(s);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool CheckShopUser(string shopId, string userId)

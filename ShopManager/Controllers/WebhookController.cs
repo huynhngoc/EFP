@@ -180,18 +180,30 @@ namespace ShopManager.Controllers
 
                                                 }
                                             }
-                                        }
-
-                                        //autoresponse + autohide here
-                                        if (shopService.GetCommentMode(shopId).Equals(CommentMode.AUTOHIDE))
-                                        {
-                                            var response = responseService.GetResponse(shopId, intent.Value);
-                                            if (!string.IsNullOrEmpty(response))
-                                            {
-
-                                            }
-                                        }
+                                        }                                        
                                         
+                                        if (intent== (int)DefaultIntent.VANDAL)
+                                        {
+                                            //hide comment
+                                            if (shopService.GetCommentMode(shopId) == (int)CommentMode.AUTOHIDE)
+                                            {
+                                                //hide comment
+                                                var accessToken = shopService.GetShop(shopId).FbToken;
+                                                dynamic param = new ExpandoObject();
+                                                param.access_token = accessToken;
+                                                param.is_hidden = true;
+                                                try
+                                                {
+                                                    fbApp.Post(commentId, param);
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    
+                                                }
+                                                
+                                            }
+                                            status = (int) CommentStatus.WARNING;
+                                        }                                        
 
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
@@ -304,37 +316,58 @@ namespace ShopManager.Controllers
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
             param.fields = "from,created_time,message,attachments";
-            param.limit = 1;
+            param.limit = 5;
+            param.until = time;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
             
             if (shopId.Equals(detail.from.id))
             {
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, 0);
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, 0);
                 conversationService.SetReadConversation(threadId, time);
             } else
             {
                 int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
                 //chatbot api here              
-                var respond = apiAi.TextRequest(message);
-                var intentRespond = respond.Result.Metadata.IntentName;
-                //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
-                if (intentRespond != null)
+                try
                 {
-                    try
-                    {
-                        if (int.Parse(intentRespond) != (int)DefaultIntent.UNKNOWN)
-                        {
-                            intent = int.Parse(intentRespond);
-                        }
-                    }
-                    catch (Exception)
-                    {
-
+                    var respond = apiAi.TextRequest(message);
+                    var intentRespond = respond.Result.Metadata.IntentName;
+                    //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
+                    if (intentRespond != null)
+                    {                        
+                       intent = int.Parse(intentRespond);                       
                     }
                 }
-                SignalRAlert.AlertHub.SendMessage(shopId, detail, threadId, intent);
+                catch (Exception)
+                {                    
+                }
+                
+                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO)
+                {
+                    var response = responseService.GetResponse(shopId, intent);
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        //respond message
+                        string res = responseService.GetResponse(shopId, intent);
+                        if (!string.IsNullOrEmpty(res))
+                        {
+                            dynamic replyParam = new ExpandoObject();
+                            param.access_token = accessToken;
+                            param.message = res;
+                            try
+                            {
+                                fbApp.Post(threadId + "/messages", param);
+                            }
+                            catch (Exception)
+                            {
+                                                                
+                            }
+                        }
+                    }
+                }
+                SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
         }

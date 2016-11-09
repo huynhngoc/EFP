@@ -59,7 +59,7 @@ namespace DataService.Utils
     {
         public const string Name = "@sp.gia";
         public const string Value = "Hiện tại, sản phẩm _sp_ có giá là _gia_";
-        public const bool IsDynamic = true;
+        public const bool IsDynamic = false;
         public const string Description = "Báo giá";        
     }
 
@@ -67,7 +67,7 @@ namespace DataService.Utils
     {
         public const string Name = "@sp.conhang";
         public const string Value = "Hiện tại, sản phẩm _sp_ có giá là _conhang_";
-        public const bool IsDynamic = true;
+        public const bool IsDynamic = false;
         public const string Description = "Báo còn hàng";
     }
 

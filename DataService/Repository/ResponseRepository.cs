@@ -13,9 +13,14 @@ namespace DataService.Repository
 
         }
 
-        public Respons FindByShopAndIntent(string shopId, int intentId)
+        public List<Respons> FindByShopAndIntent(string shopId, int intentId)
         {
-            return dbSet.Where(q => q.ShopId == shopId & q.IntentId == intentId).FirstOrDefault();
+            return dbSet.Where(q => q.ShopId == shopId && q.IntentId == intentId).ToList();
+        }
+        
+        public List<Respons> GetAll(string shopId)
+        {
+            return dbSet.Where(q => q.ShopId == shopId).ToList();
         }
     }
 }

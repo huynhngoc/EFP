@@ -174,13 +174,13 @@ namespace ShopManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateOrder(string note, int status, string address, string receiver, string phone
+        public ActionResult CreateOrder(int custId, string note, int status, string address, string receiver, string phone
             , List<OrderDetailViewModel> listDetail)
         {
             string shopId = (string)Session["ShopId"];// (string)Session["ShopId"];
             //string custId = (string)Session["CustId"];//(string)Session["CustId"];
             OrderService service = new OrderService();
-            bool rs = service.AddOrder(shopId, note, 1 /*hard code*/, status, address, receiver, phone, listDetail);
+            bool rs = service.AddOrder(shopId, note, custId, status, address, receiver, phone, listDetail);
             return Content(rs.ToString());
         }
     }

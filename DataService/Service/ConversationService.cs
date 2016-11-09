@@ -53,5 +53,10 @@ namespace DataService.Service
             c.LastUpdate = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(time)).ToLocalTime();
             return repository.Update(c);
         }
+
+        public IEnumerable<Conversation> GetConversationsByShopId(string shopId)
+        {
+            return repository.GetConversationsByShopId(shopId);
+        }
     }
 }

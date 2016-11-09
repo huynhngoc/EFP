@@ -98,5 +98,13 @@ namespace ShopManager.Controllers
 
             return service.EditCustomer(Id,Name,Addr,Desc,Phone,Email,ShopId);
         }
+
+        public JsonResult AddCustomerReturnId(string Id, string Name, string Addr, string Desc, string Phone, string Email)
+        {
+            string shopId = (string)Session["ShopId"];
+            CustomerService service = new CustomerService();
+            var data = service.AddCustomerReturnCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
+            return Json( data, JsonRequestBehavior.AllowGet);
+        }
     }
 }
