@@ -162,7 +162,9 @@
     <Compile Include="Utils\DefaultIntent.cs" />
     <Compile Include="Utils\StatusAndMode.cs" />
     <Compile Include="Utils\WebhookObject.cs" />
+    <Compile Include="ViewModel\AnalysisCommentDataChartViewModel.cs" />
     <Compile Include="ViewModel\AnalysisCommentViewModel.cs" />
+    <Compile Include="ViewModel\AnalysisUserViewModel.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />

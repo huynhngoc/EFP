@@ -17,7 +17,7 @@ namespace DataService.Service
             return listIntent;
         }
 
-        public string GetIntentNameById(int id)
+        public string GetIntentNameById(int? id)
         {
             string intentName = intentRepository.GetIntentNameById(id);
             return intentName;

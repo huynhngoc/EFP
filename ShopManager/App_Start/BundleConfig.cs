@@ -174,10 +174,17 @@ namespace ShopManager
                 "~/Content/css/plugins/datapicker/datepicker3.css"));
             //iCheck CSS
             bundles.Add(new StyleBundle("~/iCheck-CSS").Include(
-                      "~/Content/css/plugins/iCheck/custom.css"));
+                "~/Content/css/plugins/iCheck/custom.css"));
             //iCheck JS
             bundles.Add(new ScriptBundle("~/iCheck-JS").Include(
-                      "~/Content/js/plugins/iCheck/icheck.min.js"));
+                "~/Content/js/plugins/iCheck/icheck.min.js"));
+            //C3 chart CSS
+            bundles.Add(new StyleBundle("~/C3Chart-CSS").Include(
+                "~/Content/css/plugins/c3/c3.min.css"));
+            //C3 chart JS
+            bundles.Add(new ScriptBundle("~/C3Chart-JS").Include(
+                "~/Content/js/plugins/d3/d3.min.js",
+                "~/Content/js/plugins/c3/c3.min.js"));
         }
     }
 }

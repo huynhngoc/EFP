@@ -12,6 +12,7 @@ namespace DataService.Service
     public class CommentService
     {
         CommentRepository repository = new CommentRepository();
+        IntentService intentService = new IntentService();
         public bool AddComment(string id, string SenderFbId, long date, int? intentId, int status, string parentId, string postId)
         {
 
@@ -56,10 +57,17 @@ namespace DataService.Service
         }
 
         // ANDND Get comment by condition
-        public IQueryable<AnalysisCommentViewModel> GetCommentByShopAndCondition(JQueryDataTableParamModel param,string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
+        public IQueryable<AnalysisCommentViewModel> GetCommentByShopAndCondition(JQueryDataTableParamModel param, string fbId, string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
         {
-            var listModel = repository.GetCommentByShopAndCondition(param, shopId, intentId, status, isRead, startDate, endDate);
+            var listModel = repository.GetCommentByShopAndCondition(param, fbId, shopId, intentId, status, isRead, startDate, endDate);
             return listModel;
+        }
+
+        // ANDND Get User Analysis By Time
+        public List<AnalysisUserViewModel> GetCommentUserList(JQueryDataTableParamModel param, string shopId, DateTime? startDate, DateTime? endDate)
+        {
+            var listUser = repository.GetCommentUserList(param, shopId, startDate, endDate);
+            return listUser;
         }
 
         // ANDND Set is read
@@ -85,6 +93,29 @@ namespace DataService.Service
         {
             Comment comment = repository.FindByKey(commentId);
             return comment;
+        }
+
+        //ANDND Get Comment analysis data
+        public List<AnalysisCommentDataChartViewModel> GetAnalysisDataByTime(string shopId, DateTime? startDate, DateTime? endDate)
+        {
+            var listModel = repository.GetAnalysisDataByTime(shopId, startDate, endDate).ToList();
+            List<AnalysisCommentDataChartViewModel> listData = new List<AnalysisCommentDataChartViewModel>();
+            var listIntent = intentService.GetAllIntent();
+            for (int i = 0; i < listIntent.Count(); i++)
+            {
+                listData.Add(new AnalysisCommentDataChartViewModel { IntentId = listIntent[i].Id, IntentName = listIntent[i].IntentName, CommentNumber = 0 });
+            }
+            for (int j = 0; j < listModel.Count(); j++)
+            {
+                for(int k=0;k< listData.Count(); k++)
+                {
+                    if (listModel[j].IntentId == listData[k].IntentId)
+                    {
+                        listData[k].CommentNumber = listData[k].CommentNumber + 1;
+                    }
+                }
+            }
+            return listData;
         }
     }
 }

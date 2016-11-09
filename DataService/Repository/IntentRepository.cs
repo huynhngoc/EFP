@@ -22,11 +22,11 @@ namespace DataService.Repository
             }
         }
 
-        public string GetIntentNameById(int id)
+        public string GetIntentNameById(int? id)
         {
             try
             {
-                return dbSet.Where(q=> q.Id==id).Select(q=> q.IntentName).FirstOrDefault();
+                return dbSet.Where(q=> q.Id==id || id==null).Select(q=> q.IntentName).FirstOrDefault();
             }
             catch
             {
