@@ -412,6 +412,8 @@ namespace ShopManager.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            //Session["ShopId"] = null;
+            Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
 
