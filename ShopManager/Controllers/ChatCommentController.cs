@@ -1,4 +1,5 @@
 ﻿using DataService;
+using DataService.JqueryDataTable;
 using DataService.Service;
 using DataService.ViewModel;
 using Facebook;
@@ -220,6 +221,33 @@ namespace ShopManager.Controllers
                 return Json(listSearched, JsonRequestBehavior.AllowGet);
             }
             return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAvailableResponses(JQueryDataTableParamModel param)
+        {
+            string shopId = (string)Session["ShopId"];
+            EntityService entityService = new EntityService();
+
+            try
+            {
+                var products = entityService.GetAvailableEntities(param, shopId);
+
+                var totalRecords = products.Count();
+                var data = products;
+                Debug.WriteLine("-----l ");
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = totalRecords,
+                    iTotalDisplayRecords = totalRecords,//displayRecords,
+                    aaData = data
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult SendMessage(string threadId, string message)

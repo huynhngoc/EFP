@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DataService.Repository;
 using DataService.Utils;
+using DataService.ViewModel;
+using DataService.JqueryDataTable;
 
 namespace DataService.Service
 {
@@ -120,6 +122,13 @@ namespace DataService.Service
         {
             return repository.GetAll(shopId);
         }
-        
+
+        //Long
+        public IQueryable<EntityViewModel> GetAvailableEntities(JQueryDataTableParamModel param, string shopId)
+        {
+            var rs = repository.GetAvailableEntities(param, shopId);
+
+            return rs;
+        }
     }
 }
