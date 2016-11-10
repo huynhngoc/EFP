@@ -13,7 +13,7 @@ namespace DataService.Service
     {
         CommentRepository repository = new CommentRepository();
         IntentService intentService = new IntentService();
-        public bool AddComment(string id, string SenderFbId, long date, int? intentId, int status, string parentId, string postId)
+        public bool AddComment(string id, string SenderFbId, long date, int? intentId, int status, string parentId, string postId, string lastContent)
         {
 
             Comment c = repository.FindByKey(id);
@@ -27,7 +27,8 @@ namespace DataService.Service
                     IntentId = intentId,
                     Status = status,
                     ParentId = parentId,
-                    PostId = postId
+                    PostId = postId,
+                    LastContent = lastContent                    
                 };
                 return repository.Create(c);
             }
@@ -38,6 +39,10 @@ namespace DataService.Service
                 c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
                 c.IntentId = intentId;
                 c.PostId = postId;
+                if (!string.IsNullOrEmpty(lastContent))
+                {
+                    c.LastContent = lastContent;
+                }
                 return repository.Update(c);
             }
         }

@@ -137,6 +137,7 @@ namespace ShopManager.Controllers
                         string postId = Convert.ToString(value.post_id);
                         int? intent = (int)DefaultIntent.UNKNOWN;
                         int status = (int)CommentStatus.SHOWING;
+                        string lastContent = null;
                         if (item.Equals(WebhookItem.Comment))
                         {
                             long createTime = value.created_time;
@@ -163,6 +164,10 @@ namespace ShopManager.Controllers
                                         if (HasProperty(value, "message"))
                                         {
                                             string message = value.message;
+                                            if (!string.IsNullOrEmpty(message))
+                                            {
+                                                lastContent = message;
+                                            }
                                             //chatbot api for message here
                                             var respond = apiAi.TextRequest(message);
                                             var intentRespond = respond.Result.Metadata.IntentName;
@@ -206,7 +211,7 @@ namespace ShopManager.Controllers
                                         }                                        
 
                                     }
-                                    commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
+                                    commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId, lastContent);
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
