@@ -189,9 +189,9 @@ namespace DataService.Repository
         }
 
         // ANDND Get analysis
-        public IQueryable<AnalysisCommentViewModel> GetAnalysisDataByTime(string shopId, DateTime? startDate, DateTime? endDate)
+        public IQueryable<AnalysisCommentViewModel> GetAnalysisDataByTime(string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
         {
-            var rs = dbSet.Where(q => (q.Post.ShopId == shopId) && (q.IntentId != null) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null));
+            var rs = dbSet.Where(q => (q.Post.ShopId == shopId) && (q.IntentId != null) && ((q.IntentId == intentId) || intentId == null) && (q.Status == status || status == null) && (q.IsRead == isRead || isRead == null) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null));
             var listIntent = intentService.GetAllIntent();
             var data = rs.Select(q => new AnalysisCommentViewModel()
             {
