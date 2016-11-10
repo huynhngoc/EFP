@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace DataService.ViewModel
 {
+
+    public class AnalysisDataForCharViewModel
+    {
+        public DateTime Time { get; set; }
+        public List<AnalysisCommentDataChartViewModel> ListData { get; set; }
+        public AnalysisDataForCharViewModel()
+        {
+            ListData = new List<AnalysisCommentDataChartViewModel>();
+        }
+    }
+
     public class AnalysisCommentDataChartViewModel
     {
         public int IntentId { get; set; }

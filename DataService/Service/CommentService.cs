@@ -96,9 +96,9 @@ namespace DataService.Service
         }
 
         //ANDND Get Comment analysis data
-        public List<AnalysisCommentDataChartViewModel> GetAnalysisDataByTime(string shopId, DateTime? startDate, DateTime? endDate)
+        public List<AnalysisCommentDataChartViewModel> GetAnalysisDataByTime(string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
         {
-            var listModel = repository.GetAnalysisDataByTime(shopId, startDate, endDate).ToList();
+            var listModel = repository.GetAnalysisDataByTime(shopId, intentId,status,isRead, startDate, endDate).ToList();
             List<AnalysisCommentDataChartViewModel> listData = new List<AnalysisCommentDataChartViewModel>();
             var listIntent = intentService.GetAllIntent();
             for (int i = 0; i < listIntent.Count(); i++)

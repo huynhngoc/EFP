@@ -3,46 +3,6 @@
     ViewBag.Title = "Comment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<!--Chart-->
-<div class="row">
-    <div class="col-md-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Thống kê tỉ lệ bình luận trong tháng này</h5>
-            </div>
-            <div class="ibox-content">
-                <div>
-                    <div id="pieChart"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Thống kê bình luận theo thời gian</h5>
-                <div class="ibox-tools">
-                    <div id="dateRange">
-                        <div class="input-daterange input-group pull-right" id="datepicker">
-                            <input type="text" id="startDateChart" class="input-sm form-control" name="start" value="" readonly>
-                            <span class="input-group-addon">to</span>
-                            <input type="text" id="endDateChart" class="input-sm form-control" name="end" value="" readonly>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="GetPieChartData()">Lọc</button>
-                </div>
-            </div>
-
-            <div class="ibox-content">
-                <div>
-                    <div id="stocked"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--./Chart-->
 <!--Table Analysis comment-->
 <div class="row">
     <div class="col-lg-12">
@@ -57,16 +17,6 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-2 m-b-xs">
-                        <div class="btn-group" style="margin-top:22px">
-                            <button id="selectAllButton" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Đã chọn 0 bình luận&nbsp;<span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0)" onclick="hideAllComment(true)">Ẩn những bình luận đã chọn</a></li>
-                                <li><a href="javascript:void(0)" onclick="hideAllComment(false)">Bỏ ẩn những bình luận đã chọn</a></li>
-                                <li><a href="javascript:void(0)" onclick="deleteAllComment()">Xóa những comment đã chọn</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="col-sm-2 m-b-xs">
                         <label class="font-noraml">Mục đích</label>
                         <select id="intentDDL" class="input-sm form-control input-s-sm inline"></select>
@@ -100,13 +50,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
-                        <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterCommentTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterCommentTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                    <div class="col-sm-2 m-b-xs pull-right">
+                        <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterCommentTable(true), GetPieChartData(), GetStackChartData()"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterCommentTable(false), GetPieChartData(), GetStackChartData()"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Thống kê tỉ lệ bình luận</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div>
+                                    <div id="pieChart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Thống kê bình luận theo thời gian</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div>
+                                    <div id="stocked"></div>
+                                </div>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover" id="tblAnalysisByComment" style="width:100%">
                         <thead>
@@ -370,7 +346,7 @@
         $('#endDateUserTbl').attr("value", today);
         $('#startDateChart').attr("value", firstDay);
         $('#endDateChart').attr("value", today);
-        
+
     </script>
     @Scripts.Render("~/Data-picker-JS")
     <script>
@@ -427,6 +403,7 @@
         $(document).ready(function () {
             GetPieChartData();
             GetStackChartData();
+            GetStackChartData()
             loadIntent();
             //Comment Table
             commentDataTable = $('#tblAnalysisByComment').DataTable({
@@ -441,7 +418,7 @@
                     aoData.push({ "name": "startDate", "value": $('#startDateCommentTbl').val() });
                     aoData.push({ "name": "endDate", "value": $('#endDateCommentTbl').val().concat(" 23:59:59.000") });
                 },
-                "sDom": 'lrtip',
+                "sDom": 'l<"tool">rtip',
                 "aoColumnDefs": [
                         { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='checkBoxChecked(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%", "bSortable": false },
@@ -496,6 +473,16 @@
                 },
                 oLanguage: languageConfig
             })
+            $("div.tool").html("<div class='col-sm-2'>" +
+                        "<div class='btn-group'>" +
+                            "<button id='selectAllButton' data-toggle='dropdown' class='btn btn-default dropdown-toggle'>Đã chọn 0 bình luận&nbsp;<span class='caret'></span></button>" +
+                            "<ul class='dropdown-menu'>" +
+                                "<li><a href='javascript:void(0)' onclick='hideAllComment(true)'>Ẩn những bình luận đã chọn</a></li>" +
+                                "<li><a href='javascript:void(0)' onclick='hideAllComment(false)'>Bỏ ẩn những bình luận đã chọn</a></li>" +
+                                "<li><a href='javascript:void(0)' onclick='deleteAllComment()'>Xóa những comment đã chọn</a></li>" +
+                            "</ul>" +
+                        "</div>" +
+                    "</div>");
             //User Table
             userDataTable = $('#tblAnalysisByUser').DataTable({
                 "iDisplayLength": 10,
@@ -1285,7 +1272,14 @@
         function GetPieChartData() {
             $.ajax({
                 url: "/Analysis/GetAnalysisDataByTime",
-                data: { startDate: $('#startDateChart').val(), endDate: $('#endDateChart').val() },
+                data: {
+                    intentId: $('#intentDDL').val(),
+                    status: $('#statusDDL').val(),
+                    isRead: $('#isReadDDL').val(),
+                    startDate: $('#startDateCommentTbl').val(),
+                    endDate: $('#endDateCommentTbl').val(),
+                    divideNumber: 1
+                },
                 dataType: "json",
                 type: "post",
                 success: function (result) {
@@ -1300,6 +1294,13 @@
                         data: {
                             columns: dataForPie,
                             type: 'pie'
+                        },
+                        pie: {
+                            label: {
+                                format: function (value, ratio, id) {
+                                    return (value);
+                                }
+                            }
                         }
                     });
                 },
@@ -1312,42 +1313,56 @@
         function GetStackChartData() {
             $.ajax({
                 url: "/Analysis/GetAnalysisDataByTime",
-                data: { startDate: $('#startDateChart').val(), endDate: $('#endDateChart').val() },
+                data: {
+                    intentId: $('#intentDDL').val(),
+                    status: $('#statusDDL').val(),
+                    isRead: $('#isReadDDL').val(),
+                    startDate: $('#startDateCommentTbl').val(),
+                    endDate: $('#endDateCommentTbl').val(),
+                    divideNumber: 10
+                },
                 dataType: "json",
                 type: "post",
                 success: function (result) {
-                    console.log(result);
-                    var dataForPie = [];
-                    for (var i = 0; i < result.length; i++) {
-                        dataForPie.push([result[i].IntentName, result[i].CommentNumber]);
-                    };
-                    console.log(dataForPie);
+                    var dataStack = [];
+                    var title = [];
+                    var TimeCategory = [];
+                    for (var i = 0; i < result[0].ListData.length; i++) {
+                        title.push(result[0].ListData[i].IntentName);
+                    }
+                    dataStack.push(title);
+                    for (var j = 0; j < result.length; j++) {
+                        TimeCategory.push(FormatDateVN(result[j].Time))
+                        var dataRow = [];
+                        for (var i = 0; i < result[j].ListData.length; i++) {
+                            dataRow.push(result[j].ListData[i].CommentNumber);
+                        }
+                        dataStack.push(dataRow);
+                    }
+                    console.log(dataStack);
                     c3.generate({
                         bindto: '#stocked',
                         data: {
-                            columns: [
-                                ['data1', 30, 200, 100, 400, 150, 250],
-                                ['data2', 50, 20, 10, 40, 15, 25]
-                            ],
-                            colors: {
-                                data1: '#1ab394',
-                                data2: '#BABABA'
-                            },
-                            type: 'bar',
-                            groups: [
-                                ['data1', 'data2']
-                            ]
+                            rows: dataStack,
+                        },
+                        axis: {
+                            x: {
+                                type: 'category',
+                                categories: TimeCategory
+                            }
                         }
+                        
+
                     });
                 },
                 error: function () {
-                    console.log("Get data for pie char error");
+                    console.log("Get data for bar char error");
                 }
             })
         }
 
 
-        
+
 
     </script>
 

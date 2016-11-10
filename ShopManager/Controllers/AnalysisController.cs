@@ -40,15 +40,18 @@ namespace ShopManager.Controllers
                 var displayRecords = data.Count();
 
                 ShopViewModel shop = shopService.GetShop(shopId);
+
                 if (shop != null)
                 {
                     FacebookClient fbApp = new FacebookClient(shop.FbToken);
                     dynamic postContent;
                     dynamic fbUser;
                     dynamic commentContent;
+                    Customer registedCustomer;
 
                     for (int i = 0; i < data.Count(); i++)
                     {
+                        //Get Post Content infor
                         try
                         {
                             postContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].PostId).ToString());
@@ -67,71 +70,65 @@ namespace ShopManager.Controllers
                             Debug.WriteLine(e.Message);
                         }
 
-                        try
-                        {
-                            dynamic paramFB = new ExpandoObject();
-                            paramFB.fields = "from,id,message,story";
-                            commentContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].Id).ToString());
-                            data[i].CommentContent = TruncateLongString(commentContent.message, 40);
-                            if (commentContent.from.name != null)
-                            {
-                                data[i].SenderName = commentContent.from.name.ToString();
+                        //Get comment infor
 
-                                try
+                        if (data[i].LastContent != null && data[i].LastContent.Length != 0)
+                        {
+                            data[i].CommentContent = TruncateLongString(data[i].LastContent, 40);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                dynamic paramFB = new ExpandoObject();
+                                paramFB.fields = "from,id,message,story";
+                                commentContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].Id).ToString());
+                                if (commentContent.Length != 0)
                                 {
-                                    Customer registedCustomer = customerService.GetCustomerByFacebookId(commentContent.from.id, shopId);
-                                    if (registedCustomer.Name != null)
-                                    {
-                                        data[i].IsCustomer = true;
-                                    }
+                                    data[i].CommentContent = TruncateLongString(commentContent.message, 40);
                                 }
-                                catch (Exception)
+                                else
                                 {
-                                    data[i].IsCustomer = false;
+                                    data[i].CommentContent = "Bấm để xem nội dung";
                                 }
+
+                            }
+                            catch (Exception e)
+                            {
+                                data[i].CommentContent = "Bình luận không tồn tại.";
+                                Debug.WriteLine(e.Message);
                             }
                         }
-                        catch (Exception e)
+
+                        //Get Sender Information
+                        registedCustomer = customerService.GetCustomerByFacebookId(data[i].SenderFbId, shopId);
+                        if (registedCustomer != null)
                         {
-                            data[i].CommentContent = "Bình luận không tồn tại.";
+                            data[i].SenderName = registedCustomer.Name;
+                            data[i].IsCustomer = true;
+                        }
+                        else
+                        {
+                            data[i].IsCustomer = false;
                             try
                             {
                                 fbUser = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].SenderFbId).ToString());
                                 data[i].SenderName = fbUser.name;
-                                try
-                                {
-                                    Customer registedCustomer = customerService.GetCustomerByFacebookId(data[i].SenderFbId, shopId);
-                                    if (registedCustomer.Name != null)
-                                    {
-                                        data[i].IsCustomer = true;
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    data[i].IsCustomer = false;
-                                }
                             }
                             catch (Exception ex)
                             {
                                 data[i].SenderName = "Người dùng không tồn tại";
                                 Debug.WriteLine(ex.Message);
                             }
-                            Debug.WriteLine(e.Message);
                         }
+
+                        //Get Intent infor
                         if (data[i].IntentId != null)
                         {
                             data[i].IntentId = data[i].IntentId;
                             data[i].IntentName = intentService.GetIntentNameById(data[i].IntentId.Value);
                         }
-                        var customer = customerService.GetCustomerByFacebookId(data[i].SenderFbId, shopId);
-                        if (customer != null && customer.CustomerFbId == data[i].SenderFbId)
-                        {
-                            data[i].IsCustomer = true;
-                        }
-                        else
-                        {
-                            data[i].IsCustomer = false;
-                        }
+
                     }
                 }
 
@@ -364,13 +361,50 @@ namespace ShopManager.Controllers
         }
 
         //Get Current month analysis comment
-        public JsonResult GetAnalysisDataByTime(DateTime startDate, DateTime endDate)
+        public JsonResult GetAnalysisDataByTime(int? intentId, int? status, bool? isRead, DateTime startDate, DateTime endDate, int divideNumber)
         {
             var shopId = (string)Session["ShopId"];
-            var data = commentService.GetAnalysisDataByTime(shopId, startDate, endDate);
-            return Json(data, JsonRequestBehavior.AllowGet);
+            if (divideNumber > 1 && endDate >= startDate && endDate != null && startDate != null)
+            {
+                double start = (startDate - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                double end = (endDate - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                double period = (end - start)/divideNumber;
+
+
+                List<AnalysisDataForCharViewModel> listdata = new List<AnalysisDataForCharViewModel>();
+                AnalysisDataForCharViewModel model;
+                while (start + period <= end)
+                {
+                    model = new AnalysisDataForCharViewModel();
+                    var data = commentService.GetAnalysisDataByTime(shopId, intentId, status, isRead, ConvertDoubleToDatetime(start), ConvertDoubleToDatetime(start + period));
+                    model.Time = ConvertDoubleToDatetime(start + period);
+                    model.ListData = data;
+                    listdata.Add(model);
+                    start = start + period;
+                }
+                return Json(listdata, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var data = commentService.GetAnalysisDataByTime(shopId, intentId, status, isRead, startDate, endDate);
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
+        public static DateTime ConvertDoubleToDatetime(double timestamp)
+        {
+            TimeSpan time = TimeSpan.FromMilliseconds(timestamp);
+            DateTime date = new DateTime(1970, 1, 1) + time;
+            return date;
+        }
+
+        public static double ConvertDatetimeToDouble(DateTime date)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            TimeSpan diff = date.ToUniversalTime() - origin;
+            return Math.Floor(diff.TotalSeconds);
+        }
 
     }
 }
