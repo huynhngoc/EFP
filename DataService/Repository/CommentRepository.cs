@@ -90,7 +90,8 @@ namespace DataService.Repository
                 Status = q.Status,
                 IntentId = q.IntentId.Value,
                 DateCreated = q.DateCreated,
-                ParentId = q.ParentId
+                ParentId = q.ParentId,
+                LastContent =  q.LastContent
             });
             return data;
 
