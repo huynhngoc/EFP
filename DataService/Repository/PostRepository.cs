@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataService.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace DataService.Repository
         }
         public Post GetPost(string postId, string shopId)
         {
+            Debug.WriteLine("post id " + postId);
             var result = dbSet.Where(q => (q.ShopId == shopId) && (q.Id == postId)).FirstOrDefault();
             return result;
         }
@@ -33,6 +35,19 @@ namespace DataService.Repository
                 return false;
             }
 
+        }
+
+        public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
+        {
+            entites.Configuration.ProxyCreationEnabled = true;
+            var result = dbSet.Where(q => (q.ShopId == shopId) && (q.Status != 5)).AsEnumerable().Select(q => new PostWithLastestComment()
+            {
+                Id = q.Id,
+                IsRead = q.Comments.Count() == 0 ? q.IsRead : q.Comments.All(c => c.IsRead == true),
+                commentCount = q.Comments.Count(),
+                LastUpdate = q.Comments.Count() == 0 ? q.DateCreated : q.Comments.Max(c => c.DateCreated)
+            }).OrderByDescending(q=>q.LastUpdate);
+            return result.AsQueryable();
         }
 
     }

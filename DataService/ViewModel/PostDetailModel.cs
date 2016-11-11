@@ -17,7 +17,11 @@ namespace DataService.ViewModel
         public string SenderFbId { get; set; }
         public string storyContent { get; set; }
         public int commentQuan { get; set; }
+        public int Status { get; set; }
+        public Nullable<int> IntentId { get; set; }
         public List<CommentDetailModel> Comments { get; set; }
         public List<CommentDetailModel> nestedComments { get; set; }
+
+
     }
 }

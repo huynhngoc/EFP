@@ -112,6 +112,9 @@
     <Compile Include="ProductPicture.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PromotionInfo.cs">
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CategoryRepository.cs" />
     <Compile Include="Repository\CommentRepository.cs" />
@@ -145,7 +148,6 @@
     <Compile Include="Service\ResponseService.cs" />
     <Compile Include="Service\ShopService.cs" />
     <Compile Include="Service\TemplateProductService.cs" />
-    <Compile Include="Utils\Utility.cs" />
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -158,6 +160,7 @@
     <Compile Include="TemplateProduct.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Utility.cs" />
     <Compile Include="Utils\DefaultEntity.cs" />
     <Compile Include="Utils\DefaultIntent.cs" />
     <Compile Include="Utils\StatusAndMode.cs" />

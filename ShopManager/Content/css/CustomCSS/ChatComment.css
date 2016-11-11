@@ -183,7 +183,7 @@
     }
 
     .feed-element:hover {
-        background: #365899 !important;
+        background: #1ab394 !important;
         color: white;
     }
 
@@ -233,3 +233,8 @@
     background-color: #365899;
     color: white;
   }
+
+.feed-element {
+    padding: 10px !important;
+    margin: 0;
+}

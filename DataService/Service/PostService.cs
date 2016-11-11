@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataService.Repository;
+using DataService.ViewModel;
 
 namespace DataService.Service
 {
@@ -63,6 +64,10 @@ namespace DataService.Service
         public bool SetPostIsRead(string postId)
         {
             return (repository.SetPostIsRead(postId));
+        }
+        public IQueryable<PostWithLastestComment> GetAllPost (string shopId)
+        {
+            return repository.GetAllPost(shopId);
         }
     }
 }

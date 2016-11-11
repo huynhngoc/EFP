@@ -91,15 +91,14 @@ function FormatDateVN_full(date) {
     var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
     var d = new Date(parseInt(milli));
     var curD = new Date();
-    var hours = d.getHours();
     var monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
      "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
     //console.log(curD.getFullYear() + "  " + d.getFullYear());
     //show year if more than 1 year
     if (curD.getFullYear() == d.getFullYear()) {
-        return (d.getDate() + " " + monthNames[d.getMonth()]) + " lúc " + hours + ":" + d.getMinutes();
+        return (d.getDate() + " " + monthNames[d.getMonth()]) + " lúc " + d.getHours() + ":" + d.getMinutes();
     }
-    else return (d.getDate() + " " + monthNames[d.getMonth()]) + " Năm " + d.getFullYear() + " lúc " + hours + ":" + d.getMinutes();
+    else return (d.getDate() + " " + monthNames[d.getMonth()]) + " Năm " + d.getFullYear() + " lúc " + d.getHours() + ":" + d.getMinutes();
 }
 
 //Input: millisecond - Output: string "21 Tháng 7 1995 at 18:52 PM"
@@ -139,4 +138,22 @@ function FormatDateTimeVN_Ytr(date) {
         return "Hôm qua";
     }
     else return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+}
+function textReplace(text) {
+    if (text && text != "") {
+        return text=text.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+    }
+    else {
+        return "";
+    }
+}
+function ShowMoreTextFunc(text) {
+    var match = /\r|\n/.exec(text);
+    if (match) {
+        // Found line breaks;
+        var firstLine = text.split('\n')[0];
+        return firstLine;
+    }
+    else if (text.indexOf('<br>') != -1) return text.split('<br>')[0];
+    else return text;
 }

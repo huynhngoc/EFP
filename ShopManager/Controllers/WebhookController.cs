@@ -16,7 +16,7 @@ using ApiAiSDK;
 namespace ShopManager.Controllers
 {
     public class WebhookController : Controller
-    {        
+    {
         ShopService shopService = new ShopService();
         CommentService commentService = new CommentService();
         PostService postService = new PostService();
@@ -65,12 +65,12 @@ namespace ShopManager.Controllers
             string signature = this.Request.Headers["X-Hub-Signature"];
             bool isValid = signature.Split('=')[1] == hmacHex;
 
-            
+
 
             //Decode to json data
             dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
 
-            System.Diagnostics.Debug.WriteLine(isValid);            
+            System.Diagnostics.Debug.WriteLine(isValid);
             //only process when valid            
             if (isValid)
             {
@@ -112,7 +112,7 @@ namespace ShopManager.Controllers
         private void ProcessItem(dynamic fbObj)
         {
             dynamic obj = fbObj["object"];
-            dynamic entries = fbObj.entry;            
+            dynamic entries = fbObj.entry;
             foreach (dynamic entry in entries)
             {
                 if (HasProperty(entry, "messaging"))
@@ -144,11 +144,12 @@ namespace ShopManager.Controllers
                             switch (verb)
                             {
                                 case WebhookVerb.Add:
-                                case WebhookVerb.Edit:                                    
+                                case WebhookVerb.Edit:
                                     if (customerId.Equals(shopId))
                                     {
                                         intent = null;
-                                    } else
+                                    }
+                                    else
                                     {
                                         if (HasProperty(value, "photo"))
                                         {
@@ -180,9 +181,9 @@ namespace ShopManager.Controllers
 
                                                 }
                                             }
-                                        }                                        
-                                        
-                                        if (intent== (int)DefaultIntent.VANDAL)
+                                        }
+
+                                        if (intent == (int)DefaultIntent.VANDAL)
                                         {
                                             //hide comment
                                             if (shopService.GetCommentMode(shopId) == (int)CommentMode.AUTOHIDE)
@@ -198,12 +199,12 @@ namespace ShopManager.Controllers
                                                 }
                                                 catch (Exception)
                                                 {
-                                                    
+
                                                 }
-                                                
+
                                             }
-                                            status = (int) CommentStatus.WARNING;
-                                        }                                        
+                                            status = (int)CommentStatus.WARNING;
+                                        }
 
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId);
@@ -219,7 +220,8 @@ namespace ShopManager.Controllers
                                     break;
                                 default: break;
                             }
-                        } else if (item.Equals(WebhookItem.Post)|| item.Equals(WebhookItem.Photo))
+                        }
+                        else if (item.Equals(WebhookItem.Post) || item.Equals(WebhookItem.Photo))
                         {
                             //string postId = value.comment_id;
                             switch (verb)
@@ -259,7 +261,7 @@ namespace ShopManager.Controllers
                                     }
                                     if (customerId.Equals(shopId))
                                     {
-                                        intent = null; 
+                                        intent = null;
                                     }
                                     postService.AddPost(postId, customerId, time, intent, false, status, shopId);
                                     break;
@@ -282,7 +284,7 @@ namespace ShopManager.Controllers
                             {
                                 case WebhookVerb.Add:
                                 case WebhookVerb.Edit:
-                                    intent = null;         
+                                    intent = null;
                                     postService.AddPost(postId, customerId, time, null, true, status, shopId);
                                     break;
                                 case WebhookVerb.Hide:
@@ -298,11 +300,13 @@ namespace ShopManager.Controllers
                             }
                         }
 
-                        SignalRAlert.AlertHub.SendComment(shopId, value, intent.HasValue ? intent.Value: 0);
-                    } else if (field.Equals(WebhookField.Conversations)){
+                        SignalRAlert.AlertHub.SendComment(shopId, value, intent.HasValue ? intent.Value : 0);
+                    }
+                    else if (field.Equals(WebhookField.Conversations))
+                    {
                         string threadId = value.thread_id;
                         checkLast(threadId, shopId, time);
-                    }                    
+                    }
 
                 }
             }
@@ -320,12 +324,13 @@ namespace ShopManager.Controllers
             param.until = time;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
-            
+
             if (shopId.Equals(detail.from.id))
             {
                 SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, 0);
                 conversationService.SetReadConversation(threadId, time);
-            } else
+            }
+            else
             {
                 int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
@@ -371,7 +376,8 @@ namespace ShopManager.Controllers
             if (HasProperty(result, "message_tags"))
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
@@ -390,7 +396,7 @@ namespace ShopManager.Controllers
             try
             {
                 var prop = obj[name];
-                return prop!=null;
+                return prop != null;
             }
             catch (Exception)
             {

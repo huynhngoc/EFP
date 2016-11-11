@@ -15,28 +15,27 @@ namespace DataService.Repository
         {
 
         }
-        public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
-        {
+        //public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
+        //{
+            
+        //    var result = dbSet.Where(q => (q.PostId.Contains(shopId)) && (q.Status!=5)).AsEnumerable().Select(q => new Comment()
+        //    {
+        //        PostId = q.PostId,
+        //        Id = q.Id,
+        //        IsRead = q.IsRead,
+        //        DateCreated = q.DateCreated
+        //    }).GroupBy(g => g.PostId).Select(g => new PostWithLastestComment()
+        //    {
+        //        Id = g.Key,
+        //        LastUpdate =  g.Max(x => x.DateCreated),
+        //        IsRead = g.All(x => x.IsRead == true),
+        //        commentCount = g.Count(),
+        //        //newestCommentId = g.Where(x=>x.DateCreated = g.Max((DateTime)x.DateCreated))
+        //    }).OrderByDescending(q => q.LastUpdate);
 
-            var result = dbSet.Where(q => q.PostId.Contains(shopId)).AsEnumerable().Select(q => new Comment()
-            {
-                PostId = q.PostId,
-                Id = q.Id,
-                IsRead = q.IsRead,
-                DateCreated = q.DateCreated
-            }).GroupBy(g => g.PostId).Select(g => new PostWithLastestComment()
-            {
-                Id = g.Key,
-                LastUpdate = g.Max(x => x.DateCreated),
-                IsRead = g.All(x => x.IsRead == true),
-                commentCount = g.Count(),
-                //newestCommentId = g.Where(x=>x.DateCreated = g.Max((DateTime)x.DateCreated))
-            }).OrderByDescending(q => q.LastUpdate);
+        //    return result.AsQueryable();
 
-            return result.AsQueryable();
-
-
-        }
+        //}
 
 
         public Comment getCommentById(string commentId)
@@ -46,12 +45,12 @@ namespace DataService.Repository
 
         public IQueryable<Comment> GetCommentsContainPostId(string postId)
         {
-            string searchString = postId.Split('_')[1] + "_";
-            Debug.WriteLine("search string" + searchString);
+            //Debug.WriteLine("search string" + searchString);
             Debug.WriteLine("-----id_in " + postId);
             //Debug.WriteLine("asdasdasd " + dbSet.Where(q => q.Id.Contains(searchString)).OrderByDescending(q => q.DateCreated));
             //Debug.WriteLine("fuk" + dbSet.Find(cusId).ToString());
-            return dbSet.Where(q => (q.Id.Contains(searchString)) && (q.Status == 1)).OrderByDescending(q=>q.DateCreated);
+            //return dbSet.Where(q => (q.PostId == postId) && (q.Status != 5)).OrderByDescending(q=>q.DateCreated);
+            return dbSet.Where(q => (q.PostId == postId) && (q.Status != 5)).OrderByDescending(q => q.DateCreated);
         }
 
         public int GetNestedCommentQuan(string commentId)
@@ -73,7 +72,7 @@ namespace DataService.Repository
             List<Comment> nestedComment = new List<Comment>();
             foreach (Comment c in parentComment)
             {
-                nestedComment.AddRange(GetNestedCommentOfParent(c.Id, 0, 1).ToList());
+                nestedComment.AddRange(GetNestedCommentOfParent(c.Id, 0, 2).ToList());
             }
             result[0] = parentComment.ToList();
             result[1] = nestedComment;
@@ -222,8 +221,11 @@ namespace DataService.Repository
             return data;
 
         }
+        public IEnumerable<Comment> GetAllCommentByParentId(string parentId)
+        {
+            return dbSet.Where(q => (q.ParentId == parentId) && (q.Status != 5));
+        }
 
-        
         //public IQueryable<Post> GetPost(string shopId, int from, int quantity)
         //{
         //    var result = dbSet.Where(q => q.ShopId == shopId).Select(q => new Post_Comment()

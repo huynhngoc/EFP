@@ -42,10 +42,10 @@ namespace DataService.Service
         }
 
 
-        public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
-        {
-            return repository.GetAllPost(shopId);
-        }
+        //public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
+        //{
+        //    return repository.GetAllPost(shopId);
+        //}
 
         public IQueryable<Comment> GetCommentsOfPost(string postId)
         {
@@ -126,6 +126,10 @@ namespace DataService.Service
         public bool SetCommentStatus(string commentId, int statusId)
         {
             return repository.SetStatus(commentId, statusId);
+        }
+        public IEnumerable<Comment> GetAllCommentByParentId (string parentId)
+        {
+            return repository.GetAllCommentByParentId(parentId);
         }
     }
 }

@@ -16,7 +16,9 @@ namespace DataService.ViewModel
 		public string commentImageContent { get; set; }
         public string SenderFbId { get; set; }
         public string parentId { get; set; }
-        public int status { get; set; }
+        public bool IsRead { get; set; }
+        public int Status { get; set; }
+        public Nullable<int> IntentId { get; set; }
         public int nestedCommentQuan { get; set; }
     }
 }
