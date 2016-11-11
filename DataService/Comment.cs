@@ -27,6 +27,7 @@ namespace DataService
         public Nullable<int> IntentId { get; set; }
         public System.DateTime DateCreated { get; set; }
         public string ParentId { get; set; }
+        public string LastContent { get; set; }
     
         public virtual ICollection<Comment> Comments1 { get; set; }
         public virtual Comment Comment1 { get; set; }

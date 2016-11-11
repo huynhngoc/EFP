@@ -14,7 +14,6 @@
         <EntityTypeShape EntityType="EFPModel.Entity" Width="1.5" PointX="7.5" PointY="25.25" />
         <EntityTypeShape EntityType="EFPModel.OrderDetail" Width="1.5" PointX="13" PointY="23" />
         <EntityTypeShape EntityType="EFPModel.Order" Width="1.5" PointX="9.75" PointY="26.75" />
-        <EntityTypeShape EntityType="EFPModel.Post" Width="1.5" PointX="12.5" PointY="18.875" />
         <EntityTypeShape EntityType="EFPModel.ProductPicture" Width="1.5" PointX="12" PointY="16" />
         <EntityTypeShape EntityType="EFPModel.Product" Width="1.5" PointX="9.75" PointY="16.125" />
         <EntityTypeShape EntityType="EFPModel.Respons" Width="1.5" PointX="7.5" PointY="22.25" />
@@ -37,20 +36,24 @@
         <AssociationConnector Association="EFPModel.FK_Customers_Shops" />
         <AssociationConnector Association="EFPModel.FK_Entities_Shops" />
         <AssociationConnector Association="EFPModel.FK_Orders_Shops" />
-        <AssociationConnector Association="EFPModel.FK_Posts_Shops" />
         <AssociationConnector Association="EFPModel.FK_MasterProducts_Shops" />
         <AssociationConnector Association="EFPModel.FK_Responses_Shops" />
         <AssociationConnector Association="EFPModel.FK_ShopUser_Shops" />
         <AssociationConnector Association="EFPModel.FK_TemplateProduct_Shops" />
         <AssociationConnector Association="EFPModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="15.125" PointY="10" />
         <EntityTypeShape EntityType="EFPModel.Intent" Width="1.5" PointX="0.75" PointY="1.625" />
+        <AssociationConnector Association="EFPModel.FK_Conversations_Intents" />
+        <AssociationConnector Association="EFPModel.FK_Responses_Intents" />
+        <EntityTypeShape EntityType="EFPModel.Post" Width="1.5" PointX="9.75" PointY="12" />
+        <EntityTypeShape EntityType="EFPModel.PromotionInfo" Width="1.5" PointX="7.5" PointY="29" />
+        <AssociationConnector Association="EFPModel.FK_Posts_Intents" />
+        <AssociationConnector Association="EFPModel.FK_Posts_PromotionInfo" />
+        <AssociationConnector Association="EFPModel.FK_Posts_Shops" />
+        <AssociationConnector Association="EFPModel.FK_PromotionInfo_Shops" />
+        <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="12" PointY="6.75" />
         <AssociationConnector Association="EFPModel.FK_Comments_Comments" />
         <AssociationConnector Association="EFPModel.FK_Comments_Intents" />
         <AssociationConnector Association="EFPModel.FK_Comments_Posts" />
-        <AssociationConnector Association="EFPModel.FK_Conversations_Intents" />
-        <AssociationConnector Association="EFPModel.FK_Posts_Intents" />
-        <AssociationConnector Association="EFPModel.FK_Responses_Intents" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
