@@ -19,6 +19,12 @@ namespace DataService.Repository
 
         Service.IntentService intentService = new Service.IntentService();
 
+        //ngochb
+        public int NewCommentCount(string shopId)
+        {
+            return dbSet.Where(q => q.Post.ShopId == shopId && q.IsRead == false).Count();
+        }
+
         // ANDND Get comment by condition
         public IQueryable<AnalysisCommentViewModel> GetCommentByShopAndCondition(JQueryDataTableParamModel param, string fbId, string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
         {

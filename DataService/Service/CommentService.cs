@@ -60,6 +60,11 @@ namespace DataService.Service
                 return false;
             }
         }
+        //ngochb
+        public int NewCommentCount(string shopId)
+        {
+            return repository.NewCommentCount(shopId);
+        }
 
         // ANDND Get comment by condition
         public IQueryable<AnalysisCommentViewModel> GetCommentByShopAndCondition(JQueryDataTableParamModel param, string fbId, string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)

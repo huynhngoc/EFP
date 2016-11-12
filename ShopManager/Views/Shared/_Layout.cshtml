@@ -4,13 +4,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>    
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Header-CSS")
+    @Styles.Render("~/Toastr-style")
     @RenderSection("CustomCSS", required: false)
     @Styles.Render("~/Animate-and-style-CSS")
     @RenderSection("MyCSS", required: false)
 </head>
-<body class="md-skin fixed-nav fixed-nav-basic fixed-sidebar">    
+<body class="md-skin fixed-nav fixed-nav-basic fixed-sidebar">
     <div id="wrapper">
         <!--Left navbar-->
         <nav class="navbar-default navbar-static-side" role="navigation">
@@ -34,7 +35,7 @@
                                 @*<li><a href="#">Liên hệ</a></li>*@
                                 <li><a href="../Home/ChooseShop">Đổi cửa hàng</a></li>
                                 @*<li class="divider"></li>
-                                <li><a href="#">Thoát</a></li>*@
+                                    <li><a href="#">Thoát</a></li>*@
                             </ul>
                         </div>
                         <div class="logo-element"> EFP </div>
@@ -45,24 +46,24 @@
                         <a href="../Shop/Index"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý chung</span></a>
                     </li>
                     <!--./Dashboard-->
-                    <li> <a href="../ChatComment"><i class="fa fa-comments-o"></i> <span class="nav-label">Tin nhắn và bình luận</span> <span class="label label-danger pull-right">23</span></a> </li>
+                    <li> <a href="../ChatComment"><i class="fa fa-comments-o"></i> <span class="nav-label">Tin nhắn và bình luận</span> <span id="chatCommentCount" class="label label-danger pull-right">@(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )</span></a> </li>
                     <li> <a href="../Order"><i class="fa fa-inbox"></i> <span class="nav-label">Đơn hàng</span> <span class="label label-danger pull-right">23</span></a> </li>
                     <li> <a href="../Product"><i class="fa fa-tags"></i> <span class="nav-label">Sản phẩm</span> </a> </li>
                     <li> <a href="../Category"><i class="fa fa-tags"></i> <span class="nav-label">Phân loại</span> </a> </li>
                     <li> <a href="../Template"><i class="fa fa-tags"></i> <span class="nav-label">Mẫu sản phẩm</span> </a> </li>
-                    <li> <a href="../Customer"><i class="fa fa-users"></i> <span class="nav-label">Khách hàng</span> </a> </li>                    
-                    <li> <a href="../Analysis/Comment"><i class="fa fa-line-chart"></i> <span class="nav-label">Thống kê</span> </a> </li>                    
+                    <li> <a href="../Customer"><i class="fa fa-users"></i> <span class="nav-label">Khách hàng</span> </a> </li>
+                    <li> <a href="../Analysis/Comment"><i class="fa fa-line-chart"></i> <span class="nav-label">Thống kê</span> </a> </li>
                     <li>
                         <a href="../Shop/Setting"><i class="fa fa-edit"></i> <span class="nav-label">Cài đặt</span>@*<span class="fa arrow"></span>*@</a>
                         @*<ul class="nav nav-second-level collapse">
-                            <li><a href="">Basic form</a></li>
-                            <li><a href="form_advanced.html">Advanced Plugins</a></li>
-                            <li><a href="form_wizard.html">Wizard</a></li>
-                            <li><a href="form_file_upload.html">File Upload</a></li>
-                            <li><a href="form_editors.html">Text Editor</a></li>
-                            <li><a href="form_markdown.html">Markdown</a></li>
-                        </ul>*@
-                    </li>                    
+                                <li><a href="">Basic form</a></li>
+                                <li><a href="form_advanced.html">Advanced Plugins</a></li>
+                                <li><a href="form_wizard.html">Wizard</a></li>
+                                <li><a href="form_file_upload.html">File Upload</a></li>
+                                <li><a href="form_editors.html">Text Editor</a></li>
+                                <li><a href="form_markdown.html">Markdown</a></li>
+                            </ul>*@
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -74,52 +75,64 @@
                 <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                        <form role="search" class="navbar-form-custom" action="search_results.html">
-                            <div class="form-group">
-                                <input type="text" placeholder="Tìm kiếm" class="form-control" name="top-search" id="top-search">
-                            </div>
-                        </form>
+                        @*<form role="search" class="navbar-form-custom" action="search_results.html">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Tìm kiếm" class="form-control" name="top-search" id="top-search">
+                                </div>
+                            </form>*@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <!--<li>
                             <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
                         </li>-->
                         <!--Notification icon-->
+
                         <li class="dropdown">
                             <!--Number of notification-->
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#"> <i class="fa fa-bell"></i> <span class="label label-danger">8</span> </a>
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#"> 
+                            <i class="fa fa-bell"></i> 
+                                <span class="label label-danger" id="notiCount">
+                                @(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )
+                                </span> 
+                            </a>
                             <ul class="dropdown-menu dropdown-alerts">
                                 <li>
-                                    <a href="mailbox.html">
-                                        <div> <i class="fa fa-envelope fa-fw"></i> Bạn có 1 comment mới <span class="pull-right text-muted small">4 minutes ago</span> </div>
+                                    <a href="../ChatComment">
+                                        <div> <i class="fa fa-envelope fa-fw"></i> Bạn có <span id="conversationCount">@ViewBag.NewConversationCount</span> đoạn hội thoại mới @*<span class="pull-right text-muted small">4 minutes ago</span>*@ </div>
                                     </a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="profile.html">
-                                        <div> <i class="fa fa-twitter fa-fw"></i> Bạn có 2 tin nhắn mới <span class="pull-right text-muted small">12 minutes ago</span> </div>
+                                    <a href="../ChatComment">
+                                        <div> <i class="fa fa-comments fa-fw"></i> Bạn có <span id="postCount">@ViewBag.NewPostCount</span> bài viết trên trang mới @*<span class="pull-right text-muted small">12 minutes ago</span>*@ </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="../ChatComment">
+                                        <div> <i class="fa fa-comment fa-fw"></i> Bạn có <span id="commentCount">@ViewBag.NewCommentCount</span> bình luận mới @*<span class="pull-right text-muted small">12 minutes ago</span>*@ </div>
                                     </a>
                                 </li>
                                 <!--See all alert-->
                                 <li class="divider"></li>
                                 <li>
                                     <div class="text-center link-block">
-                                        <a href="notifications.html"> <strong>See All Alerts</strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a href="../ChatComment"> <strong>Xem tất cả</strong> <i class="fa fa-angle-right"></i> </a>
                                     </div>
                                 </li>
                             </ul>
                         </li>
                         <!--./Notification icon-->
-                        <!--Log out-->                        
+                        <!--Log out-->
                         <li>
-                            
+
                             <a href="javascript:document.getElementById('logoutForm').submit()"> <i class="fa fa-sign-out"></i> Đăng xuất </a>
-                             
-                        </li>                                    
+
+                        </li>
                         <!--./Log out-->
                     </ul>
                 </nav>
-            </div>            
+            </div>
             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
             {
                 @Html.AntiForgeryToken()
@@ -127,17 +140,17 @@
             <!--./Top navbar-->
             <!--Content header-->
             @*<div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-sm-4">
-                    <h2>@ViewBag.Title</h2>
-                    <ol class="breadcrumb">
-                        <li> <a href="index.html">Trang chủ</a> </li>
-                        <li class="active"> <strong>@ViewBag.Title</strong> </li>
-                    </ol>
-                </div>
-                <div class="col-sm-8">
-                    <div class="title-action"> <a href="" class="btn btn-primary">Nút gì đó</a> </div>
-                </div>
-            </div>*@
+                    <div class="col-sm-4">
+                        <h2>@ViewBag.Title</h2>
+                        <ol class="breadcrumb">
+                            <li> <a href="index.html">Trang chủ</a> </li>
+                            <li class="active"> <strong>@ViewBag.Title</strong> </li>
+                        </ol>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="title-action"> <a href="" class="btn btn-primary">Nút gì đó</a> </div>
+                    </div>
+                </div>*@
             <!--./Content header-->
             <!--Page's content-->
             <div class="wrapper wrapper-content">
@@ -156,6 +169,109 @@
 
     @Scripts.Render("~/Mainly-scripts")
     @Scripts.Render("~/Custom-and-plugin-javascript")
+    @Scripts.Render("~/Toastr")
     @RenderSection("CustomJS", required: false)
+    @Scripts.Render("~/SignalR-JS")
+    @Scripts.Render("/signalr/hubs")
+    <script type="text/javascript">
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var chat = $.connection.alertHub;
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.sendMessageToPage = function (data, threadId, intent) {
+                console.log(threadId);
+                console.log(data);
+                try {
+                    ProcessIncomingMessage(data, threadId);
+                } catch (e) {
+                    if(intent>0){
+                        toastr.info("Bạn có tin nhắn mới");
+                    }
+                } finally{
+                    //$("#conversationCount").text($("#conversationCount").text()+1);
+                    //$("#chatCommentCount").text($("#chatCommentCount").text()+1);
+                    //$("#notiCount").text($("#notiCount").text()+1);
+                }
+
+            };
+
+            chat.client.sendCommentToPage = function (comment, intent) {
+                console.log(comment);
+                console.log(intent);
+                try {
+                    ProcessIncomingComment(comment,intent);
+                } catch (e) {
+                    if(intent>0){
+                        if (comment.item == "@DataService.Utils.WebhookItem.Comment"){
+                            toastr.info("Bạn có bình luận mới");
+                        }
+                        if (comment.item == "@DataService.Utils.WebhookItem.Post" || comment.item == "@DataService.Utils.WebhookItem.Photo"){
+                            toastr.info("Bạn có bài đăng mới");
+
+                        }
+                    }
+
+                } finally {
+                    @*if(intent>0){
+                        if (comment.item == "@DataService.Utils.WebhookItem.Comment"){
+                            $("#commentCount").text($("#commentCount").text()+1);
+                        }
+                        if (comment.item == "@DataService.Utils.WebhookItem.Post" || comment.item == "@DataService.Utils.WebhookItem.Photo"){
+                            $("#postCount").text($("#postCount").text()+1);
+                        }
+                        $("#chatCommentCount").text($("#chatCommentCount").text()+1);
+                        $("#notiCount").text($("#notiCount").text()+1);
+                    }*@
+                    
+                    
+                }
+
+
+
+
+            };
+
+            //update noti
+            chat.client.sendNotification = function(conversation,post,comment){
+                $("#chatCommentCount").text(conversation+post+comment);
+                $("#notiCount").text(conversation+post+comment);
+                $("#postCount").text(post);
+                $("#commentCount").text(comment);
+                $("#conversationCount").text(comment);
+            };
+
+            // Get the user name and store it to prepend to messages.
+            //$('#displayname').val(prompt('Enter your name:', ''));
+            // Set initial focus to message input box.
+            //$('#message').focus();
+            // Start the connection.
+            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
+            $.connection.hub.start().done(function () {
+                //$('#sendmessage').click(function () {
+                //    // Call the Send method on the hub.
+                //    chat.server.send($('#displayname').val(), $('#message').val());
+                //    // Clear text box and reset focus for next comment.
+                //    $('#message').val('').focus();
+                //});
+            });
+        });
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": false,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "100",
+            "hideDuration": "100",
+            "timeOut": "3000",
+            "extendedTimeOut": "500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        </script>
 </body>
 </html>

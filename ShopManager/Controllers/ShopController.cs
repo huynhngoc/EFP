@@ -28,10 +28,11 @@ namespace ShopManager.Controllers
             ShopViewModel shop = shopService.GetShop(shopId);
             fbApp.AccessToken = shop.FbToken;
             dynamic param = new ExpandoObject();
-            param.fields = "single_line_address,phone,new_like_count,emails,website,about,description&locale=vi_vi";
+            param.fields = "single_line_address,phone,new_like_count,emails,website,about,description";
+            param.locale = "vi_vi";
             try
             {
-                dynamic result = fbApp.Get("me", param);
+                dynamic result = fbApp.Get(shopId, param);
                 if (HasProperty(result, "single_line_address"))
                 {
                     ViewBag.Address = result.single_line_address;

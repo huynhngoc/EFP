@@ -13,43 +13,63 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h2>
-                        Janet Smith
+                        @HttpContext.Current.Session["ShopName"]  
                     </h2>
                 </div>
                 <div class="ibox-content">   
                     <div class="row"                 >
                         <div class="col-xs-6 b-r">
                             <ul class="list-unstyled m-t-md">
-                                <li>
-                                    <span class="fa fa-envelope m-r-xs"></span>
-                                    <label>Email:</label>
-                                    mike@mail.com
-                                </li>
-                                <li>
-                                    <span class="fa fa-home m-r-xs"></span>
-                                    <label>Địa chỉ:</label>
-                                    Street 200, Avenue 10
-                                </li>
-                                <li>
-                                    <span class="fa fa-phone m-r-xs"></span>
-                                    <label>Liên hệ:</label>
-                                    (+121) 678 3462
-                                </li>
-                                <li>
-                                    <span class="fa fa-rss m-r-xs"></span>
-                                    <label>Trang web:</label>
-                                    www.souvenirdeparis.com
-                                </li>
-                                <li>
-                                    <span class="fa fa-info-circle m-r-xs"></span>
-                                    <label>Mô tả:</label>
-                                    Bakery and Cake
-                                </li>
+                                @if (!string.IsNullOrEmpty(ViewBag.Email))
+                                {
+                                    <li>
+                                        <span class="fa fa-envelope m-r-xs"></span>
+                                        <label>Email:</label>
+                                        @ViewBag.Email
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.Address))
+                                {
+                                    <li>
+                                        <span class="fa fa-home m-r-xs"></span>
+                                        <label>Địa chỉ:</label>
+                                        @ViewBag.Address
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.Phone))
+                                {
+                                    <li>
+                                        <span class="fa fa-phone m-r-xs"></span>
+                                        <label>Liên hệ:</label>
+                                        @ViewBag.Phone
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.Website))
+                                {
+                                    <li>
+                                        <span class="fa fa-rss m-r-xs"></span>
+                                        <label>Trang web:</label>
+                                        <a href="@ViewBag.Website">@ViewBag.Website</a>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.About) || !string.IsNullOrEmpty(ViewBag.Description))
+                                {
+                                    <li>
+                                        <span class="fa fa-info-circle m-r-xs"></span>
+                                        <label>Mô tả:</label>
+                                        @if (string.IsNullOrEmpty(ViewBag.About))
+                                        {
+                                            @ViewBag.About<br />
+                                        }
+                                         @ViewBag.Description
+                                    </li>
+                                }
+                                
                             </ul>
                         </div>
                         <div class="col-xs-6">                            
-                                <a href="" class="btn btn-white btn-lg btn-block"><span>Xem trang</span>&nbsp;&nbsp;<i class="fa fa-sign-in"></i></a>                            
-                            <a href="" class="btn btn-white btn-lg btn-block"><span>Sửa thông tin</span>&nbsp;&nbsp;<i class="fa fa-edit"></i></a>                            
+                            <a target="_blank" href="@string.Format("https://www.facebook.com/{0}", HttpContext.Current.Session["ShopId"])" class="btn btn-white btn-lg btn-block"><span>Xem trang</span>&nbsp;&nbsp;<i class="fa fa-sign-in"></i></a>                            
+                            <a target="_blank" href="@string.Format("https://www.facebook.com/{0}/about/?tab=page_info",HttpContext.Current.Session["ShopId"])" class="btn btn-white btn-lg btn-block"><span>Sửa thông tin</span>&nbsp;&nbsp;<i class="fa fa-edit"></i></a>                            
                         </div>
 
                     </div>
@@ -67,7 +87,7 @@
                     <h5>Inbox</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">23</h1> <small>Đoạn hội thoại</small>
+                    <h1 class="no-margins">@ViewBag.NewConversationCount</h1> <small>Đoạn hội thoại</small>
                 </div>
             </div>
         </div>
@@ -78,7 +98,7 @@
                     <h5>Comment</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">30</h1> <small>Lượt bình luận</small>
+                    <h1 class="no-margins">@ViewBag.NewCommentCount</h1> <small>Lượt bình luận</small>
                 </div>
             </div>
         </div>
@@ -89,7 +109,7 @@
                     <h5>Like</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">20</h1> <small>Lượt thích</small>
+                    <h1 class="no-margins">@ViewBag.Like</h1> <small>Lượt thích</small>
                 </div>
             </div>
         </div>
@@ -100,7 +120,7 @@
                     <h5>Bài đăng</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">5</h1> <small>Bài đăng</small>
+                    <h1 class="no-margins">@ViewBag.NewPostCount</h1> <small>Bài đăng</small>
                 </div>
             </div>
         </div>
