@@ -349,7 +349,7 @@ namespace ShopManager.Controllers
                 {                    
                 }
                 
-                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO)
+                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO || shopService.GetReplyMode(shopId) == (int)ReplyMode.MESSAGE_ONLY)
                 {
                     var response = responseService.GetResponse(shopId, intent);
                     if (!string.IsNullOrEmpty(response))
