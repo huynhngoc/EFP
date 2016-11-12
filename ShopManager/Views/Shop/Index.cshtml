@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section CustomCSS {
-    
+    @Styles.Render("~/C3Chart-CSS")
 }
 
 <div class="wrapper wrapper-content">
@@ -84,7 +84,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">mới</span>
-                    <h5>Inbox</h5>
+                    <h5>Tin nhắn</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">@ViewBag.NewConversationCount</h1> <small>Đoạn hội thoại</small>
@@ -95,7 +95,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">mới</span>
-                    <h5>Comment</h5>
+                    <h5>Bình luận</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">@ViewBag.NewCommentCount</h1> <small>Lượt bình luận</small>
@@ -106,7 +106,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">mới</span>
-                    <h5>Like</h5>
+                    <h5>Thích</h5>
                 </div>
                 <div class="ibox-content">
                     <h1 class="no-margins">@ViewBag.Like</h1> <small>Lượt thích</small>
@@ -143,7 +143,7 @@
                     <div class="row">
                         <div class="col-lg-9">
                             <div class="flot-chart">
-                                <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                                <div class="flot-chart-content" id="orderChart"></div>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -180,6 +180,61 @@
 <!--./Page's content-->
 
 
-    @section CustomJS {
+@section CustomJS {
+@Scripts.Render("~/C3Chart-JS")
+<script>
+    $(document).ready(function(){
+        var chart = c3.generate({
+            bindto: '#orderChart',
+            data: {
+                x: 'x',
+                columns: [
+                    ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
+                  ['data1', 30, 200, 100, 400, 150, 250],
+                  ['data2', 50, 20, 10, 40, 15, 25],
+                  ['data3', 51, 25, 30, 40, 10, 29]
+                ],
+                axes: {
+                    data3: 'y',
+                    data1: 'y2',
+                    data2: 'y2'
+                },
+                types: {
+                    data1: 'bar',
+                    data2: 'bar'
+                    
+                },
+                groups: [
+                    ['data1', 'data2']
+                ],
+                order: null
+            },
+            axis: {
+                y: {
+                    label: {
+                        text: 'Doanh thu',
+                        position: 'outer-middle'
+                    },
+                    tick: {
+                        format: d3.format("VNĐ,") // ADD
+                    }
+                },
+                y2: {
+                    show: true,
+                    label: {
+                        text: 'Số đơn hàng',
+                        position: 'outer-middle'
+                    }
+                },
+                x: {
+                    type: 'timeseries',
+                    tick: {
+                        format: '%Y-%m-%d'
+                    }
+                }
 
-    }
+            }
+        });
+    });
+</script>
+}
