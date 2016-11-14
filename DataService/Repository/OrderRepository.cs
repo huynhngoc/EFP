@@ -142,5 +142,11 @@ namespace DataService.Repository
             }
             return rs;
         }
+
+        public List<List<object>> GetOrderAnalysis(string shopId, long startDate, long endDate, int divide)
+        {
+            var result = new List<List<object>>();
+            return result;
+        }
     }
 }

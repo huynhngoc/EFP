@@ -15,6 +15,13 @@ namespace DataService.Repository
 
         }
 
+        //ngochb
+        public int NewPostCount(string shopId)
+        {
+            return dbSet.Where(q => q.ShopId == shopId && q.IsRead == false).Count();
+        }
+
+        //ANDND set post id read
         //ANDND set post is read
         public bool SetPostIsRead(string postId)
         {

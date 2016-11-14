@@ -96,12 +96,20 @@
                         <label class="col-sm-4 control-label">Chế độ trả lời tin nhắn:</label>
                         <div class="col-sm-8">
                             <div class="radio radio-info radio-inline  col-sm-4">
-                                <input type="radio" id="replyMode1" value="1" name="reply">
+                                <input type="radio" id="replyMode1" value="@((int)DataService.Utils.ReplyMode.MANUAL)" name="reply">
                                 <label for="replyMode1"> Thủ công </label>
                             </div>
                             <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
-                                <input type="radio" id="replyMode2" value="2" name="reply">
+                                <input type="radio" id="replyMode2" value="@((int)DataService.Utils.ReplyMode.AUTO)" name="reply">
                                 <label for="replyMode2"> Trả lời tự động</label>
+                            </div>
+                            <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
+                                <input type="radio" id="replyMode3" value="@((int)DataService.Utils.ReplyMode.COMMENT_ONLY)" name="reply">
+                                <label for="replyMode3"> Chỉ trả lời tự động bình luận</label>
+                            </div>
+                            <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
+                                <input type="radio" id="replyMode4" value="@((int)DataService.Utils.ReplyMode.MESSAGE_ONLY)" name="reply">
+                                <label for="replyMode4"> Chỉ trả lời tự động tin nhắn</label>
                             </div>
                             </div>
                         </div>

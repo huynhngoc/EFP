@@ -11,6 +11,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ShopManager.SignalRAlert;
 
 namespace ShopManager.Controllers
 {
@@ -216,7 +217,10 @@ namespace ShopManager.Controllers
         //ANDND Set comment is read
         public JsonResult SetCommentIsRead(string commentId)
         {
-            return Json(commentService.SetIsRead(commentId), JsonRequestBehavior.AllowGet);
+            string shopId = (string) Session["ShopId"];
+            var result = commentService.SetIsRead(commentId);
+            AlertHub.SendNotification(shopId);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         //ANDND Set comment Intent
