@@ -21,6 +21,7 @@ namespace ShopManager.Controllers
         ShopService shopService = new ShopService();
         IntentService intentService = new IntentService();
         FacebookClient fbApp = new FacebookClient();
+        OrderService orderService = new OrderService();
         // GET: Shop
         public ActionResult Index()
         {
@@ -178,6 +179,20 @@ namespace ShopManager.Controllers
                 System.Diagnostics.Debug.WriteLine("Name = " + name);
                 return false;
             }
+        }
+
+        public JsonResult GetRevenue(long startDate, long endDate)
+        {
+            string shopId = (string)Session["ShopId"];
+            var start = (new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(startDate)).ToLocalTime();
+            var end = (new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(endDate)).ToLocalTime();
+            return Json(orderService.GetOrderRevenue(shopId, start, end),JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetOrderAnalysis(long startDate, long endDate, int divide)
+        {
+            string shopId = (string)Session["ShopId"];
+            return Json(orderService.GetOrderAnalysis(shopId, startDate, endDate, divide), JsonRequestBehavior.AllowGet);
         }
 
     }

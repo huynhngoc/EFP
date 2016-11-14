@@ -130,12 +130,13 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Orders</h5>
+                    <h5>Đơn hàng</h5>
                     <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-white active">Hôm nay</button>
-                            <button type="button" class="btn btn-xs btn-white">Tuần này</button>
-                            <button type="button" class="btn btn-xs btn-white">Tháng này</button>
+                        <div class="btn-group radio">
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white active" onclick="getTodayOrder()">Hôm nay</button>
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white" onclick="getWeekOrder()">Tuần này</button>
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white" onclick="getMonthOrder()">Tháng này</button>
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white" onclick="getYearOrder()">Năm nay</button>
                         </div>
                     </div>
                 </div>
@@ -183,29 +184,34 @@
 @section CustomJS {
 @Scripts.Render("~/C3Chart-JS")
 <script>
+    var chart;
+    var ajax_getOrder;
     $(document).ready(function(){
-        var chart = c3.generate({
+        chart = c3.generate({
             bindto: '#orderChart',
             data: {
                 x: 'x',
                 columns: [
                     ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
-                  ['data1', 30, 200, 100, 400, 150, 250],
-                  ['data2', 50, 20, 10, 40, 15, 25],
-                  ['data3', 51, 25, 30, 40, 10, 29]
+                  ['Đơn hàng hoàn thành', 30, 200, 100, 400, 150, 250],
+                  ['Đơn hàng chưa xong', 50, 20, 10, 40, 15, 25],
+                  ['Đơn hàng đã hủy', 51, 25, 30, 40, 10, 29],
+                  ['Doanh thu', 51, 25, 30, 40, 10, 29]
                 ],
                 axes: {
-                    data3: 'y',
-                    data1: 'y2',
-                    data2: 'y2'
-                },
-                types: {
-                    data1: 'bar',
-                    data2: 'bar'
+                    'Đơn hàng hoàn thành': 'y2',
+                    'Đơn hàng chưa xong': 'y2',
+                    'Đơn hàng đã hủy': 'y2',
+                    'Doanh thu': 'y'
                     
                 },
+                types: {
+                    'Đơn hàng hoàn thành': 'bar',
+                    'Đơn hàng chưa xong': 'bar',
+                    'Đơn hàng đã hủy': 'bar'
+                },
                 groups: [
-                    ['data1', 'data2']
+                    ['Đơn hàng hoàn thành', 'Đơn hàng chưa xong', 'Đơn hàng đã hủy']
                 ],
                 order: null
             },
@@ -227,14 +233,83 @@
                     }
                 },
                 x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: '%Y-%m-%d'
-                    }
+                    type: 'category'
+                    //tick: {
+                    //    format: '%Y-%m-%d'
+                    //}
                 }
 
             }
         });
+
+        getTodayOrder();
+
+        //$.ajax({
+        //    url: '../Shop/GetOrderAnalysis',
+        //    type: 'POST',
+        //    data: {
+        //        'startDate': new Date().setHours(0, 0, 0, 0),
+        //        'endDate': new Date().getTime(),
+        //        'divide': 7
+        //    },
+        //    success: function (data) {
+        //        chart.load({
+        //            columns: data
+        //        });
+        //    }
+        //});
+        
     });
+
+    function getTodayOrder() {
+        start = new Date().setHours(0, 0, 0, 0),
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getWeekOrder() {
+        start = getMonday(new Date());
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getMonthOrder() {
+        start = new Date().setDate(1);
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getYearOrder() {
+        start = new Date(new Date().getFullYear(), 0, 1).getTime();
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getAnalysis(start, end) {
+        if (ajax_getOrder) {
+            ajax_getOrder.abort();
+        }
+        ajax_getOrder = $.ajax({
+            url: '../Shop/GetOrderAnalysis',
+            type: 'POST',
+            data: {
+                'startDate': start,
+                'endDate': end,
+                'divide': 7
+            },
+            success: function (data) {
+                chart.load({
+                    columns: data
+                });
+            }
+        });
+    }
+
+    function getMonday( date ) {
+        var day = date.getDay() || 7;  
+        if( day !== 1 ) 
+            date.setHours(-24 * (day - 1)); 
+        return new Date(date).setHours(0,0,0,0);
+    }
 </script>
 }
