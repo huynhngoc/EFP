@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DataService;
 using DataService.Repository;
 using DataService.Service;
+using DataService.ViewModel;
+using Facebook;
 
 namespace ShopManager.Controllers
 {
@@ -15,15 +20,60 @@ namespace ShopManager.Controllers
         EntityService entityService = new EntityService();
         ShopService shopService = new ShopService();
         IntentService intentService = new IntentService();
+        FacebookClient fbApp = new FacebookClient();
+        OrderService orderService = new OrderService();
         // GET: Shop
         public ActionResult Index()
         {
+            string shopId = (string)Session["ShopId"];
+            ShopViewModel shop = shopService.GetShop(shopId);
+            fbApp.AccessToken = shop.FbToken;
+            dynamic param = new ExpandoObject();
+            param.fields = "single_line_address,phone,new_like_count,emails,website,about,description";
+            param.locale = "vi_vi";
+            try
+            {
+                dynamic result = fbApp.Get(shopId, param);
+                if (HasProperty(result, "single_line_address"))
+                {
+                    ViewBag.Address = result.single_line_address;
+                }
+                if (HasProperty(result, "phone"))
+                {
+                    ViewBag.Phone = result.phone;
+                }
+                if (HasProperty(result, "new_like_count"))
+                {
+                    ViewBag.Like = result.new_like_count;
+                }
+                if (HasProperty(result, "emails"))
+                {
+                    ViewBag.Email = result.emails;
+                }
+                if (HasProperty(result, "website"))
+                {
+                    ViewBag.Website = result.website;
+                }
+                if (HasProperty(result, "about"))
+                {
+                    ViewBag.About = result.about;
+                }
+                if (HasProperty(result, "description"))
+                {
+                    ViewBag.Description = result.description;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Facebook Exception: " + e.Message);
+            }            
             return View();
         }
 
         public ActionResult Setting()
         {
-            string shopId = (string) Session["shopId"];
+            string shopId = (string) Session["ShopId"];
             ViewBag.CommentMode = shopService.GetCommentMode(shopId);
             ViewBag.ReplyMode = shopService.GetReplyMode(shopId);
             ViewBag.Entities = entityService.GetAll(shopId);
@@ -115,6 +165,34 @@ namespace ShopManager.Controllers
             //string shopId = (string)Session["shopId"];
             bool result = responseService.DeleteResponse(id);
             return Json(new { success = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        private bool HasProperty(dynamic obj, string name)
+        {            
+            try
+            {
+                var prop = obj[name];
+                return prop != null;
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Name = " + name);
+                return false;
+            }
+        }
+
+        public JsonResult GetRevenue(long startDate, long endDate)
+        {
+            string shopId = (string)Session["ShopId"];
+            var start = (new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(startDate)).ToLocalTime();
+            var end = (new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(endDate)).ToLocalTime();
+            return Json(orderService.GetOrderRevenue(shopId, start, end),JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetOrderAnalysis(long startDate, long endDate, int divide)
+        {
+            string shopId = (string)Session["ShopId"];
+            return Json(orderService.GetOrderAnalysis(shopId, startDate, endDate, divide), JsonRequestBehavior.AllowGet);
         }
 
     }

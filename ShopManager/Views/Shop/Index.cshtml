@@ -4,20 +4,90 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section CustomCSS {
-    
+    @Styles.Render("~/C3Chart-CSS")
 }
 
 <div class="wrapper wrapper-content">
-    <!--New notification-->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>
+                        @HttpContext.Current.Session["ShopName"]  
+                    </h2>
+                </div>
+                <div class="ibox-content">   
+                    <div class="row"                 >
+                        <div class="col-xs-6 b-r">
+                            <ul class="list-unstyled m-t-md">
+                                @if (!string.IsNullOrEmpty(ViewBag.Email))
+                                {
+                                    <li>
+                                        <span class="fa fa-envelope m-r-xs"></span>
+                                        <label>Email:</label>
+                                        @ViewBag.Email
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.Address))
+                                {
+                                    <li>
+                                        <span class="fa fa-home m-r-xs"></span>
+                                        <label>Địa chỉ:</label>
+                                        @ViewBag.Address
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.Phone))
+                                {
+                                    <li>
+                                        <span class="fa fa-phone m-r-xs"></span>
+                                        <label>Liên hệ:</label>
+                                        @ViewBag.Phone
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.Website))
+                                {
+                                    <li>
+                                        <span class="fa fa-rss m-r-xs"></span>
+                                        <label>Trang web:</label>
+                                        <a href="@ViewBag.Website">@ViewBag.Website</a>
+                                    </li>
+                                }
+                                @if (!string.IsNullOrEmpty(ViewBag.About) || !string.IsNullOrEmpty(ViewBag.Description))
+                                {
+                                    <li>
+                                        <span class="fa fa-info-circle m-r-xs"></span>
+                                        <label>Mô tả:</label>
+                                        @if (string.IsNullOrEmpty(ViewBag.About))
+                                        {
+                                            @ViewBag.About<br />
+                                        }
+                                         @ViewBag.Description
+                                    </li>
+                                }
+                                
+                            </ul>
+                        </div>
+                        <div class="col-xs-6">                            
+                            <a target="_blank" href="@string.Format("https://www.facebook.com/{0}", HttpContext.Current.Session["ShopId"])" class="btn btn-white btn-lg btn-block"><span>Xem trang</span>&nbsp;&nbsp;<i class="fa fa-sign-in"></i></a>                            
+                            <a target="_blank" href="@string.Format("https://www.facebook.com/{0}/about/?tab=page_info",HttpContext.Current.Session["ShopId"])" class="btn btn-white btn-lg btn-block"><span>Sửa thông tin</span>&nbsp;&nbsp;<i class="fa fa-edit"></i></a>                            
+                        </div>
+
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--New notification-->    
     <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">mới</span>
-                    <h5>Inbox</h5>
+                    <h5>Tin nhắn</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">23</h1> <small>Tin nhắn mới</small>
+                    <h1 class="no-margins">@ViewBag.NewConversationCount</h1> <small>Đoạn hội thoại</small>
                 </div>
             </div>
         </div>
@@ -25,10 +95,10 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">mới</span>
-                    <h5>Comment</h5>
+                    <h5>Bình luận</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">30</h1> <small>Lượt bình luận</small>
+                    <h1 class="no-margins">@ViewBag.NewCommentCount</h1> <small>Lượt bình luận</small>
                 </div>
             </div>
         </div>
@@ -36,10 +106,10 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <span class="label label-danger pull-right">mới</span>
-                    <h5>Like</h5>
+                    <h5>Thích</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">20</h1> <small>Lượt thích</small>
+                    <h1 class="no-margins">@ViewBag.Like</h1> <small>Lượt thích</small>
                 </div>
             </div>
         </div>
@@ -50,7 +120,7 @@
                     <h5>Bài đăng</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">5</h1> <small>Bài đăng</small>
+                    <h1 class="no-margins">@ViewBag.NewPostCount</h1> <small>Bài đăng</small>
                 </div>
             </div>
         </div>
@@ -60,12 +130,13 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Orders</h5>
+                    <h5>Đơn hàng</h5>
                     <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-white active">Hôm nay</button>
-                            <button type="button" class="btn btn-xs btn-white">Tuần này</button>
-                            <button type="button" class="btn btn-xs btn-white">Tháng này</button>
+                        <div class="btn-group radio">
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white active" onclick="getTodayOrder()">Hôm nay</button>
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white" onclick="getWeekOrder()">Tuần này</button>
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white" onclick="getMonthOrder()">Tháng này</button>
+                            <button type="button" data-toggle="button" class="btn btn-xs btn-white" onclick="getYearOrder()">Năm nay</button>
                         </div>
                     </div>
                 </div>
@@ -73,7 +144,7 @@
                     <div class="row">
                         <div class="col-lg-9">
                             <div class="flot-chart">
-                                <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                                <div class="flot-chart-content" id="orderChart"></div>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -110,6 +181,135 @@
 <!--./Page's content-->
 
 
-    @section CustomJS {
+@section CustomJS {
+@Scripts.Render("~/C3Chart-JS")
+<script>
+    var chart;
+    var ajax_getOrder;
+    $(document).ready(function(){
+        chart = c3.generate({
+            bindto: '#orderChart',
+            data: {
+                x: 'x',
+                columns: [
+                    ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
+                  ['Đơn hàng hoàn thành', 30, 200, 100, 400, 150, 250],
+                  ['Đơn hàng chưa xong', 50, 20, 10, 40, 15, 25],
+                  ['Đơn hàng đã hủy', 51, 25, 30, 40, 10, 29],
+                  ['Doanh thu', 51, 25, 30, 40, 10, 29]
+                ],
+                axes: {
+                    'Đơn hàng hoàn thành': 'y2',
+                    'Đơn hàng chưa xong': 'y2',
+                    'Đơn hàng đã hủy': 'y2',
+                    'Doanh thu': 'y'
+                    
+                },
+                types: {
+                    'Đơn hàng hoàn thành': 'bar',
+                    'Đơn hàng chưa xong': 'bar',
+                    'Đơn hàng đã hủy': 'bar'
+                },
+                groups: [
+                    ['Đơn hàng hoàn thành', 'Đơn hàng chưa xong', 'Đơn hàng đã hủy']
+                ],
+                order: null
+            },
+            axis: {
+                y: {
+                    label: {
+                        text: 'Doanh thu',
+                        position: 'outer-middle'
+                    },
+                    tick: {
+                        format: d3.format("VNĐ,") // ADD
+                    }
+                },
+                y2: {
+                    show: true,
+                    label: {
+                        text: 'Số đơn hàng',
+                        position: 'outer-middle'
+                    }
+                },
+                x: {
+                    type: 'category'
+                    //tick: {
+                    //    format: '%Y-%m-%d'
+                    //}
+                }
 
+            }
+        });
+
+        getTodayOrder();
+
+        //$.ajax({
+        //    url: '../Shop/GetOrderAnalysis',
+        //    type: 'POST',
+        //    data: {
+        //        'startDate': new Date().setHours(0, 0, 0, 0),
+        //        'endDate': new Date().getTime(),
+        //        'divide': 7
+        //    },
+        //    success: function (data) {
+        //        chart.load({
+        //            columns: data
+        //        });
+        //    }
+        //});
+        
+    });
+
+    function getTodayOrder() {
+        start = new Date().setHours(0, 0, 0, 0),
+        end = new Date().getTime();
+        getAnalysis(start, end);
     }
+
+    function getWeekOrder() {
+        start = getMonday(new Date());
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getMonthOrder() {
+        start = new Date().setDate(1);
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getYearOrder() {
+        start = new Date(new Date().getFullYear(), 0, 1).getTime();
+        end = new Date().getTime();
+        getAnalysis(start, end);
+    }
+
+    function getAnalysis(start, end) {
+        if (ajax_getOrder) {
+            ajax_getOrder.abort();
+        }
+        ajax_getOrder = $.ajax({
+            url: '../Shop/GetOrderAnalysis',
+            type: 'POST',
+            data: {
+                'startDate': start,
+                'endDate': end,
+                'divide': 7
+            },
+            success: function (data) {
+                chart.load({
+                    columns: data
+                });
+            }
+        });
+    }
+
+    function getMonday( date ) {
+        var day = date.getDay() || 7;  
+        if( day !== 1 ) 
+            date.setHours(-24 * (day - 1)); 
+        return new Date(date).setHours(0,0,0,0);
+    }
+</script>
+}

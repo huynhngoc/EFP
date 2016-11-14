@@ -304,6 +304,7 @@ namespace ShopManager.Controllers
                         }
 
                         SignalRAlert.AlertHub.SendComment(shopId, value, intent.HasValue ? intent.Value: 0);
+                        SignalRAlert.AlertHub.SendNotification(shopId);
                     } else if (field.Equals(WebhookField.Conversations)){
                         string threadId = value.thread_id;
                         checkLast(threadId, shopId, time);
@@ -349,7 +350,7 @@ namespace ShopManager.Controllers
                 {                    
                 }
                 
-                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO)
+                if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO || shopService.GetReplyMode(shopId) == (int)ReplyMode.MESSAGE_ONLY)
                 {
                     var response = responseService.GetResponse(shopId, intent);
                     if (!string.IsNullOrEmpty(response))
@@ -375,6 +376,7 @@ namespace ShopManager.Controllers
                 SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, intent);
                 conversationService.AddConversation(threadId, intent, time, shopId);
             }
+            SignalRAlert.AlertHub.SendNotification(shopId);
         }
 
         private bool CheckTagOthers(string commentId, string shopId)

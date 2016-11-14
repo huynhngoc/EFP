@@ -83,6 +83,70 @@ namespace DataService.Repository
                 Phone = q.Phone
             }).ToList();
         }
+
+        
+
+        //ngochb
+        public int GetCompletedOrderNumber(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && q.Status == (int)Utils.OrderStatus.COMPLETED && q.DateModified < endDate && q.DateModified >= startDate).Count();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
+        }
+
+        //ngochb
+        public int GetCanceledOrderNumber(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && q.Status == (int)Utils.OrderStatus.CANCELED && q.DateModified < endDate && q.DateModified >= startDate).Count();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
+        }
+
+        //ngochb
+        public int GetIncompleteOrderNumber(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && (q.Status == (int)Utils.OrderStatus.PROCESSING || q.Status == (int)Utils.OrderStatus.DELIVERING) && q.DateModified < endDate && q.DateModified >= startDate).Count();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
+        }
+
+        //ngochb
+        public decimal GetOrderRevenue(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && q.Status == (int)Utils.OrderStatus.COMPLETED && q.DateModified < endDate && q.DateModified >= startDate).Select(q => q.OrderDetails.Sum(d => d.Price * d.Quantity)).Sum();
+                return result;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
     }
 
     public class OrderDetailRepository : BaseRepository<OrderDetail>
@@ -142,5 +206,7 @@ namespace DataService.Repository
             }
             return rs;
         }
+
+       
     }
 }
