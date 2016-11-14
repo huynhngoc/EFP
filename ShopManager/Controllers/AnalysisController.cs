@@ -55,7 +55,9 @@ namespace ShopManager.Controllers
                         //Get Post Content infor
                         try
                         {
-                            postContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].PostId).ToString());
+                            dynamic paramFB = new ExpandoObject();
+                            paramFB.locale = "vi_VI";
+                            postContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].PostId, paramFB).ToString());
                             if (postContent.story == null || postContent.message == null)
                             {
                                 data[i].PostContent = TruncateLongString(postContent.story + postContent.message, 40);
@@ -83,7 +85,7 @@ namespace ShopManager.Controllers
                             {
                                 dynamic paramFB = new ExpandoObject();
                                 paramFB.fields = "from,id,message,story";
-                                commentContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].Id).ToString());
+                                commentContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].Id, paramFB).ToString());
                                 if (commentContent.Length != 0)
                                 {
                                     data[i].CommentContent = TruncateLongString(commentContent.message, 40);
@@ -213,7 +215,7 @@ namespace ShopManager.Controllers
         }
 
         //ANDND Set comment is read
-        public JsonResult SetIsRead(string commentId)
+        public JsonResult SetCommentIsRead(string commentId)
         {
             string shopId = (string) Session["ShopId"];
             var result = commentService.SetIsRead(commentId);
@@ -222,9 +224,15 @@ namespace ShopManager.Controllers
         }
 
         //ANDND Set comment Intent
-        public JsonResult SetIntent(string commentId, int intentId)
+        public JsonResult SetCommentIntent(string commentId, int intentId)
         {
             return Json(commentService.SetIntent(commentId, intentId), JsonRequestBehavior.AllowGet);
+        }
+
+        //ANDND Set comment Intent
+        public JsonResult SetPostIntent(string postId, int intentId)
+        {
+            return Json(postService.SetIntent(postId, intentId), JsonRequestBehavior.AllowGet);
         }
 
         //Delete a comment
@@ -342,7 +350,8 @@ namespace ShopManager.Controllers
         //ANDND Set post is read
         public JsonResult SetPostIsRead(string postId)
         {
-            return Json(postService.SetPostIsRead(postId), JsonRequestBehavior.AllowGet);
+            var rs = postService.SetPostIsRead(postId);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SetCommentStatus(string commentId, int statusId)
@@ -370,10 +379,10 @@ namespace ShopManager.Controllers
             var shopId = (string)Session["ShopId"];
             if (divideNumber > 1 && endDate >= startDate && endDate != null && startDate != null)
             {
-                double start = (startDate - new DateTime(1970, 1, 1)).TotalMilliseconds;
-                double end = (endDate - new DateTime(1970, 1, 1)).TotalMilliseconds;
-                double period = (end - start)/divideNumber;
-
+                double start = (startDate - new DateTime(1970, 1, 1)).TotalSeconds;
+                double end = (endDate - new DateTime(1970, 1, 1)).TotalSeconds;
+                double period = (end - start) / divideNumber;
+                Debug.WriteLine("start: " + start + "end: " + end + "period:" + period);
 
                 List<AnalysisDataForCharViewModel> listdata = new List<AnalysisDataForCharViewModel>();
                 AnalysisDataForCharViewModel model;
@@ -393,12 +402,247 @@ namespace ShopManager.Controllers
                 var data = commentService.GetAnalysisDataByTime(shopId, intentId, status, isRead, startDate, endDate);
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
+
+        }
+
+        // Get Post by Time
+        public JsonResult GetPostByTime(JQueryDataTableParamModel param, DateTime? startDate, DateTime? endDate)
+        {
+            var shopId = (string)Session["ShopId"];
+            var listPost = postService.GetPostByTime(param, shopId, startDate, endDate);
+            var totalRecords = listPost.Count();
+            var data = listPost.Skip(param.iDisplayStart).Take(param.iDisplayLength).ToList();
+            var displayRecords = data.Count();
+
+            ShopViewModel shop = shopService.GetShop(shopId);
+
+            if (shop != null)
+            {
+                FacebookClient fbApp = new FacebookClient(shop.FbToken);
+                dynamic postContent;
+                dynamic fbUser;
+                Customer registedCustomer;
+
+                List<AnalysisPostViewModel> listModel = new List<AnalysisPostViewModel>();
+                AnalysisPostViewModel model;
+
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    model = new AnalysisPostViewModel();
+                    model.PostId = data[i].Id;
+                    try
+                    {
+                        //Get Post Information
+                        dynamic paramFB = new ExpandoObject();
+                        paramFB.locale = "vi_VI";
+                        paramFB.fields = "from,id,message,story,likes.summary(true),comments.summary(true),shares";
+                        postContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].Id, paramFB).ToString());
+                        if (postContent.story == null || postContent.message == null)
+                        {
+                            model.PostContent = TruncateLongString(postContent.story + postContent.message, 40);
+                        }
+                        else
+                        {
+                            model.PostContent = TruncateLongString(postContent.story + ": " + postContent.message, 40);
+                        };
+                        if (postContent.likes != null)
+                        {
+                            model.LikeCount = postContent.likes.summary.total_count;
+                        }
+                        else
+                        {
+                            model.LikeCount = 0;
+                        }
+                        if (postContent.comments != null)
+                        {
+                            model.CommentCount = postContent.comments.summary.total_count;
+                        }
+                        else
+                        {
+                            model.CommentCount = 0;
+                        }
+                        if (postContent.shares != null)
+                        {
+                            model.ShareCount = postContent.shares.count;
+                        }
+                        else
+                        {
+                            model.ShareCount = 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        model.PostContent = "Bài đăng không tồn tại.";
+                        model.LikeCount = 0;
+                        model.CommentCount = 0;
+                        model.ShareCount = 0;
+                        Debug.WriteLine(e.Message);
+                    }
+
+                    //Get Sender Information
+                    model.SenderFBId = data[i].SenderFbId;
+                    registedCustomer = customerService.GetCustomerByFacebookId(data[i].SenderFbId, shopId);
+                    if (registedCustomer != null)
+                    {
+                        model.SenderFBName = registedCustomer.Name;
+                        model.IsCustomer = true;
+                    }
+                    else
+                    {
+                        model.IsCustomer = false;
+                        try
+                        {
+                            fbUser = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].SenderFbId).ToString());
+                            model.SenderFBName = fbUser.name;
+                        }
+                        catch (Exception ex)
+                        {
+                            model.SenderFBName = "Người dùng không tồn tại";
+                            Debug.WriteLine(ex.Message);
+                        }
+                    }
+
+                    model.ShopId = data[i].ShopId;
+                    model.Status = data[i].Status;
+                    model.IsRead = data[i].IsRead;
+                    model.IntentId = data[i].IntentId;
+                    if (data[i].IntentId != null)
+                    {
+                        model.IntentName = intentService.GetIntentNameById(data[i].IntentId);
+                    }
+                    listModel.Add(model);
+
+                }
+
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = totalRecords,
+                    iTotalDisplayRecords = totalRecords,//displayRecords,
+                    aaData = listModel
+                }, JsonRequestBehavior.AllowGet);
+            }else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
             
+        }
+
+        //ANDND Hide a post by comment id
+        public JsonResult HidePost(string[] PostId, bool isHide)
+        {
+            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+            FacebookClient fbApp = new FacebookClient(accessToken);
+            dynamic param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.is_hidden = isHide;
+            List<string> hideFailed = new List<string>();
+            Post post;
+            for (int i = 0; i < PostId.Length; i++)
+            {
+                post = new Post();
+                post = postService.GetPostById(PostId[i]);
+                if (post != null)
+                {
+                    var status = post.Status;
+                    if (isHide)
+                    {
+                        if (status == (int)CommentStatus.SHOWING || status == (int)CommentStatus.WARNING || status == (int)CommentStatus.APPROVED)
+                        {
+                            try
+                            {
+                                dynamic result = fbApp.Post(PostId[i], param);
+                                if (result.success)
+                                {
+                                    bool rs;
+                                    rs = postService.SetStatus(PostId[i], (int)CommentStatus.HIDDEN);
+                                    if (!rs)
+                                    {
+                                        hideFailed.Add(PostId[i]);
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine(e.StackTrace);
+                                hideFailed.Add(PostId[i]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (status == (int)CommentStatus.HIDDEN)
+                        {
+                            try
+                            {
+                                dynamic result = fbApp.Post(PostId[i], param);
+                                if (result.success)
+                                {
+                                    bool rs;
+                                    rs = postService.SetStatus(PostId[i], (int)CommentStatus.APPROVED);
+                                    if (!rs)
+                                    {
+                                        hideFailed.Add(PostId[i]);
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine(e.StackTrace);
+                                hideFailed.Add(PostId[i]);
+                            }
+                        }
+                    }
+                }
+
+            };
+            return Json(new { totalPost = PostId.Length, errorNumber = hideFailed.Count() }, JsonRequestBehavior.AllowGet);
+        }
+
+        //Delete a post
+        public JsonResult DeletePost(string[] PostId)
+        {
+            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+            FacebookClient fbApp = new FacebookClient(accessToken);
+            List<string> deleteFailed = new List<string>();
+            Post post;
+            for (int i = 0; i < PostId.Length; i++)
+            {
+                post = new Post();
+                post = postService.GetPostById(PostId[i]);
+                if (post != null)
+                {
+                    var status = post.Status;
+                    if (status == (int)CommentStatus.SHOWING || status == (int)CommentStatus.HIDDEN || status == (int)CommentStatus.WARNING || status == (int)CommentStatus.APPROVED)
+                    {
+                        try
+                        {
+                            dynamic result = fbApp.Delete(PostId[i]);
+                            if (result.success)
+                            {
+                                var rs = postService.SetStatus(PostId[i], (int)CommentStatus.DELETED);
+                                if (!rs)
+                                {
+                                    deleteFailed.Add(PostId[i]);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            deleteFailed.Add(PostId[i]);
+                            Debug.WriteLine(e.StackTrace);
+                        }
+                    }
+                }
+            }
+
+            return Json(new { totalPost = PostId.Length, errorNumber = deleteFailed.Count() }, JsonRequestBehavior.AllowGet);
+
         }
 
         public static DateTime ConvertDoubleToDatetime(double timestamp)
         {
-            TimeSpan time = TimeSpan.FromMilliseconds(timestamp);
+            TimeSpan time = TimeSpan.FromSeconds(timestamp);
             DateTime date = new DateTime(1970, 1, 1) + time;
             return date;
         }
