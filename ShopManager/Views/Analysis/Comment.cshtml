@@ -19,11 +19,11 @@
                 <div class="row">
                     <div class="col-sm-2 m-b-xs">
                         <label class="font-noraml">Mục đích</label>
-                        <select id="intentDDL" class="input-sm form-control input-s-sm inline"></select>
+                        <select id="intentCommentTable" class="input-sm form-control input-s-sm inline"></select>
                     </div>
                     <div class="col-sm-2 m-b-xs">
                         <label class="font-noraml">Trạng thái</label>
-                        <select id="statusDDL" class="input-sm form-control input-s-sm inline">
+                        <select id="statusCommentTable" class="input-sm form-control input-s-sm inline">
                             <option value="">Tất cả</option>
                             <option value="1">Đang hiển thị</option>
                             <option value="2">Đang cảnh báo</option>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-sm-1 m-b-xs">
                         <label class="font-noraml">Đã đọc</label>
-                        <select id="isReadDDL" class="input-sm form-control input-s-sm inline">
+                        <select id="isReadCommentTable" class="input-sm form-control input-s-sm inline">
                             <option value="">Tất cả</option>
                             <option value="true">Đã đọc</option>
                             <option value="false">Chưa đọc</option>
@@ -44,9 +44,9 @@
                         <div class="form-group" id="dateRange">
                             <label class="font-noraml">Thời gian</label>
                             <div class="input-daterange input-group" id="datepicker">
-                                <input type="text" id="startDateCommentTbl" class="input-sm form-control" name="start" value="" readonly>
+                                <input type="text" id="startDateCommentTable" class="input-sm form-control" name="start" value="" readonly>
                                 <span class="input-group-addon">to</span>
-                                <input type="text" id="endDateCommentTbl" class="input-sm form-control" name="end" value="" readonly>
+                                <input type="text" id="endDateCommentTable" class="input-sm form-control" name="end" value="" readonly>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="ibox-content">
                                 <div>
-                                    <div id="stocked"></div>
+                                    <div id="stockedChart"></div>
                                 </div>
                             </div>
 
@@ -87,7 +87,7 @@
                     <table class="table table-bordered table-hover" id="tblAnalysisByComment" style="width:100%">
                         <thead>
                             <tr>
-                                <th><input id="checkAll" type="checkbox" onchange="checkAllComment()"></th>
+                                <th><input id="checkAllCommentTable" type="checkbox" onchange="selectAllComment()"></th>
                                 <th>Bình luận</th>
                                 <th>Bài đăng</th>
                                 <th>Người đăng</th>
@@ -138,9 +138,9 @@
                         <div class="form-group" id="dateRange">
                             <label class="font-noraml">Thời gian</label>
                             <div class="input-daterange input-group" id="datepicker">
-                                <input type="text" id="startDateUserTbl" class="input-sm form-control" name="start" value="" readonly>
+                                <input type="text" id="startDateUserTable" class="input-sm form-control" name="start" value="" readonly>
                                 <span class="input-group-addon">to</span>
-                                <input type="text" id="endDateUserTbl" class="input-sm form-control" name="end" value="" readonly>
+                                <input type="text" id="endDateUserTable" class="input-sm form-control" name="end" value="" readonly>
                             </div>
                         </div>
                     </div>
@@ -183,8 +183,78 @@
     </div>
 </div>
 <!--./Table Analysis comment by user-->
-<!--Modal User detail-->
-<div class="modal inmodal fade" id="userDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+<!--Table Analysis Post by Page-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Thống kê bài đăng của bạn</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-3 m-b-xs">
+                        <div class="form-group" id="dateRange">
+                            <label class="font-noraml">Thời gian</label>
+                            <div class="input-daterange input-group" id="datepicker">
+                                <input type="text" id="startDateAnalysisPostByPage" class="input-sm form-control" name="start" value="" readonly>
+                                <span class="input-group-addon">to</span>
+                                <input type="text" id="endDateAnalysisPostByPage" class="input-sm form-control" name="end" value="" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-sm-offset-7 m-b-xs">
+                        <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterPostTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterPostTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                    </div>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover" id="tblAnalysisPostByPage" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th><input id="checkAllPostTbl" type="checkbox" onchange="checkAllPost()"></th>
+                                <th>Bài đăng</th>
+                                <th>Người đăng</th>
+                                <th>Thích</th>
+                                <th>Chia sẻ</th>
+                                <th>Bình luận</th>
+                                <th>Mục đích</th>
+                                <th>Trạng thái</th>
+                                <th>Đã đọc</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>Bài đăng</th>
+                                <th>Người đăng</th>
+                                <th>Thích</th>
+                                <th>Chia sẻ</th>
+                                <th>Bình luận</th>
+                                <th>Mục đích</th>
+                                <th>Trạng thái</th>
+                                <th>Đã đọc</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./Table Analysis Post by Page-->
+<!--Modal User comment detail-->
+<div class="modal inmodal fade" id="tblUserCommentDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="width:80%">
         <div class="modal-content">
             <div class="modal-header">
@@ -197,9 +267,9 @@
                         <div class="btn-group" style="margin-top:22px">
                             <button id="selectAllButtonUserCommentDetail" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Đã chọn 0 bình luận &nbsp;<span class="caret"></span></button>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0)" onclick="hideAllCommentDetailTbl(true)">Ẩn những bình luận đã chọn</a></li>
-                                <li><a href="javascript:void(0)" onclick="hideAllCommentDetailTbl(false)">Bỏ ẩn những bình luận đã chọn</a></li>
-                                <li><a href="javascript:void(0)" onclick="deleteAllCommentDetailTbl()">Xóa những comment đã chọn</a></li>
+                                <li><a href="javascript:void(0)" onclick="hideAllCommentDetail(true)">Ẩn những bình luận đã chọn</a></li>
+                                <li><a href="javascript:void(0)" onclick="hideAllCommentDetail(false)">Bỏ ẩn những bình luận đã chọn</a></li>
+                                <li><a href="javascript:void(0)" onclick="deleteAllCommentDetail()">Xóa những comment đã chọn</a></li>
                             </ul>
                         </div>
                     </div>
@@ -238,7 +308,7 @@
                     <table class="table table-bordered table-hover" id="tblUserCommentDetail" style="width:100%">
                         <thead>
                             <tr>
-                                <th><input id="checkAllCommentTable" type="checkbox" onchange="checkAllCommentDetailTbl()"></th>
+                                <th><input id="checkAllCommentDetailTable" type="checkbox" onchange="checkAllCommentDetailTbl()"></th>
                                 <th>Bình luận</th>
                                 <th>Bài đăng</th>
                                 <th>Mục đích</th>
@@ -279,19 +349,9 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Đóng</span></button>
                 <h4 class="modal-title">Thông tin người dùng</h4>
-                <small class="font-bold">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
             </div>
             <div class="modal-body">
-                <p>
-                    <strong>Lorem Ipsum is simply dummy</strong> text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged.
-                </p>
-                <p>
-                    <strong>Lorem Ipsum is simply dummy</strong> text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged.
-                </p>
+                <p>Abc</p>
             </div>
 
             <div class="modal-footer">
@@ -324,28 +384,30 @@
 
     @Scripts.Render("~/C3Chart-JS")
     <script>
+        // Get firstday of month and current day
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
         var yyyy = today.getFullYear();
-
         if (dd < 10) {
             dd = '0' + dd
         }
-
         if (mm < 10) {
             mm = '0' + mm
         }
-
         today = yyyy + '/' + mm + '/' + dd;
         var firstDay = yyyy + '/' + mm + '/' + '01';
 
-        $('#startDateCommentTbl').attr("value", firstDay);
-        $('#endDateCommentTbl').attr("value", today);
-        $('#startDateUserTbl').attr("value", firstDay);
-        $('#endDateUserTbl').attr("value", today);
-        $('#startDateChart').attr("value", firstDay);
-        $('#endDateChart').attr("value", today);
+        //Set first day and current day to date picker
+        //Comment table
+        $('#startDateCommentTable').attr("value", firstDay);
+        $('#endDateCommentTable').attr("value", today);
+        //User table
+        $('#startDateUserTable').attr("value", firstDay);
+        $('#endDateUserTable').attr("value", today);
+
+        $('#startDateAnalysisPostByPage').attr("value", firstDay);
+        $('#endDateAnalysisPostByPage').attr("value", today);
 
     </script>
     @Scripts.Render("~/Data-picker-JS")
@@ -359,12 +421,14 @@
         });
         var listSelectedComment = [];
         var listSelectedCommentDetailTable = [];
+        var listSelectedPost = [];
         var statusArray = ["Đang hiện", "Cảnh báo", "Đã ẩn", "Đã duyệt", "Đã xóa"];
         var listIntent;
         //Datatable
         var commentDataTable;
         var userDataTable;
         var userCommentDetailDataTable;
+        var postDataTable;
 
         var languageConfig = {
             "oPaginate": {
@@ -401,26 +465,28 @@
             "hideMethod": "fadeOut"
         }
         $(document).ready(function () {
+            //Load Chart
             GetPieChartData();
             GetStackChartData();
-            
+            //Load Intent dropdown list
             loadIntent();
             //Comment Table
             commentDataTable = $('#tblAnalysisByComment').DataTable({
                 "iDisplayLength": 10,
-                "bProcessing": true, "bServerSide": true,
+                "bProcessing": true,
+                "bServerSide": true,
                 "sAjaxSource": "/Analysis/GetCommentByShopAndCondition",
                 "fnServerParams": function (aoData) {
                     aoData.push({ "name": "fbId", "value": null });
-                    aoData.push({ "name": "intentId", "value": $('#intentDDL').val() });
-                    aoData.push({ "name": "status", "value": $('#statusDDL').val() });
-                    aoData.push({ "name": "isRead", "value": $('#isReadDDL').val() });
-                    aoData.push({ "name": "startDate", "value": $('#startDateCommentTbl').val() });
-                    aoData.push({ "name": "endDate", "value": $('#endDateCommentTbl').val().concat(" 23:59:59.000") });
+                    aoData.push({ "name": "intentId", "value": $('#intentCommentTable').val() });
+                    aoData.push({ "name": "status", "value": $('#statusCommentTable').val() });
+                    aoData.push({ "name": "isRead", "value": $('#isReadCommentTable').val() });
+                    aoData.push({ "name": "startDate", "value": $('#startDateCommentTable').val() });
+                    aoData.push({ "name": "endDate", "value": $('#endDateCommentTable').val().concat(" 23:59:59.000") });
                 },
-                "sDom": 'l<"tool">rtip',
+                "sDom": 'l<"CommentToolbar">rtip',
                 "aoColumnDefs": [
-                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='checkBoxChecked(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
+                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='selectRowCommentTable(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [2], "width": "15%" },
                         {
@@ -435,7 +501,7 @@
                         },
                         {
                             "mData": function (source) {
-                                var rs = "<select class='input-sm' onchange='setIntent(\"" + source.Id + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
+                                var rs = "<select class='input-sm' onchange='setCommentIntent(\"" + source.Id + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
                                 for (var i = 0; i < listIntent.length; i++) {
                                     if (listIntent[i].Id != source.IntentId) {
                                         rs = rs + "<option value='" + (i + 1) + "'>" + listIntent[i].IntentName + "</option>";
@@ -473,24 +539,25 @@
                 },
                 oLanguage: languageConfig
             })
-            $("div.tool").html("<div class='col-sm-2'>" +
+            $("div.CommentToolbar").html("<div class='col-sm-2'>" +
                         "<div class='btn-group'>" +
-                            "<button id='selectAllButton' data-toggle='dropdown' class='btn btn-default dropdown-toggle'>Đã chọn 0 bình luận&nbsp;<span class='caret'></span></button>" +
+                            "<button id='selectAllCommentTable' data-toggle='dropdown' class='btn btn-default dropdown-toggle'>Đã chọn 0 bình luận&nbsp;<span class='caret'></span></button>" +
                             "<ul class='dropdown-menu'>" +
                                 "<li><a href='javascript:void(0)' onclick='hideAllComment(true)'>Ẩn những bình luận đã chọn</a></li>" +
                                 "<li><a href='javascript:void(0)' onclick='hideAllComment(false)'>Bỏ ẩn những bình luận đã chọn</a></li>" +
-                                "<li><a href='javascript:void(0)' onclick='deleteAllComment()'>Xóa những comment đã chọn</a></li>" +
+                                "<li><a href='javascript:void(0)' onclick='deleteAllComment()'>Xóa những bình luận đã chọn</a></li>" +
                             "</ul>" +
                         "</div>" +
                     "</div>");
             //User Table
             userDataTable = $('#tblAnalysisByUser').DataTable({
                 "iDisplayLength": 10,
-                "bProcessing": true, "bServerSide": true,
+                "bProcessing": true,
+                "bServerSide": true,
                 "sAjaxSource": "/Analysis/GetUserList",
                 "fnServerParams": function (aoData) {
-                    aoData.push({ "name": "startDate", "value": $('#startDateUserTbl').val() });
-                    aoData.push({ "name": "endDate", "value": $('#endDateUserTbl').val().concat(" 23:59:59.000") });
+                    aoData.push({ "name": "startDate", "value": $('#startDateUserTable').val() });
+                    aoData.push({ "name": "endDate", "value": $('#endDateUserTable').val().concat(" 23:59:59.000") });
                 },
                 "sDom": 'lrtip',
                 "aoColumnDefs": [
@@ -531,7 +598,99 @@
                 oLanguage: languageConfig
             })
 
-
+            postDataTable = $('#tblAnalysisPostByPage').DataTable({
+                "iDisplayLength": 10,
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "/Analysis/GetPostByTime",
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "startDate", "value": $('#startDateAnalysisPostByPage').val() });
+                    aoData.push({ "name": "endDate", "value": $('#endDateAnalysisPostByPage').val().concat(" 23:59:59.000") });
+                },
+                "sDom": 'l<"PostToolBar">rtip',
+                "aoColumnDefs": [
+                        {
+                            "mData": function (source) {
+                                if (source.IntentId != null) {
+                                    return "<input type='checkbox' value='" + source.PostId + "' onchange='checkBoxCheckedPostTbl(this)'>"
+                                } else {
+                                    return null;
+                                }
+                            }, "aTargets": [0], "width": "1%", "bSortable": false
+                        },
+                        {
+                            "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [1], width: "15%"
+                        },
+                        {
+                            "mData": function (source) {
+                                var rs = "<a href='https://www.facebook.com/" + source.SenderFBId + "' target='_blank'>" + source.SenderFBName + "</a>";
+                                if (source.IsCustomer == true) {
+                                    rs = rs + " (Khách hàng)"
+                                };
+                                return rs;
+                            }, "aTargets": [2], width: "10%"
+                        },
+                        {
+                            "mData": "LikeCount", "aTargets": [3], width: "5%"
+                        },
+                        {
+                            "mData": "ShareCount", "aTargets": [4], width: "5%"
+                        },
+                        {
+                            "mData": "CommentCount", "aTargets": [5], width: "5%"
+                        },
+                        {
+                            "mData": function (source) {
+                                if (source.IntentId != null) {
+                                    var rs = "<select class='input-sm' onchange='setPostIntent(\"" + source.PostId + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
+                                    for (var i = 0; i < listIntent.length; i++) {
+                                        if (listIntent[i].Id != source.IntentId) {
+                                            rs = rs + "<option value='" + (i + 1) + "'>" + listIntent[i].IntentName + "</option>";
+                                        }
+                                    };
+                                    rs = rs + "</select>";
+                                    return rs;
+                                } else {
+                                    return null;
+                                }
+                            }, "aTargets": [6], "width": "7%"
+                        },
+                        {
+                            "mData": function (source) { return statusArray[source.Status - 1] }, "aTargets": [7], width: "5%"
+                        },
+                        { "mData": function (source) { if (source.IsRead == true) { return "<i class='fa fa-check-square-o' style='font-size:20px'></i>" } else { return null } }, "aTargets": [8], "width": "5%" },
+                        {
+                            "mData": function (source) {
+                                var rs = "<div class='btn-group' style='height:100%'>";
+                                if (source.Status == 1 || source.Status == 4) {
+                                    rs = rs + "<button class='btn btn-sm btn-warning' onclick='hidePost(\"" + source.PostId + "\",true)'>Ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deletePost(\"" + source.PostId + "\")'>Xóa</button>";
+                                }
+                                if (source.Status == 3) {
+                                    rs = rs + "<button class='btn btn-sm btn-success' onclick='hidePost(\"" + source.PostId + "\",false)'>Bỏ ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deletePost(\"" + source.PostId + "\")'>Xóa</button>";
+                                }
+                                if (source.Status == 5) {
+                                    return null;
+                                }
+                                rs = rs + "</div>";
+                                return rs;
+                            }, "aTargets": [9], "width": "10%"
+                        },
+                ],
+                "fnInitComplete": function (oSetting, json) {
+                    $('#tblAnalysisByUser').removeAttr("style");
+                },
+                oLanguage: languageConfig
+            })
+            $("div.PostToolBar").html("<div class='col-sm-2'>" +
+                        "<div class='btn-group'>" +
+                            "<button id='selectAllButtonPostTbl' data-toggle='dropdown' class='btn btn-default dropdown-toggle'>Đã chọn 0 bài đăng&nbsp;<span class='caret'></span></button>" +
+                            "<ul class='dropdown-menu'>" +
+                                "<li><a href='javascript:void(0)' onclick='hideAllPost(true)'>Ẩn những bài đăng đã chọn</a></li>" +
+                                "<li><a href='javascript:void(0)' onclick='hideAllPost(false)'>Bỏ ẩn những bài đăng đã chọn</a></li>" +
+                                "<li><a href='javascript:void(0)' onclick='deleteAllPost()'>Xóa những bài đăng đã chọn</a></li>" +
+                            "</ul>" +
+                        "</div>" +
+                    "</div>");
         })
         $('#dateRange .input-daterange').datepicker({
             keyboardNavigation: false,
@@ -540,60 +699,155 @@
             format: "yyyy/mm/dd"
         });
 
+        //Get pie chart data
+        function GetPieChartData() {
+            $.ajax({
+                url: "/Analysis/GetAnalysisDataByTime",
+                data: {
+                    intentId: $('#intentCommentTable').val(),
+                    status: $('#statusCommentTable').val(),
+                    isRead: $('#isReadCommentTable').val(),
+                    startDate: $('#startDateCommentTable').val(),
+                    endDate: $('#endDateCommentTable').val().concat(" 23:59:59.000"),
+                    divideNumber: 1
+                },
+                dataType: "json",
+                type: "post",
+                success: function (result) {
+                    var dataForPie = [];
+                    for (var i = 0; i < result.length; i++) {
+                        dataForPie.push([result[i].IntentName, result[i].CommentNumber]);
+                    };
+                    c3.generate({
+                        bindto: '#pieChart',
+                        data: {
+                            columns: dataForPie,
+                            type: 'pie'
+                        },
+                        pie: {
+                            label: {
+                                format: function (value, ratio, id) {
+                                    return (value);
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function () {
+                    console.log("Get data for pie char error");
+                }
+            })
+        }
+
+        //Get stack chart data
+        function GetStackChartData() {
+            $.ajax({
+                url: "/Analysis/GetAnalysisDataByTime",
+                data: {
+                    intentId: $('#intentCommentTable').val(),
+                    status: $('#statusCommentTable').val(),
+                    isRead: $('#isReadCommentTable').val(),
+                    startDate: $('#startDateCommentTable').val(),
+                    endDate: $('#endDateCommentTable').val().concat(" 23:59:59.000"),
+                    divideNumber: 8
+                },
+                dataType: "json",
+                type: "post",
+                success: function (result) {
+                    var dataStack = [];
+                    var title = [];
+                    var TimeCategory = [];
+                    for (var i = 0; i < result[0].ListData.length; i++) {
+                        title.push(result[0].ListData[i].IntentName);
+                    }
+                    dataStack.push(title);
+                    for (var j = 0; j < result.length; j++) {
+                        TimeCategory.push(FormatDateVN(result[j].Time))
+                        var dataRow = [];
+                        for (var i = 0; i < result[j].ListData.length; i++) {
+                            dataRow.push(result[j].ListData[i].CommentNumber);
+                        }
+                        dataStack.push(dataRow);
+                    }
+                    c3.generate({
+                        bindto: '#stockedChart',
+                        data: {
+                            rows: dataStack,
+                        },
+                        axis: {
+                            x: {
+                                type: 'category',
+                                categories: TimeCategory
+                            }
+                        }
+                    });
+                },
+                error: function () {
+                    console.log("Get data for bar char error");
+                }
+            })
+        }
+
+        //Function for Comment table
         //Fileter Comment Table
         function filterCommentTable(loadFromStart) {
             listSelectedComment = [];
+            $('#selectAllCommentTable').empty();
+            $('#selectAllCommentTable').append("Đã chọn " + listSelectedComment.length + " bình luận&nbsp; <span class='caret'></span>");
             if (loadFromStart == true) {
-                $('#selectAllButton').empty();
-                $('#selectAllButton').append("Đã chọn " + listSelectedComment.length + " bình luận&nbsp; <span class='caret'></span>");
                 commentDataTable.ajax.reload();
             } else {
-                $('#selectAllButton').empty();
-                $('#selectAllButton').append("Đã chọn " + listSelectedComment.length + " bình luận&nbsp; <span class='caret'></span>");
                 commentDataTable.ajax.reload(null, false);
             }
-
         }
 
-        //Filter User table
-        function filterUserTable(loadFromStart) {
-            if (loadFromStart == true) {
-                userDataTable.ajax.reload();
+        //Check all comment
+        function selectAllComment() {
+            $('#selectAllCommentTable').empty();
+            if ($('#checkAllCommentTable').is(':checked')) {
+                listSelectedComment.splice(0, listSelectedComment.length);
+                $('#tblAnalysisByComment').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().addClass("active");
+                    $(this).prop('checked', true);
+                    listSelectedComment.push($(this).val());
+                });
             } else {
-                userDataTable.ajax.reload(null, false);
+                listSelectedComment.splice(0, listSelectedComment.length);
+                $('#tblAnalysisByComment').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().removeClass("active");
+                    $(this).prop('checked', false);
+                });
             }
-
+            $('#selectAllCommentTable').append("Đã chọn " + listSelectedComment.length + " bình luận &nbsp;<span class='caret'></span>");
+            console.log(listSelectedComment);
         }
 
-        //Filter User detail table
-        function filterUserDetailTable(loadFromStart) {
-            listSelectedCommentDetailTable = [];
-            if (loadFromStart == true) {
-                if (userCommentDetailDataTable != null) {
-                    $('#selectAllButtonUserCommentDetail').empty();
-                    $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận&nbsp; <span class='caret'></span>");
-                    userCommentDetailDataTable.ajax.reload();
-                }
+        //Selected comment
+        function selectRowCommentTable(checkbox) {
+            if ($('#checkAllCommentTable').is(':checked')) {
+                $('#checkAllCommentTable').prop('checked', false);
+            }
+            if ($(checkbox).is(':checked')) {
+                $(checkbox).closest("tr").addClass("active");
+                listSelectedComment.push(checkbox.value);
+                console.log(listSelectedComment);
             } else {
-                if (userCommentDetailDataTable != null) {
-                    $('#selectAllButtonUserCommentDetail').empty();
-                    $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận&nbsp; <span class='caret'></span>");
-                    userCommentDetailDataTable.ajax.reload(null, false);
+                $(checkbox).closest("tr").removeClass("active");
+                for (var i = 0; i < listSelectedComment.length; i++) {
+                    if (listSelectedComment[i] == checkbox.value) {
+                        listSelectedComment.splice(i, 1);
+                    }
                 }
+                console.log(listSelectedComment);
             }
-
-        }
-
-        function FormatDateVN(date) {
-            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
-            var d = new Date(parseInt(milli));
-            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+            $('#selectAllCommentTable').empty();
+            $('#selectAllCommentTable').append("Đã chọn " + listSelectedComment.length + " bình luận &nbsp;<span class='caret'></span>");
         }
 
         //Set Commnet is read
         function setCommentIsRead(commentId) {
             $.ajax({
-                url: "/Analysis/SetIsRead",
+                url: "/Analysis/SetCommentIsRead",
                 dataType: "json",
                 type: "post",
                 data: { commentId: commentId },
@@ -604,13 +858,10 @@
                         if (userCommentDetailDataTable != null) {
                             userCommentDetailDataTable.ajax.reload(null, false);
                         }
-                    } else {
-                        alert(data)
                     }
-
                 },
                 error: function () {
-                    alert("Set status failed!");
+                    console.log("Set comment is read failed!");
                 }
             })
         }
@@ -625,50 +876,22 @@
                 success: function (data) {
                     if (data == true) {
                         commentDataTable.ajax.reload(null, false);
-                        userDataTable.ajax.reload(null, false);
+                        postDataTable.ajax.reload(null, false);
                         if (userCommentDetailDataTable != null) {
                             userCommentDetailDataTable.ajax.reload(null, false);
                         }
-                    } else {
-                        alert(data)
                     }
-
                 },
                 error: function () {
-                    alert("Set status failed!");
+                    console.log("Set post is read fail failed!");
                 }
             })
         }
 
-        //Load Intent
-        function loadIntent() {
+        //Set comment intent onchange
+        function setCommentIntent(commentId, intentList) {
             $.ajax({
-                url: "/Analysis/GetAllIntent",
-                dataType: "json",
-                type: "post",
-                async: false,
-                success: function (data) {
-                    listIntent = data;
-                    $('#intentDDL').empty();
-                    $('#intentDDL').append("<option value='all'>Tất cả</option>");
-                    $('#userCommentDetailIntentDDL').empty();
-                    $('#userCommentDetailIntentDDL').append("<option value='all'>Tất cả</option>");
-                    for (var i = 0; i < data.length; i++) {
-                        $('#userCommentDetailIntentDDL').append("<option value='" + data[i].Id + "'>" + data[i].IntentName + "</option>");
-                        $('#intentDDL').append("<option value='" + data[i].Id + "'>" + data[i].IntentName + "</option>");
-                    }
-                },
-                error: function () {
-                    $('#intentDDL').empty();
-                    $('#userCommentDetailIntentDDL').empty();
-                }
-            })
-        }
-
-        //Set intent onchange
-        function setIntent(commentId, intentList) {
-            $.ajax({
-                url: "/Analysis/SetIntent",
+                url: "/Analysis/SetCommentIntent",
                 dataType: "json",
                 type: "post",
                 data: {
@@ -677,6 +900,8 @@
                 },
                 type: "post",
                 success: function (data) {
+                    GetPieChartData();
+                    GetStackChartData();
                     toastr.success("Cập nhật thành công");
                 },
                 error: function () {
@@ -707,16 +932,22 @@
                         },
                         type: "post",
                         success: function (data) {
-                            swal({
-                                title: "Đã xóa!",
-                                text: "Đã xóa bình luận thành công",
-                                timer: 2000,
-                                type: "success"
-                            });
-                            commentDataTable.ajax.reload(null, false);
-                            userDataTable.ajax.reload(null, false);
-                            if (userCommentDetailDataTable != null) {
-                                userCommentDetailDataTable.ajax.reload(null, false);
+                            if (data.errorNumber == 0) {
+                                commentDataTable.ajax.reload(null, false);
+                                userDataTable.ajax.reload(null, false);
+                                swal({
+                                    title: "Đã xóa!",
+                                    text: "Đã xóa bình luận thành công",
+                                    timer: 2000,
+                                    type: "success"
+                                });
+                            } else {
+                                swal({
+                                    title: "Thất bại!",
+                                    text: "Xóa bình luận thất bại",
+                                    timer: 2000,
+                                    type: "error"
+                                });
                             }
                         },
                         error: function () {
@@ -754,65 +985,9 @@
                         },
                         type: "post",
                         success: function (data) {
-                            console.log(data.totalComment);
-                            console.log(data.errorNumber);
-                            if (data.errorNumber == 0 || data.errorNumber == "undefined") {
-                                swal({
-                                    title: "Đã xóa!",
-                                    text: "Xóa " + data.totalComment + " bình luận thành công",
-                                    timer: 2000,
-                                    type: "success"
-                                });
-                            } else {
-                                swal({
-                                    title: "Thất bại!",
-                                    text: data.errorNumber + " bình luận chưa được xóa",
-                                    timer: 2000,
-                                    type: "error"
-                                });
-                            }
                             commentDataTable.ajax.reload(null, false);
                             userDataTable.ajax.reload(null, false);
-                            if (userCommentDetailDataTable != null) {
-                                userCommentDetailDataTable.ajax.reload(null, false);
-                            }
                             listSelectedComment = [];
-                        },
-                        error: function () {
-                            swal({
-                                title: "Thất bại!",
-                                text: data.errorNumber + " bình luận chưa được xóa",
-                                timer: 2000,
-                                type: "error"
-                            });
-                        }
-                    })
-                }
-            })
-        }
-
-        function deleteAllCommentDetailTbl() {
-            swal({
-                title: "Bạn có chắc chắn xóa các bình luận?",
-                text: "Bạn không thể khôi phục sau khi xóa!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Xóa",
-                closeOnConfirm: false
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    $.ajax({
-                        url: "/Analysis/DeleteComment",
-                        dataType: "json",
-                        type: "post",
-                        data: {
-                            commentId: listSelectedCommentDetailTable
-                        },
-                        type: "post",
-                        success: function (data) {
-                            console.log(data.totalComment);
-                            console.log(data.errorNumber);
                             if (data.errorNumber == 0 || data.errorNumber == "undefined") {
                                 swal({
                                     title: "Đã xóa!",
@@ -828,14 +1003,11 @@
                                     type: "error"
                                 });
                             }
-                            commentDataTable.ajax.reload(null, false);
-                            userDataTable.ajax.reload(null, false);
-                            if (userCommentDetailDataTable != null) {
-                                userCommentDetailDataTable.ajax.reload(null, false);
-                            }
-                            listSelectedCommentDetailTable = [];
                         },
                         error: function () {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
+                            listSelectedComment = [];
                             swal({
                                 title: "Thất bại!",
                                 text: data.errorNumber + " bình luận chưa được xóa",
@@ -846,10 +1018,9 @@
                     })
                 }
             })
-
         }
 
-        //Hide / Unhide Comment by Id
+        //Hide / Unhide a Comment by Id
         function hideComment(commentId, isHide) {
             $.ajax({
                 url: "/Analysis/HideComment",
@@ -861,10 +1032,10 @@
                 },
                 type: "post",
                 success: function (data) {
-                    console.log(data.hideSuccess);
-                    console.log(data.errorNumber);
                     if (isHide) {
                         if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
                             swal({
                                 title: "Đã ẩn!",
                                 text: "Ẩn bình luận thành công",
@@ -881,6 +1052,8 @@
                         }
                     } else {
                         if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
                             swal({
                                 title: "Đã bỏ ẩn!",
                                 text: "Bỏ ẩn bình luận thành công",
@@ -896,12 +1069,6 @@
                             });
                         }
                     }
-                    commentDataTable.ajax.reload(null, false);
-                    userDataTable.ajax.reload(null, false);
-                    if (userCommentDetailDataTable != null) {
-                        userCommentDetailDataTable.ajax.reload(null, false);
-                    }
-
                 },
                 error: function () {
                     if (isHide) {
@@ -936,84 +1103,9 @@
                 },
                 type: "post",
                 success: function (data) {
-                    console.log(data.totalComment);
-                    console.log(data.errorNumber);
-                    if (isHide) {
-                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
-                            swal({
-                                title: "Thành công!",
-                                text: "Ẩn " + data.totalComment + " bình luận thành công",
-                                timer: 2000,
-                                type: "success"
-                            });
-                        } else {
-                            swal({
-                                title: "Thất bại!",
-                                text: data.errorNumber + " bình luận chưa được ẩn",
-                                timer: 2000,
-                                type: "error"
-                            });
-                        }
-                    } else {
-                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
-                            swal({
-                                title: "Thành công!",
-                                text: "Bỏ ẩn " + data.totalComment + " bình luận thành công",
-                                timer: 2000,
-                                type: "success"
-                            });
-                        } else {
-                            swal({
-                                title: "Thất bại!",
-                                text: data.errorNumber + " bình luận chưa được bỏ ẩn",
-                                timer: 2000,
-                                type: "error"
-                            });
-                        }
-                    }
                     commentDataTable.ajax.reload(null, false);
                     userDataTable.ajax.reload(null, false);
-                    if (userCommentDetailDataTable != null) {
-                        userCommentDetailDataTable.ajax.reload(null, false);
-                    };
                     listSelectedComment = [];
-                },
-                error: function () {
-                    console.log(data.hideSuccess);
-                    console.log(data.hideError);
-                    if (isHide) {
-                        swal({
-                            title: "Thất bại!",
-                            text: data.errorNumber + " bình luận chưa được ẩn",
-                            timer: 2000,
-                            type: "error"
-                        });
-                    } else {
-                        swal({
-                            title: "Thất bại!",
-                            text: data.errorNumber + " bình luận chưa được bỏ ẩn",
-                            timer: 2000,
-                            type: "error"
-                        });
-                    }
-                }
-            })
-        }
-
-        function hideAllCommentDetailTbl(isHide) {
-            $.ajax({
-                url: "/Analysis/HideComment",
-                dataType: "json",
-                type: "post",
-                async: false,
-                data: {
-                    commentId: listSelectedCommentDetailTable,
-                    isHide: isHide
-                },
-                type: "post",
-                success: function (data) {
-                    console.log(data.totalComment);
-                    console.log(data.errorNumber);
                     if (isHide) {
                         if (data.errorNumber == 0 || data.errorNumber == "undefined") {
                             swal({
@@ -1047,16 +1139,11 @@
                             });
                         }
                     }
-                    commentDataTable.ajax.reload(null, false);
-                    userDataTable.ajax.reload(null, false);
-                    if (userCommentDetailDataTable != null) {
-                        userCommentDetailDataTable.ajax.reload(null, false);
-                    }
-                    listSelectedCommentDetailTable = [];
                 },
                 error: function () {
-                    console.log(data.hideSuccess);
-                    console.log(data.hideError);
+                    commentDataTable.ajax.reload(null, false);
+                    userDataTable.ajax.reload(null, false);
+                    listSelectedComment = [];
                     if (isHide) {
                         swal({
                             title: "Thất bại!",
@@ -1088,12 +1175,9 @@
                 },
                 type: "post",
                 success: function (data) {
-                    swal("Thành công!", "Đã chấp nhận bình luận", "success");
                     commentDataTable.ajax.reload(null, false);
                     userDataTable.ajax.reload(null, false);
-                    if (userCommentDetailDataTable != null) {
-                        userCommentDetailDataTable.ajax.reload(null, false);
-                    }
+                    swal("Thành công!", "Đã chấp nhận bình luận", "success");
                 },
                 error: function () {
                     swal("Thất bại", "Chuyển trạng thái bình luận thất bại", "error");
@@ -1101,104 +1185,28 @@
             })
         }
 
-        // Selected comment
-        function checkBoxChecked(checkbox) {
-            if ($('#checkAll').is(':checked')) {
-                $('#checkAll').prop('checked', false);
-            }
-            if ($(checkbox).is(':checked')) {
-                $(checkbox).closest("tr").addClass("active");
-                listSelectedComment.push(checkbox.value);
-                console.log(listSelectedComment);
-            } else {
-                $(checkbox).closest("tr").removeClass("active");
-                for (var i = 0; i < listSelectedComment.length; i++) {
-                    if (listSelectedComment[i] == checkbox.value) {
-                        listSelectedComment.splice(i, 1);
-                    }
-                }
-                console.log(listSelectedComment);
-            }
-            $('#selectAllButton').empty();
-            $('#selectAllButton').append("Đã chọn " + listSelectedComment.length + " bình luận &nbsp; <span class='caret'></span>");
-        }
-
-        function checkBoxCheckedDetailTbl(checkbox) {
-            if ($('#checkAllCommentTable').is(':checked')) {
-                $('#checkAllCommentTable').prop('checked', false);
-            }
-            if ($(checkbox).is(':checked')) {
-                $(checkbox).closest("tr").addClass("active");
-                listSelectedCommentDetailTable.push(checkbox.value);
-                console.log(listSelectedCommentDetailTable);
-            } else {
-                $(checkbox).closest("tr").removeClass("active");
-                for (var i = 0; i < listSelectedCommentDetailTable.length; i++) {
-                    if (listSelectedCommentDetailTable[i] == checkbox.value) {
-                        listSelectedCommentDetailTable.splice(i, 1);
-                    }
-                }
-                console.log(listSelectedCommentDetailTable);
-            }
-            $('#selectAllButtonUserCommentDetail').empty();
-            $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận &nbsp; <span class='caret'></span>");
-        }
-
         // On page change unselect check box select all
         $('#tblAnalysisByComment').on('draw.dt', function () {
-            if ($('#checkAll').is(':checked')) {
-                $('#checkAll').prop('checked', false);
-            };
-            listSelectedComment.splice(0, listSelectedComment.length);
-        });
-
-        $('#tblUserCommentDetail').on('draw.dt', function () {
             if ($('#checkAllCommentTable').is(':checked')) {
                 $('#checkAllCommentTable').prop('checked', false);
             };
             listSelectedComment.splice(0, listSelectedComment.length);
+            $('#selectAllCommentTable').empty();
+            $('#selectAllCommentTable').append("Đã chọn " + listSelectedComment.length + " bình luận &nbsp;<span class='caret'></span>");
         });
 
-        //Check all comment
-        function checkAllComment() {
-            $('#selectAllButton').empty();
-            if ($('#checkAll').is(':checked')) {
-                listSelectedComment.splice(0, listSelectedComment.length);
-                $('#tblAnalysisByComment').find("tbody > tr > td > input").each(function () {
-                    $(this).parent().parent().addClass("active");
-                    $(this).prop('checked', true);
-                    listSelectedComment.push($(this).val());
-                });
+
+        //Function for User table
+        //Filter User table
+        function filterUserTable(loadFromStart) {
+            if (loadFromStart == true) {
+                userDataTable.ajax.reload();
             } else {
-                listSelectedComment.splice(0, listSelectedComment.length);
-                $('#tblAnalysisByComment').find("tbody > tr > td > input").each(function () {
-                    $(this).parent().parent().removeClass("active");
-                    $(this).prop('checked', false);
-                });
+                userDataTable.ajax.reload(null, false);
             }
-            $('#selectAllButton').append("Đã chọn " + listSelectedComment.length + " bình luận &nbsp; <span class='caret'></span>");
-            console.log(listSelectedComment);
+
         }
 
-        function checkAllCommentDetailTbl() {
-            $('#selectAllButtonUserCommentDetail').empty();
-            if ($('#checkAllCommentTable').is(':checked')) {
-                listSelectedCommentDetailTable.splice(0, listSelectedCommentDetailTable.length);
-                $('#tblUserCommentDetail').find("tbody > tr > td > input").each(function () {
-                    $(this).parent().parent().addClass("active");
-                    $(this).prop('checked', true);
-                    listSelectedCommentDetailTable.push($(this).val());
-                });
-            } else {
-                listSelectedCommentDetailTable.splice(0, listSelectedCommentDetailTable.length);
-                $('#tblUserCommentDetail').find("tbody > tr > td > input").each(function () {
-                    $(this).parent().parent().removeClass("active");
-                    $(this).prop('checked', false);
-                });
-            }
-            $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận &nbsp; <span class='caret'></span>");
-            console.log(listSelectedCommentDetailTable);
-        }
 
         // User's comment detail
         function showUserCommentDetail(fbId) {
@@ -1210,7 +1218,8 @@
             $('#userCommentDetailIsReadDDL').prop('selectedIndex', 0);
             userCommentDetailDataTable = $('#tblUserCommentDetail').DataTable({
                 "iDisplayLength": 10,
-                "bProcessing": true, "bServerSide": true,
+                "bProcessing": true,
+                "bServerSide": true,
                 "sAjaxSource": "/Analysis/GetCommentByShopAndCondition",
                 "destroy": true,
                 "fnServerParams": function (aoData) {
@@ -1218,17 +1227,17 @@
                     aoData.push({ "name": "intentId", "value": $('#userCommentDetailIntentDDL').val() });
                     aoData.push({ "name": "status", "value": $('#userCommentDetailStatusDDL').val() });
                     aoData.push({ "name": "isRead", "value": $('#userCommentDetailIsReadDDL').val() });
-                    aoData.push({ "name": "startDate", "value": $('#startDateUserTbl').val() });
-                    aoData.push({ "name": "endDate", "value": $('#endDateUserTbl').val().concat(" 23:59:59.000") });
+                    aoData.push({ "name": "startDate", "value": $('#startDateUserTable').val() });
+                    aoData.push({ "name": "endDate", "value": $('#endDateUserTable').val().concat(" 23:59:59.000") });
                 },
                 "sDom": 'lrtip',
                 "aoColumnDefs": [
-                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='checkBoxCheckedDetailTbl(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
+                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='selectRowUserCommentDetailTable(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [2], "width": "15%" },
                         {
                             "mData": function (source) {
-                                var rs = "<select class='input-sm' onchange='setIntent(\"" + source.Id + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
+                                var rs = "<select class='input-sm' onchange='setCommentIntent(\"" + source.Id + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
                                 for (var i = 0; i < listIntent.length; i++) {
                                     if (listIntent[i].Id != source.IntentId) {
                                         rs = rs + "<option value='" + (i + 1) + "'>" + listIntent[i].IntentName + "</option>";
@@ -1262,107 +1271,602 @@
                         },
                 ],
                 "fnInitComplete": function (oSetting, json) {
-                    $('#tblAnalysisByComment').removeAttr("style");
+                    $('#tblUserCommentDetail').removeAttr("style");
                 },
                 oLanguage: languageConfig
             });
-            $('#userDetailModal').modal('show');
+            $('#tblUserCommentDetailModal').modal('show');
         }
 
-        function GetPieChartData() {
-            $.ajax({
-                url: "/Analysis/GetAnalysisDataByTime",
-                data: {
-                    intentId: $('#intentDDL').val(),
-                    status: $('#statusDDL').val(),
-                    isRead: $('#isReadDDL').val(),
-                    startDate: $('#startDateCommentTbl').val(),
-                    endDate: $('#endDateCommentTbl').val(),
-                    divideNumber: 1
-                },
-                dataType: "json",
-                type: "post",
-                success: function (result) {
-                    console.log(result);
-                    var dataForPie = [];
-                    for (var i = 0; i < result.length; i++) {
-                        dataForPie.push([result[i].IntentName, result[i].CommentNumber]);
-                    };
-                    console.log(dataForPie);
-                    c3.generate({
-                        bindto: '#pieChart',
+        
+        //Filter User detail table
+        function filterUserDetailTable(loadFromStart) {
+            listSelectedCommentDetailTable = [];
+            $('#selectAllButtonUserCommentDetail').empty();
+            $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận&nbsp; <span class='caret'></span>");
+            if (loadFromStart == true) {
+                if (userCommentDetailDataTable != null) {
+                    userCommentDetailDataTable.ajax.reload();
+                }
+            } else {
+                if (userCommentDetailDataTable != null) {
+                    userCommentDetailDataTable.ajax.reload(null, false);
+                }
+            }
+
+        }
+
+        //Select row user comment detail table
+        function selectRowUserCommentDetailTable(checkbox) {
+            if ($('#checkAllCommentDetailTable').is(':checked')) {
+                $('#checkAllCommentDetailTable').prop('checked', false);
+            }
+            if ($(checkbox).is(':checked')) {
+                $(checkbox).closest("tr").addClass("active");
+                listSelectedCommentDetailTable.push(checkbox.value);
+                console.log(listSelectedCommentDetailTable);
+            } else {
+                $(checkbox).closest("tr").removeClass("active");
+                for (var i = 0; i < listSelectedCommentDetailTable.length; i++) {
+                    if (listSelectedCommentDetailTable[i] == checkbox.value) {
+                        listSelectedCommentDetailTable.splice(i, 1);
+                    }
+                }
+                console.log(listSelectedCommentDetailTable);
+            }
+            $('#selectAllButtonUserCommentDetail').empty();
+            $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận &nbsp;<span class='caret'></span>");
+        }
+
+        //Select all user comment detail table
+        function checkAllCommentDetailTbl() {
+            $('#selectAllButtonUserCommentDetail').empty();
+            if ($('#checkAllCommentDetailTable').is(':checked')) {
+                listSelectedCommentDetailTable.splice(0, listSelectedCommentDetailTable.length);
+                $('#tblUserCommentDetailModal').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().addClass("active");
+                    $(this).prop('checked', true);
+                    listSelectedCommentDetailTable.push($(this).val());
+                });
+            } else {
+                listSelectedCommentDetailTable.splice(0, listSelectedCommentDetailTable.length);
+                $('#tblUserCommentDetail').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().removeClass("active");
+                    $(this).prop('checked', false);
+                });
+            }
+            $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận &nbsp; <span class='caret'></span>");
+            console.log(listSelectedCommentDetailTable);
+        }
+
+        //On page chang in user comment detail table
+        $('#tblUserCommentDetailModal').on('draw.dt', function () {
+            if ($('#checkAllCommentDetailTable').is(':checked')) {
+                $('#checkAllCommentDetailTable').prop('checked', false);
+            };
+            listSelectedCommentDetailTable.splice(0, listSelectedCommentDetailTable.length);
+            $('#selectAllButtonUserCommentDetail').empty();
+            $('#selectAllButtonUserCommentDetail').append("Đã chọn " + listSelectedCommentDetailTable.length + " bình luận &nbsp; <span class='caret'></span>");
+        });
+
+        //Delete all comment in user comment detail
+        function deleteAllCommentDetail() {
+            swal({
+                title: "Bạn có chắc chắn xóa các bình luận?",
+                text: "Bạn không thể khôi phục sau khi xóa!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa",
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: "/Analysis/DeleteComment",
+                        dataType: "json",
+                        type: "post",
                         data: {
-                            columns: dataForPie,
-                            type: 'pie'
+                            commentId: listSelectedCommentDetailTable
                         },
-                        pie: {
-                            label: {
-                                format: function (value, ratio, id) {
-                                    return (value);
-                                }
+                        type: "post",
+                        success: function (data) {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
+                            if (userCommentDetailDataTable != null) {
+                                userCommentDetailDataTable.ajax.reload(null, false);
                             }
+                            listSelectedCommentDetailTable = [];
+                            if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                                swal({
+                                    title: "Đã xóa!",
+                                    text: "Xóa " + data.totalComment + " bình luận thành công",
+                                    timer: 2000,
+                                    type: "success"
+                                });
+                            } else {
+                                swal({
+                                    title: "Thất bại!",
+                                    text: data.errorNumber + " bình luận chưa được xóa",
+                                    timer: 2000,
+                                    type: "error"
+                                });
+                            }
+                        },
+                        error: function () {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
+                            if (userCommentDetailDataTable != null) {
+                                userCommentDetailDataTable.ajax.reload(null, false);
+                            }
+                            listSelectedCommentDetailTable = [];
+                            swal({
+                                title: "Thất bại!",
+                                text: data.errorNumber + " bình luận chưa được xóa",
+                                timer: 2000,
+                                type: "error"
+                            });
                         }
-                    });
-                },
-                error: function () {
-                    console.log("Get data for pie char error");
+                    })
                 }
             })
         }
 
-        function GetStackChartData() {
+        //Hide / Unhide all user comment detail table
+        function hideAllCommentDetail(isHide) {
             $.ajax({
-                url: "/Analysis/GetAnalysisDataByTime",
-                data: {
-                    intentId: $('#intentDDL').val(),
-                    status: $('#statusDDL').val(),
-                    isRead: $('#isReadDDL').val(),
-                    startDate: $('#startDateCommentTbl').val(),
-                    endDate: $('#endDateCommentTbl').val(),
-                    divideNumber: 10
-                },
+                url: "/Analysis/HideComment",
                 dataType: "json",
                 type: "post",
-                success: function (result) {
-                    var dataStack = [];
-                    var title = [];
-                    var TimeCategory = [];
-                    for (var i = 0; i < result[0].ListData.length; i++) {
-                        title.push(result[0].ListData[i].IntentName);
+                async: false,
+                data: {
+                    commentId: listSelectedCommentDetailTable,
+                    isHide: isHide
+                },
+                type: "post",
+                success: function (data) {
+                    commentDataTable.ajax.reload(null, false);
+                    userDataTable.ajax.reload(null, false);
+                    if (userCommentDetailDataTable != null) {
+                        userCommentDetailDataTable.ajax.reload(null, false);
                     }
-                    dataStack.push(title);
-                    for (var j = 0; j < result.length; j++) {
-                        TimeCategory.push(FormatDateVN(result[j].Time))
-                        var dataRow = [];
-                        for (var i = 0; i < result[j].ListData.length; i++) {
-                            dataRow.push(result[j].ListData[i].CommentNumber);
+                    listSelectedCommentDetailTable = [];
+                    if (isHide) {
+                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            swal({
+                                title: "Thành công!",
+                                text: "Ẩn " + data.totalComment + " bình luận thành công",
+                                timer: 2000,
+                                type: "success"
+                            });
+                        } else {
+                            swal({
+                                title: "Thất bại!",
+                                text: data.errorNumber + " bình luận chưa được ẩn",
+                                timer: 2000,
+                                type: "error"
+                            });
                         }
-                        dataStack.push(dataRow);
+                    } else {
+                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            swal({
+                                title: "Thành công!",
+                                text: "Bỏ ẩn " + data.totalComment + " bình luận thành công",
+                                timer: 2000,
+                                type: "success"
+                            });
+                        } else {
+                            swal({
+                                title: "Thất bại!",
+                                text: data.errorNumber + " bình luận chưa được bỏ ẩn",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
                     }
-                    console.log(dataStack);
-                    c3.generate({
-                        bindto: '#stocked',
-                        data: {
-                            rows: dataStack,
-                        },
-                        axis: {
-                            x: {
-                                type: 'category',
-                                categories: TimeCategory
-                            }
-                        }
-                        
-
-                    });
                 },
                 error: function () {
-                    console.log("Get data for bar char error");
+                    commentDataTable.ajax.reload(null, false);
+                    userDataTable.ajax.reload(null, false);
+                    if (userCommentDetailDataTable != null) {
+                        userCommentDetailDataTable.ajax.reload(null, false);
+                    }
+                    listSelectedCommentDetailTable = [];
+                    if (isHide) {
+                        swal({
+                            title: "Thất bại!",
+                            text: data.errorNumber + " bình luận chưa được ẩn",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!",
+                            text: data.errorNumber + " bình luận chưa được bỏ ẩn",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    }
                 }
             })
         }
 
 
+        //Function for Post Table
+        //Filter Post Table
+        function filterPostTable(loadFromStart) {
+            listSelectedPost = [];
+            if (loadFromStart == true) {
+                if (postDataTable != null) {
+                    postDataTable.ajax.reload();
+                }
+            } else {
+                if (postDataTable != null) {
+                    postDataTable.ajax.reload(null, false);
+                }
+            }
+        }
 
+        // Selected a post
+        function checkBoxCheckedPostTbl(checkbox) {
+            if ($('#checkAllPostTbl').is(':checked')) {
+                $('#checkAllPostTbl').prop('checked', false);
+            }
+            if ($(checkbox).is(':checked')) {
+                $(checkbox).closest("tr").addClass("active");
+                listSelectedPost.push(checkbox.value);
+                console.log(listSelectedPost);
+            } else {
+                $(checkbox).closest("tr").removeClass("active");
+                for (var i = 0; i < listSelectedPost.length; i++) {
+                    if (listSelectedPost[i] == checkbox.value) {
+                        listSelectedPost.splice(i, 1);
+                    }
+                }
+                console.log(listSelectedPost);
+            }
+            $('#selectAllButtonPostTbl').empty();
+            $('#selectAllButtonPostTbl').append("Đã chọn " + listSelectedPost.length + " bài đăng &nbsp;<span class='caret'></span>");
+        }
+
+        //Check all comment
+        function checkAllPost() {
+            $('#selectAllButtonPostTbl').empty();
+            if ($('#checkAllPostTbl').is(':checked')) {
+                listSelectedPost.splice(0, listSelectedPost.length);
+                $('#tblAnalysisPostByPage').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().addClass("active");
+                    $(this).prop('checked', true);
+                    listSelectedPost.push($(this).val());
+                });
+            } else {
+                listSelectedPost.splice(0, listSelectedPost.length);
+                $('#tblAnalysisPostByPage').find("tbody > tr > td > input").each(function () {
+                    $(this).parent().parent().removeClass("active");
+                    $(this).prop('checked', false);
+                });
+            }
+            $('#selectAllButtonPostTbl').append("Đã chọn " + listSelectedPost.length + " bài đăng &nbsp;<span class='caret'></span>");
+            console.log(listSelectedPost);
+        }
+
+        $('#tblAnalysisPostByPage').on('draw.dt', function () {
+            if ($('#checkAllPostTbl').is(':checked')) {
+                $('#checkAllPostTbl').prop('checked', false);
+            };
+            listSelectedPost.splice(0, listSelectedPost.length);
+            $('#selectAllButtonPostTbl').empty();
+            $('#selectAllButtonPostTbl').append("Đã chọn " + listSelectedPost.length + " bài đăng &nbsp;<span class='caret'></span>");
+        });
+
+        //Set post intent onchange
+        function setPostIntent(postId, intentList) {
+            $.ajax({
+                url: "/Analysis/SetPostIntent",
+                dataType: "json",
+                type: "post",
+                data: {
+                    postId: postId,
+                    intentId: intentList.value
+                },
+                type: "post",
+                success: function (data) {
+                    toastr.success("Cập nhật thành công");
+                },
+                error: function () {
+                    toastr.error("Cập nhật thất bại");
+                }
+            })
+        }
+
+        //Delete post by id
+        function deletePost(postId) {
+            swal({
+                title: "Bạn có chắc chắn xóa bình luận?",
+                text: "Bạn không thể khôi phục sau khi xóa!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa",
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: "/Analysis/DeletePost",
+                        dataType: "json",
+                        type: "post",
+                        async: false,
+                        data: {
+                            PostId: [postId]
+                        },
+                        type: "post",
+                        success: function (data) {
+                            if (data.errorNumber == 0) {
+                                commentDataTable.ajax.reload(null, false);
+                                userDataTable.ajax.reload(null, false);
+                                postDataTable.ajax.reload(null, false);
+                                swal({
+                                    title: "Đã xóa!",
+                                    text: "Đã xóa bài đăng thành công",
+                                    timer: 2000,
+                                    type: "success"
+                                });
+                            } else {
+                                swal({
+                                    title: "Thất bại!",
+                                    text: "Xóa bài đăng thất bại",
+                                    timer: 2000,
+                                    type: "error"
+                                });
+                            }
+                        },
+                        error: function () {
+                            swal({
+                                title: "Thất bại!",
+                                text: "Xóa bài đăng thất bại",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
+                    })
+                }
+            });
+        }
+
+        //Delete all comment by id
+        function deleteAllPost() {
+            swal({
+                title: "Bạn có chắc chắn xóa các bình luận?",
+                text: "Bạn không thể khôi phục sau khi xóa!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Xóa",
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: "/Analysis/DeletePost",
+                        dataType: "json",
+                        type: "post",
+                        async: false,
+                        data: {
+                            PostId: listSelectedPost
+                        },
+                        type: "post",
+                        success: function (data) {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
+                            postDataTable.ajax.reload(null, false);
+                            listSelectedPost = [];
+                            if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                                swal({
+                                    title: "Đã xóa!",
+                                    text: "Xóa " + data.totalPost + " bài đăng thành công",
+                                    timer: 2000,
+                                    type: "success"
+                                });
+                            } else {
+                                swal({
+                                    title: "Thất bại!",
+                                    text: data.errorNumber + " bài đăng chưa được xóa",
+                                    timer: 2000,
+                                    type: "error"
+                                });
+                            }
+                            $('#selectAllButtonPostTbl').append("Đã chọn " + listSelectedPost.length + " bài đăng&nbsp; <span class='caret'></span>");
+                        },
+                        error: function () {
+                            commentDataTable.ajax.reload(null, false);
+                            userDataTable.ajax.reload(null, false);
+                            postDataTable.ajax.reload(null, false);
+                            listSelectedPost = [];
+                            swal({
+                                title: "Thất bại!",
+                                text: data.errorNumber + " bài đăng chưa được xóa",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
+                    })
+                }
+            })
+        }
+        
+        //Hide / Unhide Post by Id
+        function hidePost(postId, isHide) {
+            $.ajax({
+                url: "/Analysis/HidePost",
+                dataType: "json",
+                type: "post",
+                data: {
+                    PostId: [postId],
+                    isHide: isHide
+                },
+                type: "post",
+                success: function (data) {
+                    if (isHide) {
+                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            commentDataTable.ajax.reload(null, false);
+                            postDataTable.ajax.reload(null, false);
+                            swal({
+                                title: "Đã ẩn!",
+                                text: "Ẩn bài đăng thành công",
+                                timer: 2000,
+                                type: "success"
+                            });
+                        } else {
+                            swal({
+                                title: "Thất bại!",
+                                text: "Ẩn bài đăng thất bại",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
+                    } else {
+                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            commentDataTable.ajax.reload(null, false);
+                            postDataTable.ajax.reload(null, false);
+                            swal({
+                                title: "Đã bỏ ẩn!",
+                                text: "Bỏ ẩn bài đăng thành công",
+                                timer: 2000,
+                                type: "success"
+                            });
+                        } else {
+                            swal({
+                                title: "Thất bại!",
+                                text: "Bỏ ẩn bài đăng thất bại",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
+                    }
+                },
+                error: function () {
+                    if (isHide) {
+                        swal({
+                            title: "Thất bại!",
+                            text: "Ẩn bình luận thất bại",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!",
+                            text: "Bỏ ẩn bình luận thất bại",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    }
+                }
+            })
+        }
+        
+        //Hide / Unhide all Comment by Id
+        function hideAllPost(isHide) {
+            $.ajax({
+                url: "/Analysis/HidePost",
+                dataType: "json",
+                type: "post",
+                async: false,
+                data: {
+                    PostId: listSelectedPost,
+                    isHide: isHide
+                },
+                type: "post",
+                success: function (data) {
+                    commentDataTable.ajax.reload(null, false);
+                    postDataTable.ajax.reload(null, false);
+                    listSelectedPost = [];
+                    if (isHide) {
+                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            swal({
+                                title: "Thành công!",
+                                text: "Ẩn " + data.totalPost + " bài đăng thành công",
+                                timer: 2000,
+                                type: "success"
+                            });
+                        } else {
+                            swal({
+                                title: "Thất bại!",
+                                text: data.errorNumber + " bài đăng chưa được ẩn",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
+                    } else {
+                        if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                            swal({
+                                title: "Thành công!",
+                                text: "Bỏ ẩn " + data.totalPost + " bài đăng thành công",
+                                timer: 2000,
+                                type: "success"
+                            });
+                        } else {
+                            swal({
+                                title: "Thất bại!",
+                                text: data.errorNumber + " bài đăng chưa được bỏ ẩn",
+                                timer: 2000,
+                                type: "error"
+                            });
+                        }
+                    }
+                    $('#selectAllButtonPostTbl').append("Đã chọn " + listSelectedPost.length + " bài đăng&nbsp; <span class='caret'></span>");
+                },
+                error: function () {
+                    commentDataTable.ajax.reload(null, false);
+                    postDataTable.ajax.reload(null, false);
+                    listSelectedPost = [];
+                    if (isHide) {
+                        swal({
+                            title: "Thất bại!",
+                            text: data.errorNumber + " bài đăng chưa được ẩn",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!",
+                            text: data.errorNumber + " bài đăng chưa được bỏ ẩn",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    }
+                }
+            })
+        }
+        
+        //Load Intent
+        function loadIntent() {
+            $.ajax({
+                url: "/Analysis/GetAllIntent",
+                dataType: "json",
+                type: "post",
+                async: false,
+                success: function (data) {
+                    listIntent = data;
+                    $('#intentCommentTable').empty();
+                    $('#intentCommentTable').append("<option value='all'>Tất cả</option>");
+                    $('#userCommentDetailIntentDDL').empty();
+                    $('#userCommentDetailIntentDDL').append("<option value='all'>Tất cả</option>");
+                    for (var i = 0; i < data.length; i++) {
+                        $('#userCommentDetailIntentDDL').append("<option value='" + data[i].Id + "'>" + data[i].IntentName + "</option>");
+                        $('#intentCommentTable').append("<option value='" + data[i].Id + "'>" + data[i].IntentName + "</option>");
+                    }
+                },
+                error: function () {
+                    $('#intentCommentTable').empty();
+                    $('#userCommentDetailIntentDDL').empty();
+                }
+            })
+        }
+
+        //Function format date time to vn format
+        function FormatDateVN(date) {
+            var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
+            var d = new Date(parseInt(milli));
+            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        }
 
     </script>
 
