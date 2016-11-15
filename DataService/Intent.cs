@@ -18,8 +18,8 @@ namespace DataService
         {
             this.Conversations = new HashSet<Conversation>();
             this.Responses = new HashSet<Respons>();
-            this.Posts = new HashSet<Post>();
             this.Comments = new HashSet<Comment>();
+            this.Posts = new HashSet<Post>();
         }
     
         public int Id { get; set; }
@@ -27,7 +27,7 @@ namespace DataService
     
         public virtual ICollection<Conversation> Conversations { get; set; }
         public virtual ICollection<Respons> Responses { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

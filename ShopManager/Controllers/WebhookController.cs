@@ -16,7 +16,7 @@ using ApiAiSDK;
 namespace ShopManager.Controllers
 {
     public class WebhookController : Controller
-    {        
+    {
         ShopService shopService = new ShopService();
         CommentService commentService = new CommentService();
         PostService postService = new PostService();
@@ -65,12 +65,12 @@ namespace ShopManager.Controllers
             string signature = this.Request.Headers["X-Hub-Signature"];
             bool isValid = signature.Split('=')[1] == hmacHex;
 
-            
+
 
             //Decode to json data
             dynamic fbJson = System.Web.Helpers.Json.Decode(jsonData);
 
-            System.Diagnostics.Debug.WriteLine(isValid);            
+            System.Diagnostics.Debug.WriteLine(isValid);
             //only process when valid            
             if (isValid)
             {
@@ -112,7 +112,7 @@ namespace ShopManager.Controllers
         private void ProcessItem(dynamic fbObj)
         {
             dynamic obj = fbObj["object"];
-            dynamic entries = fbObj.entry;            
+            dynamic entries = fbObj.entry;
             foreach (dynamic entry in entries)
             {
                 if (HasProperty(entry, "messaging"))
@@ -121,6 +121,11 @@ namespace ShopManager.Controllers
                 }
                 string shopId = entry.id;
                 long time = entry.time;
+
+                bool flagCanHide = false;
+                string flagComment = null;
+                bool flagPostContent = false;
+                string flagPost = null;
 
                 dynamic changes = entry.changes;
                 foreach (dynamic change in changes)
@@ -145,11 +150,21 @@ namespace ShopManager.Controllers
                             switch (verb)
                             {
                                 case WebhookVerb.Add:
-                                case WebhookVerb.Edit:                                    
+                                case WebhookVerb.Edit:
                                     if (customerId.Equals(shopId))
                                     {
                                         intent = null;
-                                    } else
+
+                                        if (HasProperty(value, "message"))
+                                        {
+                                            string message = value.message;
+                                            if (!string.IsNullOrEmpty(message))
+                                            {
+                                                lastContent = TruncateLongString(message, 240);
+                                            }
+                                        }                                       
+                                    }
+                                    else
                                     {
                                         if (HasProperty(value, "photo"))
                                         {
@@ -166,7 +181,7 @@ namespace ShopManager.Controllers
                                             string message = value.message;
                                             if (!string.IsNullOrEmpty(message))
                                             {
-                                                lastContent = message;
+                                                lastContent = TruncateLongString(message, 240);
                                             }
                                             //chatbot api for message here
                                             var respond = apiAi.TextRequest(message);
@@ -185,9 +200,9 @@ namespace ShopManager.Controllers
 
                                                 }
                                             }
-                                        }                                        
-                                        
-                                        if (intent== (int)DefaultIntent.VANDAL)
+                                        }
+
+                                        if (intent == (int)DefaultIntent.VANDAL)
                                         {
                                             //hide comment
                                             if (shopService.GetCommentMode(shopId) == (int)CommentMode.AUTOHIDE)
@@ -203,15 +218,17 @@ namespace ShopManager.Controllers
                                                 }
                                                 catch (Exception)
                                                 {
-                                                    
+
                                                 }
-                                                
+
                                             }
-                                            status = (int) CommentStatus.WARNING;
-                                        }                                        
+                                            status = (int)CommentStatus.WARNING;
+                                        }
 
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId, lastContent);
+                                    flagCanHide = true;
+                                    flagComment = commentId;
                                     break;
                                 case WebhookVerb.Hide:
                                     commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
@@ -224,7 +241,8 @@ namespace ShopManager.Controllers
                                     break;
                                 default: break;
                             }
-                        } else if (item.Equals(WebhookItem.Post)|| item.Equals(WebhookItem.Photo))
+                        }
+                        else if (item.Equals(WebhookItem.Post) || item.Equals(WebhookItem.Photo))
                         {
                             //string postId = value.comment_id;
                             switch (verb)
@@ -264,9 +282,11 @@ namespace ShopManager.Controllers
                                     }
                                     if (customerId.Equals(shopId))
                                     {
-                                        intent = null; 
+                                        intent = null;
                                     }
                                     postService.AddPost(postId, customerId, time, intent, false, status, shopId);
+                                    flagPostContent = true;
+                                    flagPost = postId;
                                     break;
                                 case WebhookVerb.Hide:
                                     postService.SetStatus(postId, (int)CommentStatus.HIDDEN);
@@ -287,8 +307,10 @@ namespace ShopManager.Controllers
                             {
                                 case WebhookVerb.Add:
                                 case WebhookVerb.Edit:
-                                    intent = null;         
+                                    intent = null;
                                     postService.AddPost(postId, customerId, time, null, true, status, shopId);
+                                    flagPostContent = true;
+                                    flagPost = postId;
                                     break;
                                 case WebhookVerb.Hide:
                                     postService.SetStatus(postId, (int)CommentStatus.HIDDEN);
@@ -303,12 +325,22 @@ namespace ShopManager.Controllers
                             }
                         }
 
-                        SignalRAlert.AlertHub.SendComment(shopId, value, intent.HasValue ? intent.Value: 0);
+                        SignalRAlert.AlertHub.SendComment(shopId, value, intent.HasValue ? intent.Value : 0);
                         SignalRAlert.AlertHub.SendNotification(shopId);
-                    } else if (field.Equals(WebhookField.Conversations)){
+                        if (flagCanHide)
+                        {
+                            SetCanHide(shopId, flagComment);
+                        }
+                        if (flagPostContent)
+                        {
+                            SetLastContent(shopId, flagPost);
+                        }
+                    }
+                    else if (field.Equals(WebhookField.Conversations))
+                    {
                         string threadId = value.thread_id;
                         checkLast(threadId, shopId, time);
-                    }                    
+                    }
 
                 }
             }
@@ -326,12 +358,13 @@ namespace ShopManager.Controllers
             param.until = time;
             dynamic result = fbApp.Get(threadId + "/messages", param);
             dynamic detail = result.data[0];
-            
+
             if (shopId.Equals(detail.from.id))
             {
                 SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, 0);
                 conversationService.SetReadConversation(threadId, time);
-            } else
+            }
+            else
             {
                 int intent = (int)DefaultIntent.UNKNOWN;
                 string message = detail.message;
@@ -342,14 +375,14 @@ namespace ShopManager.Controllers
                     var intentRespond = respond.Result.Metadata.IntentName;
                     //intent = intentRespond == null? (int) DefaultIntent.UNKNOWN : int.Parse(intentRespond);
                     if (intentRespond != null)
-                    {                        
-                       intent = int.Parse(intentRespond);                       
+                    {
+                        intent = int.Parse(intentRespond);
                     }
                 }
                 catch (Exception)
-                {                    
+                {
                 }
-                
+
                 if (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO || shopService.GetReplyMode(shopId) == (int)ReplyMode.MESSAGE_ONLY)
                 {
                     var response = responseService.GetResponse(shopId, intent);
@@ -368,7 +401,7 @@ namespace ShopManager.Controllers
                             }
                             catch (Exception)
                             {
-                                                                
+
                             }
                         }
                     }
@@ -390,7 +423,8 @@ namespace ShopManager.Controllers
             if (HasProperty(result, "message_tags"))
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
@@ -409,7 +443,7 @@ namespace ShopManager.Controllers
             try
             {
                 var prop = obj[name];
-                return prop!=null;
+                return prop != null;
             }
             catch (Exception)
             {
@@ -418,6 +452,71 @@ namespace ShopManager.Controllers
             }
         }
 
+        private void SetLastContent(string shopId, string postId)
+        {
+            string accessToken = shopService.GetShop(shopId).FbToken;
+            string lastContent = null;
+            fbApp.AccessToken = accessToken;
+            dynamic param = new ExpandoObject();
+            param.fields = "story,message";
+            param.locale = "vi_VI";
+            dynamic result = fbApp.Get(postId, param);
+            try
+            {
+                if (HasProperty(result, "story") && HasProperty(result, "message"))
+                {
+                    lastContent = TruncateLongString(result.story + ":" + result.message, 240);
+                }
+                else
+                {
+                    lastContent = TruncateLongString(result.story + result.message, 240);
+                }
+                if (!string.IsNullOrEmpty(lastContent))
+                {
+                    postService.SetLastContent(postId, lastContent);
+                }
+            }
+            catch (Exception)
+            {
 
+
+            }
+        }
+
+        private void SetCanHide(string shopId, string commentId)
+        {
+            string accessToken = shopService.GetShop(shopId).FbToken;
+            //bool canHide = false;
+            fbApp.AccessToken = accessToken;
+            dynamic param = new ExpandoObject();
+            param.fields = "can_hide";
+            //param.locale = "vi_VI";
+            dynamic result = fbApp.Get(commentId, param);
+            try
+            {
+                if (result.can_hide == true)
+                {
+                    commentService.SetCanHide(commentId, true);
+                }
+            }
+            catch (Exception)
+            {
+
+                commentService.SetCanHide(commentId, false);
+            }
+        }
+
+        private string TruncateLongString(string str, int maxLength)
+        {
+            if (str.Length > maxLength)
+            {
+                return str.Substring(0, maxLength) + " ...";
+            }
+            else
+            {
+                return str;
+            }
+
+        }
     }
 }

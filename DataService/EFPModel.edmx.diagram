@@ -44,16 +44,16 @@
         <EntityTypeShape EntityType="EFPModel.Intent" Width="1.5" PointX="0.75" PointY="1.625" />
         <AssociationConnector Association="EFPModel.FK_Conversations_Intents" />
         <AssociationConnector Association="EFPModel.FK_Responses_Intents" />
-        <EntityTypeShape EntityType="EFPModel.Post" Width="1.5" PointX="9.75" PointY="12" />
         <EntityTypeShape EntityType="EFPModel.PromotionInfo" Width="1.5" PointX="7.5" PointY="29" />
-        <AssociationConnector Association="EFPModel.FK_Posts_Intents" />
-        <AssociationConnector Association="EFPModel.FK_Posts_PromotionInfo" />
-        <AssociationConnector Association="EFPModel.FK_Posts_Shops" />
         <AssociationConnector Association="EFPModel.FK_PromotionInfo_Shops" />
-        <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="12" PointY="6.75" />
+        <EntityTypeShape EntityType="EFPModel.Comment" Width="1.5" PointX="12" PointY="6.125" />
+        <EntityTypeShape EntityType="EFPModel.Post" Width="1.5" PointX="9.75" PointY="10.875" />
         <AssociationConnector Association="EFPModel.FK_Comments_Comments" />
         <AssociationConnector Association="EFPModel.FK_Comments_Intents" />
         <AssociationConnector Association="EFPModel.FK_Comments_Posts" />
+        <AssociationConnector Association="EFPModel.FK_Posts_Intents" />
+        <AssociationConnector Association="EFPModel.FK_Posts_PromotionInfo" />
+        <AssociationConnector Association="EFPModel.FK_Posts_Shops" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

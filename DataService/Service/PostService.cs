@@ -44,9 +44,9 @@ namespace DataService.Service
             }
         }
 
-        public bool SetStatus(string commentId, int status)
+        public bool SetStatus(string postId, int status)
         {
-            Post c = repository.FindByKey(commentId);
+            Post c = repository.FindByKey(postId);
             if (c != null)
             {
                 c.Status = status;
@@ -86,6 +86,20 @@ namespace DataService.Service
         public Post GetPostById(string postId)
         {
             return repository.GetPostById(postId);
+        }
+
+        public bool SetLastContent(string postId, string lastContent)
+        {
+            Post c = repository.FindByKey(postId);
+            if (c != null && !string.IsNullOrEmpty(lastContent))
+            {
+                c.LastContent = lastContent;
+                return repository.Update(c);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

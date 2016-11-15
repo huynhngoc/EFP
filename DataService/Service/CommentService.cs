@@ -28,16 +28,19 @@ namespace DataService.Service
                     Status = status,
                     ParentId = parentId,
                     PostId = postId,
-                    LastContent = lastContent                    
+                    LastContent = lastContent,
+                    CanHide = false                                                            
                 };
                 return repository.Create(c);
             }
             else
-            {
-                //c.Id = id;
-                c.SenderFbId = SenderFbId;
+            {                
                 c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
-                c.IntentId = intentId;
+                if (c.IntentId != null)
+                {
+                    c.IntentId = intentId;
+                    c.SenderFbId = SenderFbId;
+                }
                 c.PostId = postId;
                 if (!string.IsNullOrEmpty(lastContent))
                 {
@@ -126,6 +129,20 @@ namespace DataService.Service
                 }
             }
             return listData;
+        }
+
+        public bool SetCanHide(string commentId, bool canHide)
+        {
+            Comment c = repository.FindByKey(commentId);
+            if (c != null)
+            {
+                c.CanHide = canHide;
+                return repository.Update(c);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
