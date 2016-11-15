@@ -10,6 +10,7 @@ namespace DataService.ViewModel
     {
         public string Id { get; set; }
         public string CommentContent { get; set; }
+        public string LastContent { get; set; }
         public string SenderFbId { get; set; }
         public string SenderName { get; set; }
         public bool IsCustomer { get; set; }

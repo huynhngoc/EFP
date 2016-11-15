@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using DataService.Service;
 
 namespace ShopManager
 {
@@ -14,10 +15,13 @@ namespace ShopManager
     }
 
     public class SessionRequiredFilter : ActionFilterAttribute
-    {        
+    {
+        public CommentService commentService = new CommentService();
+        public PostService postService = new PostService();
+        public ConversationService conversationService = new ConversationService();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
+        {            
             if (filterContext.HttpContext.Session["ShopId"] == null)
             {
                 filterContext.Result = new RedirectToRouteResult(
@@ -27,6 +31,13 @@ namespace ShopManager
                             { "action", "ChooseShop" }
                         }
                     );
+            }
+            else
+            {
+                string shopId = (string)filterContext.HttpContext.Session["ShopId"];
+                filterContext.Controller.ViewBag.NewCommentCount = commentService.NewCommentCount(shopId);
+                filterContext.Controller.ViewBag.NewPostCount = postService.NewPostCount(shopId);
+                filterContext.Controller.ViewBag.NewConversationCount = conversationService.NewConversationCount(shopId);
             }
             //base.OnActionExecuting(filterContext);
             //else

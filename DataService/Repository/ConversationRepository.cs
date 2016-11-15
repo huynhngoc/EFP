@@ -17,5 +17,11 @@ namespace DataService.Repository
         {
             return dbSet.Where(q => q.ShopId == shopId).OrderByDescending(q => q.LastUpdate);
         }
+
+        //ngochb
+        public int NewConversationCount(string shopId)
+        {
+            return dbSet.Where(q => q.ShopId == shopId && q.IsRead == false).Count();
+        }
     }
 }

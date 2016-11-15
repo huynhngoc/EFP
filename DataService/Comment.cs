@@ -28,6 +28,7 @@ namespace DataService
         public System.DateTime DateCreated { get; set; }
         public string ParentId { get; set; }
         public string LastContent { get; set; }
+        public bool CanHide { get; set; }
     
         public virtual ICollection<Comment> Comments1 { get; set; }
         public virtual Comment Comment1 { get; set; }

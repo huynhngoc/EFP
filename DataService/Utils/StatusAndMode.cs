@@ -33,6 +33,8 @@ namespace DataService.Utils
     public enum ReplyMode
     {
         MANUAL = 1,
-        AUTO = 2
+        AUTO = 2,
+        COMMENT_ONLY = 3,
+        MESSAGE_ONLY = 4
     }
 }

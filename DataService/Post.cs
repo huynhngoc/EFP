@@ -27,10 +27,11 @@ namespace DataService
         public Nullable<int> IntentId { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<int> PromotionId { get; set; }
+        public string LastContent { get; set; }
     
-        public virtual Shop Shop { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual Intent Intent { get; set; }
         public virtual PromotionInfo PromotionInfo { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

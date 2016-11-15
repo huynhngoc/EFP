@@ -25,7 +25,6 @@ namespace DataService
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
@@ -35,7 +34,6 @@ namespace DataService
         public virtual DbSet<Entity> Entities { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<ProductPicture> ProductPictures { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Respons> Responses { get; set; }
@@ -43,8 +41,9 @@ namespace DataService
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<ShopUser> ShopUsers { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Intent> Intents { get; set; }
         public virtual DbSet<PromotionInfo> PromotionInfoes { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
     }
 }

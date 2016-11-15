@@ -21,12 +21,12 @@ namespace DataService
             this.Customers = new HashSet<Customer>();
             this.Entities = new HashSet<Entity>();
             this.Orders = new HashSet<Order>();
-            this.Posts = new HashSet<Post>();
             this.Products = new HashSet<Product>();
             this.Responses = new HashSet<Respons>();
             this.ShopUsers = new HashSet<ShopUser>();
             this.TemplateProducts = new HashSet<TemplateProduct>();
             this.PromotionInfoes = new HashSet<PromotionInfo>();
+            this.Posts = new HashSet<Post>();
         }
     
         public string Id { get; set; }
@@ -42,11 +42,11 @@ namespace DataService
         public virtual ICollection<Customer> Customers { get; set; }
         public virtual ICollection<Entity> Entities { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Respons> Responses { get; set; }
         public virtual ICollection<ShopUser> ShopUsers { get; set; }
         public virtual ICollection<TemplateProduct> TemplateProducts { get; set; }
         public virtual ICollection<PromotionInfo> PromotionInfoes { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

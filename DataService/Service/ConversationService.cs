@@ -58,5 +58,11 @@ namespace DataService.Service
         {
             return repository.GetConversationsByShopId(shopId);
         }
+
+        //ngochb
+        public int NewConversationCount(string shopId)
+        {
+            return repository.NewConversationCount(shopId);
+        }
     }
 }
