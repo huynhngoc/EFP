@@ -36,7 +36,17 @@ namespace DataService.Repository
         //    return result.AsQueryable();
 
         //}
+        public bool CheckUnreadRemain(string parentId)
+        {
+            return dbSet.Where(q => q.ParentId == parentId).Any(q => q.IsRead == false);
+        }
 
+        public bool CheckPostUnread(string postId)
+        {
+            //true = unread
+            var post = dbSet.Where(q => q.PostId == postId).Any(q => q.IsRead == false);
+            return post;
+        }
 
         public Comment getCommentById(string commentId)
         {
@@ -50,7 +60,8 @@ namespace DataService.Repository
             //Debug.WriteLine("asdasdasd " + dbSet.Where(q => q.Id.Contains(searchString)).OrderByDescending(q => q.DateCreated));
             //Debug.WriteLine("fuk" + dbSet.Find(cusId).ToString());
             //return dbSet.Where(q => (q.PostId == postId) && (q.Status != 5)).OrderByDescending(q=>q.DateCreated);
-            return dbSet.Where(q => (q.PostId == postId) && (q.Status != 5)).OrderByDescending(q => q.DateCreated);
+            //return dbSet.Where(q => (q.PostId == postId) && (q.Status != 5)).OrderByDescending(q => q.DateCreated);
+            return dbSet.Where(q => (q.PostId == postId)).OrderByDescending(q => q.DateCreated);
         }
 
         public int GetNestedCommentQuan(string commentId)
@@ -60,7 +71,8 @@ namespace DataService.Repository
 
         public IQueryable<Comment> GetNestedCommentOfParent(string commentId,int skip, int take)
         {
-            return dbSet.Where(q => (q.ParentId == commentId) && (q.Status != 5)).AsEnumerable().OrderByDescending(q=>q.DateCreated).Skip(skip).Take(take).AsQueryable();
+            //return dbSet.Where(q => (q.ParentId == commentId) && (q.Status != 5)).AsEnumerable().OrderByDescending(q=>q.DateCreated).Skip(skip).Take(take).AsQueryable();
+            return dbSet.Where(q => (q.ParentId == commentId)).AsEnumerable().OrderByDescending(q => q.DateCreated).Skip(skip).Take(take).AsQueryable();
         }
 
         public List<Comment>[] GetCommentsWithPostId(string postId, int  skip, int take)
@@ -68,11 +80,12 @@ namespace DataService.Repository
             entites.Configuration.ProxyCreationEnabled = true;
             List<Comment>[] result = new List<Comment>[2];
             var comments = GetCommentsContainPostId(postId);
-            IQueryable<Comment> parentComment = comments.Where(q => (q.ParentId == null) && (q.Status!=5)).OrderByDescending(q =>  q.Comments1.Count>0 ?  q.Comments1.Max(x => x.DateCreated): q.DateCreated).Skip(skip).Take(take);
+            //IQueryable<Comment> parentComment = comments.Where(q => (q.ParentId == null) && (q.Status!=5)).OrderByDescending(q =>  q.Comments1.Count>0 ?  q.Comments1.Max(x => x.DateCreated): q.DateCreated).Skip(skip).Take(take);
+            IQueryable<Comment> parentComment = comments.Where(q => (q.ParentId == null)).OrderByDescending(q => q.Comments1.Count > 0 ? q.Comments1.Max(x => x.DateCreated) : q.DateCreated).Skip(skip).Take(take);
             List<Comment> nestedComment = new List<Comment>();
             foreach (Comment c in parentComment)
             {
-                nestedComment.AddRange(GetNestedCommentOfParent(c.Id, 0, 2).ToList());
+                nestedComment.AddRange(GetNestedCommentOfParent(c.Id, 0, 1).ToList());
             }
             result[0] = parentComment.ToList();
             result[1] = nestedComment;
@@ -84,7 +97,7 @@ namespace DataService.Repository
         }
         public int GetParentCommentQuan(string postId)
         {
-            return dbSet.Where(q => (q.PostId == postId) && (q.ParentId == null) && (q.Status == 1)).Count();
+            return dbSet.Where(q => (q.PostId == postId) && (q.ParentId == null)).Count();
         }
 
         public bool SetIsRead(string commentId)
@@ -223,9 +236,16 @@ namespace DataService.Repository
         }
         public IEnumerable<Comment> GetAllCommentByParentId(string parentId)
         {
-            return dbSet.Where(q => (q.ParentId == parentId) && (q.Status != 5));
+            //return dbSet.Where(q => (q.ParentId == parentId) && (q.Status != 5));
+            return dbSet.Where(q => (q.ParentId == parentId));
         }
 
+        public bool CheckUnreadParentComment(string postId)
+        {
+            //if parent comments remain as unread then return true
+            var result = dbSet.Where(q => q.PostId == postId && (q.ParentId == null || q.ParentId== "")).Any(q => q.IsRead == false);
+            return result;
+        }
         //public IQueryable<Post> GetPost(string shopId, int from, int quantity)
         //{
         //    var result = dbSet.Where(q => q.ShopId == shopId).Select(q => new Post_Comment()

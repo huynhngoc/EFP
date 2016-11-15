@@ -37,7 +37,7 @@ namespace ShopManager.Controllers
         {
             //Session["ShopId"] = "1";
             //Session["CustId"] = "3"
-            Session["ShopOwner"] = shopService.GetShop((string)Session["ShopId"]).ShopName;
+            Session["shopOwner"] = shopService.GetShop((string)Session["ShopId"]).ShopName;
             //Session["ShopAvatar"] = GetPageAvatar();
             //Session["ShopId"] = (string)Session["ShopId"];
             ViewData["MessageNext"] = "null";
@@ -104,6 +104,9 @@ namespace ShopManager.Controllers
                         if (fbPost.full_picture != null && fbPost.full_picture != "") postmodel.imageContent = fbPost.full_picture;
 
                         Debug.WriteLine("test post " + postmodel.message);
+                        //check all commments with post id;
+                        if (commentservice.CheckPostUnread(post.Id) == true) postservice.SetPostIsUnread(post.Id);
+                        else postservice.SetPostIsRead(post.Id);
                         postviewlist.Add(postmodel);
                     }
                     postlistviewmodel.postviewlist = postviewlist;
@@ -133,7 +136,7 @@ namespace ShopManager.Controllers
                 //postParam.access_token = accessToken;
                 //commentParam.access_token = accessToken;
                 postParam.fields = "full_picture,created_time,message,from{picture,name},story";
-                commentParam.fields = "attachment,from{picture,name,id},message,created_time";
+                commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide";
                 FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
                 Debug.WriteLine("a ccess tok " + accessToken);
                 //commentParam.field = "from";
@@ -146,20 +149,22 @@ namespace ShopManager.Controllers
 
                     PostDetailModel postView = new PostDetailModel();
                     postView.SenderFbId = selectedPost.SenderFbId;
+                    Debug.WriteLine("date of the post: " + selectedPost.DateCreated);
                     postView.LastUpdate = selectedPost.DateCreated;
                     postView.Id = postId;
                     postView.Status = selectedPost.Status;
                     postView.IntentId = selectedPost.IntentId;
-                    
-                        var fbPost = fbAppWithAccTok.Get(postId, postParam);
-                        postView.from = fbPost.from.name;
-                        postView.fromAvatar = fbPost.from.picture.data.url;
-                        postView.postContent = fbPost.message;
-                        postView.storyContent = fbPost.story;
-                        //posted photo
-                        postView.postImageContent = fbPost.full_picture;
-                    
-                    List<Comment>[] commentList = commentservice.GetCommentsWithPostId(postId, skip, take + 1);
+
+                    var fbPost = fbAppWithAccTok.Get(postId, postParam);
+                    postView.from = fbPost.from.name;
+                    if(postView.IntentId == null) postView.fromAvatar = "https://graph.facebook.com/" + (string)Session["ShopId"] + "/picture?type=square";
+                    else postView.fromAvatar = "https://graph.facebook.com/" + postView.SenderFbId + "/picture?type=square";
+                    postView.postContent = fbPost.message;
+                    postView.storyContent = fbPost.story;
+                    //posted photo
+                    postView.postImageContent = fbPost.full_picture;
+
+                    List<Comment>[] commentList = commentservice.GetCommentsWithPostId(postId, skip, take);
 
                     if (commentList != null)
                     {
@@ -174,31 +179,33 @@ namespace ShopManager.Controllers
                             commentdetailmodel.Id = commentList[0][i].Id;
                             commentdetailmodel.datacreated = commentList[0][i].DateCreated;
                             commentdetailmodel.Status = commentList[0][i].Status;
+                            Debug.WriteLine("status of comment: " + commentdetailmodel.Status);
                             commentdetailmodel.IsRead = commentList[0][i].IsRead;
                             commentdetailmodel.IntentId = commentList[0][i].IntentId;
+                            commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentList[0][i].Id);
+                            commentservice.SetIsRead(commentList[0][i].Id);
 
-                            //Debug.WriteLine("time  " + commentdetailmodel.datacreated);
-                            //postParam.access_token = accessToken;
-                            if (i != 8)
+                            commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[0][i].SenderFbId + "/picture?type=square";
+                            //string commentText = @fbComment.message;
+                            //commentdetailmodel.commentContent = commentText;commentdetailmodel.IntentId = commentList[0][i].IntentId;
+
+                            if (commentList[0][i].Status != 5)
                             {
                                 var fbComment = fbAppWithAccTok.Get(commentList[0][i].Id, commentParam);
-                                
-                                commentdetailmodel.from = fbComment.from.name;
-                                commentdetailmodel.avatarUrl = fbComment.from.picture.data.url;
-                                commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentList[0][i].Id);
-                                commentdetailmodel.IntentId = commentList[0][i].IntentId;
-                                //string commentText = @fbComment.message;
-                                //commentdetailmodel.commentContent = commentText;commentdetailmodel.IntentId = commentList[0][i].IntentId;
                                 if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
                                 else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
-                                if (commentList[0][i].Status!=5) {
-                                    commentdetailmodel.commentContent = fbComment.message;
-                                }
-                                else
-                                {
-                                    commentdetailmodel.commentContent = commentList[0][i].LastContent;
-                                }
+                                commentdetailmodel.from = fbComment.from.name;
+                                commentdetailmodel.commentContent = fbComment.message;
+                                commentdetailmodel.canHide = fbComment.can_hide;
                             }
+                            else
+                            {
+                                commentdetailmodel.commentImageContent = null;
+                                //commentdetailmodel.from = fbComment.from.name;
+                                commentdetailmodel.commentContent = commentList[0][i].LastContent;
+                                commentdetailmodel.from = commentdetailmodel.SenderFbId;
+                            }
+
                             commentviewlist.Add(commentdetailmodel);
                         }
                         //get replies
@@ -213,22 +220,28 @@ namespace ShopManager.Controllers
                             commentdetailmodel.Status = commentList[1][i].Status;
                             commentdetailmodel.IsRead = commentList[1][i].IsRead;
                             commentdetailmodel.IntentId = commentList[1][i].IntentId;
-
-                            var fbComment = fbAppWithAccTok.Get(commentList[1][i].Id, commentParam);
-                            Debug.WriteLine("time  " + commentdetailmodel.datacreated);
-                            commentdetailmodel.from = fbComment.from.name;
-                            commentdetailmodel.avatarUrl = fbComment.from.picture.data.url;
-
-                            if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
-                            else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                            
+                            commentservice.SetIsRead(commentList[1][i].Id);
+                            commentdetailmodel.isUnreadRepliesRemain = commentservice.CheckUnreadRemain(commentdetailmodel.parentId);
+                            commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[1][i].SenderFbId + "/picture?type=square";
 
                             if (commentList[1][i].Status != 5)
                             {
+                                var fbComment = fbAppWithAccTok.Get(commentList[1][i].Id, commentParam);
+                                Debug.WriteLine("time  " + commentdetailmodel.datacreated);
+                                commentdetailmodel.from = fbComment.from.name;
                                 commentdetailmodel.commentContent = fbComment.message;
+                                if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
+                                else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                                commentdetailmodel.canHide = fbComment.can_hide;
                             }
                             else
                             {
                                 commentdetailmodel.commentContent = commentList[1][i].LastContent;
+                                commentdetailmodel.commentImageContent = null;
+                                commentdetailmodel.from = commentdetailmodel.SenderFbId;
+
+                                //commentdetailmodel.from = fbComment.from.name;
                             }
 
                             nestedcommentlist.Add(commentdetailmodel);
@@ -243,6 +256,18 @@ namespace ShopManager.Controllers
                         postView.Comments = commentviewlist;
                         postView.nestedComments = nestedcommentlist;
                         postView.commentQuan = commentservice.GetParentCommentQuan(postId);
+                        postView.isUnreadParentRemain = commentservice.CheckUnreadParentComment(postId);
+                        //check post read state by browsing comments, true = unread
+                        if (commentservice.CheckPostUnread(selectedPost.Id) == true)
+                        {
+                            postservice.SetPostIsUnread(selectedPost.Id);
+                            postView.isRead = false;
+                        }
+                        else
+                        {
+                            postservice.SetPostIsRead(selectedPost.Id);
+                            postView.isRead = true;
+                        }
                         Debug.WriteLine(postView.nestedComments.Count);
                         return Json(postView, JsonRequestBehavior.AllowGet);
                     }
@@ -334,17 +359,21 @@ namespace ShopManager.Controllers
         public JsonResult GetReplies(string parentId, int skip, int take)
         {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+            bool isUnreadRemain = false;
+            bool postIsUnread = false;
             FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
             try
             {
-                List<Comment> newcommentlist = commentservice.GetNestedCommentOfParent(parentId, skip, take + 1);
+                List<Comment> newcommentlist = commentservice.GetNestedCommentOfParent(parentId, skip, take);
 
                 if (newcommentlist != null)
                 {
+                    
+
                     List<CommentDetailModel> newcommentdetaillist = new List<CommentDetailModel>();
                     CommentDetailModel commentdetailmodel;
                     dynamic commentParam = new ExpandoObject();
-                    commentParam.fields = "attachment,from{picture,name,id},message,created_time";
+                    commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide";
 
                     foreach (Comment comment in newcommentlist)
                     {
@@ -356,25 +385,45 @@ namespace ShopManager.Controllers
                         commentdetailmodel.SenderFbId = comment.SenderFbId;
                         commentdetailmodel.Status = comment.Status;
                         commentdetailmodel.IsRead = comment.IsRead;
+                        commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentdetailmodel.SenderFbId + "/picture?type=square";
 
-                        var fbComment = fbAppWithAccTok.Get(comment.Id, commentParam);
 
                         Debug.WriteLine("time  " + commentdetailmodel.datacreated);
-                        commentdetailmodel.commentContent = fbComment.message;
-                        commentdetailmodel.from = fbComment.from.name;
-                        commentdetailmodel.avatarUrl = fbComment.from.picture.data.url;
-                        //string commentText = @fbComment.message;
-                        //commentdetailmodel.commentContent = commentText;
-                        if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
-                        else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
-                        //Debug.WriteLine("commentdetailmodel.commentImageContent      " + commentdetailmodel.commentImageContent);
 
+                        
+                        if (comment.Status != 5)
+                        {
+                            var fbComment = fbAppWithAccTok.Get(comment.Id, commentParam);
+                            commentdetailmodel.from = fbComment.from.name;
+                            
+                            if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
+                            else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                            commentdetailmodel.commentContent = fbComment.message;
+                            commentdetailmodel.canHide = fbComment.can_hide;
+                        }
+                        else
+                        {
+                            commentdetailmodel.from = comment.Id;
+                            commentdetailmodel.commentContent = comment.LastContent;
+                            commentdetailmodel.from = comment.SenderFbId;
+                        }
+                        commentservice.SetIsRead(comment.Id);
                         newcommentdetaillist.Add(commentdetailmodel);
                     }
-                    return Json(newcommentdetaillist, JsonRequestBehavior.AllowGet);
+                    Comment tmpcomment = commentservice.GetCommentById(parentId);
+                    if (commentservice.CheckPostUnread(tmpcomment.PostId) == true)
+                    {
+                        postservice.SetPostIsUnread(tmpcomment.PostId);
+                        postIsUnread = true;
+                    }
+                    else
+                    {
+                        postservice.SetPostIsRead(tmpcomment.PostId);
+                        postIsUnread = false;
+                    }
+                    isUnreadRemain = commentservice.CheckUnreadRemain(parentId);
+                    return Json(new { newcommentdetaillist, isUnreadRemain = isUnreadRemain, postIsUnread = postIsUnread }, JsonRequestBehavior.AllowGet);
                 }
-
-
                 else return null;
             }
             catch (Exception e)
@@ -403,6 +452,20 @@ namespace ShopManager.Controllers
         //    }
         //    return Json(result, JsonRequestBehavior.AllowGet); ;
         //}
+        public JsonResult SetCommentRead(string commentId)
+        {
+            try{
+              var result = commentservice.SetIsRead(commentId);
+              return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+
 
         public JsonResult GetCommentById(string commentId)
         {
@@ -413,21 +476,23 @@ namespace ShopManager.Controllers
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
             FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
 
-            Comment newcomment = commentservice.getCommentById(commentId);
+            Comment tmpComment = commentservice.getCommentById(commentId);
 
             CommentDetailModel commentdetailmodel = new CommentDetailModel();
-            commentdetailmodel.Id = newcomment.Id;
-            commentdetailmodel.parentId = newcomment.ParentId;
-            commentdetailmodel.Status = newcomment.Status;
+            commentdetailmodel.Id = tmpComment.Id;
+            commentdetailmodel.parentId = tmpComment.ParentId;
+            commentdetailmodel.Status = tmpComment.Status;
+            
+
             try
             {
-                var fbComment = fbAppWithAccTok.Get(newcomment.Id, commentParam);
+                var fbComment = fbAppWithAccTok.Get(tmpComment.Id, commentParam);
 
-                commentdetailmodel.datacreated = newcomment.DateCreated;
+                commentdetailmodel.datacreated = tmpComment.DateCreated;
                 Debug.WriteLine("time  " + commentdetailmodel.datacreated);
                 commentdetailmodel.commentContent = fbComment.message;
                 commentdetailmodel.from = fbComment.from.name;
-                commentdetailmodel.avatarUrl = fbComment.from.picture.data.url;
+                 
                 //string commentText = @fbComment.message;
                 //commentdetailmodel.commentContent = commentText;
                 if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
@@ -435,6 +500,16 @@ namespace ShopManager.Controllers
                 commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentId);
                 //Debug.WriteLine("commentdetailmodel.commentImageContent      " + commentdetailmodel.commentImageContent);
                 commentdetailmodel.SenderFbId = fbComment.from.id;
+
+                if (tmpComment.Status != 5)
+                {
+                    commentdetailmodel.commentContent = fbComment.message;
+                }
+                else
+                {
+                    commentdetailmodel.commentContent = tmpComment.LastContent;
+                }
+                commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentdetailmodel.SenderFbId + "/picture?type=square";
                 return Json(commentdetailmodel, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -550,11 +625,32 @@ namespace ShopManager.Controllers
             }
         }
 
+        public JsonResult UnhidePost(string postId)
+        {
+            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+            Debug.WriteLine(accessToken);
+            dynamic param = new ExpandoObject();
+            try
+            {
+                param.access_token = accessToken;
+                param.is_hidden = false;
+                var result = fbApp.Post(postId, param);
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult SetHideComment(string commentId)
         {
             var result = true;
             //hide comment
-            try {
+            try
+            {
                 if (commentId.Split('_')[0] != (string)Session["ShopId"])
                 {
                     commentservice.SetStatus(commentId, 3);
@@ -613,7 +709,8 @@ namespace ShopManager.Controllers
         {
             var result = true;
             //unhide a comment
-            try {
+            try
+            {
                 if (commentId.Split('_')[0] != (string)Session["ShopId"])
                 {
                     commentservice.SetStatus(commentId, 1);
@@ -823,7 +920,7 @@ namespace ShopManager.Controllers
 
         public JsonResult PrivateReplyComment(string commentId, string message)
         {
-            
+
             try
             {
                 string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;

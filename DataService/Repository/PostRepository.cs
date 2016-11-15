@@ -36,6 +36,22 @@ namespace DataService.Repository
             }
 
         }
+        public bool SetPostIsUnRead(string postId)
+        {
+            try
+            {
+                var post = dbSet.Where(q => q.Id == postId).FirstOrDefault();
+                post.IsRead = false;
+                return Update(post);
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+
+        }
 
         public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
         {
@@ -49,6 +65,6 @@ namespace DataService.Repository
             }).OrderByDescending(q=>q.LastUpdate);
             return result.AsQueryable();
         }
-
+       
     }
 }

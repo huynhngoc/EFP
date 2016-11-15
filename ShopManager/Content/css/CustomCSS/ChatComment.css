@@ -44,6 +44,8 @@
 
 .feed-element:hover {
     background-color: #eeecec;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .small-chat-bo {
