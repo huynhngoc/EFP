@@ -62,7 +62,7 @@
         <div id="" class="heading receiver_name" draggable="true">
             (Chưa chọn)
         </div>
-        <div id="chat_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000">
+        <div id="chat_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000;position:relative;float: left;left: 40%;">
             <div class="sk-circle1 sk-circle"></div>
             <div class="sk-circle2 sk-circle"></div>
             <div class="sk-circle3 sk-circle"></div>
@@ -76,13 +76,23 @@
             <div class="sk-circle11 sk-circle"></div>
             <div class="sk-circle12 sk-circle"></div>
         </div>
-        <div id="chat_box_content" class="content slimScrollBar">
+        <div id="chat_box_content" class="content scrollbar-inner" style="z-index:1;position:relative">
 
         </div>
         <div class="div_functions">
             <button id="btn_response" class="btn btn-default" type="button">
                 <i class="fa fa-at"></i>
             </button>
+            <span id="suggest_wrapper">
+                <label class="btn btn-primary btn-outline">
+                    GỢI Ý
+                </label>
+            </span>
+            <span id="auto_wrapper">
+                <label class="btn btn-primary btn-outline">
+                    AUTO
+                </label>
+            </span>
         </div>
         <div class="form-chat">
             <div class="input-group input-group-sm">
@@ -112,20 +122,20 @@
                 </div>
                 <div class="cust_info" id="" style="padding:0">
                     <div>
-                        <div class="col-md-2">
+                        <div class="col-xs-2">
                             <img id="cust_avatar" alt="image" class="img-circle" src="~/Content/img/ava_placeholder.png" style="float:left" width="50" height="50">
                         </div>
                     </div>
-                    <div class="col-md-5" style="padding-right:0">
+                    <div class="col-xs-5" style="padding-right:0">
                         <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-xs-5">
                         <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="" readonly>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly></textarea>
                     </div>
                 </div>
@@ -138,7 +148,7 @@
                     <div class="ibox-content">
                         <button id="btn_addproduct" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</button>
 
-                        <div id="tbl_order" class="table-responsive col-md-12" style="overflow:auto;position:relative;">
+                        <div id="tbl_order" class="table-responsive col-md-12 scrollbar-inner">
                             <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="add_datatableproduct">
                                 <thead>
                                     <tr>
@@ -169,6 +179,9 @@
                             </table>
                         </div>
                         <button id="btn_addorder" class="btn btn-primary">Tạo đơn hàng</button>
+                        @*<div class="att_img" style="height:100px; width:100px">
+                                <img style="height: 100%; width: 100%; object-fit: contain" src="">
+                            </div>*@
                     </div>
                 </div>
 
@@ -195,14 +208,14 @@
 <!--Order-->
 <div id="popover_response" hidden>
     <div class="table-responsive col-md-12">
-        <table id="resp_dt" class="table table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
-            <thead>
-                <tr>
-                    <th class="col-md-3">@@</th>
-                    <th class="col-md-9">Câu trả lời</th>
-                </tr>
-            </thead>
-        </table>
+        @*<table id="resp_dt" class="table table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
+                <thead>
+                    <tr>
+                        <th class="col-md-3">@@</th>
+                        <th class="col-md-9">Câu trả lời</th>
+                    </tr>
+                </thead>
+            </table>*@
     </div>
 </div>
 <!--./Order-->
@@ -211,6 +224,7 @@
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     @Styles.Render("~/TouchSpin-CSS")
+    @Styles.Render("~/jQueryScrollbar-CSS")
     @Styles.Render("~/jQuery-UI-CSS")
     @Styles.Render("~/Toastr-style")
 }
@@ -227,7 +241,8 @@
         }
 
         .noTitleStuff {
-            height: 37% !important;
+            z-index: 2031;
+            max-height: 34% !important;
             width: 500px !important;
             box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
         }
@@ -236,18 +251,30 @@
                 display: none;
             }
 
-        .responsesDiv {
-            height: 37% !important;
+        .dialog_resp {
+            z-index: 2031;
+            max-height: 34% !important;
             width: 500px !important;
             box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
         }
 
-            .responsesDiv .ui-dialog-titlebar {
+            .dialog_resp .ui-dialog-titlebar {
                 display: none;
             }
 
-        .div_functions .active {
+        /*.div_functions .active {
             color: blue;
+        }*/
+
+        .response:hover {
+            background-color: #B0BED9;
+        }
+
+        #tbl_order {
+            height: 10%;
+            overflow: auto;
+            position: relative;
+            max-height: 40vh;
         }
     </style>
 }
@@ -260,6 +287,7 @@
     @Scripts.Render("~/TouchSpin-JS")
     @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Utility-JS")
+    @Scripts.Render("~/jQueryScrollbar-JS")
     @Scripts.Render("~/Toastr")
     @Scripts.Render("~/SignalR-JS")
     @Scripts.Render("/signalr/hubs")
@@ -401,7 +429,7 @@
         }
 
         @*Default*@
-        $('#chat_loading').hide();
+        $('#chat_loading').show();
         function ShowConvLoading(){
             $('#list_conversation').empty();
             $('#no_result').hide();
@@ -445,49 +473,21 @@
             }
         });
 
-        function ShowAutoSuggest(){
-            $("#popover_product").dialog({
-                autoOpen: false,
-                //appendTo: "#someElem",
-                draggable: true,
-                //height: 40vh,
-                //width: 700,
-                modal: true,
-                resizable: false,
-                dialogClass: 'noTitleStuff',
-                close: function (event, ui) { $('#wrap').show(); },
-                open: function (event, ui) {
-                    $('.ui-widget-overlay').bind('click', function () {
-                        $("#popover_product").dialog('close');
-                    });
-                    $('.ui-widget-overlay').css(
-                        "cssText", "background: none;"
-                    )
-                },
-                position: {
-                    my: "left bottom",
-                    at: "left top",
-                    of: "#btn_addproduct"
-                }
-            });
-        }
+        $('.small-chat-bo .content').scrollbar();
 
-        $('.small-chat-bo .content').slimScroll({
-            height: "70vh",
-            start: 'bottom'
-        });
         $('.ibox-scroll').slimScroll({
             height: "70vh"
         });
 
-        $('#messreply_textbox').keypress(function(e){
+        $('#txt_messreply').keypress(function(e){
             if(e.keyCode==13)
                 $('#btn_sendmess').click();
         });
 
         $('#btn_sendmess').click(function (){
             var tid=$('.ui-selected').attr('id');
-            var mess= $('#messreply_textbox').val();
+            var mess= $('#txt_messreply').val();
+            console.log(mess);
 
             $.ajax({
                 async: false,
@@ -500,7 +500,7 @@
                 success: function (data) {
                     console.log(data);
                     if(data.success == true){
-                        $('#messreply_textbox').val('');
+                        $('#txt_messreply').val('');
                     }
                     else{
                         //alert("Có lỗi! Không gửi được");
@@ -511,9 +511,7 @@
         });
 
         function ChatboxScrollToBottom(){
-            //var scrollTo_val = $('.small-chat-bo .content').prop('scrollHeight') + 'px';
-            //alert(scrollTo_val);
-            //$('.small-chat-bo .content').slimScroll({ scrollTo: scrollTo_val });
+            $('#chat_box_content').scrollTop($('#chat_box_content').height()*10);
         }
 
         //Datatable list order
@@ -530,10 +528,7 @@
                     "zeroRecords": "Chưa có sản phẩm"
                 }
                 , "fnInitComplete": function () {
-                    $('#tbl_order').slimScroll({
-                        height: "34vh",
-                        alwaysVisible: true
-                    });
+                    $('#tbl_order').scrollbar();
                 }
         });
 
@@ -583,73 +578,85 @@
                         , { "aTargets": [2], "mData": "Price" }
                 ]
                 , "fnInitComplete": function () {
+
                     $('div.dataTables_filter input').focus();
 
                     //function row click
-                    $('#popover_datatable tbody').unbind("click");
-                    $('#popover_datatable tbody').on('click', 'tr', function () {
-                        if ($(this).hasClass('selected')) {
-                            //Do nothing
-                        }
-                        else {
-                            table.$('tr.selected').removeClass('selected');
-                            $(this).addClass('selected');
-                        }
-
-                        var t = $('#add_datatableproduct').DataTable();
-                        var id = table.cell('.selected', 0).data();
-                        var tRow = t.row('#' + id);//table.cell('.selected', 0).data() + '');
-                        if (tRow.index() == undefined) {
-                            //Add row
-                            var rowNode = t.row.add([
-                                table.cell('.selected', 0).data(),
-                                table.cell('.selected', 1).data(),
-                                '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" style="padding: 4px;text-align: center;" />',
-                                table.cell('.selected', 2).data(),
-                                table.cell('.selected', 2).data(),
-                                '<button id="del_' + id + '" class="btn btn-danger btn-sm" type="button" style="padding:1px 4px"><i class="fa fa-trash-o"></i></button>'
-                            ]).draw(false).node();
-                            $(rowNode).attr('id', id);
-
-                            //Quantity
-                            $("input[id='" + id + "']").TouchSpin({
-                                min: 1,
-                                max: 100,
-                                initval: 1,
-                                verticalbuttons: true
-                            }).on('change', function () {
-                                var id = $(this).attr('id');
-                                CalculateTotal($(this).val(), id);
-                            });
-                            $(".input-group-btn-vertical").remove();
-
-                            //Delete button
-                            $("#del_" + id).click(function () {
-                                t.row('#' + id).remove().draw();
-                            });
-
-                            //Change total
-                            CalculateTotal(1, id);
-                        }
-                        else {
-                            //Increase quantity on click
-                            var val = $("input[id='" + id + "']").val();
-                            if (val <= 99) {
-                                $("input[id='" + id + "']").val(parseInt(val) + 1);
-                                CalculateTotal($("input[id='" + id + "']").val(), id);
+                    //var isEmpty = $('.dataTables_empty') != null;
+                    //alert(isEmpty);
+                    var isEmpty = false;
+                    if (isEmpty){
+                        //Do nothing
+                    }
+                    else{
+                        $('#popover_datatable tbody').unbind("click");
+                        $('#popover_datatable tbody').on('click', 'tr', function () {
+                            if ($(this).hasClass('selected')) {
+                                //Do nothing
                             }
-                        }
+                            else {
+                                table.$('tr.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                            }
 
-                        //Calculate total on row
-                        function CalculateTotal(q, id) {
-                            var index = '#' + t.cell('#' + id, 0).data();
-                            t.cell(index, 4).data(q * t.cell(index, 3).data());
+                            var t = $('#add_datatableproduct').DataTable();
+                            var id = table.cell('.selected', 0).data();
+                            var tRow = t.row('#' + id);//table.cell('.selected', 0).data() + '');
+                            if (tRow.index() == undefined) {
+                                //Add row
+                                var rowNode = t.row.add([
+                                    table.cell('.selected', 0).data(),
+                                    table.cell('.selected', 1).data(),
+                                    '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" style="padding: 4px;text-align: center;" />',
+                                    table.cell('.selected', 2).data(),
+                                    table.cell('.selected', 2).data(),
+                                    '<button id="del_' + id + '" class="btn btn-danger btn-sm" type="button" style="padding:1px 4px"><i class="fa fa-trash-o"></i></button>'
+                                ]).draw(false).node();
+                                $(rowNode).attr('id', id);
 
-                            $("#total #table_total").text(t.column(4).data().reduce(function (a, b) {
-                                return a + b;
-                            }));
-                        }
-                    });
+                                //Quantity
+                                $("input[id='" + id + "']").TouchSpin({
+                                    min: 1,
+                                    max: 100,
+                                    initval: 1,
+                                    verticalbuttons: true
+                                }).on('change', function () {
+                                    var id = $(this).attr('id');
+                                    CalculateTotal($(this).val(), id);
+                                });
+                                $(".input-group-btn-vertical").remove();
+
+                                //Delete button
+                                $("#del_" + id).click(function () {
+                                    t.row('#' + id).remove().draw();
+                                });
+
+                                //Change total
+                                CalculateTotal(1, id);
+                            }
+                            else {
+                                //Increase quantity on click
+                                var val = $("input[id='" + id + "']").val();
+                                if (val <= 99) {
+                                    $("input[id='" + id + "']").val(parseInt(val) + 1);
+                                    CalculateTotal($("input[id='" + id + "']").val(), id);
+                                }
+                            }
+
+                            //Calculate total on row
+                            function CalculateTotal(q, id) {
+                                var index = '#' + t.cell('#' + id, 0).data();
+                                t.cell(index, 4).data(q * t.cell(index, 3).data());
+
+                                $("#total #table_total").text(t.column(4).data().reduce(function (a, b) {
+                                    return a + b;
+                                }));
+                            }
+                        });
+
+                        $('#popover_datatable tbody').find('.dataTables_empty').parent().unbind("click");
+                    }
+
                 }
                 , "paging": false
                 , "searching": true
@@ -764,6 +771,54 @@
             $('#conv_loading').hide();
         }
 
+        //"GỢI Ý"
+        $('#suggest_wrapper').click(function(){
+            if ($('#suggest_wrapper .btn').hasClass('active')){
+                $('#suggest_wrapper .btn').removeClass('active');
+                $("#txt_messreply").unbind('keydown');
+                $("#txt_messreply").autocomplete("destroy");
+            }
+            else{
+                $('#suggest_wrapper .btn').addClass('active');
+                GetSuggestReply();
+            }
+        });
+
+        //"AUTO"
+        var reply_mode=0;
+        $.ajax({
+            async: false,
+            method: 'GET',
+            url: '/Shop/GetReplyMode',
+            success: function (data) {
+                console.log(data);
+                reply_mode=data.mode;
+            }
+        });
+        if (reply_mode==1){
+            $('#auto_wrapper .btn').addClass('active');
+        }
+
+        $('#auto_wrapper').click(function(){
+            if ($('#auto_wrapper .btn').hasClass('active')){
+                $('#auto_wrapper .btn').removeClass('active');
+                SetReplyMode(1);
+            }
+            else{
+                $('#auto_wrapper .btn').addClass('active');
+                SetReplyMode(2);
+            }
+        });
+
+        function SetReplyMode(mode){
+            $.ajax({
+                async: true,
+                method: 'GET',
+                url: '/Shop/SetReplyMode',
+                data: {"mode": mode}
+            });
+        }
+
         //Get conversation content
         var ajax_GetConversationContent;
         function GetConversationContent(t_id){
@@ -783,22 +838,122 @@
                     $('#chat_loading').hide();
                 }
             });
+
+            
         }
 
-        // Chat box content
+        function GetSuggestReply(){
+            $( function() {
+                var availableReps=[];
+
+                $.ajax({
+                    async: true,
+                    method: 'GET',
+                    url: '/ChatComment/GetAvailableResponses',
+                    success: function (data) {
+                        console.log(data);
+                        for (var i=0;i<data.length;i++){
+                            availableReps.push(data[i].Value);
+                        }
+                    }
+                });
+
+                function split( val ) {
+                    return val.split( / \s*/ );
+                }
+                function extractLast( term ) {
+                    return split( term ).pop();
+                }
+
+                $( "#txt_messreply" )
+                  // don't navigate away from the field on tab when selecting an item
+                  .on( "keydown", function( event ) {
+                      if ( event.keyCode === $.ui.keyCode.TAB &&
+                          $( this ).autocomplete( "instance" ).menu.active ) {
+                          event.preventDefault();
+                      }
+                  })
+                  .autocomplete({
+                      minLength: 0,
+                      source: function( request, response ) {
+                          // delegate back to autocomplete, but extract the last term
+                          response( $.ui.autocomplete.filter(
+                            availableReps, extractLast( request.term ) ) );
+                      },
+                      focus: function() {
+                          // prevent value inserted on focus
+                          return false;
+                      },
+                      select: function( event, ui ) {
+                          var terms = split( this.value );
+                          // remove the current input
+                          terms.pop();
+                          // add the selected item
+                          terms.push( ui.item.value );
+                          // add placeholder to get the comma-and-space at the end
+                          terms.push( "" );
+                          this.value = terms.join( " " );
+                          return false;
+                      },
+                      position: {
+                          my: "left bottom",
+                          at: "left top"
+                      }
+                  });
+            } );
+        }
+
+        // Display Chat box content
         function DisplayChatContent(data){
             for (i=0;i<data.Messages.length;i++){
                 var mess=data.Messages[i];
                 if (mess.UserId != shopId){
+                    //Check has attachments
+                    var strAtt="";
+                    console.log(mess);
+                    if (mess.Attachments.length > 0)
+                    {
+
+                        strAtt+='<div class="chat-attach col-sm-12" style="word-wrap: break-word;margin-left:32px">';
+                        for (var j=0;j<mess.Attachments.length;j++){
+                            var att=mess.Attachments[j];
+                            if (att.Type == "img"){
+                                strAtt+='<a href="'+att.Url+'" target="_blank">'+
+                                            '<img style="height: 100px; width: 100px; object-fit: contain" src="'+att.Url+'">'+
+                                        '</a>'
+                            }
+                            else{
+                                strAtt+='<div class="chat-message active" style="word-wrap: break-word;">'+
+                                            '<a href="'+att.Url+'" target="_blank" style="color:white;">'+
+                                                att.Filename+
+                                            '</a>'
+                                '</div>'
+
+                            }
+
+                            if (j!=mess.Attachments.length-1){
+                                strAtt+='<br/>';
+                            }
+                        }
+                        strAtt+='</div>';
+                    }
+
+                    //Chat message
+                    var strMess="";
+                    if (mess.MessContent.length >0){
+                        strMess+='<div class="chat-message active" style="word-wrap: break-word;">'+
+                                    mess.MessContent+
+                                '</div>'
+                    }
+
                     $('#chat_box_content').prepend('<div id="'+mess.MessId+'" class="left">'+
-                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="40" height="40">'+
+                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px;height: 40px; width: 40px;">'+
                             '<div class="author-name">'+
                                 mess.UserName+
                                 '<small class="chat-date" style="margin-left: 5px;">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
                             '</div>'+
-                            '<div class="chat-message active" style="word-wrap: break-word;">'+
-                                mess.MessContent+
-                            '</div>'+
+                            strMess+
+                            strAtt+
                         '</div>');
                 }
                 else {
@@ -851,90 +1006,133 @@
                     });
                 });
             }
+
+            $('.scroll-x').remove();
         }
 
         // Response
         $("#btn_response").click(function (evt) {
-            $("#btn_response").addClass('active');
+            if ($("#btn_response").hasClass('active') == false){
+                $("#btn_response").addClass('active');
 
-            $("#popover_response").dialog({
-                autoOpen: false,
-                draggable: true,
-                modal: true,
-                resizable: false,
-                dialogClass: 'responsesDiv',
-                close: function (event, ui) { $('#wrap').show(); },
-                open: function (event, ui) {
-                    $('.ui-widget-overlay').bind('click', function () {
-                        $("#popover_response").dialog('close');
-                    });
-                    $('.ui-widget-overlay').css(
-                        "cssText", "background: none;"
-                    )
-                },
-                position: {
-                    my: "left bottom",
-                    at: "left top",
-                    of: "#btn_response"
-                }
-            });
+                $("#popover_response").dialog({
+                    autoOpen: false,
+                    draggable: true,
+                    modal: true,
+                    resizable: false,
+                    dialogClass: 'dialog_resp',
+                    close: function (event, ui) {
+                        $('#wrap').show();
+                        $("#btn_response").removeClass('active');
+                    },
+                    open: function (event, ui) {
+                        $('.ui-widget-overlay').bind('click', function () {
+                            $("#popover_response").dialog('close');
+                        });
+                        $('.ui-widget-overlay').css(
+                            "cssText", "background: none;"
+                        )
+                    },
+                    position: {
+                        my: "left bottom",
+                        at: "left top",
+                        of: "#btn_response"
+                    }
+                });
+            }
+
 
             CreateResponseDT();
             $("#popover_response").dialog("open");
         });
 
         function CreateResponseDT(){
-            var table = $('#resp_dt').DataTable({
-                "bProcessing": true
-                , "bServerSide": true
-                , "sAjaxSource": "/ChatComment/GetAvailableResponses"
-                , "aoColumnDefs": [{ "aTargets": [0], "mData": "Name" }
-                        , { "aTargets": [1], "mData": "Value" }
-                ]
-                , "fnInitComplete": function () {
-                    $('div.dataTables_filter input').focus();
+            //var table = $('#resp_dt').DataTable({
+            //    "bProcessing": true
+            //    , "bServerSide": true
+            //    , "sAjaxSource": "/ChatComment/GetAvailableResponses"
+            //    , "aoColumnDefs": [{ "aTargets": [0], "mData": "Name" }
+            //            , { "aTargets": [1], "mData": "Value" }
+            //    ]
+            //    , "fnInitComplete": function () {
+            //        $('div.dataTables_filter input').focus();
 
-                    //function row click
-                    $('#resp_dt tbody').unbind("click");
-                    $('#resp_dt tbody').on('click', 'tr', function () {
-                        if ($(this).hasClass('selected')) {
-                            //Do nothing
-                        }
-                        else {
-                            table.$('tr.selected').removeClass('selected');
-                            $(this).addClass('selected');
-                        }
+            //        //function row click
+            //        $('#resp_dt tbody').unbind("click");
+            //        $('#resp_dt tbody').on('click', 'tr', function () {
+            //            if ($(this).hasClass('selected')) {
+            //                //Do nothing
+            //            }
+            //            else {
+            //                table.$('tr.selected').removeClass('selected');
+            //                $(this).addClass('selected');
+            //            }
 
-                        var mess=$('#messreply_textbox').val().trim();
-                        if (mess.length !=0){
-                            mess+=' '+table.cell('.selected', 1).data();
-                        }
-                        else {
-                            mess=table.cell('.selected', 1).data();
-                        }
-                        $('#messreply_textbox').val(mess);
+            //            var mess=$('#messreply_textbox').val().trim();
+            //            if (mess.length !=0){
+            //                mess+=' '+table.cell('.selected', 1).data();
+            //            }
+            //            else {
+            //                mess=table.cell('.selected', 1).data();
+            //            }
+            //            $('#messreply_textbox').val(mess);
 
-                        $("#popover_response").dialog('close');
-                    });
+            //            $("#popover_response").dialog('close');
+            //        });
+            //    }
+            //    , "paging": false
+            //    , "searching": true
+            //    , "ordering": false
+            //    , "scrollY": "23vh"
+            //    //, "scrollX": "100%"
+            //    , "scrollCollapse": true
+            //    , "bLengthChange": false
+            //    , "language": {
+            //        "loadingRecords": "Đang tải ...",
+            //        "processing": "Đang xử lý...",
+            //        "search": "Tìm kiếm:",
+            //        "searchPlaceholder": "Tên sản phẩm...",
+            //        "zeroRecords": "Không tìm thấy dữ liệu"
+            //    }
+            //    , "info": false
+            //    , "destroy": true
+            //    , "dom": "<'search-left'f>t"
+            //})
+
+            var availableReps=[];
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/ChatComment/GetAvailableResponses',
+                success: function (data) {
+                    availableReps=data;
                 }
-                , "paging": false
-                , "searching": true
-                , "ordering": false
-                , "scrollY": "23vh"
-                //, "scrollX": "100%"
-                , "scrollCollapse": true
-                , "bLengthChange": false
-                , "language": {
-                    "loadingRecords": "Đang tải ...",
-                    "processing": "Đang xử lý...",
-                    "search": "Tìm kiếm:",
-                    "searchPlaceholder": "Tên sản phẩm...",
-                    "zeroRecords": "Không tìm thấy dữ liệu"
+            });
+
+            $("#popover_response").empty();
+            console.log(availableReps);
+            for (var i=0;i<availableReps.length;i++){
+                var att=availableReps[i];
+
+                $("#popover_response").append('<div class="response input-group col-xs-12">'+
+                    '<span class="col-xs-3">'+att.Name+'</span>'+
+                    '<span class="resp_value col-xs-9">'+att.Value+'</span>'+
+                '</div>');
+            }
+
+            $('.response').click(function (){
+                var mess=$('#txt_messreply').val().trim();
+                console.log(mess);
+                if (mess.length !=0){
+                    mess+=' '+$(this).find('.resp_value').html().trim();
                 }
-                , "info": false
-                , "destroy": true
-                , "dom": "<'search-left'f>t"
-            })
+                else {
+                    mess=$(this).find('.resp_value').html().trim();
+                }
+                $('#txt_messreply').val(mess);
+                $("#popover_response").dialog('close');
+            });
+
         }
 
         //User info
@@ -1224,5 +1422,7 @@
             var t = $('#add_datatableproduct').DataTable();
             t.clear().draw();
         }
+
+
     </script>
 }

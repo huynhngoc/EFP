@@ -920,6 +920,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\css\plugins\jQueryScrollbar\" />
+    <Folder Include="Content\js\plugins\jQueryScrollbar\" />
     <Folder Include="Views\Webhook\" />
   </ItemGroup>
   <ItemGroup>

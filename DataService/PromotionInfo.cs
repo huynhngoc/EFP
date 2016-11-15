@@ -12,25 +12,22 @@ namespace DataService
     using System;
     using System.Collections.Generic;
     
-    public partial class Post
+    public partial class PromotionInfo
     {
-        public Post()
+        public PromotionInfo()
         {
-            this.Comments = new HashSet<Comment>();
+            this.Posts = new HashSet<Post>();
         }
     
-        public string Id { get; set; }
-        public string SenderFbId { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Tags { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public string ShopId { get; set; }
-        public bool IsRead { get; set; }
-        public int Status { get; set; }
-        public Nullable<int> IntentId { get; set; }
-        public System.DateTime DateCreated { get; set; }
-        public Nullable<int> PromotionId { get; set; }
     
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual Shop Shop { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual Intent Intent { get; set; }
-        public virtual PromotionInfo PromotionInfo { get; set; }
     }
 }

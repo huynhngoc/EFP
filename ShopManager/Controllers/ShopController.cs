@@ -117,5 +117,12 @@ namespace ShopManager.Controllers
             return Json(new { success = result }, JsonRequestBehavior.AllowGet);
         }
 
+        //Long
+        public JsonResult GetReplyMode()
+        {
+            string shopId = (string)Session["shopId"];
+            int result = shopService.GetReplyMode(shopId);
+            return Json(new { mode = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -130,5 +130,11 @@ namespace DataService.Service
 
             return rs;
         }
+        public IQueryable<EntityViewModel> GetAvailableEntities(string shopId)
+        {
+            var rs = repository.GetAvailableEntities(shopId);
+
+            return rs;
+        }
     }
 }

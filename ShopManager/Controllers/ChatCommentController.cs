@@ -111,7 +111,7 @@ namespace ShopManager.Controllers
 
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
-            param.fields = "from,created_time,message";
+            param.fields = "from,created_time,message,attachments";
             dynamic result = fbApp.Get(conversationId + "/messages", param);
 
             foreach (var mess in result.data)
@@ -122,6 +122,30 @@ namespace ShopManager.Controllers
                 mc.DateCreated = DateTime.Parse(mess.created_time);
                 mc.UserId = mess.from.id;
                 mc.UserName = mess.from.name;
+
+                if (mess.attachments != null)
+                {
+                    foreach (var att in mess.attachments.data)
+                    {
+                        string mime = att.mime_type;
+                        string type = mime.Split('/')[0];
+                        var attachment = new AttachmentViewModel();
+
+                        if (type.Equals("image"))
+                        {
+                            attachment.Type = "img";
+                            attachment.Url = att.image_data.url;
+                        }
+                        else
+                        {
+                            attachment.Type = "other";
+                            attachment.Filename = att.name;
+                            attachment.Url = att.file_url;
+                        }
+
+                        mc.Attachments.Add(attachment);
+                    }
+                }
 
                 conversationContent.Messages.Add(mc);
             }
@@ -223,25 +247,48 @@ namespace ShopManager.Controllers
             return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAvailableResponses(JQueryDataTableParamModel param)
+        //public JsonResult GetAvailableResponses(JQueryDataTableParamModel param)
+        //{
+        //    string shopId = (string)Session["ShopId"];
+        //    EntityService entityService = new EntityService();
+
+        //    try
+        //    {
+        //        var products = entityService.GetAvailableEntities(param, shopId);
+
+        //        var totalRecords = products.Count();
+        //        var data = products;
+        //        Debug.WriteLine("-----l ");
+        //        return Json(new
+        //        {
+        //            sEcho = param.sEcho,
+        //            iTotalRecords = totalRecords,
+        //            iTotalDisplayRecords = totalRecords,//displayRecords,
+        //            aaData = data
+        //        }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e.Message);
+        //        return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
+
+        public JsonResult GetAvailableResponses()
         {
             string shopId = (string)Session["ShopId"];
             EntityService entityService = new EntityService();
 
             try
             {
-                var products = entityService.GetAvailableEntities(param, shopId);
+                var reps = entityService.GetAvailableEntities(shopId);
+                var arrReps = new List<EntityViewModel>();
 
-                var totalRecords = products.Count();
-                var data = products;
-                Debug.WriteLine("-----l ");
-                return Json(new
+                foreach (var en in reps.ToList())
                 {
-                    sEcho = param.sEcho,
-                    iTotalRecords = totalRecords,
-                    iTotalDisplayRecords = totalRecords,//displayRecords,
-                    aaData = data
-                }, JsonRequestBehavior.AllowGet);
+                    if (en.Value.Trim().Length > 0) arrReps.Add(en);
+                }
+                return Json(arrReps.ToList(), JsonRequestBehavior.AllowGet); ;
             }
             catch (Exception e)
             {

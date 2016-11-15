@@ -26,6 +26,7 @@ namespace DataService
             this.Responses = new HashSet<Respons>();
             this.ShopUsers = new HashSet<ShopUser>();
             this.TemplateProducts = new HashSet<TemplateProduct>();
+            this.PromotionInfoes = new HashSet<PromotionInfo>();
         }
     
         public string Id { get; set; }
@@ -46,5 +47,6 @@ namespace DataService
         public virtual ICollection<Respons> Responses { get; set; }
         public virtual ICollection<ShopUser> ShopUsers { get; set; }
         public virtual ICollection<TemplateProduct> TemplateProducts { get; set; }
+        public virtual ICollection<PromotionInfo> PromotionInfoes { get; set; }
     }
 }

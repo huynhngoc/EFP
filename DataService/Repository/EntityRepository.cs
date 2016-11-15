@@ -37,5 +37,19 @@ namespace DataService.Repository
             Debug.WriteLine("---------data " + data.Count());
             return data;
         }
+
+        public IQueryable<EntityViewModel> GetAvailableEntities(string shopId)
+        {
+            
+            var rs = dbSet.Where(q => q.ShopId == shopId);
+
+            var data = rs.Select(q => new EntityViewModel()
+            {
+                Name = q.EntityName,
+                Value = q.Value
+            });
+            Debug.WriteLine("---------data " + data.Count());
+            return data;
+        }
     }
 }

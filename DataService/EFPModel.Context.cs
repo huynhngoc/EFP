@@ -45,5 +45,6 @@ namespace DataService
         public virtual DbSet<ShopUser> ShopUsers { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Intent> Intents { get; set; }
+        public virtual DbSet<PromotionInfo> PromotionInfoes { get; set; }
     }
 }

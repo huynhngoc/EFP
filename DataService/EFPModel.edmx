@@ -78,6 +78,7 @@
           <Property Name="IntentId" Type="int" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="ParentId" Type="nvarchar" MaxLength="128" />
+          <Property Name="LastContent" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="Conversations">
           <Key>
@@ -157,6 +158,7 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="IntentId" Type="int" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="PromotionId" Type="int" />
         </EntityType>
         <EntityType Name="ProductPictures">
           <Key>
@@ -189,6 +191,18 @@
           <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="PromotionPrice" Type="decimal" Precision="18" Scale="0" />
           <Property Name="TemplateId" Type="int" />
+        </EntityType>
+        <EntityType Name="PromotionInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="200" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="ShopId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="Responses">
           <Key>
@@ -505,6 +519,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Posts_PromotionInfo">
+          <End Role="PromotionInfo" Type="Self.PromotionInfo" Multiplicity="0..1" />
+          <End Role="Posts" Type="Self.Posts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PromotionInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Posts">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Posts_Shops">
           <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
           <End Role="Posts" Type="Self.Posts" Multiplicity="*" />
@@ -526,6 +552,18 @@
             </Principal>
             <Dependent Role="ProductPictures">
               <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PromotionInfo_Shops">
+          <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
+          <End Role="PromotionInfo" Type="Self.PromotionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shops">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PromotionInfo">
+              <PropertyRef Name="ShopId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -606,6 +644,7 @@
           <EntitySet Name="Posts" EntityType="Self.Posts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductPictures" EntityType="Self.ProductPictures" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromotionInfo" EntityType="Self.PromotionInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Responses" EntityType="Self.Responses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopUser" EntityType="Self.ShopUser" Schema="dbo" store:Type="Tables" />
@@ -695,6 +734,10 @@
             <End Role="Intents" EntitySet="Intents" />
             <End Role="Posts" EntitySet="Posts" />
           </AssociationSet>
+          <AssociationSet Name="FK_Posts_PromotionInfo" Association="Self.FK_Posts_PromotionInfo">
+            <End Role="PromotionInfo" EntitySet="PromotionInfo" />
+            <End Role="Posts" EntitySet="Posts" />
+          </AssociationSet>
           <AssociationSet Name="FK_Posts_Shops" Association="Self.FK_Posts_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Posts" EntitySet="Posts" />
@@ -702,6 +745,10 @@
           <AssociationSet Name="FK_ProductPictures_MasterProducts" Association="Self.FK_ProductPictures_MasterProducts">
             <End Role="Products" EntitySet="Products" />
             <End Role="ProductPictures" EntitySet="ProductPictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PromotionInfo_Shops" Association="Self.FK_PromotionInfo_Shops">
+            <End Role="Shops" EntitySet="Shops" />
+            <End Role="PromotionInfo" EntitySet="PromotionInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_Responses_Intents" Association="Self.FK_Responses_Intents">
             <End Role="Intents" EntitySet="Intents" />
@@ -857,6 +904,15 @@
             <End Role="Intent" EntitySet="Intents" />
             <End Role="Respons" EntitySet="Responses" />
           </AssociationSet>
+          <EntitySet Name="PromotionInfoes" EntityType="EFPModel.PromotionInfo" />
+          <AssociationSet Name="FK_Posts_PromotionInfo" Association="EFPModel.FK_Posts_PromotionInfo">
+            <End Role="PromotionInfo" EntitySet="PromotionInfoes" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PromotionInfo_Shops" Association="EFPModel.FK_PromotionInfo_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="PromotionInfo" EntitySet="PromotionInfoes" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -995,6 +1051,8 @@
           <NavigationProperty Name="Shop" Relationship="EFPModel.FK_Posts_Shops" FromRole="Post" ToRole="Shop" />
           <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Posts" FromRole="Post" ToRole="Comment" />
           <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Posts_Intents" FromRole="Post" ToRole="Intent" />
+          <Property Name="PromotionId" Type="Int32" />
+          <NavigationProperty Name="PromotionInfo" Relationship="EFPModel.FK_Posts_PromotionInfo" FromRole="Post" ToRole="PromotionInfo" />
         </EntityType>
         <EntityType Name="ProductPicture">
           <Key>
@@ -1188,6 +1246,7 @@
           <NavigationProperty Name="Responses" Relationship="EFPModel.FK_Responses_Shops" FromRole="Shop" ToRole="Respons" />
           <NavigationProperty Name="ShopUsers" Relationship="EFPModel.FK_ShopUser_Shops" FromRole="Shop" ToRole="ShopUser" />
           <NavigationProperty Name="TemplateProducts" Relationship="EFPModel.FK_TemplateProduct_Shops" FromRole="Shop" ToRole="TemplateProduct" />
+          <NavigationProperty Name="PromotionInfoes" Relationship="EFPModel.FK_PromotionInfo_Shops" FromRole="Shop" ToRole="PromotionInfo" />
         </EntityType>
         <EntityType Name="ShopUser">
           <Key>
@@ -1380,6 +1439,7 @@
           <NavigationProperty Name="Comment1" Relationship="EFPModel.FK_Comments_Comments" FromRole="Comment1" ToRole="Comment" />
           <NavigationProperty Name="Intent" Relationship="EFPModel.FK_Comments_Intents" FromRole="Comment" ToRole="Intent" />
           <NavigationProperty Name="Post" Relationship="EFPModel.FK_Comments_Posts" FromRole="Comment" ToRole="Post" />
+          <Property Name="LastContent" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Intent">
           <Key>
@@ -1461,6 +1521,44 @@
             </Principal>
             <Dependent Role="Respons">
               <PropertyRef Name="IntentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PromotionInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Tags" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="ShopId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Posts" Relationship="EFPModel.FK_Posts_PromotionInfo" FromRole="PromotionInfo" ToRole="Post" />
+          <NavigationProperty Name="Shop" Relationship="EFPModel.FK_PromotionInfo_Shops" FromRole="PromotionInfo" ToRole="Shop" />
+        </EntityType>
+        <Association Name="FK_Posts_PromotionInfo">
+          <End Type="EFPModel.PromotionInfo" Role="PromotionInfo" Multiplicity="0..1" />
+          <End Type="EFPModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PromotionInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="PromotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PromotionInfo_Shops">
+          <End Type="EFPModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="EFPModel.PromotionInfo" Role="PromotionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PromotionInfo">
+              <PropertyRef Name="ShopId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1587,6 +1685,7 @@
           <EntitySetMapping Name="Posts">
             <EntityTypeMapping TypeName="EFPModel.Post">
               <MappingFragment StoreEntitySet="Posts">
+                <ScalarProperty Name="PromotionId" ColumnName="PromotionId" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="IntentId" ColumnName="IntentId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
@@ -1708,6 +1807,7 @@
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="EFPModel.Comment">
               <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="LastContent" ColumnName="LastContent" />
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="IntentId" ColumnName="IntentId" />
@@ -1723,6 +1823,19 @@
             <EntityTypeMapping TypeName="EFPModel.Intent">
               <MappingFragment StoreEntitySet="Intents">
                 <ScalarProperty Name="IntentName" ColumnName="IntentName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PromotionInfoes">
+            <EntityTypeMapping TypeName="EFPModel.PromotionInfo">
+              <MappingFragment StoreEntitySet="PromotionInfo">
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
