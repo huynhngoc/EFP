@@ -108,24 +108,20 @@ function FormatDateVN_fixFBDate(milli) {
     var hours = d.getHours();
     var monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
      "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
-        return (d.getDate() + " " + monthNames[d.getMonth()]) + " lúc " + hours + ":" + d.getMinutes();
+    return (d.getDate() + " " + monthNames[d.getMonth()]) + " lúc " + hours + ":" + d.getMinutes();
 }
 
-function GetCurrentDateTime()
-{
+function GetCurrentDateTime() {
     var d = new Date();
     var hours = d.getHours();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
     var monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
      "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
-    return (d.getDate() + " " + monthNames[d.getMonth()]) + " Năm " + d.getFullYear() + " vào lúc " + hours + ":" + d.getMinutes() + ampm;
+    return (d.getDate() + " " + monthNames[d.getMonth()]) + " lúc " + hours + ":" + d.getMinutes();
 }
 
 function FormatDateVN_fixFBDate_toSimplified(milli) {
     var d = new Date(milli);
-     
+
     return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 }
 
@@ -139,14 +135,25 @@ function FormatDateTimeVN_Ytr(date) {
     }
     else return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 }
-function textReplace(text) {
+//from page to fb 
+function TextReplace(text) {
     if (text && text != "") {
-        return text=text.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+        return text = text.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
     }
     else {
         return "";
     }
 }
+//from fb to page
+function TextReplacedToChat(text) {
+    if (text && text != "") {
+        return text = text.replace("<br>", /\n/g).replace("\\\\r", /\r/g).replace("\\\\t", /\t/g).replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+    }
+    else {
+        return "";
+    }
+}
+
 function ShowMoreTextFunc(text) {
     var match = /\r|\n/.exec(text);
     if (match) {

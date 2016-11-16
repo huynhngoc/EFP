@@ -1,4 +1,5 @@
-﻿using DataService.ViewModel;
+﻿using DataService.JqueryDataTable;
+using DataService.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,92 @@ namespace DataService.Repository
                 Phone = q.Phone
             }).ToList();
         }
+
+        public IQueryable<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId, JQueryDataTableParamModel param)
+        {
+            //var count = param.iDisplayStart + 1;
+            var rs = dbSet.Where(q => (q.ShopId == shopId)&&(q.CustomerId == customerId));
+            var search = param.sSearch;
+            //Debug.WriteLine("----sort col num " + param.iSortCol_0);
+            rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+                           (!string.IsNullOrEmpty(param.sSearch)
+                           && q.Id.ToString().Contains(param.sSearch.ToLower())))
+           .OrderBy(q => q.DateCreated);
+            //Debug.WriteLine("---------rs " + rs.Count());
+            //if (rs.Count() == 0) return null;
+            var data = rs.Select(q => new OrderViewModel()
+            {
+                //id dung de edit nen lay int id
+                Id = q.Id,
+                DateModified = q.DateModified,
+                Total = q.OrderDetails.Sum(d => d.Price * d.Quantity),
+            });
+            //Debug.WriteLine("---------data " + data.Count());
+            return data;
+        }
+
+
+        //ngochb
+        public int GetCompletedOrderNumber(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && q.Status == (int)Utils.OrderStatus.COMPLETED && q.DateModified < endDate && q.DateModified >= startDate).Count();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
+        }
+
+        //ngochb
+        public int GetCanceledOrderNumber(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && q.Status == (int)Utils.OrderStatus.CANCELED && q.DateModified < endDate && q.DateModified >= startDate).Count();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
+        }
+
+        //ngochb
+        public int GetIncompleteOrderNumber(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && (q.Status == (int)Utils.OrderStatus.PROCESSING || q.Status == (int)Utils.OrderStatus.DELIVERING) && q.DateModified < endDate && q.DateModified >= startDate).Count();
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+            
+        }
+
+        //ngochb
+        public decimal GetOrderRevenue(string shopId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var result = dbSet.Where(q => q.ShopId == shopId && q.Status == (int)Utils.OrderStatus.COMPLETED && q.DateModified < endDate && q.DateModified >= startDate).Select(q => q.OrderDetails.Sum(d => d.Price * d.Quantity)).Sum();
+                return result;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
     }
 
     public class OrderDetailRepository : BaseRepository<OrderDetail>
@@ -142,5 +229,7 @@ namespace DataService.Repository
             }
             return rs;
         }
+
+       
     }
 }

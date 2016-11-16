@@ -20,5 +20,7 @@ namespace DataService.ViewModel
         public int Status { get; set; }
         public Nullable<int> IntentId { get; set; }
         public int nestedCommentQuan { get; set; }
+        public bool canHide { get; set; }
+        public bool isUnreadRepliesRemain { get; set; }
     }
 }

@@ -47,6 +47,11 @@ namespace DataService.Service
         //    return repository.GetAllPost(shopId);
         //}
 
+        public bool CheckUnreadRemain(string parentId)
+        {
+           return repository.CheckUnreadRemain(parentId);
+        }
+
         public IQueryable<Comment> GetCommentsOfPost(string postId)
         {
             return repository.GetCommentsContainPostId(postId);
@@ -130,6 +135,15 @@ namespace DataService.Service
         public IEnumerable<Comment> GetAllCommentByParentId (string parentId)
         {
             return repository.GetAllCommentByParentId(parentId);
+        }
+
+        public bool CheckPostUnread(string postId)
+        {
+            return repository.CheckPostUnread(postId);
+        }
+        public bool CheckUnreadParentComment(string postId)
+        {
+            return repository.CheckUnreadParentComment(postId);
         }
     }
 }

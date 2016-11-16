@@ -79,6 +79,7 @@
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="ParentId" Type="nvarchar" MaxLength="128" />
           <Property Name="LastContent" Type="nvarchar" MaxLength="256" />
+          <Property Name="CanHide" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Conversations">
           <Key>
@@ -159,6 +160,7 @@
           <Property Name="IntentId" Type="int" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="PromotionId" Type="int" />
+          <Property Name="LastContent" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="ProductPictures">
           <Key>
@@ -853,6 +855,7 @@
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ParentId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="LastContent" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="CanHide" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Comments1" Relationship="Self.FK_Comments_Comments" FromRole="Comments" ToRole="Comments1" />
           <NavigationProperty Name="Comment1" Relationship="Self.FK_Comments_Comments" FromRole="Comments1" ToRole="Comments" />
           <NavigationProperty Name="Intent" Relationship="Self.FK_Comments_Intents" FromRole="Comments" ToRole="Intents" />
@@ -951,6 +954,7 @@
           <Property Name="IntentId" Type="Int32" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PromotionId" Type="Int32" />
+          <Property Name="LastContent" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Posts" FromRole="Posts" ToRole="Comments" />
           <NavigationProperty Name="Intent" Relationship="Self.FK_Posts_Intents" FromRole="Posts" ToRole="Intents" />
           <NavigationProperty Name="PromotionInfo" Relationship="Self.FK_Posts_PromotionInfo" FromRole="Posts" ToRole="PromotionInfo" />
@@ -1637,6 +1641,7 @@
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="LastContent" ColumnName="LastContent" />
+                <ScalarProperty Name="CanHide" ColumnName="CanHide" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1724,6 +1729,7 @@
                 <ScalarProperty Name="IntentId" ColumnName="IntentId" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="PromotionId" ColumnName="PromotionId" />
+                <ScalarProperty Name="LastContent" ColumnName="LastContent" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

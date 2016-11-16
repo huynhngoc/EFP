@@ -1,4 +1,5 @@
-﻿using DataService.Repository;
+﻿using DataService.JqueryDataTable;
+using DataService.Repository;
 using DataService.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -99,7 +100,7 @@ namespace DataService.Service
                     rs = false;
                 }
             }
-            
+
             return rs;
         }
 
@@ -109,6 +110,92 @@ namespace DataService.Service
             var listOrders = orderRepo.GetOrderByShopIdAndCustomerId(shopId, customerId);
 
             return listOrders;
+        }
+        // get order by shop and customer id and  fill into datatable
+        public IQueryable<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId, JQueryDataTableParamModel param)
+        {
+            var listOrders = orderRepo.GetOrderByShopIdAndCustomerId(shopId, customerId, param);
+
+            return listOrders;
+        }
+
+        //ngochb test
+        public decimal GetOrderRevenue(string shopId, DateTime startDate, DateTime endDate)
+        {
+            return orderRepo.GetOrderRevenue(shopId, startDate, endDate);
+        }
+
+        //ngochb
+        public List<List<object>> GetOrderAnalysis(string shopId, long startDate, long endDate, int divide)
+        {
+            var result = new List<List<object>>();
+            var orderCompletedNumbers = new List<object>();
+            var orderCanceledNumbers = new List<object>();
+            var orderIncompletedNumbers = new List<object>();
+            var orderRevenue = new List<object>();
+            var timeLine = new List<object>();
+
+            orderCompletedNumbers.Add("Đơn hàng hoàn thành");
+            orderCanceledNumbers.Add("Đơn hàng đã hủy");
+            orderIncompletedNumbers.Add("Đơn hàng chưa xong");
+            orderRevenue.Add("Doanh thu");
+            timeLine.Add("x");
+
+            long diff = endDate - startDate;
+            long level = diff / divide;
+            startDate = startDate - level;
+            while (startDate < endDate - level)
+            {
+                orderCompletedNumbers.Add(
+                    orderRepo.GetCompletedOrderNumber(
+                        shopId, ToDate(startDate), ToDate(startDate + level)));
+                orderCanceledNumbers.Add(
+                    orderRepo.GetCanceledOrderNumber(
+                        shopId, ToDate(startDate), ToDate(startDate + level)));
+                orderIncompletedNumbers.Add(
+                    orderRepo.GetIncompleteOrderNumber(
+                        shopId, ToDate(startDate), ToDate(startDate + level)));
+                orderRevenue.Add(
+                    orderRepo.GetOrderRevenue(
+                        shopId, ToDate(startDate), ToDate(startDate + level)));                
+                startDate += level;
+                timeLine.Add(DateString(startDate));
+            }
+            if (startDate/1000*1000 < endDate/1000*1000)
+            {
+                orderCompletedNumbers.Add(
+                    orderRepo.GetCompletedOrderNumber(
+                        shopId, ToDate(startDate), ToDate(endDate)));
+                orderCanceledNumbers.Add(
+                    orderRepo.GetCanceledOrderNumber(
+                        shopId, ToDate(startDate), ToDate(endDate)));
+                orderIncompletedNumbers.Add(
+                    orderRepo.GetIncompleteOrderNumber(
+                        shopId, ToDate(startDate), ToDate(endDate)));
+                orderRevenue.Add(
+                    orderRepo.GetOrderRevenue(
+                        shopId, ToDate(startDate), ToDate(endDate)));
+                timeLine.Add(DateString(endDate));
+            }            
+
+            result.Add(timeLine);
+            result.Add(orderCompletedNumbers);
+            result.Add(orderIncompletedNumbers);
+            result.Add(orderCanceledNumbers);
+            result.Add(orderRevenue);
+
+            return result;
+        }
+
+        private DateTime ToDate(long date)
+        {
+            return (new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(date)).ToLocalTime();
+        }
+
+        private string DateString(long date)
+        {
+            DateTime dateStr = (new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(date)).ToLocalTime();
+            return string.Format("{0}/{1}/{2} {3:D2}:{4:D2}", dateStr.Day, dateStr.Month, dateStr.Year, dateStr.Hour, dateStr.Minute);
         }
     }
 }

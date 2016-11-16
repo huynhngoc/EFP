@@ -13,5 +13,8 @@ namespace DataService.ViewModel
         public bool IsRead { get; set; }
         public int commentCount { get; set; }
         public string newestCommentId { get; set; }
+        public int status { get; set; }
+        public string SenderFbId { get; set; }
+        public string LastContent { get; set; }
     }
 }

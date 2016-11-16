@@ -65,9 +65,14 @@ namespace DataService.Service
         {
             return (repository.SetPostIsRead(postId));
         }
+        public bool SetPostIsUnread(string postId)
+        {
+            return (repository.SetPostIsUnRead(postId));
+        }
         public IQueryable<PostWithLastestComment> GetAllPost (string shopId)
         {
             return repository.GetAllPost(shopId);
         }
+        
     }
 }

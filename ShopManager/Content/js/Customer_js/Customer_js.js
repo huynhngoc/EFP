@@ -1,4 +1,4 @@
-﻿var create_validate_flag = 1;
+﻿
 var createSuc_Mes = "Tạo mới khách hàng thành công!";
 var createFail_Mes = "Tạo mới khách hàng thất bại";
 var createFaildup_Mes = "Khách hàng này đã tồn tại";
@@ -6,12 +6,13 @@ var editFail_Mes = "Chỉnh sửa thông tin thất bại";
 var editSuc_Mes = "Chỉnh sửa thông tin thành công";
 var fail_Mes = "Lỗi hệ thống";
 var oTable;
+var oTable_Order;
+//var oTable_Order;
 
 function validate(mode, value) {
 
-    var hidden_warning = document.getElementById("mail_errorTxt");
-    create_validate_flag = 1;
-
+    //var hidden_warning = document.getElementById("mail_errorTxt");
+    
     //1 = email mode
     if (mode == 1) {
         var atpos = value.indexOf("@");
@@ -19,16 +20,16 @@ function validate(mode, value) {
         //alert(atpos + " " + (dotpos ));
         //alert(value.length);
         //alert(value.length - dotpos);
-        if (atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length- dotpos<=2 || atpos == -1 || dotpos == -1) {
-            create_validate_flag = 0;
+        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1)&& value.length != 0) {
+            
             document.getElementById("mail_errorTxt").style.display = "block";
             //alert("false");
-            document.getElementById("btnSave").disabled=true;
+            document.getElementById("btnSave").disabled = true;
         }
         else {
-            create_validate_flag = 1;
+            
             document.getElementById("mail_errorTxt").style.display = "none";
-            document.getElementById("btnSave").disabled=false;
+            document.getElementById("btnSave").disabled = false;
             //alert("true");
         }
         //2 = phone mode
@@ -36,113 +37,84 @@ function validate(mode, value) {
     else if (mode == 2) {
         var phoneno = /^[0-9]+$/;
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
-            create_validate_flag = 1;
+            
             document.getElementById("phone_errorTxt").style.display = "none";
             document.getElementById("btnSave").disabled = false;
         }
         else {
-            create_validate_flag = 0;
+            
             document.getElementById("phone_errorTxt").style.display = "block";
             document.getElementById("btnSave").disabled = true;
         }
     }
-
 }
 
 
-function clear_table() {
-    create_validate_flag = 1;
-    document.getElementById("phone_errorTxt").style.display = "none";
-    document.getElementById("mail_errorTxt").style.display = "none";
-}
 
-//function setSucMes(sucmes) {
-//    document.getElementById("sucTxt").innerHTML = sucmes;
-//}
-//function setfailMes(failmes) {
-//    document.getElementById("failTxt").innerHTML = failmes;
-//}
+    function Addingvalidate(mode, value) {
 
-//$('.demo3').click(function () {
-//    swal({
-//        title: "Are you sure?",
-//        text: "You will not be able to recover this imaginary file!",
-//        type: "warning",
-//        showCancelButton: true,
-//        confirmButtonColor: "#DD6B55",
-//        confirmButtonText: "Yes, delete it!",
-//        closeOnConfirm: false
-//    }, function () {
-//        swal("Deleted!", "Your imaginary file has been deleted.", "success");
-//    });
-//});
+        //var hidden_warning = document.getElementById("mail_errorTxt");
+        
 
-$(document).ready(function () {
-    $("#saveID").hide();
-    $("#cancelID").hide();
-
-
-    var languageConfig = {
-        "oPaginate": {
-            "sNext": "Tiếp"
-            , "sLast": "Cuối"
-            , "sPrevious": "Trước"
-            , "sFirst": "Đầu"
-        }
-                , "infoFiltered": "(được lọc từ _MAX_ khách hàng)"
-                , "sInfo": "Kết quả từ _START_ đến _END_ trong số _TOTAL_"
-                , "sInfoThousands": "."
-                , "sLoadingRecords": "Đang tải ..."
-                , "sProcessing": "Đang xử lý ..."
-                , "sSearch": "Tìm kiếm khách hàng: "
-                , "sZeroRecords": "Không tìm thấy kết quả"
-                , "sLengthMenu": "Hiện _MENU_ khách hàng"
-                , "searchPlaceholder": "Search records"
+        //1 = email mode
+        if (mode == 1) {
+            var atpos = value.indexOf("@");
+            var dotpos = value.lastIndexOf(".");
+            //alert(atpos + " " + (dotpos ));
+            //alert(value.length);
+            //alert(value.length - dotpos);
+            if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
                 
+                document.getElementById("mail_errorTxt1").style.display = "block";
+                //alert("false");
+                document.getElementById("btnSave1").disabled=true;
+            }
+            else {
+                
+                document.getElementById("mail_errorTxt1").style.display = "none";
+                document.getElementById("btnSave1").disabled=false;
+                //alert("true");
+            }
+            //2 = phone mode
+        }
+        else if (mode == 2) {
+            var phoneno = /^[0-9]+$/;
+            if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
+                
+                document.getElementById("phone_errorTxt1").style.display = "none";
+                document.getElementById("btnSave1").disabled = false;
+            }
+            else {
+                
+                document.getElementById("phone_errorTxt1").style.display = "block";
+                document.getElementById("btnSave1").disabled = true;
+            }
+        }
+
     }
 
 
+function clear_table() {
+    
+    document.getElementById("phone_errorTxt").style.display = "none";
+    document.getElementById("mail_errorTxt").style.display = "none";
+    $('#btnSave').prop('disabled', false);
+}
 
 
-    oTable = $('#cusDataTable').dataTable({
-        "bProcessing": true,
-        "bServerSide": true,
-        "sServerMethod": "POST",
-        "oLanguage": languageConfig,
-        //'sDom': 'l<"toolbar"f>rtip',
-        //'sDom': '<"right"Bflrtip>rt<"bottom"pi><"clear">',
-        //'sDom':'ilftpr',
-        //'sDom': 'B<"top"l>frt<"bottom"i>p<"clear">',
-        "sjquery": true,
-        "sAjaxSource": "/Customer/GetAllCustomer",
-        "aoColumns": [
-        { "mData": "Name", "bSortable": true },
-        { "mData": "Description", "bSortable": true },
-        { "mData": "Address", "bSortable": true },
-        { "mData": "Phone", "bSortable": true },
-        { "mData": "Email", "bSortable": true },
-        {
-            "mData": function (source) {
-                return "<a id='" + source.CustomerId + "' onclick='getEditCustomer(this," + source.CustomerId + ")' class='btn btn-success search-dropdown'><span class='fa fa-edit' aria-hidden='true'></span> </a>"
-            }, "bSortable": false
-        }
-        ],
-
-
-    });
-
-    $('#sucModal').on('hidden.bs.modal', function (e) {
-        if ($('.modal').hasClass('in')) {
-            $('body').addClass('modal-open');
-        }
-    });
-});
+function clear_detail_table() {
+    document.getElementById("detailName").value ="";
+    document.getElementById("detailDes").value = "";
+    document.getElementById("detailAddr").value = "";
+    document.getElementById("detailPhone").value = "";
+    document.getElementById("detailMail").value = "";
+}
 
 
 
 
 function addCustomer() {
-    var _id = Math.round(Math.random() * 1000);
+    var _id = "";
     var _name = document.getElementById("addNameTxt").value;
     var _addr = document.getElementById("addAddrTxt").value;
     var _desc = document.getElementById("addDescTxt").value;
@@ -163,16 +135,51 @@ function addCustomer() {
                 Phone: _phone,
                 Email: _mail
             }),
+            success: function (data) {
+                if (data == 1) {
+                    swal({
+                        title: "Tạo mới thành công!",
+                        type: "success",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) { oTable.fnDraw() }
+                    });
+                }
+                if (data == 2) {
+                    swal({
+                        title: "Khách hàng này đã có!",
+                        type: "warning",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true
+                    },
+                       function (isConfirm) {
+                           if (isConfirm) { oTable.fnDraw() }
+                       });
+                }
+                if (data == 3) {
+                    swal({
+                        title: "Tạo mới thất bại!",
+                        type: "error",
+                        confirmButtonText: "Đóng",
+                        closeOnConfirm: true
+                    },
+                        function (isConfirm) {
+                            if (isConfirm) { oTable.fnDraw() }
+                        });
+                }
+            }
 
-            
+
         });
     }
-    else showCreateFailModal();
+    else swal("Vui lòng nhập tên", "", "warning");
 }
 
 function editCustomerDetail() {
     var _inputCusID = document.getElementById("cusEditID").value;
-    if (_inputCusID != null && _inputCusID != "" && create_validate_flag == 1) {
+    if (_inputCusID != null && _inputCusID != "") {
         $.ajax({
             url: "/Customer/EditCustomer",
             cache: true,
@@ -214,6 +221,19 @@ function editCustomerDetail() {
     }
 }
 
+function clear_add()
+{
+   
+    document.getElementById("phone_errorTxt1").style.display = "none";
+    document.getElementById("mail_errorTxt1").style.display = "none";
+    document.getElementById("addNameTxt").value="";
+    document.getElementById("addAddrTxt").value = "";
+    document.getElementById("addDescTxt").value = "";
+    document.getElementById("addPhoneTxt").value = "";
+    document.getElementById("addMailTxt").value = "";
+    $('#btnSave1').prop('disabled', false);
+}
+
 function getEditCustomer(e, cusEditID) {
     var currentRow = $(e).closest('tr');
     var tds = currentRow.find("td");
@@ -223,6 +243,72 @@ function getEditCustomer(e, cusEditID) {
     document.getElementById("editPhone").value = tds.eq(3).text();
     document.getElementById("editMail").value = tds.eq(4).text();
     showCusEditModal(cusEditID);
+}
+
+function getCustomerOrder(e, cusId) {
+    var id = null;
+    var languageConfig = {
+        "oPaginate": {
+            "sNext": "Tiếp"
+            , "sLast": "Cuối"
+            , "sPrevious": "Trước"
+            , "sFirst": "Đầu"
+        }
+                , "infoFiltered": "(được lọc từ _MAX_ đơn hàng)"
+                , "sInfo": "Kết quả từ _START_ đến _END_ trong số _TOTAL_"
+                , "sInfoThousands": "."
+                , "sLoadingRecords": "Đang tải ..."
+                , "sProcessing": "Đang xử lý ..."
+                , "sSearch": "Tìm kiếm đơn hàng: "
+                , "sZeroRecords": "Không tìm thấy kết quả"
+                , "sLengthMenu": "Hiện _MENU_ đơn hàng"
+                , "searchPlaceholder": "Search records"
+
+    }
+    var currentRow = $(e).closest('tr');
+    var tds = currentRow.find("td");
+    $('#orderOfCus').text(tds.eq(0).text());
+    $('#cusOrderList').modal('show');
+
+    //(cusId);
+    //oTable_Order.dataTable().fnDestroy();
+    oTable_Order = $('#cusOrderTable').dataTable({
+        "bProcessing": true,
+        "bServerSide": true,
+        "destroy": true,
+        "sServerMethod": "POST",
+        "oLanguage": languageConfig,
+        //'sDom': 'l<"toolbar"f>rtip',
+        //'sDom': '<"right"Bflrtip>rt<"bottom"pi><"clear">',
+        //'sDom':'ilftpr',
+        //'sDom': 'B<"top"l>frt<"bottom"i>p<"clear">',
+        "sjquery": true,
+        "sAjaxSource": "/Customer/GetAllOrderByCustomerId",
+        "fnServerParams": function (data) {
+            //alert(cusId);
+            data.push({ "name": "cusId", "value": cusId });
+        },
+        "aoColumns": [
+        {
+            "mData": function (source) {
+                id = source.Id;
+                return source.Id;
+            }, "bSortable": true },
+        { "mData": function (source) {
+            return FormatDateVN(source.DateModified);
+                   }, "bSortable": true },
+        { "mData": "Total", "bSortable": true },
+        {
+            "mData": function (source) {
+                return "<a href='/Order?Id=" + id + "' target='_blank' class='btn btn-success search-dropdown'>chi tiết </a>";
+            }, "bSortable": false
+        }
+        ],
+        
+
+
+    });
+    $('.dataTables_filter input').attr("placeholder", "Nhập mã đơn hàng");
 }
 
 function refreshPage() {
