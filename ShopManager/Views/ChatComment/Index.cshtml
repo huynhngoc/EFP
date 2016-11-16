@@ -51,16 +51,26 @@
                     </div>
                 </div>
                 @*Comment*@
-
+                <div class="tab-footer">
+                    <select id="auto_option" class="form-control" style="float:right;background-color: aliceblue;">
+                        <option value="1">Thủ công</option>
+                        <option value="2">Trả lời tự động</option>
+                        <option value="3">Chỉ trả lời tự động bình luận</option>
+                        <option value="4">Chỉ trả lời tự động tin nhắn</option>
+                    </select>
+                </div>
             </div>
+
         </div>
     </div>
     <!--./Tab column-->
     <!--Chat box-->
     <div class="small-chat-bo fadeInRight animated col-xs-5" style="padding: 0">
+        <div>
+            <div id="" class="heading receiver_name" draggable="true">
+                (Chưa chọn)
+            </div>
 
-        <div id="" class="heading receiver_name" draggable="true">
-            (Chưa chọn)
         </div>
         <div id="chat_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000;position:relative;float: left;left: 40%;">
             <div class="sk-circle1 sk-circle"></div>
@@ -88,11 +98,11 @@
                     GỢI Ý
                 </label>
             </span>
-            <span id="auto_wrapper">
-                <label class="btn btn-primary btn-outline">
-                    AUTO
-                </label>
-            </span>
+            @*<span id="auto_wrapper">
+                    <label class="btn btn-primary btn-outline">
+                        AUTO
+                    </label>
+                </span>*@
         </div>
         <div class="form-chat">
             <div class="input-group input-group-sm">
@@ -130,7 +140,7 @@
                         <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly>
                     </div>
                     <div class="col-xs-5">
-                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="" readonly>
+                        <i class="fa fa-phone"></i> SĐT <input id="cus_phone" class="form-control" value="" readonly>
                     </div>
                     <div class="col-xs-12">
                         <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly>
@@ -208,14 +218,6 @@
 <!--Order-->
 <div id="popover_response" hidden>
     <div class="table-responsive col-md-12">
-        @*<table id="resp_dt" class="table table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
-                <thead>
-                    <tr>
-                        <th class="col-md-3">@@</th>
-                        <th class="col-md-9">Câu trả lời</th>
-                    </tr>
-                </thead>
-            </table>*@
     </div>
 </div>
 <!--./Order-->
@@ -285,54 +287,54 @@
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
-    @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Utility-JS")
     @Scripts.Render("~/jQueryScrollbar-JS")
+    @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Toastr")
     @Scripts.Render("~/SignalR-JS")
     @Scripts.Render("/signalr/hubs")
     <script type="text/javascript">
+        $('.small-chat-bo').css('pointer-events','none');
+
         var shopId= @HttpContext.Current.Session["ShopId"];
         var page_ava_url="";
+        var page_name="";
         $.ajax({
             async: true,
-            url: '/ChatComment/GetPageAvatar',
+            url: '/ChatComment/GetPageInfo',
             success: function (data) {
-                page_ava_url=data;
+                console.log(data);
+                page_ava_url=data.avatar;
+                page_name=data.name;
             }
         });
 
-        @*$(function () {
-            // Declare a proxy to reference the hub.
-            var chat = $.connection.alertHub;
-            // Create a function that the hub can call to broadcast messages.
-            chat.client.sendMessageToPage = function (data, threadId, intent) {
-                console.log(threadId);
-                console.log(data);
-                ProcessIncomingMessage(data, threadId);
-            };
-
-            chat.client.sendCommentToPage = function (comment, intent) {
-                console.log(comment);
-                console.log(intent);
-            };
-
-            // Get the user name and store it to prepend to messages.
-            //$('#displayname').val(prompt('Enter your name:', ''));
-            // Set initial focus to message input box.
-            $('#message').focus();
-            // Start the connection.
-            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-                    // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val());
-                    // Clear text box and reset focus for next comment.
-                    $('#message').val('').focus();
-                });
+        // Auto options
+        $(function(){
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/Shop/GetReplyMode',
+                success: function (data) {
+                    console.log(data);
+                    $('#auto_option option[value="'+data.mode+'"]').attr('selected','selected');
+                }
             });
-        });*@
 
+            $('#auto_option').change(function (){
+                var mode=$(this).find('option:selected').attr("value");
+                SetReplyMode(mode);
+            });
+
+            function SetReplyMode(mode){
+                $.ajax({
+                    async: true,
+                    method: 'GET',
+                    url: '/Shop/SetReplyMode',
+                    data: {"mode": mode}
+                });
+            }
+        });
 
         function ProcessIncomingMessage(data, threadId){
             var thread=document.getElementById(threadId);
@@ -369,16 +371,19 @@
                             }
                                 //Page's mess
                             else {
-                                $('#chat_box_content').append('<div id="'+message.id+'" class="right">'+
-                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
-                                    '<div class="author-name">'+
-                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
-                                        message.from.name+
-                                    '</div>'+
-                                    '<div class="chat-message" style="word-wrap: break-word;">'+
-                                        message.message+
-                                    '</div>'+
-                                '</div>');
+                                var pm=document.getElementById(message.id);
+                                if (pm==null){
+                                    $('#chat_box_content').append('<div id="'+message.id+'" class="right">'+
+                                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
+                                        '<div class="author-name">'+
+                                            '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                                            message.from.name+
+                                        '</div>'+
+                                        '<div class="chat-message" style="word-wrap: break-word;">'+
+                                            message.message+
+                                        '</div>'+
+                                    '</div>');
+                                }
                             }
                         }
                     }
@@ -429,7 +434,7 @@
         }
 
         @*Default*@
-        $('#chat_loading').show();
+        $('#chat_loading').hide();
         function ShowConvLoading(){
             $('#list_conversation').empty();
             $('#no_result').hide();
@@ -467,17 +472,9 @@
                 $('#btn_searchsender').click();
         });
 
-        $('#txt_messreply').keypress(function(e){
-            if(e.keyCode==64){
-
-            }
-        });
-
         $('.small-chat-bo .content').scrollbar();
 
-        $('.ibox-scroll').slimScroll({
-            height: "70vh"
-        });
+        $('.ibox-scroll').scrollbar();
 
         $('#txt_messreply').keypress(function(e){
             if(e.keyCode==13)
@@ -489,6 +486,7 @@
             var mess= $('#txt_messreply').val();
             console.log(mess);
 
+            var sent_id="";
             $.ajax({
                 async: false,
                 method: 'GET',
@@ -501,13 +499,25 @@
                     console.log(data);
                     if(data.success == true){
                         $('#txt_messreply').val('');
+                        sent_id=data.id;
                     }
                     else{
                         //alert("Có lỗi! Không gửi được");
                     }
                 }
             });
-
+            console.log(sent_id);
+            $('#chat_box_content').append('<div id="'+sent_id+'" class="right">'+
+                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
+                                    '<div class="author-name">'+
+                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(new Date())+'</small>'+
+                                        page_name+
+                                    '</div>'+
+                                    '<div class="chat-message" style="word-wrap: break-word;">'+
+                                        mess+
+                                    '</div>'+
+                                '</div>');
+            ChatboxScrollToBottom();
         });
 
         function ChatboxScrollToBottom(){
@@ -687,7 +697,7 @@
             }
         });
         function ConversationSelect(){
-
+            $('.small-chat-bo').css('pointer-events','auto');
             var thread_id=$('#list_conversation .ui-selected').attr('id');
             var userfbid=$('.ui-selected .fb_avatar').attr('id');
             if ($('.ui-selected .fb_avatar').attr('id') != $('.receiver_name').attr('id')){
@@ -784,41 +794,6 @@
             }
         });
 
-        //"AUTO"
-        var reply_mode=0;
-        $.ajax({
-            async: false,
-            method: 'GET',
-            url: '/Shop/GetReplyMode',
-            success: function (data) {
-                console.log(data);
-                reply_mode=data.mode;
-            }
-        });
-        if (reply_mode==1){
-            $('#auto_wrapper .btn').addClass('active');
-        }
-
-        $('#auto_wrapper').click(function(){
-            if ($('#auto_wrapper .btn').hasClass('active')){
-                $('#auto_wrapper .btn').removeClass('active');
-                SetReplyMode(1);
-            }
-            else{
-                $('#auto_wrapper .btn').addClass('active');
-                SetReplyMode(2);
-            }
-        });
-
-        function SetReplyMode(mode){
-            $.ajax({
-                async: true,
-                method: 'GET',
-                url: '/Shop/SetReplyMode',
-                data: {"mode": mode}
-            });
-        }
-
         //Get conversation content
         var ajax_GetConversationContent;
         function GetConversationContent(t_id){
@@ -839,7 +814,7 @@
                 }
             });
 
-            
+
         }
 
         function GetSuggestReply(){
@@ -1371,7 +1346,7 @@
             }
 
             if (rs == "true") {
-                $.post('/Order/CreateOrder'
+                $.post('/Order/CreateOrderReturnOrder'
                     , { custId: custid
                         , note: null
                         , status: status
@@ -1381,15 +1356,15 @@
                         , listDetail: arDetail
                     }
                     , function (data, status) {
-                        if (data == "True") {
+                        if (data !=null) {
                             $("#add_modal").modal("hide");
                             ClearOrder();
                             swal({
-                                title: "Thêm thành công",
+                                title: "Tạo thành công đơn hàng <a target='_blank' href='/Order?id="+data.Id+"'>#"+data.Id+"</a>",
                                 animation: "slide-from-top",
                                 type: "success",
-                                timer: 1000,
-                                showConfirmButton: false
+                                html:true,
+                                showConfirmButton: true
                             });
 
                         }
@@ -1399,7 +1374,7 @@
                                 animation: "slide-from-top",
                                 text: "Thêm đơn hàng thất bại",
                                 type: "warning",
-                                timer: 1000,
+                                timer: 2000,
                                 showConfirmButton: false
                             });
                         }
@@ -1412,7 +1387,7 @@
                     animation: "slide-from-top",
                     text: "Chưa có chọn " + (rs == "detail" ? "sản phẩm" : "khách hàng") + " kìa",
                     type: "warning",
-                    timer: 1000,
+                    timer: 2000,
                     showConfirmButton: false
                 });
             }

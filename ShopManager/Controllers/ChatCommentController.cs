@@ -110,8 +110,8 @@ namespace ShopManager.Controllers
             string accessToken = shopService.GetShop(shopId).FbToken;
 
             dynamic param = new ExpandoObject();
-            param.access_token = accessToken;
             param.fields = "from,created_time,message,attachments";
+            fbApp.AccessToken = accessToken;
             dynamic result = fbApp.Get(conversationId + "/messages", param);
 
             foreach (var mess in result.data)
@@ -205,7 +205,7 @@ namespace ShopManager.Controllers
             return Content(result.data.url);
         }
 
-        public ActionResult GetPageAvatar()
+        public ActionResult GetPageInfo()
         {
             string shopId = (string)Session["ShopId"];
             string accessToken = shopService.GetShop(shopId).FbToken;
@@ -213,7 +213,10 @@ namespace ShopManager.Controllers
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
             dynamic result = fbApp.Get(shopId + "/picture?type=normal&redirect=false", param);
-            return Content(result.data.url);
+            param = new ExpandoObject();
+            param.access_token = accessToken;
+            dynamic r2= fbApp.Get(shopId, param);
+            return Json(new { avatar = result.data.url, name=r2.name }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SetConversationRead(string conversationId)
         {
@@ -305,8 +308,8 @@ namespace ShopManager.Controllers
             {
                 param.access_token = accessToken;
                 param.message = message;
-                var result = fbApp.Post(threadId + "/messages", param);
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                dynamic result = fbApp.Post(threadId + "/messages", param);
+                return Json(new { success = true, id = result.id }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

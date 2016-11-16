@@ -108,7 +108,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Ghi chú của khách hàng:</label>
                         <div class="col-lg-10">
-                            <textarea type="text" id="edit_note" class="form-control" style="max-height:10vh; width:30vw; resize:none" readonly></textarea>
+                            <textarea type="text" id="edit_note" class="form-control" style="max-height:10vh; width:30vw; resize:none"></textarea>
                         </div>
                     </div>
                 </form>
@@ -116,7 +116,6 @@
                     <table id="edit_datatable" class="table table-striped table-bordered table-hover" cellspacing="10" style="text-align: center;">
                         <thead>
                             <tr>
-                                <th class="col-md-1 dt-head-center">STT</th>
                                 <th class="col-md-2 dt-head-center">Sản phẩm</th>
                                 <th class="col-md-1 dt-head-center">Số lượng</th>
                                 <th class="col-md-2 dt-head-center">Giá từng sản phẩm</th>
@@ -124,6 +123,10 @@
                             </tr>
                         </thead>
                     </table>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Tổng:</label>
+                    <label id="edit_total" class="col-lg-10 control-label"></label>
                 </div>
             </div>
             <div class="modal-footer" style="padding: 10px">
@@ -142,39 +145,49 @@
                 <h4 class="modal-title" id="myModalLabel">Thêm đơn hàng</h4>
             </div>
             <div class="modal-body">
-                <table class="table" id="cuscreateTable" border="0">
-                    <tbody>
-                        <tr>
-                            <td class="col-md-2">Ghi chú</td>
-                            <td><input value="" id="add_note"></td>
-                        </tr>
-                        <tr>
-                            <td class="col-md-2">Tình trạng:</td>
-                            <td>
-                                <div id="add_status" data-toggle="buttons">
-                                    <label class="btn btn-info btn-outline">
-                                        <input type="radio" name="options" id="PROCESSING" autocomplete="off" checked> Chờ xử lý
-                                    </label>
-                                    <label class="btn btn-success btn-outline">
-                                        <input type="radio" name="options" id="DELIVERING" autocomplete="off"> Đang giao hàng
-                                    </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-md-2">Người nhận:</td>
-                            <td><input value="" id="add_receiver"></td>
-                        </tr>
-                        <tr>
-                            <td class="col-md-2">Địa chỉ tới:</td>
-                            <td><input value="" id="add_address"></td>
-                        </tr>
-                        <tr>
-                            <td class="col-md-2">Số điện thoại:</td>
-                            <td><input value="" id="add_phone"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Khách hàng: </label>
+                        <div class="col-lg-10">
+                            <button class="btn btn-primary" id="btn_add_cust"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Tình trạng:</label>
+                        <div id="add_status" class="col-lg-10" data-toggle="buttons">
+                            <label class="btn btn-info btn-outline">
+                                <input type="radio" name="options" id="PROCESSING" autocomplete="off" checked> Chờ xử lý
+                            </label>
+                            <label class="btn btn-success btn-outline">
+                                <input type="radio" name="options" id="DELIVERING" autocomplete="off"> Đang giao hàng
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Người nhận:</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" id="add_receiver">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Địa chỉ tới:</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" id="add_address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Số điện thoại:</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" id="add_phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Ghi chú:</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" id="add_note">
+                        </div>
+                    </div>
+                </form>
                 <button type="button" class="btn btn-primary" id="add_button" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="top">Thêm hàng</button>
                 <div class="table-responsive col-md-12">
                     <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="add_datatableproduct">
@@ -196,14 +209,14 @@
                         </tfoot>
                     </table>
                 </div>
-                <div id="popover_product">
+                <div id="popover_product" hidden>
                     <div class="table-responsive col-md-12">
-                        <table id="popover_datatable" class="table table-striped table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
+                        <table id="popover_datatable" class="table table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
                             <thead>
                                 <tr>
                                     <th class="col-md-1">Mã</th>
                                     <th class="col-md-8">Sản phẩm</th>
-                                    <th class="col-md-3">Giá từng sản phẩm</th>
+                                    <th class="col-md-3">Đơn giá</th>
                                 </tr>
                             </thead>
                         </table>
@@ -223,6 +236,7 @@
 @section CustomCSS{
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
+    @Styles.Render("~/jQuery-UI-CSS")
     @Styles.Render("~/TouchSpin-CSS")
 
     <style>
@@ -279,6 +293,17 @@
         .popover-content {
             color: #000000 !important; /*black color*/
         }
+
+        .noTitleStuff {
+            z-index: 500001;
+            max-height: 34% !important;
+            width: 500px !important;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+        }
+
+            .noTitleStuff .ui-dialog-titlebar {
+                display: none;
+            }
     </style>
 
 }
@@ -289,12 +314,33 @@
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
+    @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Utility-JS")
 
     @*Global code*@
     <script>
-        var languageConfig;
+        //Auto open detail from id
+        $(function() {
+            try{
+                @{string id="0";}
+                @if (Request.Params["id"] !=null)
+                {
+                    id = Request.Params["id"];
+                }
+                var param_id = @id;
 
+                if (param_id != "0"){
+                    showOrderModal(param_id);
+                }
+
+            }
+            catch (e){
+                console.log("Lỗi");
+            }
+        });
+
+
+        var languageConfig;
         languageConfig = {
             //            , "sInfoFiltered": " - lọc ra từ _MAX_ kết quả"
             //}
@@ -408,45 +454,17 @@
                 }
                 , "aoColumnDefs": [{ "aTargets": [0], "mData": 0 }
                         , { "aTargets": [1], "mData": 1 }
+                        , { "aTargets": [2], "mData": 2 }
                         , { "aTargets": [3], "mData": 3 }
-                        , { "aTargets": [4], "mData": 4 }
                 ]
                 , "fnInitComplete": function () {
                     GetOrderData();
                     $('#edit_datatable').removeAttr("style");
                     $('#edit_datatable').css("text-align", "center");
-                }
-                , "footerCallback": function (row, data, start, end, display) {
-                    var api = this.api(), data;
 
-                    // Remove the formatting to get integer data for summation
-                    //var intVal = function ( i ) {
-                    //    return typeof i === 'string' ?
-                    //        i.replace(/[\$,]/g, '')*1 :
-                    //        typeof i === 'number' ?
-                    //        i : 0;
-                    //};
-
-                    //// Total over all pages
-                    //total = api
-                    //    .column(4)
-                    //    .data()
-                    //    .reduce(function (a, b) {
-                    //        return a + b;
-                    //    }, 0);
-
-                    //// Total over this page
-                    //pageTotal = api
-                    //    .column(4)
-                    //    .data()
-                    //    .reduce(function (a, b) {
-                    //        return a + b;
-                    //    }, 0);
-
-                    //// Update footer
-                    //$(api.column(4).footer()).html(
-                    //    total
-                    //);
+                    $("#edit_total").text(table.column(3).data().reduce(function (a, b) {
+                        return a + b;
+                    })+" VND");
                 }
                 , "paging": false
                 , "searching": false
@@ -472,7 +490,7 @@
 
                     //Customer name
                     $('#edit_customer').text(data.CustomerName);
-                    $('#edit_customer').attr("href", "/Customer/?id=" + data.CustomerId);
+                    $('#edit_customer').attr("href", "/Customer?id=" + data.CustomerId);
                     $('#edit_customer').attr("target", "_blank");
 
                     //Receiver
@@ -489,6 +507,9 @@
 
                     //Status
                     ChangeStatus(data.Status);
+                    if (data.status == 4){
+
+                    }
 
                     $('#editOrderModal').modal('show');
                 });
@@ -533,8 +554,38 @@
                     $('#add_modal').modal('show');
                 }
             });
-            $('#add_button').click(function () {
-                CreatePopoverDT();
+
+            $("#add_button").click(function (evt) {
+                $("#popover_product").dialog({
+                    autoOpen: false,
+                    //appendTo: "#someElem",
+                    draggable: true,
+                    //height: 40vh,
+                    //width: 700,
+                    modal: true,
+                    resizable: false,
+                    dialogClass: 'noTitleStuff',
+                    close: function (event, ui) { $('#wrap').show(); },
+                    open: function (event, ui) {
+                        CreatePopoverDT();
+                        $('.ui-widget-overlay').bind('click', function () {
+                            $("#popover_product").dialog('close');
+                        });
+                        $('.ui-widget-overlay').css(
+                            "cssText", "background: none;z-index: 500000"
+                        )
+
+                    },
+                    position: {
+                        my: "left bottom",
+                        at: "left top",
+                        of: "#add_button"
+                    }
+                });
+                //$("#popover_product").bind('clickoutside', function () {
+                //    $("#popover_product").dialog('close');
+                //});
+                $("#popover_product").dialog("open");
             });
 
             $('#add_modal').modal('show');
@@ -553,6 +604,7 @@
                     , "fnInitComplete": function () {
                         $('div.dataTables_filter input').focus();
                         //function row click
+                        $('#popover_datatable tbody').unbind("click");
                         $('#popover_datatable tbody').on('click', 'tr', function () {
                             if ($(this).hasClass('selected')) {
                                 //$(this).removeClass('selected');
@@ -606,7 +658,7 @@
                                 }));
                             }
                         });
-                        $('#popover_product').show();
+
                     }
                     , "paging": false
                     , "searching": true
@@ -660,17 +712,19 @@
             var receiver = $("#edit_receiver").val();
             var address = $("#edit_address").val();
             var phone = $("#edit_phone").val();
-            UpdateOrder(id, stat, receiver, address, phone);
+            var note = $("#edit_note").text();
+            UpdateOrder(id, stat, receiver, address, phone, note);
         });
 
-        function UpdateOrder(id, status, receiver, address, phone) {
+        function UpdateOrder(id, status, receiver, address, phone, note) {
             $.post("/Order/UpdateOrder",
             {
                 orderId: id,
                 status: status,
                 receiver: receiver,
                 address: address,
-                phone: phone
+                phone: phone,
+                note: note
             },
             function (data, status) {
                 if (data == "True") {
@@ -718,17 +772,21 @@
 
                     arDetail.push({ productid, properties, quantity, price});
                     }
-                }
-                else {
+                    }
+                    else {
                 rs = "detail";
                 //alert no detail
             }
-            var cid=1;
+            var cid=1; //hard code
             var note = $('#add_note').val();
             var status = ($.trim($("#add_status").find(".active").find("input").attr("id")));
+            var iStatus=0;
             if (status.length <= 0) {
                 rs = "status";
                 //alert chưa chọn
+            }
+            else {
+                iStatus = (status == "DELEIVERING")? 2:1;
             }
             var address = $('#add_address').val();
             var receiver = $('#add_receiver').val();
@@ -739,7 +797,7 @@
                     , {
                         custId: cid
                         , note: note
-                        , status: status
+                        , status: iStatus
                         , address: address
                         , receiver: receiver
                         , phone: phone
