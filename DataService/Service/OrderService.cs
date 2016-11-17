@@ -63,9 +63,9 @@ namespace DataService.Service
             return order;
         }
 
-        public bool EditOrder(int orderId, int status, string receiver, string address, string phone)
+        public bool EditOrder(int orderId, int status, string receiver, string address, string phone, string note)
         {
-            return orderRepo.EditOrderByOrderId(orderId, status, receiver, address, phone);
+            return orderRepo.EditOrderByOrderId(orderId, status, receiver, address, phone, note);
         }
 
         public bool AddOrder(string shopId, string note, int custId, int status, string address, string receiver, string phone
@@ -102,6 +102,57 @@ namespace DataService.Service
             }
 
             return rs;
+        }
+
+        public Order AddOrderReturnORder(string shopId, string note, int custId, int status, string address, string receiver, string phone
+            , List<OrderDetailViewModel> listDetail)
+        {
+            bool rs = true;
+            Order o = new Order();
+
+            if (listDetail == null || listDetail.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                o.ShopId = shopId;
+                o.UserNote = note;
+                o.DateCreated = DateTime.Now;
+                o.DateModified = DateTime.Now;
+                o.CustomerId = custId;
+                o.Status = status;
+                o.ShippingAddress = address;
+                o.Receiver = receiver;
+                o.Phone = phone;
+
+                o = orderRepo.AddOrder(o);
+
+                if (o != null)
+                {
+                    rs = orderDetailRepo.AddOrderDetails(o.Id, listDetail);
+                    if (rs == false)
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return o;
+        }
+
+        public bool CheckOrderBelongsToShop(int orderId, string shopId)
+        {
+            var sid = orderRepo.GetShopIdOfOrder(orderId);
+            if (sid.Equals(shopId))
+            {
+                return true;
+            }
+            return false;
         }
 
         //Andnd get order by shop and customer id

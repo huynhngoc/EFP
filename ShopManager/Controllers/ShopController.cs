@@ -195,5 +195,12 @@ namespace ShopManager.Controllers
             return Json(orderService.GetOrderAnalysis(shopId, startDate, endDate, divide), JsonRequestBehavior.AllowGet);
         }
 
+        //Long
+        public JsonResult GetReplyMode()
+        {
+            string shopId = (string)Session["ShopId"];
+            int result = shopService.GetReplyMode(shopId);
+            return Json(new { mode = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -34,13 +34,19 @@ namespace DataService.Repository
         }).First();
         }
 
-        public bool EditOrderByOrderId(int orderId, int status, string receiver, string address, string phone)
+        public string GetShopIdOfOrder(int orderId)
+        {
+            return dbSet.Where(q => q.Id == orderId).Select(q => q.ShopId).First();
+        }
+
+        public bool EditOrderByOrderId(int orderId, int status, string receiver, string address, string phone, string note)
         {
             Order order = this.FindByKey(orderId);
             order.Status = status;
             order.Receiver = receiver;
             order.Phone = phone;
             order.ShippingAddress = address;
+            order.UserNote = note;
             order.DateModified = DateTime.Now;
 
             return this.Update(order);

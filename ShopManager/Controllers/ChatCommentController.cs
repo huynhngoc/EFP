@@ -1,4 +1,5 @@
 ﻿using DataService;
+using DataService.JqueryDataTable;
 using DataService.Service;
 using DataService.ViewModel;
 using Facebook;
@@ -21,15 +22,8 @@ namespace ShopManager.Controllers
         ConversationService conversationService = new ConversationService();
         ShopService shopService = new ShopService();
         CustomerService custService = new CustomerService();
-        //FacebookClient fbApp = new FacebookClient();
         string tmpPost = null;
         List<string> tmpCommentList = null;
-        //string PageId = "685524511603937";
-        //CustomerService custService = new CustomerService();
-        //var NumberofFeeds = 10;
-        //static string token = "EAAC1A8DIKmYBANZAleY9H1hY3Tb85HvHMH4ZAg6mHOZCusTRmBzQAESZAxwiIlUC3KhH103OpvUcJynkZBZBascE4KDbaWj76e6HvDiYfgfsn7U0po7FsKx1JOYEhpie1LK6YpbhJJFHSE0dYqNaRRrNRTQMfesBHHry0XlT2ssgZDZD";
-
-        //ShopService shopService = new ShopService();
         CommentService commentservice = new CommentService();
         FacebookClient fbApp = new FacebookClient();
         PostService postservice = new PostService();
@@ -796,66 +790,63 @@ namespace ShopManager.Controllers
         private ConversationPreviewViewModel GetConversationPreviewFromFb(string accessToken, Conversation c)
         {
             string shopId = (string)Session["ShopId"];
-                var preview = new ConversationPreviewViewModel();
-                preview.ThreadId = c.Id;
-                preview.IsRead = c.IsRead;
+            var preview = new ConversationPreviewViewModel();
+            preview.ThreadId = c.Id;
+            preview.IsRead = c.IsRead;
 
-                dynamic param = new ExpandoObject();
-                param.access_token = accessToken;
-                param.fields = "from,created_time,message";
-                dynamic result = fbApp.Get(c.Id + "/messages", param);
+            dynamic param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.fields = "from,created_time,message";
+            dynamic result = fbApp.Get(c.Id + "/messages", param);
 
-                int i = 0;
-                dynamic first = result.data[0];
-                dynamic detail;
-                while (true)
+            int i = 0;
+            dynamic first = result.data[0];
+            dynamic detail;
+            while (true)
+            {
+                if (result.data[i].from.id != shopId)
                 {
-                    if (result.data[i].from.id != shopId)
-                    {
-                        detail = result.data[i];
-                        break;
-                    }
-                    i++;
+                    detail = result.data[i];
+                    break;
                 }
-
-                preview.UserName = detail.from.name;
-                preview.UserFbId = detail.from.id;
-                preview.CreatedTime = DateTime.Parse(first.created_time);
-                preview.RecentMess = first.message;
-
-                param = new ExpandoObject();
-                param.access_token = accessToken;
-                param.fields = "";
-                param.limit = 1;
-                string url = preview.UserFbId + "/picture?type=normal&redirect=false";
-                dynamic result2 = fbApp.Get(url, param);
-                preview.AvatarUrl = result2.data.url;
-
-            return preview;
+                i++;
             }
 
-            return Json(listConversationPreview, JsonRequestBehavior.AllowGet);
+            preview.UserName = detail.from.name;
+            preview.UserFbId = detail.from.id;
+            preview.CreatedTime = DateTime.Parse(first.created_time);
+            preview.RecentMess = first.message;
+
+            param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.fields = "";
+            param.limit = 1;
+            string url = preview.UserFbId + "/picture?type=normal&redirect=false";
+            dynamic result2 = fbApp.Get(url, param);
+            preview.AvatarUrl = result2.data.url;
+
+            return preview;
         }
 
-    public ActionResult GetUserFromDb(string userFbId)
-    {
-        string shopId = (string)Session["ShopId"];
-        Customer cust = custService.GetCustomerByFacebookId(userFbId, shopId);
-        if (cust == null)
+        public ActionResult GetUserFromDb(string userFbId)
         {
-            return Json(false, JsonRequestBehavior.AllowGet);
+            string shopId = (string)Session["ShopId"];
+            Customer cust = custService.GetCustomerByFacebookId(userFbId, shopId);
+            if (cust == null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(cust, JsonRequestBehavior.AllowGet);
         }
-        return Json(cust, JsonRequestBehavior.AllowGet);
-    }
-    public ActionResult GetConversationContent(string conversationId)
+        public ActionResult GetConversationContent(string conversationId)
         {
             var conversationContent = new ConversationContentViewModel();
             string shopId = (string)Session["ShopId"];
             string accessToken = shopService.GetShop(shopId).FbToken;
 
             dynamic param = new ExpandoObject();
-            param.access_token = accessToken;
-            param.fields = "from,created_time,message";
+            param.fields = "from,created_time,message,attachments";
+            fbApp.AccessToken = accessToken;
             dynamic result = fbApp.Get(conversationId + "/messages", param);
 
             foreach (var mess in result.data)
@@ -866,6 +857,30 @@ namespace ShopManager.Controllers
                 mc.DateCreated = DateTime.Parse(mess.created_time);
                 mc.UserId = mess.from.id;
                 mc.UserName = mess.from.name;
+
+                if (mess.attachments != null)
+                {
+                    foreach (var att in mess.attachments.data)
+                    {
+                        string mime = att.mime_type;
+                        string type = mime.Split('/')[0];
+                        var attachment = new AttachmentViewModel();
+
+                        if (type.Equals("image"))
+                        {
+                            attachment.Type = "img";
+                            attachment.Url = att.image_data.url;
+                        }
+                        else
+                        {
+                            attachment.Type = "other";
+                            attachment.Filename = att.name;
+                            attachment.Url = att.file_url;
+                        }
+
+                        mc.Attachments.Add(attachment);
+                    }
+                }
 
                 conversationContent.Messages.Add(mc);
             }
@@ -925,7 +940,7 @@ namespace ShopManager.Controllers
             return Content(result.data.url);
         }
 
-        public ActionResult GetPageAvatar()
+        public ActionResult GetPageInfo()
         {
             string shopId = (string)Session["ShopId"];
             string accessToken = shopService.GetShop(shopId).FbToken;
@@ -933,7 +948,10 @@ namespace ShopManager.Controllers
             dynamic param = new ExpandoObject();
             param.access_token = accessToken;
             dynamic result = fbApp.Get(shopId + "/picture?type=normal&redirect=false", param);
-            return Content(result.data.url);
+            param = new ExpandoObject();
+            param.access_token = accessToken;
+            dynamic r2= fbApp.Get(shopId, param);
+            return Json(new { avatar = result.data.url, name=r2.name }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SetConversationRead(string conversationId)
         {
@@ -966,6 +984,30 @@ namespace ShopManager.Controllers
             }
             return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
+        
+
+        public JsonResult GetAvailableResponses()
+        {
+            string shopId = (string)Session["ShopId"];
+            EntityService entityService = new EntityService();
+
+            try
+            {
+                var reps = entityService.GetAvailableEntities(shopId);
+                var arrReps = new List<EntityViewModel>();
+
+                foreach (var en in reps.ToList())
+                {
+                    if (en.Value.Trim().Length > 0) arrReps.Add(en);
+                }
+                return Json(arrReps.ToList(), JsonRequestBehavior.AllowGet); ;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         public JsonResult SendMessage(string threadId, string message)
         {
@@ -975,8 +1017,8 @@ namespace ShopManager.Controllers
             {
                 param.access_token = accessToken;
                 param.message = message;
-                var result = fbApp.Post(threadId + "/messages", param);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                dynamic result = fbApp.Post(threadId + "/messages", param);
+                return Json(new { success = true, id = result.id }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -988,10 +1030,10 @@ namespace ShopManager.Controllers
 
 
         public JsonResult PrivateReplyComment(string commentId, string message)
-        {
+            {
 
             try
-            {
+        {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
             dynamic param = new ExpandoObject();
                 param.access_token = accessToken;

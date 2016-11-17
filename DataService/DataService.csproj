@@ -172,6 +172,7 @@
     <Compile Include="ViewModel\AnalysisCommentViewModel.cs" />
     <Compile Include="ViewModel\AnalysisPostViewModel.cs" />
     <Compile Include="ViewModel\AnalysisUserViewModel.cs" />
+    <Compile Include="ViewModel\AttachmentViewModel.cs" />
     <Compile Include="ViewModel\CategoryParentViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\ConversationContentViewModel.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork.cs" />
+    <Compile Include="ViewModel\EntityViewModel.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
     <Compile Include="ViewModel\PostDetailModel.cs" />
