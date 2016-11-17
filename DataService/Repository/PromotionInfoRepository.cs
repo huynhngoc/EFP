@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataService.Repository
 {
-    public class EntityRepository: BaseRepository<Entity>
+    public class PromotionInfoRepository: BaseRepository<PromotionInfo>
     {
-        public List<Entity> GetAll(string shopId)
+        public PromotionInfoRepository() : base()
         {
-            return dbSet.Where(q => q.ShopId == shopId).ToList();
+
         }
     }
 }

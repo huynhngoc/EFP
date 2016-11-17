@@ -53,11 +53,12 @@
     margin: 0 0 0 0;
     height: 100%;
     border: 1px solid #e7eaec;
+    background-color: white;
 }
 
-.small-chat-bo.ng-small-chat {
-    display: block;
-}
+    .small-chat-bo.ng-small-chat {
+        display: block;
+    }
 
 .body-small .small-chat-bo {
     bottom: 70px;
@@ -69,11 +70,11 @@
 }
 
 .small-chat-bo .heading {
-    background: #2f4050;
+    background: #1ab394;
     padding: 8px 15px;
-    font-weight: bold;
-    font-size: 14px;
-    color: #fff;
+    font-weight: bolder;
+    font-size: 15px;
+    color: whitesmoke;
 }
 
 .small-chat-bo .chat-date {
@@ -83,65 +84,66 @@
 }
 
 .small-chat-bo .content {
-    padding: 15px 15px;
+    padding: 5px 15px 15px 15px;
     overflow: auto;
     height: 70vh;
     background-color: white;
 }
 
-.small-chat-bo .content .chat-content {
-    position: relative;
-    top: 100%;
-    transform: translateY(-100%);
-    display: block;
-}
+    .small-chat-bo .content .chat-content {
+        position: relative;
+        top: 100%;
+        transform: translateY(-100%);
+        display: block;
+    }
 
-.small-chat-bo .content .author-name {
-    font-weight: bold;
-    margin-bottom: 3px;
-    font-size: 11px;
-}
+    .small-chat-bo .content .author-name {
+        font-weight: bold;
+        margin-bottom: 3px;
+        font-size: 11px;
+    }
 
     .small-chat-bo .content > div {
-    padding-bottom: 20px;
-}
+        padding-bottom: 20px;
+    }
 
-.small-chat-bo .content .chat-message {
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-family: helvetica, arial, sans-serif;
-    line-height: 14px;
-    max-width: 70%;
-    background: #f3f3f4;
-    margin-bottom: 10px;
-}
+    .small-chat-bo .content .chat-message {
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-family: helvetica, arial, sans-serif;
+        line-height: 14px;
+        max-width: 70%;
+        background: #f3f3f4;
+        margin-bottom: 10px;
+    }
 
-.small-chat-bo .content .chat-message.active {
-    background: #1ab394;
-    color: #fff;
-}
+        .small-chat-bo .content .chat-message.active {
+            background: #1ab394;
+            color: #fff;
+        }
 
-.small-chat-bo .content .left {
-    text-align: left;
-    clear: both;
-}
+    .small-chat-bo .content .left {
+        text-align: left;
+        clear: both;
+    }
 
-.small-chat-bo .content .left .chat-message {
-    float: left;
-}
+        .small-chat-bo .content .left .chat-message {
+            float: left;
+        }
 
-.small-chat-bo .content .right {
-    text-align: right;
-    clear: both;
-}
+    .small-chat-bo .content .right {
+        text-align: right;
+        clear: both;
+    }
 
-.small-chat-bo .content .right .chat-message {
-    float: right;
-}
+        .small-chat-bo .content .right .chat-message {
+            float: right;
+        }
 
 .small-chat-bo .form-chat {
     padding: 10px 10px;
+    background-color: rgb(204, 204, 204);
 }
 
 .md-skin .wrapper-content {
@@ -160,12 +162,12 @@
     text-align: center;
 }
 
-.chat-date-separator .timestamp {
-    background-color: #fff;
-    padding: 0 5px;
-    position: relative;
-    top: -8px;
-}
+    .chat-date-separator .timestamp {
+        background-color: #fff;
+        padding: 0 5px;
+        position: relative;
+        top: -8px;
+    }
 
 .information {
     padding: 0;
@@ -176,67 +178,228 @@
 .dataTables_wrapper {
     padding-bottom: 0;
 }
+
 #feedback {
-        font-size: 1.4em;
+    font-size: 1.4em;
+}
+
+#selectable .ui-selecting {
+    background: transparent;
+}
+
+.feed-element:hover {
+    background: #1ab394 !important;
+    color: white;
+}
+
+#selectable .ui-selected {
+    background-color: #365899;
+    color: white;
+}
+
+#selectable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+    #selectable li {
+        margin: 0px;
     }
 
-    #selectable .ui-selecting {
-        background: transparent;
-    }
+.feed-activity-list .feed-element {
+    border-bottom: 0px solid;
+}
 
-    .feed-element:hover {
-        background: #1ab394 !important;
-        color: white;
-    }
+.media-body, .social-body {
+    font-size: 14px;
+}
 
-    #selectable .ui-selected {
-        background-color: #365899;
-        color: white;
-    }
+.feed-element:hover {
+    background-color: transparent;
+}
 
-    #selectable {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-    }
+.ibox-scroll {
+    height: 75vh;
+}
 
-        #selectable li {
-            margin: 0px;
-        }
-
-    .feed-activity-list .feed-element {
-        border-bottom: 0px solid;
-    }
-
-    .media-body, .social-body {
-        font-size: 14px;
-    }
-
-    .feed-element:hover {
-        background-color: transparent;
-    }
-
-    .ibox-scroll {
-        height: 75vh;
-    }
-
-    .fbImage {
-        max-height: 100%;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.fbImage {
+    max-height: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 
 .unread {
     background-color: #ecf0f7;
 }
+
 .feed-activity-list .ui-selected {
-    background-color: #365899;
+    background-color: #1ab394 !important;
     color: white;
-  }
+}
+
+.feed-activity-list .ui-selecting {
+    background-color: #1ab394;
+    color: white;
+}
+
+.ibox-search {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 12px 10px 10px;
+    white-space: nowrap;
+}
+
+    .ibox-search input {
+        background-color: transparent;
+        box-sizing: border-box;
+        min-width: 186px;
+        padding-right: 21px;
+        width: 100%;
+        height: 22px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+        float: left;
+    }
 
 .feed-element {
     padding: 10px !important;
     margin: 0;
+}
+
+/* Tri's*/
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    color: mediumaquamarine;
+    opacity: 100;
+}
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200%;
+        height: 200%;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        /* Position the tooltip text */
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 200%;
+        margin-left: -60px;
+        /* Fade in tooltip */
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+        /* Tooltip arrow */
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+.fbImage {
+    margin-right: auto !important;
+}
+
+.new_comment {
+    border: 3px solid blue;
+}
+
+.commentImage {
+    width: 40% !important;
+    margin-right: 100% !important;
+}
+
+.postImage {
+    width: 40% !important;
+    height: auto !important;
+}
+
+.hided {
+    /*opacity: 0.6;*/
+    background: rgba(220,220,220,0.6) !important;
+}
+
+.unread {
+    background: #5fa08b !important;
+    animation: glowing 1500ms infinite;
+}
+
+.unreadPost {
+    background: #5fa08b;
+    color: white;
+    animation: glowing 1500ms infinite;
+}
+
+.clickable {
+    z-index: 1000;
+}
+
+.deleted {
+    background: rgba(0,0,0,0.5) !important;
+    color: white;
+}
+
+/*Long's*/
+
+table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
+    background-color: #B0BED9;
+}
+
+.search-left {
+    float: left;
+}
+
+.noTitleStuff {
+    z-index: 2031;
+    max-height: 34% !important;
+    width: 500px !important;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+}
+
+    .noTitleStuff .ui-dialog-titlebar {
+        display: none;
+    }
+
+.dialog_resp {
+    z-index: 2031;
+    max-height: 34% !important;
+    width: 500px !important;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+}
+
+    .dialog_resp .ui-dialog-titlebar {
+        display: none;
+    }
+
+.response:hover {
+    background-color: #B0BED9;
+}
+
+#tbl_order {
+    height: 10%;
+    overflow: auto;
+    position: relative;
+    max-height: 40vh;
 }

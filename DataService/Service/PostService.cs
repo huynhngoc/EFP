@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Facebook;
 using DataService.Repository;
+using DataService.JqueryDataTable;
 using DataService.ViewModel;
 
 namespace DataService.Service
@@ -12,7 +14,7 @@ namespace DataService.Service
     {
         PostRepository repository = new PostRepository();
 
-        public bool AddPost(string id, string SenderFbId, long date, int? intentId,bool isRead, int status, string shopId)
+        public bool AddPost(string id, string SenderFbId, long date, int? intentId, bool isRead, int status, string shopId)
         {
             Post c = repository.FindByKey(id);
             if (c == null)
@@ -42,9 +44,9 @@ namespace DataService.Service
             }
         }
 
-        public bool SetStatus(string commentId, int status)
+        public bool SetStatus(string postId, int status)
         {
-            Post c = repository.FindByKey(commentId);
+            Post c = repository.FindByKey(postId);
             if (c != null)
             {
                 c.Status = status;
@@ -54,10 +56,15 @@ namespace DataService.Service
             {
                 return false;
             }
-        }        
+        }
         public Post GetPost(string postId, string shopId)
         {
             return repository.GetPost(postId, shopId);
+        }
+
+        public int NewPostCount(string shopId)
+        {
+            return repository.NewPostCount(shopId);
         }
 
         //ANDND Set post is read
@@ -73,6 +80,38 @@ namespace DataService.Service
         {
             return repository.GetAllPost(shopId);
         }
-        
+
+        //ANDND Get post by time
+        public List<Post> GetPostByTime(JQueryDataTableParamModel param, string shopId, DateTime? startDate, DateTime? endDate)
+        {
+            var data = repository.GetPostByTime(param, shopId, startDate, endDate).ToList();
+            return data;
+        }
+
+        // ANDND Set intent
+        public bool SetIntent(string postId, int intentId)
+        {
+            return repository.SetIntent(postId, intentId);
+        }
+
+        //ANDND Get post by id
+        public Post GetPostById(string postId)
+        {
+            return repository.GetPostById(postId);
+        }
+
+        public bool SetLastContent(string postId, string lastContent)
+        {
+            Post c = repository.FindByKey(postId);
+            if (c != null && !string.IsNullOrEmpty(lastContent))
+            {
+                c.LastContent = lastContent;
+                return repository.Update(c);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

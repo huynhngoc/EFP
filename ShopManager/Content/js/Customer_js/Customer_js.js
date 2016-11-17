@@ -12,7 +12,10 @@ var oTable_Order;
 function validate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
-    
+    var valid_name = 0;
+    var valid_email = 1;
+    var valid_phone = 1;
+
     //1 = email mode
     if (mode == 1) {
         var atpos = value.indexOf("@");
@@ -20,16 +23,16 @@ function validate(mode, value) {
         //alert(atpos + " " + (dotpos ));
         //alert(value.length);
         //alert(value.length - dotpos);
-        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1)&& value.length != 0) {
-            
+        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
+
             document.getElementById("mail_errorTxt").style.display = "block";
+            valid_email = 0;
             //alert("false");
-            document.getElementById("btnSave").disabled = true;
         }
         else {
-            
+
             document.getElementById("mail_errorTxt").style.display = "none";
-            document.getElementById("btnSave").disabled = false;
+            valid_email = 1;
             //alert("true");
         }
         //2 = phone mode
@@ -37,65 +40,74 @@ function validate(mode, value) {
     else if (mode == 2) {
         var phoneno = /^[0-9]+$/;
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
-            
             document.getElementById("phone_errorTxt").style.display = "none";
-            document.getElementById("btnSave").disabled = false;
+            valid_phone = 1;
         }
         else {
-            
             document.getElementById("phone_errorTxt").style.display = "block";
-            document.getElementById("btnSave").disabled = true;
+            valid_phone = 0;
         }
     }
+        // 3 = name mode
+    else if (mode == 3) {
+        if (!value.trim()) {
+            document.getElementById("name_errorTxt").style.display = "block";
+            valid_name = 0;
+        }
+        else valid_name = 1;
+
+    }
+    if (valid_phone == 1 && valid_email == 1 && valid_name == 1) document.getElementById("btnSave").disabled = false;
+    else document.getElementById("btnSave").disabled = true;
 }
 
 
 
-    function Addingvalidate(mode, value) {
+function Addingvalidate(mode, value) {
 
-        //var hidden_warning = document.getElementById("mail_errorTxt");
-        
+    //var hidden_warning = document.getElementById("mail_errorTxt");
 
-        //1 = email mode
-        if (mode == 1) {
-            var atpos = value.indexOf("@");
-            var dotpos = value.lastIndexOf(".");
-            //alert(atpos + " " + (dotpos ));
-            //alert(value.length);
-            //alert(value.length - dotpos);
-            if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
-                
-                document.getElementById("mail_errorTxt1").style.display = "block";
-                //alert("false");
-                document.getElementById("btnSave1").disabled=true;
-            }
-            else {
-                
-                document.getElementById("mail_errorTxt1").style.display = "none";
-                document.getElementById("btnSave1").disabled=false;
-                //alert("true");
-            }
-            //2 = phone mode
+
+    //1 = email mode
+    if (mode == 1) {
+        var atpos = value.indexOf("@");
+        var dotpos = value.lastIndexOf(".");
+        //alert(atpos + " " + (dotpos ));
+        //alert(value.length);
+        //alert(value.length - dotpos);
+        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
+
+            document.getElementById("mail_errorTxt1").style.display = "block";
+            //alert("false");
+            document.getElementById("btnSave1").disabled = true;
         }
-        else if (mode == 2) {
-            var phoneno = /^[0-9]+$/;
-            if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
-                
-                document.getElementById("phone_errorTxt1").style.display = "none";
-                document.getElementById("btnSave1").disabled = false;
-            }
-            else {
-                
-                document.getElementById("phone_errorTxt1").style.display = "block";
-                document.getElementById("btnSave1").disabled = true;
-            }
-        }
+        else {
 
+            document.getElementById("mail_errorTxt1").style.display = "none";
+            document.getElementById("btnSave1").disabled = false;
+            //alert("true");
+        }
+        //2 = phone mode
     }
+    else if (mode == 2) {
+        var phoneno = /^[0-9]+$/;
+        if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
+
+            document.getElementById("phone_errorTxt1").style.display = "none";
+            document.getElementById("btnSave1").disabled = false;
+        }
+        else {
+
+            document.getElementById("phone_errorTxt1").style.display = "block";
+            document.getElementById("btnSave1").disabled = true;
+        }
+    }
+
+}
 
 
 function clear_table() {
-    
+
     document.getElementById("phone_errorTxt").style.display = "none";
     document.getElementById("mail_errorTxt").style.display = "none";
     $('#btnSave').prop('disabled', false);
@@ -103,7 +115,7 @@ function clear_table() {
 
 
 function clear_detail_table() {
-    document.getElementById("detailName").value ="";
+    document.getElementById("detailName").value = "";
     document.getElementById("detailDes").value = "";
     document.getElementById("detailAddr").value = "";
     document.getElementById("detailPhone").value = "";
@@ -195,16 +207,16 @@ function editCustomerDetail() {
 
             success: function (data) {
                 //showSucModal(editSuc_Mes);
-                    swal({
-                        title: "Chỉnh sửa thành công!",
-                        type: "success",
-                        confirmButtonText: "Đóng",
-                        closeOnConfirm: true
-                    },
-                function (isConfirm){ 
-                    if (isConfirm) { oTable.fnDraw() }
-                });
-                
+                swal({
+                    title: "Chỉnh sửa thành công!",
+                    type: "success",
+                    confirmButtonText: "Đóng",
+                    closeOnConfirm: true
+                },
+            function (isConfirm) {
+                if (isConfirm) { oTable.fnDraw() }
+            });
+
             },
             error: function () {
                 swal({
@@ -214,19 +226,18 @@ function editCustomerDetail() {
                     closeOnConfirm: true
                 },
                 function (isConfirm) {
-                    
+
                 });
             }
         });
     }
 }
 
-function clear_add()
-{
-   
+function clear_add() {
+
     document.getElementById("phone_errorTxt1").style.display = "none";
     document.getElementById("mail_errorTxt1").style.display = "none";
-    document.getElementById("addNameTxt").value="";
+    document.getElementById("addNameTxt").value = "";
     document.getElementById("addAddrTxt").value = "";
     document.getElementById("addDescTxt").value = "";
     document.getElementById("addPhoneTxt").value = "";
@@ -293,10 +304,13 @@ function getCustomerOrder(e, cusId) {
             "mData": function (source) {
                 id = source.Id;
                 return source.Id;
-            }, "bSortable": true },
-        { "mData": function (source) {
-            return FormatDateVN(source.DateModified);
-                   }, "bSortable": true },
+            }, "bSortable": true
+        },
+        {
+            "mData": function (source) {
+                return FormatDateVN(source.DateModified);
+            }, "bSortable": true
+        },
         { "mData": "Total", "bSortable": true },
         {
             "mData": function (source) {
@@ -304,7 +318,7 @@ function getCustomerOrder(e, cusId) {
             }, "bSortable": false
         }
         ],
-        
+
 
 
     });

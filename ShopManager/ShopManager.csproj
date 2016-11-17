@@ -352,10 +352,9 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\font-awesome\css\font-awesome.css" />
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
-    <Content Include="Content\image\loader.gif" />
+    <Content Include="Content\img\ava_placeholder.png" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
-    <Content Include="Content\js\Comment_js\Comment_js.js" />
     <Content Include="Content\js\Customer_js\Customer_js.js" />
     <Content Include="Content\js\CustomJS\Utility.js" />
     <Content Include="Content\js\demo\chartjs-demo.js" />
@@ -917,8 +916,6 @@
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\ChatComment\Index.cshtml" />
     <Content Include="Views\Analysis\Comment.cshtml" />
-    <Content Include="Views\Shop\Setting.cshtml" />
-    <Content Include="Views\Analysis\Commnent.cshtml" />
     <Content Include="Views\Shop\Setting.cshtml" />
   </ItemGroup>
   <ItemGroup>
