@@ -88,7 +88,7 @@ namespace ShopManager.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Sai tên đăng nhập hoặc mật khẩu.");
                     return View(model);
             }
         }

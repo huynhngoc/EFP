@@ -11,7 +11,7 @@
 @Styles.Render("~/SweetAlert-CSS")
 }
 
-<div class="wrapper wrapper-content">
+
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
@@ -170,44 +170,46 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- template div area-->
-<div id="intentGroup" style="display:none">
-    <div class="intent-group form-group">
-        <input type="hidden" name="id" />
-        <div class="col-sm-4">
-            <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
-                <option>Chọn một mục đích khách hàng</option>
-                @foreach(var intent in ViewBag.Intents)
-                {
-                    <option value="@intent.Id">@intent.IntentName</option>
-                }
-            </select>
-        </div>
-        <div class="col-sm-6"><input name="content" onkeydowm="changeIntent(event)" type="text" class="form-control" placeholder="" /></div>
-        <div class="col-sm-2 btn-group">
-            <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)" style="display:none"><i class="fa fa-trash"></i></button>
-            <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)" ><i class="fa fa-check"></i></button>
-            <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)" ><i class="fa fa-times"></i></button>
+    <!-- template div area-->
+    <div id="intentGroup" style="display:none">
+        <div class="intent-group form-group">
+            <input type="hidden" name="id" />
+            <div class="col-sm-4">
+                <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
+                    <option>Chọn một mục đích khách hàng</option>
+                    @foreach (var intent in ViewBag.Intents)
+                    {
+                        <option value="@intent.Id">@intent.IntentName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-6"><input name="content" onkeydowm="changeIntent(event)" type="text" class="form-control" placeholder="" /></div>
+            <div class="col-sm-2 btn-group">
+                <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)" style="display:none"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)"><i class="fa fa-check"></i></button>
+                <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)"><i class="fa fa-times"></i></button>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="entityGroup" style="display:none">
-    <div class="entity-group form-group">
-        <input type="hidden" name="id" />
-        <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" /></div>
-        <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" /></div>
-        <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" /></div>
-        
-        <div class="col-sm-2 btn-group">
-            <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)" style="display:none"><i class="fa fa-trash"></i></button>
-            <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" ><i class="fa fa-check"></i></button>
-            <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" ><i class="fa fa-times"></i></button>
+    <div id="entityGroup" style="display:none">
+        <div class="entity-group form-group">
+            <input type="hidden" name="id" />
+            <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" /></div>
+            <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" /></div>
+            <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" /></div>
+
+            <div class="col-sm-2 btn-group">
+                <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)" style="display:none"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)"><i class="fa fa-check"></i></button>
+                <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)"><i class="fa fa-times"></i></button>
+            </div>
         </div>
     </div>
-</div>
+
+
+
 
 @section CustomJS {
 @Scripts.Render("~/Toastr")
@@ -237,6 +239,14 @@
                 }            
                         
                 $(remove).hide();
+            } else if (!$($(event.target).closest(".entity-group").find(".btn-save-entity")).is(":visible") && id!="undefined"){
+                console.log(list);
+                listEntity[id] = {
+                    name: name,
+                    value: value,
+                    des: des
+                };
+                console.log(listEntity);
             }
             
             var save = $(event.target).closest(".entity-group").find(".btn-save-entity");
