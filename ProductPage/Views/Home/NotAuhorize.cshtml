@@ -18,7 +18,7 @@
         <div>
             <h2 style="margin-top:100px">Chưa đăng nhập</h2>
             <h3>Bạn chưa đăng nhập vào Facebook. Vui lòng đăng nhập để sử dụng dịch vụ</h3>
-           <button class="btn btn-success btn-facebook" onclick="Login()"><i class="fa fa-facebook"></i>&nbsp;&nbsp;Đăng nhập</button>
+           <button id="btnFacebook" class="btn btn-success btn-facebook" onclick="Login()"><i class="fa fa-facebook"></i>&nbsp;&nbsp;Đăng nhập</button>
         </div>
     </div>
 
@@ -32,6 +32,7 @@
                 xfbml: true,
                 version: 'v2.7'
             });
+            Login();
         };
 
         (function (d, s, id) {
@@ -39,7 +40,7 @@
             if (d.getElementById(id)) { return; }
             js = d.createElement(s); js.id = id;
             js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
+            fjs.parentNode.insertBefore(js, fjs);            
         }(document, 'script', 'facebook-jssdk'));
         function Login() {
             FB.login(function (response) {
@@ -64,7 +65,18 @@
     </script>
     <script>
         $(document).ready(function () {
-            
+            //running = true;
+            //while (running) {
+            //    console.log(running);
+            //    setTimeout(function () {
+            //        try {                        
+            //            $("#btnFacebook").click();
+            //            running = false;
+            //        } catch (e) {
+
+            //        }
+            //    }, 2000);                
+            //}
         });
     </script>
 </body>
