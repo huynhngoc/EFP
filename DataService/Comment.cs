@@ -14,6 +14,7 @@ namespace DataService
     
     public partial class Comment
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Comment()
         {
             this.Comments1 = new HashSet<Comment>();
@@ -30,6 +31,7 @@ namespace DataService
         public string LastContent { get; set; }
         public bool CanHide { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments1 { get; set; }
         public virtual Comment Comment1 { get; set; }
         public virtual Intent Intent { get; set; }

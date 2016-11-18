@@ -7,6 +7,7 @@ using DataService.Service;
 using System.Threading.Tasks;
 using DataService.ViewModel;
 using DataService.JqueryDataTable;
+using DataService;
 
 namespace ShopManager.Controllers
 {
@@ -127,33 +128,37 @@ namespace ShopManager.Controllers
         public JsonResult GetOrderDetailFromOrderId(JQueryDataTableParamModel param, int orderId)
         {
             OrderService service = new OrderService();
-            var orders = service.GetOrderDetailsFromOrderId(orderId);
-            var count = 1;
-            try
+            var shopId = (string)Session["ShopId"];
+            if (service.CheckOrderBelongsToShop(orderId, shopId))
             {
-                var rs = (orders
-                            .ToList())
-                            .Select(q => new IConvertible[] {
-                                ++count,
+                var orders = service.GetOrderDetailsFromOrderId(orderId);
+                var count = 1;
+                try
+                {
+                    var rs = (orders
+                                .ToList())
+                                .Select(q => new IConvertible[] {
                                 q.Properties,
                                 q.Quantity,
                                 q.Price,
                                 q.Price*q.Quantity
-                            });
-                var totalRecords = rs.Count();
+                                });
+                    var totalRecords = rs.Count();
 
-                return Json(new
+                    return Json(new
+                    {
+                        sEcho = param.sEcho,
+                        iTotalRecords = totalRecords,
+                        iTotalDisplayRecords = totalRecords,
+                        aaData = rs
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e)
                 {
-                    sEcho = param.sEcho,
-                    iTotalRecords = totalRecords,
-                    iTotalDisplayRecords = totalRecords,
-                    aaData = rs
-                }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                }
             }
-            catch (Exception e)
-            {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-            }
+            return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDetailModel(int orderId)
@@ -163,14 +168,14 @@ namespace ShopManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateOrder(int orderId, int status, string receiver, string address, string phone)
+        public ActionResult UpdateOrder(int orderId, int status, string receiver, string address, string phone, string note)
         {
             OrderService service = new OrderService();
             if (!(receiver!=null && receiver.Length > 0))
             {
                 receiver = null;
             }
-            return Content(service.EditOrder(orderId, status, receiver, address, phone).ToString());
+            return Content(service.EditOrder(orderId, status, receiver, address, phone, note).ToString());
         }
 
         [HttpPost]
@@ -182,6 +187,17 @@ namespace ShopManager.Controllers
             OrderService service = new OrderService();
             bool rs = service.AddOrder(shopId, note, custId, status, address, receiver, phone, listDetail);
             return Content(rs.ToString());
+        }
+
+        [HttpPost]
+        public ActionResult CreateOrderReturnOrder(int custId, string note, int status, string address, string receiver, string phone
+            , List<OrderDetailViewModel> listDetail)
+        {
+            string shopId = (string)Session["ShopId"];// (string)Session["ShopId"];
+            //string custId = (string)Session["CustId"];//(string)Session["CustId"];
+            OrderService service = new OrderService();
+            Order rs = service.AddOrderReturnORder(shopId, note, custId, status, address, receiver, phone, listDetail);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
     }
 }

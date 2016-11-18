@@ -1,4 +1,5 @@
-﻿using DataService.ViewModel;
+﻿using DataService.JqueryDataTable;
+using DataService.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +34,19 @@ namespace DataService.Repository
         }).First();
         }
 
-        public bool EditOrderByOrderId(int orderId, int status, string receiver, string address, string phone)
+        public string GetShopIdOfOrder(int orderId)
+        {
+            return dbSet.Where(q => q.Id == orderId).Select(q => q.ShopId).First();
+        }
+
+        public bool EditOrderByOrderId(int orderId, int status, string receiver, string address, string phone, string note)
         {
             Order order = this.FindByKey(orderId);
             order.Status = status;
             order.Receiver = receiver;
             order.Phone = phone;
             order.ShippingAddress = address;
+            order.UserNote = note;
             order.DateModified = DateTime.Now;
 
             return this.Update(order);
@@ -84,7 +91,29 @@ namespace DataService.Repository
             }).ToList();
         }
 
-        
+        public IQueryable<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId, JQueryDataTableParamModel param)
+        {
+            //var count = param.iDisplayStart + 1;
+            var rs = dbSet.Where(q => (q.ShopId == shopId)&&(q.CustomerId == customerId));
+            var search = param.sSearch;
+            //Debug.WriteLine("----sort col num " + param.iSortCol_0);
+            rs = rs.Where(q => string.IsNullOrEmpty(param.sSearch) ||
+                           (!string.IsNullOrEmpty(param.sSearch)
+                           && q.Id.ToString().Contains(param.sSearch.ToLower())))
+           .OrderBy(q => q.DateCreated);
+            //Debug.WriteLine("---------rs " + rs.Count());
+            //if (rs.Count() == 0) return null;
+            var data = rs.Select(q => new OrderViewModel()
+            {
+                //id dung de edit nen lay int id
+                Id = q.Id,
+                DateModified = q.DateModified,
+                Total = q.OrderDetails.Sum(d => d.Price * d.Quantity),
+            });
+            //Debug.WriteLine("---------data " + data.Count());
+            return data;
+        }
+
 
         //ngochb
         public int GetCompletedOrderNumber(string shopId, DateTime startDate, DateTime endDate)

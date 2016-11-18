@@ -25,6 +25,12 @@ namespace DataService.ViewModel
         public string UserName { get; set; }
         public DateTime DateCreated { get; set; }
         public string MessContent { get; set; }
+        public List<AttachmentViewModel> Attachments { get; set; }
+
+        public MessageContentViewModel()
+        {
+            Attachments = new List<AttachmentViewModel>();
+        }
 
     }
 }

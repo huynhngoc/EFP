@@ -1,34 +1,35 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Tin nhắn";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="fh-breadcrumb" style="padding:0 10px">
+<div class="row">
     <!--Tab column-->
-    <div class="col-lg-3" style="padding:0;height:100%">
+    <div class="col-xs-3" style="padding:0">
         <div class="tabs-container">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a data-toggle="tab" href="#tab-inbox" class="cust-tab"> <i class="fa fa-envelope-o big-ic"></i></a>
+                    <a data-toggle="tab" href="#tab-inbox" class="cust-tab" onclick="comment_tab_check('chat')"> <i class="fa fa-comment big-ic"></i></a>
                 </li>
-                <li class=""><a data-toggle="tab" href="#tab-comment" class="cust-tab"><i class="fa fa-comment big-ic"></i></a></li>
+                <li class=""><a data-toggle="tab" href="#tab-comment" class="cust-tab" onclick="comment_tab_check('comment')"><img class="big-ic" style="max-height:20px;max-width:20px" src="~/Content/img/comment.jpg"></a></li>
+
             </ul>
-            <div class="tab-content" style="height: 100%">
+            <div class="tab-content" style="height: 90vh">
+                @*Tab inbox*@
                 <div id="tab-inbox" class="tab-pane active">
                     <div class="panel-body" style="padding: 0px 15px 0 15px;">
                         <div class="row">
-                            <div class="col-lg-12" style="padding:0px 0 0px 0">
+                            <div class="ibox-scroll" style="padding:0px 0 0px 0">
                                 <div class="ibox" style="margin-bottom: 0">
                                     <div class="ibox-search">
-                                        <span>
+                                        <span>        
                                             @*<h3><i class="fa fa-envelope-o"></i> Tin nhắn</h3>*@
-                                            <input id="txt_searchsender" type="text" class="form-control input-sm" placeholder="Tên người" style="width:90%" />
+                                            <input i d="txt_searchsender" type="text" class="form-control input-sm" placeholder="Tên người" style="width:90%" />
                                             <button id="btn_searchsender" class="btn btn-default btn-xs" title="Search" place aria-label="Search"><span class="fa fa-search"></span></button>
-                                        </span>
+                                        </span>  
                                     </div>
-                                    <div class="ibox-content ibox-scroll">
-                                        <div id="conv_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000">
+                                    <div id="conv_wrapper" class="ibox-content ibox-scroll scrollbar-inner">
+                                        <div id="conv_loading" class="sk-spinner sk-spinner-fading-circle" style="margin: 60% auto;vertical-align:central;height:100px;width:100px;z-index:1000">
                                             <div class="sk-circle1 sk-circle"></div>
                                             <div class="sk-circle2 sk-circle"></div>
                                             <div class="sk-circle3 sk-circle"></div>
@@ -43,86 +44,199 @@
                                             <div class="sk-circle12 sk-circle"></div>
                                         </div>
                                         <div id="no_result" style="display:none">Không tìm thấy người này</div>
-                                        <ul id="list_conversation" class="list-group feed-activity-list" style="list-style-type: none;">
-                                            
-                                        </ul>
+                                        <ul id="list_conversation" class="list-group feed-activity-list" style="list-style-type: none;"></ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @*Comment*@
-                
+
+                @*Tab comment*@
+                <div id="tab-comment" class="tab-pane">
+                    <div class="panel-body" style="padding: 0px 15px 0 15px">
+                        <div class="row">
+                            <div class="ibox-scroll" style="padding:0px 0 0px 0">
+                                <div class="ibox ibox-scroll" style="margin-bottom: 0">
+                                    <div class="ibox-content ibox-heading">
+                                        <h3>Bình luận</h3>
+                                        <!--                                                    <small><i class="fa fa-tim"></i> B?n có <strong>22 tin nh?n m?i</strong></small>-->
+                                    </div>
+                                    <div class="ibox-content ibox-scroll" id="scrollPostList" style="position: relative;">
+                                        @*<div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 60% auto; display:none;" id="postLoader">
+                                                <img src="~/Content/image/loader.gif" />
+                                            </div>*@
+                                        <div id="postLoader" class="sk-spinner sk-spinner-fading-circle" style="margin: 60% auto;display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 60% auto;">
+                                            <div class="sk-circle1 sk-circle"></div>
+                                            <div class="sk-circle2 sk-circle"></div>
+                                            <div class="sk-circle3 sk-circle"></div>
+                                            <div class="sk-circle4 sk-circle"></div>
+                                            <div class="sk-circle5 sk-circle"></div>
+                                            <div class="sk-circle6 sk-circle"></div>
+                                            <div class="sk-circle7 sk-circle"></div>
+                                            <div class="sk-circle8 sk-circle"></div>
+                                            <div class="sk-circle9 sk-circle"></div>
+                                            <div class="sk-circle10 sk-circle"></div>
+                                            <div class="sk-circle11 sk-circle"></div>
+                                            <div class="sk-circle12 sk-circle"></div>
+                                        </div>
+                                        <div class="feed-activity-list">
+                                            <ol id="selectable"></ol>
+                                        </div>
+                                        @*<div id="newPostLoader" style="text-align:center; display:none; background:rgba(225, 225, 225, .4);"><img src="~/Content/image/loader.gif" height="40" /></div>*@
+                                        <div id="newPostLoader" class="sk-spinner sk-spinner-fading-circle" style="display:none; height:50px;width:50px;z-index:1000; vertical-align:central; ">
+                                            <div class="sk-circle1 sk-circle"></div>
+                                            <div class="sk-circle2 sk-circle"></div>
+                                            <div class="sk-circle3 sk-circle"></div>
+                                            <div class="sk-circle4 sk-circle"></div>
+                                            <div class="sk-circle5 sk-circle"></div>
+                                            <div class="sk-circle6 sk-circle"></div>
+                                            <div class="sk-circle7 sk-circle"></div>
+                                            <div class="sk-circle8 sk-circle"></div>
+                                            <div class="sk-circle9 sk-circle"></div>
+                                            <div class="sk-circle10 sk-circle"></div>
+                                            <div class="sk-circle11 sk-circle"></div>
+                                            <div class="sk-circle12 sk-circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-footer">
+                    <select id="auto_option" class="form-control" style="float:right;background-color: aliceblue;">
+                        <option value="1">Thủ công</option>
+                        <option value="2">Trả lời tự động</option>
+                        <option value="3">Chỉ trả lời tự động bình luận</option>
+                        <option value="4">Chỉ trả lời tự động tin nhắn</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
     <!--./Tab column-->
-    <!--Chat box-->
-    <div class="small-chat-bo fadeInRight animated col-lg-5" style="padding: 0">
 
+    <div class="small-chat-bo fadeInLeft animated col-xs-5" style="padding: 0">
         <div id="" class="heading receiver_name" draggable="true">
-            (Chưa chọn)
+            Tin nhắn
         </div>
-        <div id="chat_loading" class="sk-spinner sk-spinner-fading-circle" style="height:100px;width:100px;z-index:1000">
-            <div class="sk-circle1 sk-circle"></div>
-            <div class="sk-circle2 sk-circle"></div>
-            <div class="sk-circle3 sk-circle"></div>
-            <div class="sk-circle4 sk-circle"></div>
-            <div class="sk-circle5 sk-circle"></div>
-            <div class="sk-circle6 sk-circle"></div>
-            <div class="sk-circle7 sk-circle"></div>
-            <div class="sk-circle8 sk-circle"></div>
-            <div class="sk-circle9 sk-circle"></div>
-            <div class="sk-circle10 sk-circle"></div>
-            <div class="sk-circle11 sk-circle"></div>
-            <div class="sk-circle12 sk-circle"></div>
-        </div>
-        <div id="chat_box_content" class="content slimScrollBar">
-            
-        </div>
-        <div class="form-chat">
-            <div class="input-group input-group-sm">
-                <input id="messreply_textbox" type="text" class="form-control">
-                <span class="input-group-btn">
-                    <button id="btn_sendmess" class="btn btn-primary" type="button">
-                        Send
-                    </button>
+        <!--Chat box-->
+        <div id="chatSection" class="center_content">
+            <div id="chat_loading" class="sk-spinner sk-spinner-fading-circle" style="display:none;height:100px;width:100px;z-index:1000;position:relative;float: left;left: 40%;vertical-align:central; ">
+                <div class="sk-circle1 sk-circle"></div>
+                <div class="sk-circle2 sk-circle"></div>
+                <div class="sk-circle3 sk-circle"></div>
+                <div class="sk-circle4 sk-circle"></div>
+                <div class="sk-circle5 sk-circle"></div>
+                <div class="sk-circle6 sk-circle"></div>
+                <div class="sk-circle7 sk-circle"></div>
+                <div class="sk-circle8 sk-circle"></div>
+                <div class="sk-circle9 sk-circle"></div>
+                <div class="sk-circle10 sk-circle"></div>
+                <div class="sk-circle11 sk-circle"></div>
+                <div class="sk-circle12 sk-circle"></div>
+            </div>
+            <div id="chat_box_content" class="content scrollbar-inner" style="z-index:1;position:relative">
+
+            </div>
+            <div class="div_functions">
+                <button id="btn_response" class="btn btn-default" type="button">
+                    <i class="fa fa-at"></i>
+                </button>
+                <span id="suggest_wrapper">
+                    <label class="btn btn-primary btn-outline">
+                        GỢI Ý
+                    </label>
                 </span>
             </div>
+            <div class="form-chat">
+                <div class="input-group input-group-sm">
+                    <input id="txt_messreply" type="text" class="form-control">
+                    <span class="input-group-btn">
+                        <button id="btn_sendmess" class="btn btn-primary" type="button">
+                            Gửi
+                        </button>
+                    </span>
+                </div>
+            </div>
         </div>
+        <!--./Chat box-->
+        <div class="ibox center_content" style="display:none;" id="commentSection">
+            <div class="ibox-content ibox-scroll scrollbar-inner" style="max-height:200%" id="comment_div">
+
+                <div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;" id="commentSelect">
+                    <div class="panel panel-primary" style="height:70%; background-color: lightblue; color:white; font-size:20px;">
+                        <div class="panel-body" style="height:100%; text-align:center">
+                            Xin chọn bài đăng
+                        </div>
+                    </div>
+                </div>
+
+                @*<div style="text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;" id="commentLoader">
+                        <img src="~/Content/image/loader.gif" />
+                    </div>*@
+                <div id="commentLoader" class="sk-spinner sk-spinner-fading-circle" style="display:none; height:100px;width:100px;z-index:1000; vertical-align:central; margin: 40% auto;">
+                    <div class="sk-circle1 sk-circle"></div>
+                    <div class="sk-circle2 sk-circle"></div>
+                    <div class="sk-circle3 sk-circle"></div>
+                    <div class="sk-circle4 sk-circle"></div>
+                    <div class="sk-circle5 sk-circle"></div>
+                    <div class="sk-circle6 sk-circle"></div>
+                    <div class="sk-circle7 sk-circle"></div>
+                    <div class="sk-circle8 sk-circle"></div>
+                    <div class="sk-circle9 sk-circle"></div>
+                    <div class="sk-circle10 sk-circle"></div>
+                    <div class="sk-circle11 sk-circle"></div>
+                    <div class="sk-circle12 sk-circle"></div>
+                </div>
+            </div>
+            <div class="social-comment">
+                <div class="media-body">
+                    <textarea class="form-control" id="replyInputTxt" disabled style="resize:none;height:100%;" placeholder="Nhập bình luận..."></textarea>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
-    <!--./Chat box-->
+
+
+
+
     <!--Customer Info-->
-    <div class="col-lg-4 information" style="height: 100%">
-        <div class="">
+
+    <div class="col-xs-4 information" style="height: 100%">
+        <div class="">   
             <div>
                 <div>
                     <h3 style="padding: 0 0 5px 15px;display:inline-block;">Thông tin khách hàng</h3>
                     <span style="padding: 5px 15px 0 0;float:right">
-                        <a id="btn_add" class="btn btn-primary btn-xs" hidden><i class="fa fa-plus"></i></a>
-                        <a id="btn_edit" class="btn btn-info btn-xs" hidden><i class="fa fa-edit"></i></a>
-                        <a id="btn_ok_add" class="btn btn-primary btn-xs" hidden><i class="fa fa-check"></i></a>
-                        <a id="btn_ok_edit" class="btn btn-primary btn-xs" hidden><i class="fa fa-check"></i></a>
-                        <a id="btn_cancel" class="btn btn-danger btn-xs" hidden><i class="fa fa-times"></i></a>
+                        <a id="btn_add" class="btn btn-primary btn-xs" style="display:none" hidden><i class="fa fa-plus"></i></a>
+                        <a id="btn_edit" class="btn btn-info btn-xs" style="display:none" hidden><i class="fa fa-edit"></i></a>
+                        <a id="btn_ok_add" class="btn btn-primary btn-xs" style="display:none"><i class="fa fa-check"></i></a>
+                        <a id="btn_ok_edit" class="btn btn-primary btn-xs" style="display:none"><i class="fa fa-check"></i></a>
+                        <a id="btn_cancel" class="btn btn-danger btn-xs" style="display:none"><i class="fa fa-times"></i></a>
                     </span>
                 </div>
-                <div class="cust_info" id="" style="padding:0">
+                <div class="cust_info" id="" style="padding:0" data-fbid="" data-fbname="">
                     <div>
-                        <div class="col-md-2">
+                        <div class="col-xs-2">
                             <img id="cust_avatar" alt="image" class="img-circle" src="~/Content/img/ava_placeholder.png" style="float:left" width="50" height="50">
                         </div>
                     </div>
-                    <div class="col-md-5" style="padding-right:0">
+                    <div class="col-xs-5" style="padding-right:0">
                         <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly>
                     </div>
-                    <div class="col-md-5">
-                        <i class="fa fa-phone"></i> Số điện thoại <input id="cus_phone" class="form-control" value="" readonly>
+                    <div class="col-xs-5">
+                        <i class="fa fa-phone"></i> SĐT <input id="cus_phone" class="form-control" value="" readonly>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-xs-12">
                         <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly></textarea>
                     </div>
                 </div>
@@ -135,7 +249,7 @@
                     <div class="ibox-content">
                         <button id="btn_addproduct" class="btn btn-primary btn-sm" style="margin-top:3px">Thêm sản phẩm</button>
 
-                        <div id="tbl_order" class="table-responsive col-md-12" style="overflow:auto;position:relative;">
+                        <div id="tbl_order" class="table-responsive col-md-12 scrollbar-inner">
                             <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="add_datatableproduct">
                                 <thead>
                                     <tr>
@@ -147,7 +261,8 @@
                                         <th class=""></th>
                                     </tr>
                                 </thead>
-                                @*<tfoot>
+                                @*
+                                    <tfoot>
                                         <tr>
                                             <td colspan="4" style="font-weight:bold; text-align:right">Tổng cộng</td>
                                             <td id="table_total" style="font-weight:bold; text-align:center">0</td>
@@ -166,18 +281,46 @@
                             </table>
                         </div>
                         <button id="btn_addorder" class="btn btn-primary">Tạo đơn hàng</button>
+                        @*<div class="att_img" style="height:100px; width:100px">
+                                <img style="height: 100%; width: 100%; object-fit: contain" src="">
+                            </div>*@
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+    @* hidden customer name and avatar url *@
+    <input type="hidden" value="" id="cusName" />
+
+    @*Private mess*@
+    <div class="modal fade" id="cusPrivateMes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="margin-top: 15%;">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #1ab394">
+                    <h2 style="color: white;">Tin nhắn mới</h2>@*<span class="close" data-dismiss="modal">x</span>*@
+                </div>
+                <div class="modal-body">
+                    <div>Tới: <div style="display:inline-block" id="receiverName"></div></div></br>
+                    <textarea class="form-control" id="private_mes" placeholder="Nhắn tin với tu cách là chủ shop..."></textarea>
+                    </br><div>Tại comment: <div id="comment_id_to_reply"></div></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSave" class="btn btn-success" data-dismiss="modal" onclick="SendPrivateMessage($('#private_mes').val(),$('#comment_id_to_reply').data('id'))">Gởi</button>
+                    <button type="button" id="btnCloseModal" class="btn btn-success" data-dismiss="modal" onclick="clear_message();">Huỷ</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 <!--./Customer Info-->
-<!--Order-->
+<!--Product table-->
 <div id="popover_product" hidden>
     <div class="table-responsive col-md-12">
-        <table id="popover_datatable" class="table table-striped table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
+        <table id="popover_datatable" class="table table-bordered table-hover" width="100%" style="text-align: center;" aria-hidden="true">
             <thead>
                 <tr>
                     <th class="col-md-1">Mã</th>
@@ -188,36 +331,37 @@
         </table>
     </div>
 </div>
-<!--./Order-->
-
+<!--./Product table-->
+<!--Response-->
+<div id="popover_response" hidden>
+    <div class="table-responsive col-md-12">
+    </div>
+</div>
+<!--./Response-->
 @section CustomCSS{
+
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     @Styles.Render("~/TouchSpin-CSS")
+    @Styles.Render("~/jQueryScrollbar-CSS")
     @Styles.Render("~/jQuery-UI-CSS")
     @Styles.Render("~/Toastr-style")
-}
-@section MyCSS{
     @Styles.Render("~/ChatComment-CSS")
 
     <style>
-        table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
-            background-color: #B0BED9;
-        }
-
-        .search-left {
-            float: left;
-        }
-
-        .noTitleStuff {
-            height: 37% !important;
-            width: 500px !important;
-        }
-
-            .noTitleStuff .ui-dialog-titlebar {
-                display: none;
+        @@keyframes glowing {
+            0% {
+                background-color: #1ab394;
+                box-shadow: 0 0 1px #004A7F;
             }
+
+            50% {
+                background-color: #2dbc9f;
+                box-shadow: 0 0 3px #0094FF;
+            }
+        }
     </style>
+
 }
 
 @section CustomJS {
@@ -226,53 +370,1978 @@
     @Scripts.Render("~/DataTable-JS")
     @Scripts.Render("~/SweetAlert-JS")
     @Scripts.Render("~/TouchSpin-JS")
-    @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Utility-JS")
+    @Scripts.Render("~/jQueryScrollbar-JS")
+    @Scripts.Render("~/jQuery-UI")
     @Scripts.Render("~/Toastr")
-    @Scripts.Render("~/SignalR-JS")
-    @Scripts.Render("/signalr/hubs")
+
+    @*Comment*@
     <script type="text/javascript">
-        var shopId= @HttpContext.Current.Session["ShopId"];
-        var page_ava_url="";
-        $.ajax({
-            async: true,
-            url: '/ChatComment/GetPageAvatar',
-            success: function (data) {
-                page_ava_url=data;
+        var monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                          "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+        ];
+        var shopId_text = @Session["shopId"].ToString();
+        var shopName_text = '@Session["shopOwner"].ToString()';
+
+        function ProcessCommentSignalR(comment,intent){
+            console.log(comment);
+            comment.message = TextReplacedToChat(comment.message);
+            var html = '';
+            //check if comment or nest comment
+            // comment of post
+
+            //check if currently in the post
+            if (comment!=null){
+                //post won't return created time, but comment does
+                var date = null;
+                if (comment.created_time) date = FormatDateVN_fixFBDate(comment.created_time*1000);
+                else date = FormatDateVN_fixFBDate(new Date());
+                //var curDate = FormatDateVN_fixFBDate_toSimplified(new Date());
+                console.log(date);
+                if(comment.verb == "add")
+                {
+                    //in current post
+                    if ($('#hiddenPostId').val() == comment.post_id)
+                    {
+                        //is comment of post
+                        //check if comment or reply
+                        //is comment
+                        if (comment.post_id == comment.parent_id)
+                        {
+                            //new comment
+                            AddToComment(comment,date,intent);
+                            //AddToComment(comment,date);
+                        }
+
+                            // is nested comment / reply
+                        else if (comment.parent_id != comment.post_id){
+                            //AddToReply(comment,date,intent);
+                            AddToReply(comment,date);
+                        }
+                        //move post in post list
+                        var tmpPost =  $('#'+comment.post_id+'_Post').wrap('<p/>').parent().html();
+                        ////(tmpPost);
+                        $('#'+comment.post_id+'_Post').unwrap();
+                        $('#'+comment.post_id+'_Post').remove();
+                        ////(tmpPost);
+                        $('#selectable').prepend(tmpPost);
+                        //console.log("in date "+ date);
+                        $('#'+comment.post_id+'_time').text(date);
+                        $('#'+comment.post_id+'_Post').removeClass("unreadPost");
+                        setTimeout(function(){
+                            $.ajax({
+                                url: "/ChatComment/SetCommentRead",
+                                method: 'get',
+                                data: ({
+                                    commentId: comment.comment_id,
+                                }),
+                                processing: 'true',
+                                success: function (data) {
+                                    console.log(data);
+                                    if (data.success == false)
+                                    {
+                                    }
+                                    else {
+                                        ////(data[0].Value);
+                                        //var curDate = FormatDateVN_fixFBDate_toSimplified(new Date());
+                                    }
+                                }
+                            })},2000);
+                    }
+                        //not from current post
+                    else
+                    {
+                        //AddToPostList(comment,date,curDate);
+                        AddToPostList(comment,date);
+                    }
+                    
+
+                }
+                else if (comment.verb == "hide"){
+                    //in current post
+                    ////(comment.comment_id);
+                    if ($('#hiddenPostId').val() == comment.post_id){
+                        //post hide
+                        
+                        if (!comment.comment_id){
+                            ////("Sdfsdfsd");
+                            HideToPost(comment);
+                        }
+                            //comment hide
+                        else {
+                            if ($('#'+comment.comment_id).length){
+                                HideToComment(comment);
+                            }
+                        }
+                    }
+                        //685524511603937_727490264074028_Post
+                        if ($('#'+comment.post_id+'_Post').length) {
+                            //alert ($('#'+comment.post_id+'_Post').length);
+                            $('#'+comment.post_id+'_Post').addClass('hided');
+                        }
+                    
+                }
+                else if (comment.verb == "unhide"){
+                    ////("fking unhide");
+                    //in current post
+                    if ($('#hiddenPostId').val() == comment.post_id){
+                        //post unhide
+                        if (!comment.comment_id){
+                            ////("Sdfsdfsd");
+                            UnhideToPost(comment);
+                        }
+                        //comment unhide
+                        if($('#'+comment.comment_id).length) {
+                            ////("fuuuuuuu");
+                            UnhideToComment(comment);
+                        }
+                    }
+                    if ($('#'+comment.post_id+'_Post').length){
+                        $('#'+comment.post_id+'_Post').removeClass('hided');
+                    }
+                }
+                else if (comment.verb == "remove"){
+                    // in current post
+                    if ($('#hiddenPostId').val() == comment.post_id){
+                        //remove post
+                        if (!comment.comment_id){
+                            DeleteToPost(comment);
+                        }
+                            //remove comment
+                        else {
+                            DeleteToComment(comment);
+                        }
+                    }
+                        // not in current post
+
+                    if($('#'+comment.post_id+'_Post').length)
+                    {
+                        DeleteToPostList(comment);
+                    }
+                            
+
+                }
+                else if (comment.verb == "edited"){
+                    // in current post
+                    if ($('#hiddenPostId').val() == comment.post_id){
+                        //post edited
+                        if (!comment.comment_id){
+                            EditToPost(comment);
+                            $('#'+comment.post_id).text(comment.message);
+                        }
+                            //shown comment edited
+                        else if ($('#'+comment.comment_id).length){
+                            //shown reply editted
+                            if ($('#'+comment.comment_id).parent().attr('id').indexOf('reply_to')!= -1){
+                                EditToCommentReply(comment,date);
+                            }
+                                // shown comment editted
+                            else if ($('#'+comment.comment_id).parent().attr('id').indexOf('_Comments')!= -1){
+                                EditToComment(comment,date);
+                            }
+                            //edit reply
+
+                        }//reply edited
+                        else if (($('#'+comment.parent_id).length) && ($('#Show_'+comment.parent_id+'_Replies').length)){
+                            EditToReply(comment,date);
+                        }
+                        else if (!($('#'+comment.parent_id).length))
+                        {
+                            EditToReply(comment,date);
+                        }
+                        //move post in post list
+                        var tmpPost =  $('#'+comment.post_id+'_Post').wrap('<p/>').parent().html();
+                        $('#'+comment.post_id+'_Post').unwrap();
+                        $('#'+comment.post_id+'_Post').remove();
+                        ////(tmpPost);
+                        $('#selectable').prepend(tmpPost);
+                        //console.log("in date "+ date);
+                        $('#'+comment.post_id+'_time').text(date);
+                        //$('#'+comment.post_id).text(comment.message);
+                    }
+                    else {//not in post
+                        if ($('#'+comment.post_id+'_Post').length){
+                            var tmpPost =  $('#'+comment.post_id+'_Post').wrap('<p/>').parent().html();
+                            $('#'+comment.post_id+'_Post').unwrap();
+                            $('#'+comment.post_id+'_Post').remove();
+                            ////(tmpPost);
+                            $('#selectable').prepend(tmpPost);
+                            $('#'+comment.post_id+'_Post').addClass('unreadPost');
+                            //console.log("in date "+ date);
+                            $('#'+comment.post_id+'_time').text(date);
+                            if (!comment.comment_id){
+                                $('#'+comment.post_id).text(comment.message);
+                            }
+                        }
+                            //else GetPostToList(comment,curDate);
+                        else GetPostToList(comment,date);
+                    }
+                }
+            }
+        }
+
+        var refresh = false;
+        var pagemode = "chat";
+        var splittedCommentId ="";
+
+        //function SetFbIdToUserInfo(id){
+        //    ////("sdfsdf");
+        //    var fbid="";
+        //    if (pagemode =="comment"){
+        //        console.log("get info from comment");
+        //        fbid= id;
+        //        $('.cust_info').data('fbid', fbid);
+        //    }
+        //    else {
+
+        //    }
+        //}
+
+        $(document).ready(function () {
+            
+            $(function () {
+                $("#selectable").selectable({
+                    selecting: function (event, ui) {
+                        if ($("#selectable .ui-selected, #selectable .ui-selecting").length > 1) {
+                            $(ui.selecting).removeClass("ui-selecting");
+                        }
+                    },
+                    stop: function () {
+                        console.log("select the post");
+                        var result = $("#select-result").empty();
+                        $(".ui-selected", this).each(function () {
+                            ////("test");
+                            var index = $("#selectable li").index(this);
+                            result.append(" #" + (index + 1));
+                            gettingCommentInit = true;
+                            nextIsRead = null;
+                            nextReplyIsRead = null;
+                            document.getElementById("replyInputTxt").disabled = true;
+                            appendMode=false;
+                            ////(this.id.split('_')[0]+"_"+this.id.split('_')[1]);
+                            loadPostDetail(this.id.split('_')[0]+"_"+this.id.split('_')[1]);
+                            ////(gettingCommentInit);
+                        });
+                    }
+                });
+            });
+
+            loadPosts();
+
+            jQuery(function ($) {
+                $('#scrollPostList').on('scroll', function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+
+                        if (post_ViewSkip < post_quan && loading_post_flag==0)(loadPosts());
+                    }
+                })
+            });
+
+            $('#replyInputTxt').on('keyup', function(e) {
+                if (e.which == 13 && ! e.shiftKey) {
+                    var content = this.value;
+                    var postId = $('#hiddenPostId').val();
+                    var newMessage = $('#replyInputTxt').val();
+                    var caret = getCaret(this);
+                    ////(newMessage);
+                    if(e.shiftKey){
+                        this.value = content.substring(0, caret - 1) + "\n" + content.substring(caret, content.length);
+                        event.stopPropagation();
+                    } else {
+                        this.value = content.substring(0, caret - 1) + content.substring(caret, content.length);
+                        newMessage = this.value;
+                        ////(newMessage);
+                        $('#replyInputTxt').val('');
+                        $.ajax({
+                            url: "/ChatComment/ReplyComment",
+                            method: 'get',
+                            data: ({
+                                commentId: postId,
+                                message: newMessage,
+                            }),
+                            processing: 'true',
+                            success: function (data) {
+                                console.log(data);
+                                if (data.success == false)
+                                {
+                                    swal("Bình luận thất bại!","", "error");
+                                }
+                                else {
+                                    ////(data[0].Value);
+                                    //var curDate = FormatDateVN_fixFBDate_toSimplified(new Date());
+                                    ShopAddToComment(newMessage,data[0].Value,GetCurrentDateTime());
+                                }
+                            }
+                        })}
+                }
+            });
+        })
+
+        var currentDate = new Date();
+        var lastPersonToChat = null;
+        function comment_tab_check(mode) {
+            if (mode == "comment") {
+                $('#chatSection').css('display', 'none');
+                $('#commentSection').css('display', 'block').fadeIn();
+                lastPersonToChat=$('.receiver_name').text();
+                $('.receiver_name').text("Chi tiết bài đăng");
+                ////($('.receiver_name').attr('id'));
+                //$('.receiver_name').attr('id','');
+            }
+            else {
+                $('#chatSection').css('display', 'block').fadeIn();
+                $('#commentSection').css('display', 'none');
+                $('.receiver_name').text(lastPersonToChat);
+            }
+            pagemode = mode;
+        }
+
+        function ShowDiv(replyBtn) {
+            var id = replyBtn.id.split('_')[0] + "_" +replyBtn.id.split('_')[1];
+            document.getElementById("reply_" + id).style.display = "block";
+            //location.href = "#reply_" + Id;
+            document.getElementById("reply_" + id).focus();
+            console.log('#reply_'+id+'_content');
+        }
+
+        var post_ViewSkip = 0;
+        //total number of post
+        var post_quan = 0;
+        //1 = init load, 2 = append
+        var loader_flag = 1;
+        //prevent appending new post while getting current post list
+        var loading_post_flag = 0;
+        //prevent getting new post detail while loading current post
+        var loading_post_detail_flag = 0;
+
+        function getCaret(el) {
+            if (el.selectionStart) {
+                return el.selectionStart;
+            } else if (document.selection) {
+                el.focus();
+                var r = document.selection.createRange();
+                if (r == null) {
+                    return 0;
+                }
+                var re = el.createTextRange(), rc = re.duplicate();
+                re.moveToBookmark(r.getBookmark());
+                rc.setEndPoint('EndToStart', re);
+                return rc.text.length;
+            }
+            return 0;
+        }
+
+
+        //load all post with lastest unread comment(s)
+        function loadPosts() {
+            loading_post_flag = 1;
+            $.ajax({
+                url: "/ChatComment/GetAllPost",
+                method: 'get',
+                data: ({
+                    skip: post_ViewSkip,
+                    take: 11,
+                }),
+                processing: 'true',
+                success: function (data) {
+                    if (data == false)
+                    {
+                        swal("Không thể kết nối!","", "error");
+                    }
+                    else
+                    {
+                        post_quan = data.postQuan;
+                        ////(data.postQuan);
+                        var html = "";
+                        if (data != null) {
+                            $("#postLoader").hide();
+                            $("#newPostLoader").hide();
+                            console.log(data);
+                            for (var i = 0; i < data.postviewlist.length; i++) {
+                                console.log(data.postviewlist[i].post.IsRead);
+                                ////(data[i].message.length);
+                                //if (data[i].message.length > 30) data[i].message = data[i].message.substring(0, 30);
+                                if (!$('#'+data.postviewlist[i].post.Id+'_Post').length){
+                                    ////(data.postviewlist[i].post.status);
+                                    if (data.postviewlist[i].post.IsRead == false) html = "<li class='ui-widget-content unreadPost' id='" + data.postviewlist[i].post.Id + "_Post'>\n";
+                                    else if (data.postviewlist[i].post.status == 3) {html = "<li class='ui-widget-content hided' id='" + data.postviewlist[i].post.Id + "_Post'>\n";}
+                                    else html = "<li class='ui-widget-content' id='" + data.postviewlist[i].post.Id + "_Post'>\n";
+                                    if (data.postviewlist[i].post.status == 5) html = "<li class='ui-widget-content deleted' id='" + data.postviewlist[i].post.Id + "_Post'>\n";
+                                    html+= "<div class='feed-element'>\n" +
+                                                   "<div id='" + data.postviewlist[i].post.Id + "_contentDiv'>\n" +
+                                                   "<small class='pull-right' id='"+data.postviewlist[i].post.Id+"_time'>" + FormatDateVN_full(data.postviewlist[i].post.LastUpdate) + "</small>\n" +
+                                                   "<strong>" + data.postviewlist[i].from + "</strong>\n  <div>";
+                                    if (data.postviewlist[i].message == null) data.postviewlist[i].message = "trống";
+                                    console.log("hình " + data.imageContent);
+                                    if (data.postviewlist[i].imageContent) data.postviewlist[i].message += " (kèm hình)";
+                                    html += "<div id='"+data.postviewlist[i].post.Id+"' style='text-overflow:clip;' >"+data.postviewlist[i].message+"</div>";
+                                    html += "</div>\n";
+                                    html += "</div>\n" + "</div></li>\n";
+                                    ////(html);
+                                    $("#selectable").append(html);
+                                }
+                            }
+                            ////(post_ViewSkip);
+                            loader_flag = 2;
+                            post_ViewSkip += 11;
+                            loading_post_flag = 0;
+                            ////(post_ViewSkip);
+                        }}
+                },
+                beforeSend: function () {
+                    if (loader_flag == 1)$("#postLoader").show();
+                    else $("#newPostLoader").show();
+                },
+            })
+
+        }
+
+        //private message
+        function SendPrivateMessage(content, comment_id)
+        {
+            $.ajax({
+                url: "/ChatComment/PrivateReplyComment",
+                method: 'get',
+                data: ({
+                    commentId: comment_id,
+                    message: content,
+                }),
+                processing: 'true',
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == false)
+                    {
+                        if (data.Message == "(OAuthException - #10900) (#10900) Activity already replied to") swal("Không thể nhắn quá 1 tin cho 1 comment","","warning");
+                        if (data.Message == "(OAuthException - #10903) (#10903) This user cant reply to this activity") swal("Không thể nhắn tin\n cho trang khác","","error");
+                        else swal("Nhắn tin thất bại!","", "error");
+                    }
+                    else {swal("Nhắn tin thành công!","", "success");}
+                }
+            })}
+
+        //first load?
+        var gettingCommentInit;
+        var ajax;
+        var appendMode = false;
+        var nextIsRead = null;
+        var nextReplyIsRead = null;
+
+        //load clicked post's content
+        function loadPostDetail(postid) {
+            //loading_post_detail_flag = 1;
+            var skip = 0;
+            if (gettingCommentInit) skip = 0;
+            else skip = $('#moreCommentsOption').data('skipnum');
+            ////(skip + " dsfsdfsdf");
+            var postId = postid;
+            if (ajax) ajax.abort();
+            ajax = $.ajax({
+                url: "/ChatComment/GetPostDetail",
+                method: 'get',
+                async: 'true',
+                data: ({
+                    postId: postid,
+                    skip: skip,
+                    take: 7,
+                }),
+                processing: 'true',
+                success: function (data) {
+                    if (data == false)
+                    {
+                        swal("Lỗi!","", "error");
+                    }
+                    else
+                    {
+                        ////(data.length);
+                        //post returned as data
+                        console.log(data);
+                        $('#commentLoader').hide();
+                        $('#moreCommentLoader').hide();
+                        if (data.success == false){
+                            swal("Không thể truy cập bài đăng!","", "error");
+                            $("#comment_div").append("<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
+                                                                        "<div class='sk-circle1 sk-circle'></div>"+
+                                                                        "<div class='sk-circle2 sk-circle'></div>"+
+                                                                        "<div class='sk-circle3 sk-circle'></div>"+
+                                                                        "<div class='sk-circle4 sk-circle'></div>"+
+                                                                        "<div class='sk-circle5 sk-circle'></div>"+
+                                                                        "<div class='sk-circle6 sk-circle'></div>"+
+                                                                        "<div class='sk-circle7 sk-circle'></div>"+
+                                                                        "<div class='sk-circle8 sk-circle'></div>"+
+                                                                        "<div class='sk-circle9 sk-circle'></div>"+
+                                                                        "<div class='sk-circle10 sk-circle'></div>"+
+                                                                        "<div class='sk-circle11 sk-circle'></div>"+
+                                                                        "<div class='sk-circle12 sk-circle'></div></div>"+
+                                                                       "<input type='hidden' value='"+postId+"' id='hiddenPostId'> <input type='hidden' value='' id='hiddenEditId'>");
+                        }
+                        if (data != null) {
+                            var html = "";
+                            //init mode
+                            console.log(data);
+                            if (gettingCommentInit){
+                                ////("init");
+                                $("#comment_div").empty();
+                                html = "<div class='social-feed-box' id='postDetail'>";
+
+                                if(data.Status != 5){
+                                    html+="<div class='pull-right social-action dropdown'>" +
+                                                                    "<a data-toggle='dropdown' class='dropdown-toggle'>" +
+                                                                    "<i class='fa fa-chevron-down'></i></a>" +
+                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px'>";
+                                    //if (data.SenderFbId == @Session["shopId"].ToString()) html +="<li onclick=''><a>S?a</a></li>";
+                                    ////(shopId_text);
+                                    ////(data.SenderFbId);
+                                    if (data.IntentId == null)html+="<li onclick='EditComment(this.id)' id ="+data.Id+"_editBtn'><a>Sửa</a></li>";
+                                    else if (data.IntentId != null)
+                                    {
+                                        if (data.Status == 3)
+                                            html+="<li onclick='UnhideComment(this.id)' id ='"+data.Id+"_unhideBtn'><a>Hiện</a></li>";
+                                        else
+                                            html+="<li onclick='HidePost(this.id)' id ='"+data.Id+"_hideBtn'><a>Ẩn</a></li>";
+                                    }
+                                    html+="<li onclick='DeleteComment(this.id)' id ='"+data.Id+"_deleteBtn'><a>Xoá</a></li></ul></div>";
+                                }
+                                if (data.Status == 3)
+                                    html += "<div class='social-avatar hided' id=" + data.SenderFbId + ">";
+                                else if (data.Status == 5)
+                                {
+                                    html+="<div class='social-avatar deleted' id=" + data.SenderFbId + ">";
+                                }
+                                else html += "<div class='social-avatar' id=" + data.SenderFbId + ">";
+                                html+= "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
+                                "<a href='' class='pull-left'>" +
+                                "<img alt='image' src='" + data.fromAvatar + "'> </a>" +
+                                "<div class='media-body'>" +
+                                    "<a href='" + "https://www.facebook.com/" + data.SenderFbId + "' id='" + data.SenderFbId + "' target='_blank' style='display:inline'>" + data.from + "</a>\n <br>";
+                                ////(data.LastUpdate);
+                                html += "<small class='text-muted'><a href='" + "https://www.facebook.com/"+ data.Id + "' target='_blank' style='display:inline'>" + FormatDateVN_full(data.LastUpdate) + "</a></small>" +
+                        "</div>"+"<div class='social-body'>";
+                                if (data.storyContent && !data.postContent) {
+                                    var tmpString1 = data.storyContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
+                                    html += "<p>" + "<span id='"+data.Id+"_text'>"+tmpString1+"</span>"+ "</p>";
+                                    ////("sdf")
+                                }
+                                else if (data.storyContent && data.postContent) {
+                                    var tmpString2 = TextReplacedToChat(data.postContent);
+                                    html += "<p>" + "<span id='"+data.Id+"_text'>"+tmpString2+"</span>" + "</p>";
+                                    ////("123");
+                                }
+                                else if (!data.storyContent && data.postContent) {
+                                    var tmpString3 = TextReplacedToChat(data.postContent);
+                                    html += "<p>" + "<span id='"+data.Id+"_text'>"+tmpString3+"</span>" + "</p>";
+                                    ////("123");
+                                }
+
+                                if (data.postImageContent != "" && data.postImageContent != null) {
+                                    html += "<img src='" + data.postImageContent + "' class='img-responsive fbImage postImage'>";
+                                }
+                                html+="</div>";
+                                if (data.Status != 5){
+                                    if (shopId_text != data.SenderFbId) html+= "<a class='btn btn-white btn-xs' data-name= '"+data.from+"' id= '" + data.SenderFbId + "' data-commentid='" + data.Id + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i> Nhắn tin</a>\n";
+                                }
+                                html+= "</div>" +
+                                 "</div>";
+                                $("#comment_div").append(html);
+
+                                html = "<div class='social-footer' id='"+data.Id+"_Comments'>";
+
+                            }
+
+                            if(gettingCommentInit == true){
+                                $("#postDetail").append(html + "</div>");
+                                $("#postDetail").append("<div id='moreCommentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:50px;width:10%;z-index:1000;'>"+
+                                                                        "<div class='sk-circle1 sk-circle'></div>"+
+                                                                        "<div class='sk-circle2 sk-circle'></div>"+
+                                                                        "<div class='sk-circle3 sk-circle'></div>"+
+                                                                        "<div class='sk-circle4 sk-circle'></div>"+
+                                                                        "<div class='sk-circle5 sk-circle'></div>"+
+                                                                        "<div class='sk-circle6 sk-circle'></div>"+
+                                                                        "<div class='sk-circle7 sk-circle'></div>"+
+                                                                        "<div class='sk-circle8 sk-circle'></div>"+
+                                                                        "<div class='sk-circle9 sk-circle'></div>"+
+                                                                        "<div class='sk-circle10 sk-circle'></div>"+
+                                                                        "<div class='sk-circle11 sk-circle'></div>"+
+                                                                        "<div class='sk-circle12 sk-circle'></div></div>");
+                                $("#postDetail").append("<button id='moreCommentsOption' class='btn btn-primary  btn-block' style='text-align:center;' data-commentquan='"+data.commentQuan+"'  data-skipnum='0' onclick='ShowMoreComments(this);'>Hiện thêm</button>");
+
+                                //if (data.Status == 3) $("postDetail").children('.social-avatar').addClass("hided");
+                                $("#comment_div").append("<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
+                                                                        "<div class='sk-circle1 sk-circle'></div>"+
+                                                                        "<div class='sk-circle2 sk-circle'></div>"+
+                                                                        "<div class='sk-circle3 sk-circle'></div>"+
+                                                                        "<div class='sk-circle4 sk-circle'></div>"+
+                                                                        "<div class='sk-circle5 sk-circle'></div>"+
+                                                                        "<div class='sk-circle6 sk-circle'></div>"+
+                                                                        "<div class='sk-circle7 sk-circle'></div>"+
+                                                                        "<div class='sk-circle8 sk-circle'></div>"+
+                                                                        "<div class='sk-circle9 sk-circle'></div>"+
+                                                                        "<div class='sk-circle10 sk-circle'></div>"+
+                                                                        "<div class='sk-circle11 sk-circle'></div>"+
+                                                                        "<div class='sk-circle12 sk-circle'></div></div>"+
+                                                                       "<input type='hidden' value='"+postId+"' id='hiddenPostId'> <input type='hidden' value='' id='hiddenEditId'>");
+                                if ($('#moreCommentsOption').data('skipnum') >= $('#moreCommentsOption').data('commentquan')) $('#moreCommentsOption').remove();
+                                gettingCommentInit = false;
+                                html="";
+                            }
+
+                            if (data.Comments.length != 0) {
+                                //normal: get 7, get 8 to check if the 8th is unread
+                                //if (data.Comments.length == 8) nextIsRead = data.Comments[7].IsRead;
+                                for (var i = 0; i < data.Comments.length; i++) {
+                                    ////(data[i].message.length);
+                                    if ($('#'+data.Comments[i].Id).length){}
+                                    else
+                                    {
+                                        html += "<div class='social-comment' id='" + data.Comments[i].Id + "'> \n"; console.log(data.Comments[i].Status)
+
+                                        if (data.Comments[i].Status != 5){
+                                            html+="<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                                    "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                                        "<i class='fa fa-chevron-down'></i>\n" +
+                                                                                    "</a>\n" +
+                                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                            if (data.Comments[i].IntentId == null)html+="<li onclick='EditComment(this.id)' id ='"+data.Comments[i].Id+"_editBtn'><a>Sửa</a></li>";
+                                            else if (data.Comments[i].IntentId != null && data.Comments[i].canHide == true){
+                                                if(data.Comments[i].Status != 3)
+                                                    html+="<li onclick='HideComment(this.id)' id ='"+data.Comments[i].Id+"_hideBtn'><a>Ẩn</a></li>";
+                                                else html+="<li onclick='UnhideComment(this.id)' id ='"+data.Comments[i].Id+"_unhideBtn'><a>Hiện</a></li>";
+                                            }
+                                            html+="<li onclick = 'DeleteComment(this.id)' id ='"+data.Comments[i].Id+"_deleteBtn '><a>Xoá</a></li></ul>" +
+                                      "</ul></div>\n";
+                                        }
+                                        if (data.Comments[i].Status == 3) html+="<div class = 'clickable hided' onclick='ShowUserInfo(this)'>";
+                                        else if (data.Comments[i].Status == 5) html+="<div class = 'clickable deleted' onclick='ShowUserInfo(this)'>";
+                                        else html+= "<div class = 'clickable' onclick='ShowUserInfo(this)'>";
+                                        html+= "<a href='' class='pull-left'>\n" +
+                                            "<img alt='image' src='" + data.Comments[i].avatarUrl + "'>\n" +
+                                        "</a>\n" +
+                                        "<div class='media-body'>\n" +
+                                            "<a href='"+"https://www.facebook.com/" + data.Comments[i].SenderFbId + "' id='" + data.Comments[i].SenderFbId + "' target='_blank'>\n" +
+                                                data.Comments[i].from +
+                                            "</a>\n";
+                                        console.log(data.Comments[i].commentContent);
+                                        //html= html+data.comments[i].commentContent;
+                                        html += "<span id='"+data.Comments[i].Id+"_text'>"+TextReplacedToChat(data.Comments[i].commentContent)+"</span>";
+
+                                        if (data.Comments[i].commentImageContent != "" && data.Comments[i].commentImageContent != null && data.Comments[i].commentImageContent != "null") {
+                                            html += "<img src='" + data.Comments[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
+                                        }
+                                        html = html + "</div><br>";
+                                        if (data.Comments[i].Status != 5) {
+                                            ////("sdfsdf");
+                                            html += "<a class='btn btn-white btn-xs' id= '" + data.Comments[i].Id + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả  lời</a>\n";
+                                            if (shopId_text != data.Comments[i].SenderFbId) html+= "<a class='btn btn-white btn-xs' data-name= '"+data.Comments[i].from+"' data-commentid='" +data.Comments[i].Id + "' id= '" + data.Comments[i].SenderFbId + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
+                                        }
+                                        html+="<small class='text-muted'> <a href='"+"https://www.facebook.com/" + data.Comments[i].Id + "' target='_blank' style='display:inline'>" + FormatDateVN_full(data.Comments[i].datacreated) + "</a></small>\n" +
+                                    "</div>"+
+                                    "<div id='reply_to_"+data.Comments[i].Id+"' style='margin-top:1%'></div>";
+                                        if (data.Comments[i].nestedCommentQuan > 1)
+                                        {
+                                            html += "<div id='"+data.Comments[i].Id+"_ParentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:50px;width:10%;z-index:1000;'>"+
+                                                                        "<div class='sk-circle1 sk-circle'></div>"+
+                                                                        "<div class='sk-circle2 sk-circle'></div>"+
+                                                                        "<div class='sk-circle3 sk-circle'></div>"+
+                                                                        "<div class='sk-circle4 sk-circle'></div>"+
+                                                                        "<div class='sk-circle5 sk-circle'></div>"+
+                                                                        "<div class='sk-circle6 sk-circle'></div>"+
+                                                                        "<div class='sk-circle7 sk-circle'></div>"+
+                                                                        "<div class='sk-circle8 sk-circle'></div>"+
+                                                                        "<div class='sk-circle9 sk-circle'></div>"+
+                                                                        "<div class='sk-circle10 sk-circle'></div>"+
+                                                                        "<div class='sk-circle11 sk-circle'></div>"+
+                                                                        "<div class='sk-circle12 sk-circle'></div></div>";
+                                            html += "<button class='btn btn-primary btn-block ' id='Show_"+data.Comments[i].Id+"_Replies' onclick='ShowMoreReplies(this)' data-repliesquan='"+data.Comments[i].nestedCommentQuan+"'  data-skipnum='1'>"+
+                                                "Hiện thêm</button>";
+                                        }
+                                        html += "<div class='social-comment' id='reply_" + data.Comments[i].Id + "' style='display:none'>" +
+                                        "<a href class='pull-left'> <img src='"+"https://graph.facebook.com/"+shopId_text+"/picture?type=square"+"'></a><div class='media-body'>" +
+                                        //reply to a comment
+                                        "<textarea class='form-control replyComment' id='reply_" + data.Comments[i].Id + "_content' placeholder='Nhập bình luận...'></textarea></div>" +
+                                        //
+                                        "</div></div>\n";
+                                    }
+                                }
+                            }
+
+                            $('#'+$('#hiddenPostId').val()+"_Comments").append(html);
+                            if (nextIsRead == false) {
+                                $('#moreCommentsOption').addClass("unreadComment");
+                                nextIsRead = null;
+                            }
+
+                            ////(data.nestedComments.length);
+                            if (data.nestedComments.length != 0)
+                            {
+                                var html1 = "";
+                                console.log("nested " + data.nestedComments);
+                                for (var i = 0; i < data.nestedComments.length; i++) {
+                                    if(!$('#'+data.nestedComments[i].Id).length)
+                                    {
+                                        //$('#reply_' + data.nestedComments[i].parentId).remove();
+                                        html1 = "<div class='social-comment' id='" + data.nestedComments[i].Id + "'> \n";
+                                        if (data.nestedComments[i].Status != 5){
+                                            html1+="<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                 "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                     "<i class='fa fa-chevron-down'></i>\n" +
+                                                                 "</a>\n" +
+                                                                 "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                            if (data.nestedComments[i].IntentId==null)html1+="<li onclick='EditComment(this.id)' id ='"+data.nestedComments[i].Id+"_editBtn'><a>Sửa</a></li>";
+                                            else if (data.nestedComments[i].IntentId!=null && data.nestedComments[i].canHide == true)
+                                                //{
+                                                if (data.nestedComments[i].Status != 3)
+                                                    html1+="<li onclick='HideComment(this.id)' id ='"+data.nestedComments[i].Id+"_hideBtn'><a>Ẩn</a></li>";
+                                                else html1+="<li onclick='UnhideComment(this.id)' id ='"+data.nestedComments[i].Id+"_unhideBtn'><a>Hiện</a></li>";
+                                            //}
+                                            html1+= "<li onclick='DeleteComment(this.id)' id ='"+ data.nestedComments[i].Id+"_deleteBtn'><a>Xoá</a></li>\n" +
+                                         "</ul></div>\n";
+                                        }
+                                        if(data.nestedComments[i].Status == 3) html1+="<div class = 'clickable hided' onclick='ShowUserInfo(this)'>";
+                                        else if (data.nestedComments[i].Status == 5) html1+="<div class = 'clickable deleted' onclick='ShowUserInfo(this)'>";
+                                        else html1 +="<div class = 'clickable' onclick='ShowUserInfo(this)'>";
+                                        html1+="<a href='' class='pull-left'>\n" +
+                                            "<img alt='image' src='" + data.nestedComments[i].avatarUrl + "'>\n" +
+                                        "</a>\n" +
+
+                                        "<div class='media-body'>\n" +
+                                            "<a href='" + "https://www.facebook.com/" + data.nestedComments[i].SenderFbId + "' id='" + data.nestedComments[i].SenderFbId + "' target='_blank'>\n" +
+                                                data.nestedComments[i].from +
+                                            "</a>\n";
+
+                                        console.log(data.nestedComments[i].commentContent);
+                                        html1+= "<span id='"+data.nestedComments[i].Id+"_text'>"+TextReplace(data.nestedComments[i].commentContent)+"</span>";
+                                        //html= html+data.comments[i].commentContent;
+
+                                        if (data.nestedComments[i].commentImageContent != "" && data.nestedComments[i].commentImageContent != null && data.nestedComments[i].commentImageContent != "null") {
+                                            html1 += "<img src='" + data.nestedComments[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
+
+                                        }
+
+                                        html1 = html1 + "</div><br>";
+                                        if (data.nestedComments[i].Status != 5) {
+                                            html1+= "<a class='btn btn-white btn-xs' id= '" + data.nestedComments[i].parentId + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
+                                            if (shopId_text != data.nestedComments[i].SenderFbId) html1+= "<a class='btn btn-white btn-xs' data-name= '"+data.nestedComments[i].from+"' data-commentid='" +data.nestedComments[i].Id + "' id= '" + data.nestedComments[i].SenderFbId + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
+                                        }
+                                        html1 += "<small class='text-muted'><a href='"+"https://www.facebook.com/" + data.nestedComments[i].Id + "' target='_blank' style='display:inline'>"  + FormatDateVN_full(data.nestedComments[i].datacreated) + "</small>\n" +
+                                                             "</div>";
+
+                                        $('#reply_to_' + data.nestedComments[i].parentId).append(html1);
+                                        html1="";
+                                        if (data.nestedComments[i].isUnreadRepliesRemain == true) $("#Show_"+data.nestedComments[i].parentId+"_Replies").addClass('unreadComment');
+                                        else $("#Show_"+data.nestedComments[i].parentId+"_Replies").removeClass('unreadComment');
+                                    }
+                                }
+                            }
+                            //bindNestedShowMore();
+                            if (data.Status != 5) document.getElementById("replyInputTxt").disabled = false;
+
+                            //alert ("viewskip from init " + comment_ViewSkip + " comment quan " +comment_quan );
+                            ////($('#moreCommentsOption').data('skipnum'));
+                            $('#moreCommentsOption').data('skipnum',$('#moreCommentsOption').data('skipnum')+7);
+                            ////($('#moreCommentsOption').data('skipnum'));
+                            //alert ("viewskip from init1 " + comment_ViewSkip);
+                            if ($('#moreCommentsOption').data('skipnum') >= $('#moreCommentsOption').data('commentquan')) $('#moreCommentsOption').remove();
+                            if (data.isRead== false){
+                                $('#'+data.Id+'_Post').addClass('unreadPost');
+                            }
+                            else{
+                                $('#'+data.Id+'_Post').removeClass('unreadPost');
+                            }
+                            //unread parent comments remain
+                            if (data.isUnreadParentRemain) $('#moreCommentsOption').addClass('unreadComment');
+                            else $('#moreCommentsOption').removeClass('unreadComment');
+                            //bind onclick event
+                            //bindFunctions();
+                            //bindShowMoreComments();
+                        }
+                    }
+                },
+                beforeSend: function () {
+                    //$('#processingDelete').show();
+
+                    $('#commentSelect').hide();
+                    if(gettingCommentInit==true)
+                    {
+                        $('#commentLoader').show();
+                        $("#postDetail").hide();
+                    }
+                    else $('#moreCommentLoader').show();
+
+                },
+                complete: function() {
+                },
+            })
+
+        }
+
+        $(document).on('keyup', '.replyComment', function(e) {
+            if (e.which == 13 && ! e.shiftKey)
+            {
+                //var postId = $('#hiddenPostId').val();
+                //var newMessage = this.val;
+                //$('#replyInputTxt').val('');
+                var content = this.value;
+                var tokens = this.id.split('_');
+                var commentId = tokens[1] + "_" + tokens[2];
+                var newmessage = $('#reply_'+commentId+'_content').val();
+                var caret = getCaret(this);
+                ////(newMessage);
+                if(e.shiftKey){
+                    this.value = content.substring(0, caret - 1) + "\n" + content.substring(caret, content.length);
+                    event.stopPropagation();
+                } else {
+                    this.value = content.substring(0, caret - 1) + content.substring(caret, content.length);
+                    newMessage = this.value;
+                    ////(commentId);
+                    $.ajax({
+                        url: "/ChatComment/ReplyComment",
+                        method: 'post',
+                        data: ({
+                            commentId: commentId,
+                            message: newmessage,
+                        }),
+                        processing: 'true',
+                        success: function (data) {
+                            if(data.success == false){
+                                swal("Bình luận thất bại","","error");
+                            }
+                            else {
+                                ShopAddToReply(commentId,newmessage,data[0].Value,GetCurrentDateTime());
+                            }
+                        }
+                    })}
+
+                $('#reply_'+commentId+'_content').val('');
             }
         });
 
-        @*$(function () {
-            // Declare a proxy to reference the hub.
-            var chat = $.connection.alertHub;
-            // Create a function that the hub can call to broadcast messages.
-            chat.client.sendMessageToPage = function (data, threadId, intent) {
-                console.log(threadId);
-                console.log(data);
-                ProcessIncomingMessage(data, threadId);
-            };
+        function ShowUserInfo(div_ob)
+        {
+            var curElement = $($(div_ob).children(".media-body")[0]);
+            var curImage = $($(div_ob).children(".pull-left")[0]);
+            var userfbid = curElement.find("a").attr("id");
+            var cust = GetUserFromDb(userfbid);
+            
+            ////("sdfsdfs");
+            SetFbIdToUserInfo();
+            if(userfbid!=shopId_text)
+            {
+                $('#cust_avatar').attr('src',curImage.find("img").attr('src'));
+                $('#cusName').val(curElement.find("a").html());
+                //$('#cusAvatar').val(curElement.find("img").attr('src'));
+                ProcessUserInfo(userfbid);
+                event.stopPropagation();
+            }
+            $('.cust_info').data('fbid', userfbid);
+            $('.cust_info').data('fbname', curElement.find("a").html());
+            ////( $('.cust_info').data('fbid'));
+        }
 
-            chat.client.sendCommentToPage = function (comment, intent) {
-                console.log(comment);
-                console.log(intent);
-            };
+        function ShowMoreComments(showBtn)
+        {
 
-            // Get the user name and store it to prepend to messages.
-            //$('#displayname').val(prompt('Enter your name:', ''));
-            // Set initial focus to message input box.
-            $('#message').focus();
-            // Start the connection.
-            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-                    // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val());
-                    // Clear text box and reset focus for next comment.
-                    $('#message').val('').focus();
+            if ($(showBtn).data('skipnum') <= $(showBtn).data('commentquan'))(loadPostDetail($('#hiddenPostId').val()));
+
+        }
+
+        function ShowMoreReplies(moreRepliesBtn)
+        {
+            //var id = id_in;
+            //var skip= skip_in;
+            //console.log(moreRepliesBtn);
+            var id = moreRepliesBtn.id.split('_')[1]+"_"+moreRepliesBtn.id.split('_')[2];
+            var skip = $(moreRepliesBtn).data('skipnum');
+            var quan = $(moreRepliesBtn).data('repliesquan');
+            ////("skip "+ skip +" " + quan);
+            $.ajax({
+                url: "/ChatComment/GetReplies",
+                method: 'get',
+                data: ({
+                    parentId: id,
+                    skip: skip,
+                    take: 3
+                }),
+                processing: 'true',
+                success: function (data) {
+                    $('#'+id+'_ParentLoader').hide();
+                    console.log(data);
+                    if(data)
+                    {
+                        if(data.sucess == false)
+                        {
+                            swal("Không thể lấy thêm comment","","error");
+                        }
+                        else
+                        {
+                            //get 3 only, 4 to check is read
+                            var nextReplyIsRead  = data.nextReplyIsRead;
+                            ////(data.newcommentdetaillist.length);
+                            for (var i = 0; i < data.newcommentdetaillist.length; i++)
+                            {
+                                var tmphtml = '';
+                                if ($('#'+data.newcommentdetaillist[i].Id).length){}
+                                else{
+                                    tmphtml +="</div><div class='social-comment' id='" + data.newcommentdetaillist[i].Id + "'> \n";
+                                    if(data.newcommentdetaillist[i].Status != 5){
+                                        tmphtml+= "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                    "<i class='fa fa-chevron-down'></i>\n" +
+                                                                "</a>\n" +
+                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                        if (data.newcommentdetaillist[i].intendId == 0)tmphtml+="<li onclick='EditComment(this.id)' id ="+data.newcommentdetaillist[i].Id+"><a>Sửa</a></li>";
+                                        if (data.newcommentdetaillist[i].intendId != 0 && data.newcommentdetaillist[i].canHide == true){
+                                            if (data.newcommentdetaillist[i].Status != 3)
+                                                tmphtml+="<li onclick='HideComment(this.id)' id ='"+data.newcommentdetaillist[i].Id+"_unhideBtn'><a>Ẩn</a></li>";
+                                            else tmphtml+="<li onclick='UnhideComment(this.id)' id ='"+data.newcommentdetaillist[i].Id+"_unhideBtn'><a>Hiện</a></li>";
+                                        }
+                                        tmphtml+="<li onclick='DeleteComment(this.id)' id ='"+data.newcommentdetaillist[i].Id+"_deleteBtn'><a>Xoá</a></li>\n"+
+                                        "</ul>\n</div>\n";
+                                    }
+                                    if (data.newcommentdetaillist[i].Status == 3) tmphtml+="<div class = 'clickable hided' onclick='ShowUserInfo(this)'>";
+                                    else if (data.newcommentdetaillist[i].Status == 5) tmphtml+="<div class = 'clickable deleted' onclick='ShowUserInfo(this)'>";
+                                    else tmphtml+= "<div class = 'clickable' onclick='ShowUserInfo(this)'>";
+                                    tmphtml += "<a href='' class='pull-left'>\n" +
+                                        "<img alt='image' src='" + data.newcommentdetaillist[i].avatarUrl + "'>\n" +
+                                    "</a>\n" +
+
+                                    "<div class='media-body'>\n" +
+                                        "<a href='" + "https://www.facebook.com/" +data.newcommentdetaillist[i].SenderFbId + "' id='" + data.newcommentdetaillist[i].SenderFbId + "' target='_blank'>\n" +
+                                            data.newcommentdetaillist[i].from +
+                                        "</a>\n";
+
+                                    if (data.newcommentdetaillist[i].commentContent != "" && data.newcommentdetaillist[i].commentContent != null && data.newcommentdetaillist[i].commentContent != "null") {
+                                        //console.log(data.nestedComments[i].commentContent);
+                                        var tmpString = data.newcommentdetaillist[i].commentContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                                        //html= html+data.comments[i].commentContent;
+                                        tmphtml+= "<span id='"+data.newcommentdetaillist[i].Id+"_text'>"+TextReplace(tmpString)+"</span>"
+                                    }
+                                    if (data.newcommentdetaillist[i].commentImageContent != "" && data.newcommentdetaillist[i].commentImageContent != null && data.newcommentdetaillist[i].commentImageContent != "null") {
+                                        tmphtml += "<img src='" + data.newcommentdetaillist[i].commentImageContent + "' class='img-responsive fbImage commentImage'>";
+
+                                    }
+                                    tmphtml += "</div><br>";
+                                    if (data.newcommentdetaillist[i].Status != 5){
+                                        tmphtml+="<a class='btn btn-white btn-xs' id= '" +  data.newcommentdetaillist[i].parentId + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
+                                        if (shopId_text != data.newcommentdetaillist[i].SenderFbId) tmphtml+= "<a class='btn btn-white btn-xs' data-name= '"+data.newcommentdetaillist[i].from+"'  data-commentid='" +data.newcommentdetaillist[i].Id + "' id= '" + data.newcommentdetaillist[i].SenderFbId + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
+                                    }
+                                    tmphtml+="<small class='text-muted'><a href='"+"https://www.facebook.com/" + data.newcommentdetaillist[i].Id + "' target='_blank' style='display:inline'>"  + FormatDateVN_full(data.newcommentdetaillist[i].datacreated) + "</small>\n" +
+                                "</div>";
+                                }
+                                ////(tmphtml);
+                                $('#reply_to_'+id).append(tmphtml);
+
+                                if (data.isUnreadRemain==true){
+                                    $('#'+moreRepliesBtn.id).addClass('unreadComment');
+                                }
+                                else  $('#'+moreRepliesBtn.id).removeClass('unreadComment');
+                                if (data.postIsUnread == true){
+                                    $('#'+$('#hiddenPostId').val()+'_Post').addClass('unreadPost');
+                                }
+                                else $('#'+$('#hiddenPostId').val()+'_Post').removeClass('unreadPost');
+                                //bindNestedFunctionEvent();
+                            }}
+                        $('#nested_loader').hide();
+                    }
+                },
+                beforeSend: function()
+                {
+                    $('#'+id+'_ParentLoader').show();
+                    //$('#nested_loader').show();
+                }
+            })
+
+            skip+=3;
+            if (nextReplyIsRead == false){
+                $(moreRepliesBtn).addClass('unreadComment');
+                nextReplyIsRead = null;
+            }
+            if(skip>=quan)$(moreRepliesBtn).remove();
+            else
+            {
+                $(moreRepliesBtn).data('skipnum',skip);
+                skip = 0;
+            }
+        }
+
+        function PrivateMes(showBtn)
+        {
+            $('#receiverName').empty();
+            $('#comment_id_to_reply').text("");
+            $('#private_mes').val("");
+            var name = $(showBtn).data('name');
+            var id = showBtn.id;
+            var comment_id = $(showBtn).data('commentid');
+            $('#receiverName').append("<a href='"+"www.facebook.com/"+id+"'>"+name+"</a>");
+            $('#comment_id_to_reply').text("www.facebook.com/"+comment_id);
+            $('#comment_id_to_reply').data('id',comment_id);
+            $('#comment_id_to_reply').data('fbid',id);
+            $('#cusPrivateMes').modal('show');
+        }
+
+        function HideComment(commentId){
+            ////(commentId);
+            var id = commentId.split('_')[0] +"_"+ commentId.split('_')[1];
+            ////(id);
+            if($('#'+commentId).length){
+                ////("sdfsdf")
+                $.ajax({
+                    url: "/ChatComment/HideComment",
+                    method: 'get',
+                    data: ({
+                        commentId : id
+                    }),
+                    processing: 'true',
+                    success: function (data) {
+                        console.log(data);
+                        if (data.success == false)
+                        {
+                            swal("Ẩn thất bại!","", "error");
+                        }
+                        else {
+                            $.ajax({
+                                url: "/ChatComment/SetHideComment",
+                                method: 'get',
+                                data: ({
+                                    commentId : id
+                                }),
+                                processing: 'true',
+                                success: function (data) {
+                                    console.log(data.success);
+                                    if (data == false)
+                                    {
+                                        swal("Ẩn thất bại!","", "error");
+                                    }
+                                    else
+                                    {
+                                        //if ($('#'+id).children('.clickable').length)$('#'+id).children('.clickable').addClass("hided");
+                                        //var optionList = $('#'+commentId).parent();
+                                        //$('#'+commentId).remove();
+                                        //optionList.prepend("<li onclick='UnhideComment(this.id)' id ='"+id+"_unhideBtn'><a>Hiện</a></li>");
+                                        swal("Ẩn thành công!","","success");
+                                    }
+                                }})
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function HidePost(postId){
+            ////(commentId);
+            ////(id);
+            var id = postId.split('_')[0]+'_'+postId.split('_')[1];
+            if($('#'+postId).length){
+                ////("sdfsdf")
+                $.ajax({
+                    url: "/ChatComment/HidePost",
+                    method: 'get',
+                    data: ({
+                        postId : id
+                    }),
+                    processing: 'true',
+                    success: function (data) {
+                        console.log(data);
+                        if (data.success == false)
+                        {
+                            swal("Ẩn thất bại!","", "error");
+                        }
+                        else {
+                            $.ajax({
+                                url: "/ChatComment/SetHideComment",
+                                method: 'get',
+                                data: ({
+                                    commentId : id
+                                }),
+                                processing: 'true',
+                                success: function (data) {
+                                    console.log(data.success);
+                                    if (data == false)
+                                    {
+                                        swal("Ẩn thất bại!","", "error");
+
+                                    }
+                                    else
+                                    {
+                                        if ($('#postDetail').children('.social-avatar').length){
+                                            $('#postDetail').children('.social-avatar').addClass('hided');
+                                            
+                                        }
+                                        if ($('#'+id+'_Post').length) $('#'+id+'_Post').addClass('hided');
+                                        var optionList = $('#'+postId).parent();
+                                        $('#'+postId).remove();
+                                        optionList.prepend("<li onclick='UnhidePost(this.id)' id ='"+id+"_unhideBtn'><a>Hiện</a></li>");
+                                        swal("Ẩn thành công!","","success");
+                                    }
+                                }})
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function UnhidePost(postId){
+            ////(commentId);
+            ////(id);
+            //format: id1_id2_hideBtn
+            var id = postId.split('_')[0]+'_'+postId.split('_')[1];
+            if($('#'+postId).length){
+                ////("sdfsdf")
+                $.ajax({
+                    url: "/ChatComment/UnhidePost",
+                    method: 'get',
+                    data: ({
+                        postId : id
+                    }),
+                    processing: 'true',
+                    success: function (data) {
+                        console.log(data);
+                        if (data.success == false)
+                        {
+                            swal("Hiện thất bại!","", "error");
+                        }
+                        else {
+                            $.ajax({
+                                url: "/ChatComment/SetUnhideComment",
+                                method: 'get',
+                                data: ({
+                                    commentId : id
+                                }),
+                                processing: 'true',
+                                success: function (data) {
+                                    console.log(data.success);
+                                    if (data == false)
+                                    {
+                                        swal("Hiện thất bại!","", "error");
+                                    }
+                                    else
+                                    {
+                                        if ($('#postDetail').children('.social-avatar').length){
+                                            ////("Sdfsdfsdf");
+                                            $('#postDetail').children('.social-avatar').removeClass('hided');
+                                        }
+                                        if ($('#'+id+'_Post').length) $('#'+id+'_Post').removeClass('hided');
+                                        var optionList = $('#'+postId).parent();
+                                        $('#'+postId).remove();
+
+                                            if ($('#'+id+'_Post').length) $('#'+id+'_Post').removeClass('hided');
+                                            var optionList = $('#'+postId).parent();
+                                            $('#'+postId).remove();
+                                            optionList.prepend("<li onclick='HidePost(this.id)' id ='"+id+"_hideBtn'><a>Ẩn</a></li>");
+                                            swal("Hiện thành công!","","success");
+                                     }
+                                       
+                                    }
+                                })
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function UnhideComment(commentId){
+            //console.log(//("this is a button"+commentId));
+            var id = commentId.split('_')[0] +"_"+ commentId.split('_')[1];
+            if($('#'+id).length){
+                ////("sdfsdf");
+                $.ajax({
+                    url: "/ChatComment/UnhideComment",
+                    method: 'get',
+                    data: ({
+                        commentId : id
+                    }),
+                    processing: 'true',
+                    success: function (data) {
+                        console.log(data.success);
+                        if (data.success == false)
+                        {
+                            swal("Hiện thất bại!","", "error");
+                        }
+                        else {
+                            $.ajax({
+                                url: "/ChatComment/SetUnhideComment",
+                                method: 'get',
+                                data: ({
+                                    commentId : id
+                                }),
+                                processing: 'true',
+                                success: function (data) {
+                                    console.log(data.success);
+                                    if (data == false)
+                                    {
+                                        swal("Hiện thất bại!","", "error");
+                                    }
+                                    else
+                                    {
+                                        //if ($('#'+id).children('.clickable').length)$('#'+id).children('.clickable').removeClass("hided");
+                                        //var optionList = $('#'+commentId).parent();
+                                        //$('#'+commentId).remove();
+                                        //optionList.prepend("<li onclick='HideComment(this.id)' id ='"+id+"_unhideBtn'><a>?n</a></li>");
+                                        swal("Hiện thành công!","","success");
+                                    }
+                                }})
+                        }
+                    }
+                })
+            }
+        }
+
+        function EditComment(commentId){
+            if ($('#hiddenEditId').val()){
+                $('#'+$('#hiddenEditId').val()+"_text").removeAttr("style");
+                $('#'+$('#hiddenEditId').val()+"_text").attr('contenteditable','false');
+            }
+
+            var id = commentId.split('_')[0] + "_" + commentId.split('_')[1];
+            $('#hiddenEditId').val(id);
+            var photo = null;
+            ////($('#'+id).children('.clickable').children('.media-body').find('.fbImage').length);
+            if ($('#'+id).children('.clickable').children('.media-body').find('.fbImage').length){
+                ////("yes");
+                photo = $('#'+id).children('.clickable').children('.media-body').find('.fbImage').attr('src');
+            }
+            console.log('#'+id+'_text');
+            if($('#'+id+'_text').length){
+                ////("sdfsdf");
+                $('#'+id+"_text").attr('contenteditable','true');
+                $('#'+id+"_text").css('border','1px solid #bdc7d8');
+                $('#'+id+"_text").css('background','white');
+                $('#'+id+"_text").on('keyup', function(e) {
+                    if (e.which == 27){
+                        $('#'+id+"_text").removeAttr("style");
+                        $('#'+id+"_text").attr('contenteditable','false');}
+                    if (e.which == 13 && ! e.shiftKey) {
+                        $('#'+id+"_text").removeAttr("style");
+                        $('#'+id+"_text").attr('contenteditable','false');
+                        $('#'+id+"_text").text($('#'+id+"_text").text().trim());
+                        $.ajax({
+                            url: "/ChatComment/EditComment",
+                            method: 'get',
+                            data: ({
+                                commentId: id,
+                                message: $('#'+id+"_text").text(),
+                                photo: photo,
+                            }),
+                            processing: 'true',
+                            success: function (data) {
+                                ////("Sdfsd");
+                                console.log(data);
+                                if (data.success == false)
+                                {
+                                    swal("Chỉnh sửa thất bại!","", "error");
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        })
+
+                    }
+
                 });
-            });
-        });*@
+            }
+        }
 
+        function clear_message()
+        {
+            $('#receiverName').empty();
+            $('#comment_id_to_reply').text("");
+            $('#private_mes').empty();
+        }
+
+        function DeleteComment(commentId){
+            ////(commentId);
+            var id = commentId.split('_')[0] +"_"+ commentId.split('_')[1];
+            //console.log("fking div" + id);
+            if($('#'+id).length || id == $('#hiddenPostId').val()){
+                console.log("found fking div");
+                ////("sdfsdf");
+                swal({
+                    title: "Xác nhận xoá?",
+                    type: "warning",
+                    confirmButtonText: "Ðóng",
+                    showCancelButton: true,
+                    confirmButtonColor: "#4660bf",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                        function () {
+                            //is comment
+                            if(id.split('_')[0]!=shopId_text)
+                            {
+                                $.ajax({
+                                    url: "/ChatComment/DeleteComment",
+                                    method: 'get',
+                                    data: ({
+                                        commentId : id
+                                    }),
+                                    processing: 'true',
+                                    success: function (data) {
+                                        console.log(data.success);
+                                        if (data.success == false)
+                                        {
+                                            swal("Xoá thất bại!","", "error");
+                                        }
+                                        else {
+                                            $.ajax({
+                                                url: "/ChatComment/SetDeleteComment",
+                                                method: 'get',
+                                                data: ({
+                                                    id : id
+                                                }),
+                                                processing: 'true',
+                                                success: function (data) {
+                                                    if (data == false)
+                                                    {
+                                                        swal("Xoá thất bại!","", "error");
+                                                    }
+                                                    else {
+                                                        if($('#'+id).length) {
+                                                            $('#'+id).children('.clickable').addClass('deleted');
+                                                            $('#'+id).find(".btn").remove();
+                                                        }
+                                                        swal("Xoá thành công!","","success");
+                                                    }
+                                                }
+                                            })
+
+                                        }
+                                    }
+                                })
+                            }
+                            else //is post
+                            {
+
+                                $.ajax({
+                                    url: "/ChatComment/DeletePost",
+                                    method: 'get',
+                                    data: ({
+                                        postId : id
+                                    }),
+                                    processing: 'true',
+                                    success: function (data) {
+                                        console.log(data.success);
+                                        if (data.success == false)
+                                        {
+                                            swal("Xoá thất bại!","", "error");
+                                        }
+                                        else {
+                                            $.ajax({
+                                                url: "/ChatComment/SetDeleteComment",
+                                                method: 'get',
+                                                data: ({
+                                                    id : id
+                                                }),
+                                                processing: 'true',
+                                                success: function (data) {
+                                                    if (data == false)
+                                                    {
+                                                        swal("Xoá thất bại!","", "error");
+                                                    }
+                                                    else {
+                                                        // delete whole post
+                                                        if ($('#hiddenPostId').val() == id) {
+                                                            $("#comment_div").empty();
+                                                            if($('#'+id+'_Post').length){
+                                                                $('#'+id+'_Post').removeClass('unreadPost');
+                                                                $('#'+id+'_Post').addClass('deleted');
+                                                            }
+                                                            var tmp = "";
+                                                            tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
+                                                                    "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
+                                                                        "<div class='panel-body' style='height:100%; text-align:center'>"+
+                                                                            "Xin chọn bài đăng"+
+                                                                        "</div>"+
+                                                                    "</div>"+
+                                                                "</div>"+
+                                                                "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
+                                                                    "<div class='sk-circle1 sk-circle'></div>"+
+                                                                    "<div class='sk-circle2 sk-circle'></div>"+
+                                                                    "<div class='sk-circle3 sk-circle'></div>"+
+                                                                    "<div class='sk-circle4 sk-circle'></div>"+
+                                                                    "<div class='sk-circle5 sk-circle'></div>"+
+                                                                    "<div class='sk-circle6 sk-circle'></div>"+
+                                                                    "<div class='sk-circle7 sk-circle'></div>"+
+                                                                    "<div class='sk-circle8 sk-circle'></div>"+
+                                                                    "<div class='sk-circle9 sk-circle'></div>"+
+                                                                    "<div class='sk-circle10 sk-circle'></div>"+
+                                                                    "<div class='sk-circle11 sk-circle'></div>"+
+                                                                    "<div class='sk-circle12 sk-circle'></div>"+
+                                                                "</div>";
+                                                            //        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
+                                                            //    "<img src='/Content/image/loader.gif' />"+
+                                                            //"</div>";
+                                                            $('#comment_div').append(tmp);
+                                                            if($('#'+id+".ui-widget-content.ui-selectee").length) console.log("sdfsdfsdf");
+                                                        }
+                                                        swal("Xoá thành công!","","success");
+                                                    }
+                                                }
+                                            })
+
+                                        }
+                                    }
+                                })
+                            }
+                        });
+
+            }
+        }
+
+        function AddToPostList(comment,dateFromSignalR){
+            //find post
+            ////(date);
+            var date = dateFromSignalR;
+            var postOption = $('#'+comment.post_id+'_Post');
+
+            //found case
+            if(postOption.length)
+            {
+                var tmp = postOption.wrap('<p/>').parent().html();
+                postOption.unwrap();
+                postOption.remove();
+                $('#selectable').prepend(tmp);
+                //$("#selectable").append(html);
+                ////(html);
+                $('#'+comment.post_id+'_time').text(date);
+                $('#'+comment.post_id+'_Post').addClass("unreadPost");
+            }
+                //not found => get from db
+            else {
+                $.ajax({
+                    url: "/ChatComment/GetPost",
+                    method: 'get',
+                    data: ({
+                        postId : comment.post_id
+                    }),
+                    processing: 'true',
+                    success: function (data) {
+                        if (data == false)
+                        {
+                            swal("Lỗi!","", "error");
+                        }
+                        else
+                        {
+                            ////("new post");
+                            var html1 = "<li class='ui-widget-content' id='" + comment.post_id + "_Post'>\n" +
+                                                "<div class='feed-element'>\n" +
+                                                "<div id='" + comment.post_id + "_contentDiv'>\n" +
+                                                "<small class='pull-right' id='"+comment.post_id+"_time'></small>\n" +
+                                                "<strong>" + data.from + "</strong>\n  <div>";
+
+                            ////(data.message);
+                            html1 += data.message;
+                            if (data.imageContent) {
+                                html1 += " (kèm hình)";
+                            }
+                            html1 += "</div>\n";
+                            html1 += "</div>\n" + "</div></li>\n";
+                            $('#selectable').prepend(html1);
+                            ////(date);
+                            $('#'+comment.post_id+'_time').text(date);
+                            if (comment.post_id != $('#hiddenPostId').val()) {
+                                $('#'+comment.post_id+'_Post').addClass("unreadPost");
+                            }
+                        }}
+                })}}
+
+        function AddToComment(comment,date,intent){
+            //is comment
+            if (!$('#'+comment.comment_id).length)
+            {
+                var postId = $('#hiddenPostId').val();
+                ////(postId);
+                //$('#replyInputTxt').val('');
+                var html = "";
+                html = html + "<div class='social-comment' id='"+comment.comment_id+"'> \n" +
+                                           "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                    "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                        "<i class='fa fa-chevron-down'></i>\n" +
+                                                                    "</a>\n" +
+                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                //is from shop?
+                if (shopId_text == comment.sender_id) html+= "<li onclick='EditComment(this.id)' id ='"+ comment.comment_id+"_editBtn'><a>Sửa</a></li>";
+                //not from shop
+                if (shopId_text != comment.sender_id && intent != null)
+                {
+                    html+= "<li onclick='HideComment(this.id)' id ='"+ comment.comment_id+"_hideBtn'><a>Ẩn</a></li>";
+                }
+                html+= "<li onclick='DeleteComment(this.id)' id ='"+ comment.comment_id+"_deleteBtn'><a>Xoá</a></li></ul>" +
+                   "</ul>\n" +
+               "</div>\n" +
+                "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
+               "<a href='' class='pull-left'>\n" +
+                   "<img alt='image' src='"+"https://graph.facebook.com/"+comment.sender_id+"/picture?type=square"+"'>\n" +
+               "</a>\n" +
+               "<div class='media-body'>\n" +
+                   "<a href='"+"https://www.facebook.com/"+comment.sender_id+"' id='"+comment.sender_id+"' target='_blank'>"+comment.sender_name+"\n"+
+                       "</a>\n";
+
+                //html += "<img src='' class='img-responsive fbImage commentImage'>";
+                html+= "<span id='"+comment.comment_id+"_text'>"+comment.message+"</span>";
+                if (comment.photo!= null){
+                    html += "<img src='" + comment.photo + "' class='img-responsive fbImage commentImage'>";
+                }
+                html+="</div>";
+                html = html + "<br>" +
+                              "<a class='btn btn-white btn-xs' id= '" + comment.comment_id + "_Reply' onclick='ShowDiv(this)' data-mode='comment'><i class='fa fa-comments'></i> Trả lời</label></a>\n";
+                if (shopId_text != comment.sender_id) html+= "<a class='btn btn-white btn-xs' data-name= '"+comment.sender_name+"' data-commentid='" + comment.comment_id + "' id= '" + comment.sender_id + "_Private' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
+                html+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+comment.comment_id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+                      "</div>"+
+                      "<div id='reply_to_"+comment.comment_id+"' style='margin-top:1%'></div>"+
+                      "<div class='social-comment' id='reply_"+comment.comment_id+"' style='display:none'>" +
+                      "<a href='' class='pull-left'>\n" +
+                                                         "<img alt='image' src='"+"https://graph.facebook.com/"+comment.sender_id+"/picture?type=square"+"'>\n" +
+                                                     "</a>\n" +
+                      "<div class='media-body'>" +
+                      "<textarea class='form-control replyComment' id='reply_"+comment.comment_id+"_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                      "</div></div>\n";
+                $('#'+postId+'_Comments').prepend(html + "</div>");
+                if ($('#moreCommentsOption').length) $('#moreCommentsOption').data('data-commentquan', $('#moreCommentsOption').data('data-commentquan')+1);
+            }
+        }
+
+        function ShopAddToComment(message,id,date){
+            //is comment
+            var postId = $('#hiddenPostId').val();
+            ////(postId);
+            //$('#replyInputTxt').val('');
+            var html = "";
+            html = html + "<div class='social-comment' id='"+id+"'> \n" +
+                                       "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                    "<i class='fa fa-chevron-down'></i>\n" +
+                                                                "</a>\n" +
+                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+            html+= "<li onclick='EditComment(this.id)' id ='"+ id+"_editBtn'><a>Sửa</a></li>";
+            //if (shopId_text != comment.sender_id)
+            //{
+            //  html+= "<li onclick='HideComment(this.id)' id ='"+ comment.comment_id+"_hideBtn'><a>?n</a></li>";
+            //}
+            html+= "<li onclick='DeleteComment(this.id)' id ='"+ id+"_deleteBtn'><a>Xoá</a></li></ul>" +
+               "</ul>\n" +
+           "</div>\n" +
+            "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
+           "<a href='' class='pull-left'>\n" +
+               "<img alt='image' src='"+"https://graph.facebook.com/"+shopId_text+"/picture?type=square"+"'>\n" +
+           "</a>\n" +
+           "<div class='media-body'>\n" +
+               "<a href='"+"https://www.facebook.com/"+shopId_text+"' id='"+shopId_text+"' target='_blank'>"+shopName_text+"\n"+
+                   "</a>\n";
+
+            //html += "<img src='' class='img-responsive fbImage commentImage'>";
+            html+= "<span id='"+id+"_text'>"+TextReplace(message)+"</span>";
+            html+="</div>";
+            html = html + "<br>" +
+                          "<a class='btn btn-white btn-xs' id= '" + id + "_Reply' onclick='ShowDiv(this)' data-mode='comment'><i class='fa fa-comments'></i> Trả lời</label></a>\n";
+            html+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+                  "</div>"+
+                  "<div id='reply_to_"+id+"' style='margin-top:1%'></div>"+
+                  "<div class='social-comment' id='reply_"+id+"' style='display:none'>" +
+                  "<a href='' class='pull-left'>\n" +
+                                                     "<img alt='image' src='"+"https://graph.facebook.com/"+shopId_text+"/picture?type=square"+"'>\n" +
+                                                 "</a>\n" +
+                  "<div class='media-body'>" +
+                  "<textarea class='form-control replyComment' id='reply_"+id+"_content' placeholder='Nhập bình luận...'></textarea> </div>" +
+                  "</div></div>\n";
+            $('#'+postId+'_Comments').prepend(html + "</div>");
+            if ($('#moreCommentsOption').length) {
+                $('#moreCommentsOption').data('data-skipnum', $('#moreCommentsOption').data('data-skipnum')+1)
+                $('#moreCommentsOption').data('data-commentquan', $('#moreCommentsOption').data('data-commentquan')+1);
+            }
+        }
+
+        function AddToReply(comment,date){
+            //console.log("in");
+            if(!$('#'+comment.comment_id).length){
+                var postId = $('#hiddenPostId').val();
+                var html1 = "";
+                //new reply div
+                html1 = html1 + "<div class='social-comment' id='"+comment.comment_id+"'> \n" +
+                                           "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                    "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                        "<i class='fa fa-chevron-down'></i>\n" +
+                                                                    "</a>\n" +
+                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                if (shopId_text == comment.sender_id) html1+= "<li onclick='EditComment(this.id)' id ='"+ comment.comment_id+"_editBtn'><a>Sửa</a></li>";
+                if (shopId_text != comment.sender_id) html1+="<li onclick='HideComment(this.id)' id ='"+comment.comment_id+"_hideBtn'><a>Ẩn</a></li>";
+                html1+="<li onclick='DeleteComment(this.id)' id ='"+comment.comment_id+"_deleteBtn'><a>Xoá</a></li></ul>";
+                html1+="</ul>\n" +
+            "</div>\n" +
+             "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
+            "<a href='' class='pull-left'>\n" +
+                "<img alt='image' src='"+"https://graph.facebook.com/"+comment.sender_id+"/picture?type=square"+"'>\n" +
+            "</a>\n" +
+            "<div class='media-body'>\n" +
+                "<a href='"+"http://facebook.com/"+comment.sender_id+"' id='"+comment.sender_id+"' target='_blank'>"+comment.sender_name+"\n"+
+                    "</a>\n";
+                //var date = GetCurrentDateTime();
+                if(comment.message)html1+=  "<span id='"+comment.comment_id+"_text'>"+comment.message+"</span>";
+                if(comment.photo){html1 += "<img src='" + comment.photo + "' class='img-responsive fbImage commentImage'>"; }
+                html1+= "</div></div><br>" +
+                       "<a class='btn btn-white btn-xs' id= '" + comment.parent_id + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
+                if (shopId_text != comment.sender_id) html1+= "<a class='btn btn-white btn-xs' data-name= '"+comment.sender_name+"' data-commentid='" + comment.comment_id + "' id= '" + comment.sender_id + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
+                html1+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+comment.comment_id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+                "</div></div>";
+                //parent comment is in the shown list
+                if($('#'+comment.parent_id).length)
+                {
+                    var movedCommentId = comment.parent_id;
+                    $('#reply_to_'+movedCommentId).prepend(html1);
+
+                    var tmp = $('#'+movedCommentId).wrap('<p/>').parent().html();
+                    $('#'+movedCommentId).unwrap();
+                    $('#'+movedCommentId).remove();
+                    $('#'+postId+'_Comments').prepend(tmp);
+                    if ($('#Show_'+movedCommentId+'_Replies').length){
+                        $('#Show_'+movedCommentId+'_Replies').data('skipnum',$('#Show_'+movedCommentId+'_Replies').data('skipnum')+1);
+                        $('#Show_'+movedCommentId+'_Replies').data('repliesquan',$('#Show_'+movedCommentId+'_Replies').data('repliesquan')+1);
+                    }
+                }
+                    //parent comment is not in the shown list
+                else if (!$('#'+comment.parent_id).length)
+                {
+                    $.ajax({
+                        url: "/ChatComment/GetCommentById",
+                        method: 'get',
+                        data: ({
+                            commentId : comment.parent_id
+                        }),
+                        processing: 'true',
+                        success: function (data) {
+                            if (data)
+                            {
+                                if (data == false)
+                                {
+                                    swal("L?i!","", "error");
+                                }
+                                else
+                                {
+                                    ////("sdfsdfsd");
+                                    html2= "";
+                                    html2 = html2 + "<div class='social-comment' id='" + data.Id + "'> \n" +
+                                           "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                    "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                        "<i class='fa fa-chevron-down'></i>\n" +
+                                                                    "</a>\n" +
+                                                                    "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+                                    if (shopId_text == data.SenderFbId)html2+="<li onclick='EditComment(this.id)' id ='"+data.Id+"_editBtn'><a>Sửa</a></li>";
+                                    if (shopId_text != data.SenderFbId){
+                                        html2+="<li onclick='HideComment(this.id)' id ='"+data.Id+"_hideBtn'><a>Ẩn</a></li>";
+                                    }
+                                    html2+= "<li onclick='DeleteComment(this.id)' id ='"+data.Id+"_deleteBtn'><a>Xoá</a></li></ul>" +
+                                                                      "</ul>\n" +
+                                                                  "</div>\n" +
+                                                                   "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
+                                                                  "<a href='' class='pull-left'>\n" +
+                                                                      "<img alt='image' src='" + data.avatarUrl + "'>\n" +
+                                                                  "</a>\n" +
+                                                                  "<div class='media-body'>\n" +
+                                                                      "<a href='"+"https://www.facebook.com/" + data.SenderFbId + "' id='" + data.SenderFbId + "' target='_blank'>\n" +
+                                                                          data.from +
+                                                                      "</a>\n";
+
+                                    if (data.commentContent != "" && data.commentContent != null && data.commentContent != "null") {
+                                        console.log(data.commentContent);
+                                        var tmpString = data.commentContent.replace(/\n/g, "<br>").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t")
+                                        //html= html+data.comments[i].commentContent;
+                                        html2 += tmpString;
+                                    }
+                                    if (data.commentImageContent != "" && data.commentImageContent != null && data.commentImageContent != "null") {
+                                        html2 += "<img src='" + data.commentImageContent + "' class='img-responsive fbImage commentImage'>";
+                                    }
+                                    html2 = html2 + "</div><br>" +
+                                                             "<a class='btn btn-white btn-xs' id= '" + comment.Id + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
+                                    if (shopId_text != data.SenderFbId) html2+= "<a class='btn btn-white btn-xs' data-name= '"+data.from+"'  data-commentid='" + data.Id + "' id= '" + data.SenderFbId + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
+                                    html2+="<small class='text-muted'> <a href='"+"https://www.facebook.com/" + data.Id + "' target='_blank' style='display:inline'>" + date + "</a></small>\n" +
+                                "</div>"+
+                                "<div id='reply_to_"+data.Id+"' style='margin-top:1%'></div>";
+                                    console.log("nested quan "+ data.nestedCommentQuan);
+                                    if (data.nestedCommentQuan > 1)
+                                    {
+                                        html2 += "<div id='"+data.Id+"_ParentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:50px;width:10%;z-index:1000;'>"+
+                                                                       "<div class='sk-circle1 sk-circle'></div>"+
+                                                                       "<div class='sk-circle2 sk-circle'></div>"+
+                                                                       "<div class='sk-circle3 sk-circle'></div>"+
+                                                                       "<div class='sk-circle4 sk-circle'></div>"+
+                                                                       "<div class='sk-circle5 sk-circle'></div>"+
+                                                                       "<div class='sk-circle6 sk-circle'></div>"+
+                                                                       "<div class='sk-circle7 sk-circle'></div>"+
+                                                                       "<div class='sk-circle8 sk-circle'></div>"+
+                                                                       "<div class='sk-circle9 sk-circle'></div>"+
+                                                                       "<div class='sk-circle10 sk-circle'></div>"+
+                                                                       "<div class='sk-circle11 sk-circle'></div>"+
+                                                                       "<div class='sk-circle12 sk-circle'></div></div>";
+                                        html2 += "<button class='btn btn-primary btn-block' id='Show_"+data.Id+"_Replies' onclick ='ShowMoreReplies(this)'  data-repliesquan='"+data.nestedCommentQuan+"' data-skipnum='1' >"+
+                                            "Hiện thêm</button>";
+                                    }
+
+                                    html2 += "<div class='social-comment' id='reply_"+data.Id+"' style='display:none'>" +
+                                    "<a href class='pull-left'> <img src='"+"https://graph.facebook.com/"+shopId_text+"/picture?type=square"+"'></a><div class='media-body'>" +
+                                    //reply to a comment
+                                    "<textarea class='form-control replyComment' id='reply_"+comment.parent_id+"_content' placeholder='Nhập bình luận...'></textarea></div>" +
+                                    //
+                                    "</div></div>\n";
+
+                                    $('#'+comment.post_id+'_Comments').prepend(html2);
+                                    $('#reply_to_'+comment.parent_id).prepend(html1);
+
+                                }}
+                        }
+                    })
+                }
+            }
+            //bindNestedShowMore();
+            //bindFunctions();
+
+            //$('#reply_to_'+comment.post_id).prepend(html1);
+        }
+
+        function ShopAddToReply(parentId,message,id,date){
+            //console.log("in");
+            var postId = $('#hiddenPostId').val();
+            var html1 = "";
+            //new reply div
+            html1 = html1 + "<div class='social-comment' id='"+id+"'> \n" +
+                                       "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
+                                                                "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
+                                                                    "<i class='fa fa-chevron-down'></i>\n" +
+                                                                "</a>\n" +
+                                                                "<ul class='dropdown-menu m-t-xs' style='min-width:0px;'>\n";
+            html1+="<li onclick='EditComment(this.id)' id ='"+id+"_editBtn'><a>Sửa</a></li>";
+            html1+="<li onclick='DeleteComment(this.id)' id ='"+id+"_deleteBtn'><a>Xoá</a></li></ul>";
+            html1+="</ul>\n" +
+        "</div>\n" +
+         "<div class = 'clickable' onclick='ShowUserInfo(this)'>" +
+        "<a href='' class='pull-left'>\n" +
+            "<img alt='image' src='"+"https://graph.facebook.com/"+shopId_text+"/picture?type=square"+"'>\n" +
+        "</a>\n" +
+        "<div class='media-body'>\n" +
+            "<a href='"+"http://facebook.com/"+shopId_text+"' id='"+shopId_text+"' target='_blank'>"+shopName_text+"\n"+
+                "</a>\n";
+            //var date = GetCurrentDateTime();
+            html1+=  "<span id='"+id+"_text'>"+TextReplacedToChat(message)+"</span>";
+            html1+= "</div></div><br>" +
+                   "<a class='btn btn-white btn-xs' id= '" + parentId + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
+            html1+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
+            "</div></div>";
+            //parent comment is in the shown list
+            $('#reply_to_'+parentId).prepend(html1);
+
+            var tmp = $('#'+parentId).wrap('<p/>').parent().html();
+            $('#'+parentId).unwrap();
+            $('#'+parentId).remove();
+            $('#'+postId+'_Comments').prepend(tmp);
+            if ($('#Show_'+parentId+'_Replies').length){
+                $('#Show_'+parentId+'_Replies').data('skipnum',$('#Show_'+parentId+'_Replies').data('skipnum')+1);
+                $('#Show_'+parentId+'_Replies').data('repliesquan',$('#Show_'+parentId+'_Replies').data('repliesquan')+1);
+            }
+        }
+
+        function DeleteToPost(comment){
+            //$("#comment_div").empty();
+            if($('#'+comment.post_id+'_Post').length){
+                $('#'+comment.post_id+'_Post').removeClass('unreadPost').addClass('deleted');
+            }
+            $('#postDetail').children('.social-avatar').removeClass('hided').addClass('deleted');
+            $('#postDetail').children('.social-footer').find('.clickable').removedClass('hided').addClass('deleted');
+            $('#postDetail').children('.social-footer').find('.btn').remove();
+        }
+
+        function DeleteToComment(comment){
+            //remove comment and reply
+            ////("delete comment "+ comment.comment_id);
+            if($('#'+comment.comment_id).length)
+            {
+                $('#'+comment.comment_id).children('.clickable').removeClass('unreadComment').removeClass('hided').addClass('deleted');
+                $('#'+comment.comment_id).children('.clickable').find(".btn").remove();
+            }
+        }
+
+        function DeleteToPostList(comment){
+            if ($('#'+comment.post_id+'_Post').length) $('#'+comment.post_id+'_Post').removeClass('unreadPost').addClass('deleted');
+        }
+
+        function EditToPost(comment){
+            $('#'+comment.post_id+'_text').text("");
+            $('#'+comment.post_id+'_text').text(comment.message);
+        }
+
+        function EditToComment(comment,date){
+            $('#'+comment.comment_id+'_text').text("");
+            $('#'+comment.comment_id+'_text').text(comment.message);
+            if (comment.photo){
+                if ($('#'+comment.comment_id).children('.clickable').children('.media-body').find('.fbImage').length){
+                    $('#'+comment.comment_id).children('.clickable').children('.media-body').remove('.fbImage');
+                }
+                $('#'+comment.comment_id).children('.clickable').children('.media-body').append("<img src='" + comment.photo + "' class='img-responsive fbImage commentImage'>");
+            }
+            else {
+                if ($('#'+comment.comment_id).children('.clickable').children('.media-body').find('.fbImage').length){
+                    $('#'+comment.comment_id).children('.clickable').children('.media-body').remove('.fbImage');
+                }
+            }
+            var tmpCom =  $('#'+comment.comment_id).wrap('<p/>').parent().html();
+            $('#'+comment.comment_id).unwrap();
+            $('#'+comment.comment_id).remove();
+            ////(tmpPost);
+            $('#'+comment.post_id+"_Comments").prepend(tmpCom);
+            //console.log("in date "+ date);
+            $('#'+comment.comment_id).children('.clickable').children('.media-body').children('.text-muted').find('a').text(date);
+        }
+
+        function EditToCommentReply(comment,date){
+            $('#'+comment.comment_id+'_text').text("");
+            $('#'+comment.comment_id+'_text').text(comment.message);
+            if (comment.photo){
+                if ($('#'+comment.comment_id).children('.clickable').children('.media-body').find('.fbImage').length){
+                    $('#'+comment.comment_id).children('.clickable').children('.media-body').remove('.fbImage');
+                }
+                $('#'+comment.comment_id).children('.clickable').children('.media-body').append("<img src='" + comment.photo + "' class='img-responsive fbImage commentImage'>");
+            }
+            else {
+                if ($('#'+comment.comment_id).children('.clickable').children('.media-body').find('.fbImage').length){
+                    $('#'+comment.comment_id).children('.clickable').children('.media-body').remove('.fbImage');
+                }
+            }
+            var tmpCom =  $('#'+comment.comment_parentid).wrap('<p/>').parent().html();
+            $('#'+comment.comment_parentid).unwrap();
+            $('#'+comment.comment_parentid).remove();
+            ////(tmpPost);
+            $('#reply_to_'+comment.post_id).prepend(tmpCom);
+            //console.log("in date "+ date);
+            $('#'+comment.comment_id).children('.clickable').children('.media-body').children('.text-muted').find('a').text(date);
+        }
+
+        function EditToReply(comment,date){
+            $('#Show_'+comment.parent_id+'_Replies').data('skipnum',$('#Show_'+comment.parent_id+'_Replies').data('skipnum')-1);
+            AddToReply(comment,date);
+            ////("sdfsdfsd");
+        }
+
+        function HideToPost(comment){
+            $('#postDetail').children('.social-avatar').addClass("hided");
+            var parent = $('#'+comment.post_id+"_hideBtn").parent();
+            $('#'+comment.post_id+"_hideBtn").remove();
+            parent.prepend("<li onclick='UnhideComment(this.id)' id ='"+comment.post_id+"_unhideBtn'><a>Hiện</a></li>");
+        }
+
+        function HideToComment(comment){
+            $('#'+comment.comment_id).children('.clickable').addClass("hided");
+            var parent = $('#'+comment.comment_id+"_hideBtn").parent();
+            $('#'+comment.comment_id+"_hideBtn").remove();
+            parent.prepend("<li onclick='UnhideComment(this.id)' id ='"+comment.comment_id+"_unhideBtn'><a>Hiện</a></li>");
+        }
+
+        function GetPostToList(comment,date){
+            $.ajax({
+                url: "/ChatComment/GetPost",
+                method: 'get',
+                data: ({
+                    postId : comment.post_id
+                }),
+                processing: 'true',
+                success: function (data) {
+                    if (data == false)
+                    {
+                        swal("Lỗi!","", "error");
+                    }
+                    else
+                    {
+                        var html1 = "<li class='ui-widget-content' id='" + comment.post_id + "_Post'>\n" +
+                                            "<div class='feed-element'>\n" +
+                                            "<div id='" + comment.post_id + "_contentDiv'>\n" +
+                                            "<small class='pull-right' id='"+comment.post_id+"_time'></small>\n" +
+                                            "<strong>" + data.from + "</strong>\n  <div>";
+                        ////(data.message);
+                        html1 += TextReplace(data.message);
+                        if (data.imageContent != "" && data.imageContent != null && data.imageContent != "null") {
+                            html1 += "(hình)";
+                        }
+                        html1 += "</div>\n";
+                        html1 += "</div>\n" + "</div></li>\n";
+                        $('#selectable').prepend(html1);
+                        $('#'+comment.post_id+'_time').text(date);
+                    }}
+            })
+        }
+
+        function UnhideToPost(comment){
+            $('#postDetail').children('.social-avatar').removeClass("hided");
+            var parent = $('#'+comment.post_id+"_unhideBtn").parent();
+            $('#'+comment.post_id+"_unhideBtn").remove();
+            parent.prepend("<li onclick='HideComment(this.id)' id ='"+comment.post_id+"_hideBtn'><a>Ẩn</a></li>");
+        }
+
+        function UnhideToComment(comment){
+            $('#'+comment.comment_id).children('.clickable').removeClass("hided");
+            var parent = $('#'+comment.comment_id+"_unhideBtn").parent();
+            $('#'+comment.comment_id+"_unhideBtn").remove();
+            parent.prepend("<li onclick='HideComment(this.id)' id ='"+comment.comment_id+"_hideBtn'><a>Ẩn</a></li>");
+        }
+
+    </script>
+
+    @*Long's*@
+    <script type="text/javascript">
+
+        function SetFbIdToUserInfo(){
+            var fbid="";
+           
+            if (pagemode =="comment"){
+                console.log("Get info from comment " + $('.cust_info').data('fbid'));
+            }
+            else if (pagemode =="chat"){
+                
+                fbid=$('#list_conversation .ui-selected .fb_avatar').attr('id');
+                console.log("Get info from chat " + fbid);
+                $('.cust_info').data('fbid', fbid);
+            }
+        }
+
+        $('#chatSection').css('pointer-events','none');
+
+        var shopId= @HttpContext.Current.Session["ShopId"];
+        var page_ava_url="";
+        var page_name="";
+        $.ajax({
+            async: true,
+            url: '/ChatComment/GetPageInfo',
+            success: function (data) {
+                console.log(data);
+                page_ava_url=data.avatar;
+                page_name=data.name;
+            }
+        });
+
+        // Auto options
+        $(function(){
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/Shop/GetReplyMode',
+                success: function (data) {
+                    console.log(data);
+                    $('#auto_option option[value="'+data.mode+'"]').attr('selected','selected');
+                }
+            });
+
+            $('#auto_option').change(function (){
+                var mode=$(this).find('option:selected').attr("value");
+                SetReplyMode(mode);
+            });
+
+            function SetReplyMode(mode){
+                $.ajax({
+                    async: true,
+                    method: 'GET',
+                    url: '/Shop/SetReplyMode',
+                    data: {"mode": mode}
+                });
+            }
+        });
 
         function ProcessIncomingMessage(data, threadId){
             var thread=document.getElementById(threadId);
@@ -284,7 +2353,7 @@
                 $(thread).find('.mess_time').text(FormatChatDateRealtimeVN(Date.parse(mess.created_time)));
 
                 //check if new mess in current clicked conversation
-                if (threadId == $('.ui-selected').attr('id')){
+                if (threadId == $('#list_conversation .ui-selected').attr('id')){
                     for (var i=data.length-1;i>=0;i--){
                         var message = data[i];
                         console.log(message);
@@ -302,23 +2371,26 @@
                                         message.from.name+
                                         '<small class="chat-date" style="margin-left: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
                                     '</div>'+
-                                    '<div class="chat-message active">'+
+                                    '<div class="chat-message active" style="word-wrap: break-word;">'+
                                         message.message+
                                     '</div>'+
                                 '</div>');
                             }
                                 //Page's mess
                             else {
-                                $('#chat_box_content').append('<div id="'+message.id+'" class="right">'+
-                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
-                                    '<div class="author-name">'+
-                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
-                                        message.from.name+
-                                    '</div>'+
-                                    '<div class="chat-message">'+
-                                        message.message+
-                                    '</div>'+
-                                '</div>');
+                                var pm=document.getElementById(message.id);
+                                if (pm==null){
+                                    $('#chat_box_content').append('<div id="'+message.id+'" class="right">'+
+                                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
+                                        '<div class="author-name">'+
+                                            '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(Date.parse(message.created_time))+'</small>'+
+                                            message.from.name+
+                                        '</div>'+
+                                        '<div class="chat-message" style="word-wrap: break-word;">'+
+                                            message.message+
+                                        '</div>'+
+                                    '</div>');
+                                }
                             }
                         }
                     }
@@ -344,7 +2416,7 @@
                 //create new thread
                 var u_ava="";
                 $.ajax({
-                    async: true,
+                    async: false,
                     method: 'GET',
                     url: '/ChatComment/GetUserAvatar',
                     data: {"uid": mess.from.id},
@@ -360,9 +2432,9 @@
                         '</div>'+
                     '</div>'+
                     '<div>'+
-                        '<small class="mess_time pull-right">'+FormatChatDateRealtimeVN(Date.parse(mess.created_time))+'</small>'+
                         '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+mess.from.name+'</strong>'+
-                        '<div class="mess_preview" style="overflow: hidden;">'+mess.message+'</div>'+
+                        '<div class="mess_preview" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+mess.message+'</div>'+
+                        '<small class="mess_time pull-left">'+FormatChatDateRealtimeVN(Date.parse(mess.created_time))+'</small>'+
                     '</div>'+
                 '</div>');
             }
@@ -380,7 +2452,7 @@
             $('#chat_box_content').empty();
             $('#chat_loading').show();
         }
-        
+
         var ajax_searchsender;
         //Search sender
         $('#btn_searchsender').click(function (){
@@ -407,23 +2479,21 @@
                 $('#btn_searchsender').click();
         });
 
-        $('.small-chat-bo .content').slimScroll({
-            height: "70vh",
-            start: 'bottom'
-        });
-        $('.ibox-scroll').slimScroll({
-            height: "70vh"
-        });
+        $('.small-chat-bo .content').scrollbar();
 
-        $('#messreply_textbox').keypress(function(e){
+        $('.ibox-scroll').scrollbar();
+
+        $('#txt_messreply').keypress(function(e){
             if(e.keyCode==13)
                 $('#btn_sendmess').click();
         });
 
         $('#btn_sendmess').click(function (){
-            var tid=$('.ui-selected').attr('id');
-            var mess= $('#messreply_textbox').val();
+            var tid=$('#list_conversation .ui-selected').attr('id');
+            var mess= $('#txt_messreply').val();
+            console.log(mess);
 
+            var sent_id="";
             $.ajax({
                 async: false,
                 method: 'GET',
@@ -435,20 +2505,30 @@
                 success: function (data) {
                     console.log(data);
                     if(data.success == true){
-                        $('#messreply_textbox').val('');
+                        $('#txt_messreply').val('');
+                        sent_id=data.id;
                     }
                     else{
-                        //alert("Có lỗi! Không gửi được");
+                        ////("Có lỗi! Không gửi được");
                     }
                 }
             });
-
+            console.log(sent_id);
+            $('#chat_box_content').append('<div id="'+sent_id+'" class="right">'+
+                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
+                                    '<div class="author-name">'+
+                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(new Date())+'</small>'+
+                                        page_name+
+                                    '</div>'+
+                                    '<div class="chat-message" style="word-wrap: break-word;">'+
+                                        mess+
+                                    '</div>'+
+                                '</div>');
+            ChatboxScrollToBottom();
         });
 
         function ChatboxScrollToBottom(){
-            //var scrollTo_val = $('.small-chat-bo .content').prop('scrollHeight') + 'px';
-            //alert(scrollTo_val);
-            //$('.small-chat-bo .content').slimScroll({ scrollTo: scrollTo_val });
+            $('#chat_box_content').scrollTop($('#chat_box_content').height()*10);
         }
 
         //Datatable list order
@@ -465,10 +2545,7 @@
                     "zeroRecords": "Chưa có sản phẩm"
                 }
                 , "fnInitComplete": function () {
-                    $('#tbl_order').slimScroll({
-                        height: "34vh",
-                        alwaysVisible: true
-                    });
+                    $('#tbl_order').scrollbar();
                 }
         });
 
@@ -518,73 +2595,85 @@
                         , { "aTargets": [2], "mData": "Price" }
                 ]
                 , "fnInitComplete": function () {
+
                     $('div.dataTables_filter input').focus();
 
                     //function row click
-                    $('#popover_datatable tbody').unbind("click");
-                    $('#popover_datatable tbody').on('click', 'tr', function () {
-                        if ($(this).hasClass('selected')) {
-                            //Do nothing
-                        }
-                        else {
-                            table.$('tr.selected').removeClass('selected');
-                            $(this).addClass('selected');
-                        }
-
-                        var t = $('#add_datatableproduct').DataTable();
-                        var id = table.cell('.selected', 0).data();
-                        var tRow = t.row('#' + id);//table.cell('.selected', 0).data() + '');
-                        if (tRow.index() == undefined) {
-                            //Add row
-                            var rowNode = t.row.add([
-                                table.cell('.selected', 0).data(),
-                                table.cell('.selected', 1).data(),
-                                '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" style="padding: 4px;text-align: center;" />',
-                                table.cell('.selected', 2).data(),
-                                table.cell('.selected', 2).data(),
-                                '<button id="del_' + id + '" class="btn btn-danger btn-sm" type="button" style="padding:1px 4px"><i class="fa fa-trash-o"></i></button>'
-                            ]).draw(false).node();
-                            $(rowNode).attr('id', id);
-
-                            //Quantity
-                            $("input[id='" + id + "']").TouchSpin({
-                                min: 1,
-                                max: 100,
-                                initval: 1,
-                                verticalbuttons: true
-                            }).on('change', function () {
-                                var id = $(this).attr('id');
-                                CalculateTotal($(this).val(), id);
-                            });
-                            $(".input-group-btn-vertical").remove();
-
-                            //Delete button
-                            $("#del_" + id).click(function () {
-                                t.row('#' + id).remove().draw();
-                            });
-
-                            //Change total
-                            CalculateTotal(1, id);
-                        }
-                        else {
-                            //Increase quantity on click
-                            var val = $("input[id='" + id + "']").val();
-                            if (val <= 99) {
-                                $("input[id='" + id + "']").val(parseInt(val) + 1);
-                                CalculateTotal($("input[id='" + id + "']").val(), id);
+                    //var isEmpty = $('.dataTables_empty') != null;
+                    ////(isEmpty);
+                    var isEmpty = false;
+                    if (isEmpty){
+                        //Do nothing
+                    }
+                    else{
+                        $('#popover_datatable tbody').unbind("click");
+                        $('#popover_datatable tbody').on('click', 'tr', function () {
+                            if ($(this).hasClass('selected')) {
+                                //Do nothing
                             }
-                        }
+                            else {
+                                table.$('tr.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                            }
 
-                        //Calculate total on row
-                        function CalculateTotal(q, id) {
-                            var index = '#' + t.cell('#' + id, 0).data();
-                            t.cell(index, 4).data(q * t.cell(index, 3).data());
+                            var t = $('#add_datatableproduct').DataTable();
+                            var id = table.cell('.selected', 0).data();
+                            var tRow = t.row('#' + id);//table.cell('.selected', 0).data() + '');
+                            if (tRow.index() == undefined) {
+                                //Add row
+                                var rowNode = t.row.add([
+                                    table.cell('.selected', 0).data(),
+                                    table.cell('.selected', 1).data(),
+                                    '<input class="form-control" type="text" name="quantity" id="' + table.cell('.selected', 0).data() + '" style="padding: 4px;text-align: center;" />',
+                                    table.cell('.selected', 2).data(),
+                                    table.cell('.selected', 2).data(),
+                                    '<button id="del_' + id + '" class="btn btn-danger btn-sm" type="button" style="padding:1px 4px"><i class="fa fa-trash-o"></i></button>'
+                                ]).draw(false).node();
+                                $(rowNode).attr('id', id);
 
-                            $("#total #table_total").text(t.column(4).data().reduce(function (a, b) {
-                                return a + b;
-                            }));
-                        }
-                    });
+                                //Quantity
+                                $("input[id='" + id + "']").TouchSpin({
+                                    min: 1,
+                                    max: 100,
+                                    initval: 1,
+                                    verticalbuttons: true
+                                }).on('change', function () {
+                                    var id = $(this).attr('id');
+                                    CalculateTotal($(this).val(), id);
+                                });
+                                $(".input-group-btn-vertical").remove();
+
+                                //Delete button
+                                $("#del_" + id).click(function () {
+                                    t.row('#' + id).remove().draw();
+                                });
+
+                                //Change total
+                                CalculateTotal(1, id);
+                            }
+                            else {
+                                //Increase quantity on click
+                                var val = $("input[id='" + id + "']").val();
+                                if (val <= 99) {
+                                    $("input[id='" + id + "']").val(parseInt(val) + 1);
+                                    CalculateTotal($("input[id='" + id + "']").val(), id);
+                                }
+                            }
+
+                            //Calculate total on row
+                            function CalculateTotal(q, id) {
+                                var index = '#' + t.cell('#' + id, 0).data();
+                                t.cell(index, 4).data(q * t.cell(index, 3).data());
+
+                                $("#total #table_total").text(t.column(4).data().reduce(function (a, b) {
+                                    return a + b;
+                                }));
+                            }
+                        });
+
+                        $('#popover_datatable tbody').find('.dataTables_empty').parent().unbind("click");
+                    }
+
                 }
                 , "paging": false
                 , "searching": true
@@ -607,32 +2696,47 @@
         }
 
         $('#list_conversation').selectable({
+            selecting: function(event, ui) {
+                $('#list_conversation .ui-selected').removeClass('ui-selected');
+            },
             selected: function( event, ui ) {
                 ConversationSelect();
             }
         });
         function ConversationSelect(){
+            $('#chatSection').css('pointer-events','auto');
 
+            
             var thread_id=$('#list_conversation .ui-selected').attr('id');
-            var userfbid=$('.ui-selected .fb_avatar').attr('id');
-            if ($('.ui-selected .fb_avatar').attr('id') != $('.receiver_name').attr('id')){
-                ShowChatLoading();
+            var userfbid=$('#list_conversation .ui-selected .fb_avatar').attr('id');
+            if ($('#list_conversation .ui-selected .fb_avatar').attr('id') != $('.cust_info').data('fbid')){
+                SetFbIdToUserInfo();
+                ProcessUserInfo(userfbid);
+                $('#cust_avatar').attr('src',$('#list_conversation .ui-selected .fb_avatar').attr('src'));
+            }
+            if ($('#list_conversation .ui-selected .fb_avatar').attr('id') != $('.receiver_name').attr('id')){
+                
+                ShowChatLoading();                
+                $('.receiver_name').text($('#list_conversation .ui-selected .fb_name').html());
+                $('.receiver_name').attr('id', $('#list_conversation .ui-selected .fb_avatar').attr('id'));
 
-                $('#cust_avatar').attr('src',$('.ui-selected .fb_avatar').attr('src'));
-                $('.receiver_name').text($('.ui-selected .fb_name').html());
-                $('.receiver_name').attr('id', $('.ui-selected .fb_avatar').attr('id'));
-
-                if ($('.ui-selected').hasClass('unread')){
+                if ($('#list_conversation .ui-selected').hasClass('unread')){
                     SetConversationRead(thread_id);
                 }
 
-                ProcessUserInfo(userfbid);
+                
 
                 GetConversationContent(thread_id);
 
                 ClearOrder();
+
+                ClearChatBox();
             }
 
+        }
+
+        function ClearChatBox(){
+            $('#txt_messreply').val('');
         }
 
         function SetConversationRead(t_id){
@@ -643,7 +2747,7 @@
                 data: {"conversationId": t_id},
                 success: function (data) {
                     if (data ==true){
-                        $('.ui-selected').removeClass('unread');
+                        $('#list_conversation .ui-selected').removeClass('unread');
                     }
                 }
             });
@@ -675,9 +2779,9 @@
                                         '</div>'+
                                      '</div>'+
                                     '<div>'+
-                                        '<small class="mess_time pull-right">'+FormatChatDateTimeVN(data[i].CreatedTime)+'</small>'+
                                         '<strong class="fb_name" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+data[i].UserName+'</strong>'+
-                                        '<div class="mess_preview" style="overflow: hidden;">'+data[i].RecentMess+'</div>'+
+                                        '<div class="mess_preview" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+data[i].RecentMess+'</div>'+
+                                        '<small class="mess_time pull-left">'+FormatChatDateTimeVN(data[i].CreatedTime)+'</small>'+
                                     '</div>'+
                                 '</li>');
                 }
@@ -689,6 +2793,19 @@
             }
             $('#conv_loading').hide();
         }
+
+        //"GỢI Ý"
+        $('#suggest_wrapper').click(function(){
+            if ($('#suggest_wrapper .btn').hasClass('active')){
+                $('#suggest_wrapper .btn').removeClass('active');
+                $("#txt_messreply").unbind('keydown');
+                $("#txt_messreply").autocomplete("destroy");
+            }
+            else{
+                $('#suggest_wrapper .btn').addClass('active');
+                GetSuggestReply();
+            }
+        });
 
         //Get conversation content
         var ajax_GetConversationContent;
@@ -709,22 +2826,122 @@
                     $('#chat_loading').hide();
                 }
             });
+
+
         }
 
-        // Chat box content
+        function GetSuggestReply(){
+            $( function() {
+                var availableReps=[];
+
+                $.ajax({
+                    async: true,
+                    method: 'GET',
+                    url: '/ChatComment/GetAvailableResponses',
+                    success: function (data) {
+                        console.log(data);
+                        for (var i=0;i<data.length;i++){
+                            availableReps.push(data[i].Value);
+                        }
+                    }
+                });
+
+                function split( val ) {
+                    return val.split( / \s*/ );
+                }
+                function extractLast( term ) {
+                    return split( term ).pop();
+                }
+
+                $( "#txt_messreply" )
+                  // don't navigate away from the field on tab when selecting an item
+                  .on( "keydown", function( event ) {
+                      if ( event.keyCode === $.ui.keyCode.TAB &&
+                          $( this ).autocomplete( "instance" ).menu.active ) {
+                          event.preventDefault();
+                      }
+                  })
+                  .autocomplete({
+                      minLength: 0,
+                      source: function( request, response ) {
+                          // delegate back to autocomplete, but extract the last term
+                          response( $.ui.autocomplete.filter(
+                            availableReps, extractLast( request.term ) ) );
+                      },
+                      focus: function() {
+                          // prevent value inserted on focus
+                          return false;
+                      },
+                      select: function( event, ui ) {
+                          var terms = split( this.value );
+                          // remove the current input
+                          terms.pop();
+                          // add the selected item
+                          terms.push( ui.item.value );
+                          // add placeholder to get the comma-and-space at the end
+                          terms.push( "" );
+                          this.value = terms.join( " " );
+                          return false;
+                      },
+                      position: {
+                          my: "left bottom",
+                          at: "left top"
+                      }
+                  });
+            } );
+        }
+
+        // Display Chat box content
         function DisplayChatContent(data){
             for (i=0;i<data.Messages.length;i++){
                 var mess=data.Messages[i];
                 if (mess.UserId != shopId){
+                    //Check has attachments
+                    var strAtt="";
+                    console.log(mess);
+                    if (mess.Attachments.length > 0)
+                    {
+
+                        strAtt+='<div class="chat-attach col-sm-12" style="word-wrap: break-word;margin-left:32px">';
+                        for (var j=0;j<mess.Attachments.length;j++){
+                            var att=mess.Attachments[j];
+                            if (att.Type == "img"){
+                                strAtt+='<a href="'+att.Url+'" target="_blank">'+
+                                            '<img style="height: 100px; width: 100px; object-fit: contain" src="'+att.Url+'">'+
+                                        '</a>'
+                            }
+                            else{
+                                strAtt+='<div class="chat-message active" style="word-wrap: break-word;">'+
+                                            '<a href="'+att.Url+'" target="_blank" style="color:white;">'+
+                                                att.Filename+
+                                            '</a>'
+                                '</div>'
+
+                            }
+
+                            if (j!=mess.Attachments.length-1){
+                                strAtt+='<br/>';
+                            }
+                        }
+                        strAtt+='</div>';
+                    }
+
+                    //Chat message
+                    var strMess="";
+                    if (mess.MessContent.length >0){
+                        strMess+='<div class="chat-message active" style="word-wrap: break-word;">'+
+                                    mess.MessContent+
+                                '</div>'
+                    }
+
                     $('#chat_box_content').prepend('<div id="'+mess.MessId+'" class="left">'+
-                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px" width="40" height="40">'+
+                            '<img alt="image" class="img-circle user_ava" src="'+$('#cust_avatar').attr('src')+'" style="float:left; margin-right:7px;height: 40px; width: 40px;">'+
                             '<div class="author-name">'+
                                 mess.UserName+
                                 '<small class="chat-date" style="margin-left: 5px;">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
                             '</div>'+
-                            '<div class="chat-message active">'+
-                                mess.MessContent+
-                            '</div>'+
+                            strMess+
+                            strAtt+
                         '</div>');
                 }
                 else {
@@ -734,7 +2951,7 @@
                             '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateTimeVN(mess.DateCreated)+'</small>'+
                             mess.UserName+
                         '</div>'+
-                        '<div class="chat-message">'+
+                        '<div class="chat-message" style="word-wrap: break-word;">'+
                             mess.MessContent+
                         '</div>'+
                     '</div>');
@@ -777,8 +2994,84 @@
                     });
                 });
             }
+
+            $('.scroll-x').remove();
         }
 
+        // Response
+        $("#btn_response").click(function (evt) {
+            if ($("#btn_response").hasClass('active') == false){
+                $("#btn_response").addClass('active');
+
+                $("#popover_response").dialog({
+                    autoOpen: false,
+                    draggable: true,
+                    modal: true,
+                    resizable: false,
+                    dialogClass: 'dialog_resp',
+                    close: function (event, ui) {
+                        $('#wrap').show();
+                        $("#btn_response").removeClass('active');
+                    },
+                    open: function (event, ui) {
+                        $('.ui-widget-overlay').bind('click', function () {
+                            $("#popover_response").dialog('close');
+                        });
+                        $('.ui-widget-overlay').css(
+                            "cssText", "background: none;"
+                        )
+                    },
+                    position: {
+                        my: "left bottom",
+                        at: "left top",
+                        of: "#btn_response"
+                    }
+                });
+            }
+
+
+            CreateResponseDT();
+            $("#popover_response").dialog("open");
+        });
+
+        function CreateResponseDT(){
+            var availableReps=[];
+            $.ajax({
+                async: false,
+                method: 'GET',
+                url: '/ChatComment/GetAvailableResponses',
+                success: function (data) {
+                    availableReps=data;
+                }
+            });
+
+            $("#popover_response").empty();
+            console.log(availableReps);
+            for (var i=0;i<availableReps.length;i++){
+                var att=availableReps[i];
+
+                $("#popover_response").append('<div class="response input-group col-xs-12">'+
+                    '<span class="col-xs-3">'+att.Name+'</span>'+
+                    '<span class="resp_value col-xs-9">'+att.Value+'</span>'+
+                '</div>');
+            }
+
+            $('.response').click(function (){
+                var mess=$('#txt_messreply').val().trim();
+                console.log(mess);
+                if (mess.length !=0){
+                    mess+=' '+$(this).find('.resp_value').html().trim();
+                }
+                else {
+                    mess=$(this).find('.resp_value').html().trim();
+                }
+                $('#txt_messreply').val(mess);
+                $("#popover_response").dialog('close');
+            });
+
+        }
+
+        //User info
         $('#btn_add').hide();
         $('#btn_edit').hide();
         $('#btn_ok_add').hide();
@@ -836,7 +3129,8 @@
             $("#cus_mail").prop('readonly', false);
             $("#cus_addr").prop('readonly', false);
 
-            $('#cus_name').val($('.ui-selected .fb_name').html());
+            if(pagemode == "chat") $('#cus_name').val($('.ui-selected .fb_name').html());
+            else if (pagemode == "comment") $('#cus_name').val($('.cust_info').data('fbname'));
             $('#cus_phone').val('');
             $('#cus_mail').val('');
             $('#cus_addr').val('');
@@ -862,8 +3156,9 @@
         });
 
         $('#btn_ok_add').click(function(){
+
             $.get('/Customer/AddCustomerReturnId', {
-                "Id": $('.ui-selected .fb_avatar').attr('id'),
+                "Id": $('.cust_info').data('fbid'),
                 "Name": $('#cus_name').val(),
                 "Addr": $('#cus_addr').val(),
                 "Desc": null,
@@ -1003,7 +3298,7 @@
                     else {
                 rs = "detail";
                 //alert no detail
-            }
+                    }
             var status = 1;
 
             //check customer đã chọn
@@ -1014,7 +3309,7 @@
             }
 
             if (rs == "true") {
-                $.post('/Order/CreateOrder'
+                $.post('/Order/CreateOrderReturnOrder'
                     , { custId: custid
                         , note: null
                         , status: status
@@ -1024,15 +3319,15 @@
                         , listDetail: arDetail
                     }
                     , function (data, status) {
-                        if (data == "True") {
+                        if (data !=null) {
                             $("#add_modal").modal("hide");
                             ClearOrder();
                             swal({
-                                title: "Thêm thành công",
+                                title: "Tạo thành công đơn hàng <a target='_blank' href='/Order?id="+data.Id+"'>#"+data.Id+"</a>",
                                 animation: "slide-from-top",
                                 type: "success",
-                                timer: 1000,
-                                showConfirmButton: false
+                                html:true,
+                                showConfirmButton: true
                             });
 
                         }
@@ -1042,7 +3337,7 @@
                                 animation: "slide-from-top",
                                 text: "Thêm đơn hàng thất bại",
                                 type: "warning",
-                                timer: 1000,
+                                timer: 2000,
                                 showConfirmButton: false
                             });
                         }
@@ -1055,7 +3350,7 @@
                     animation: "slide-from-top",
                     text: "Chưa có chọn " + (rs == "detail" ? "sản phẩm" : "khách hàng") + " kìa",
                     type: "warning",
-                    timer: 1000,
+                    timer: 2000,
                     showConfirmButton: false
                 });
             }
@@ -1065,5 +3360,7 @@
             var t = $('#add_datatableproduct').DataTable();
             t.clear().draw();
         }
+
+
     </script>
 }

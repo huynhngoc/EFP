@@ -68,10 +68,10 @@ namespace DataService.Service
      }
 
         
-        public Customer GetCustomerByCustomerId(int customerId)
+        public Customer GetCustomerByCustomerId(int customerId,string shopid)
         {
             //Customer Customer = repository.GetCustomerById(customerId).FirstOrDefault();
-            Customer customer = repository.FindByKey(customerId);
+            Customer customer = repository.GetCustomerById(customerId, shopid);
             return customer;
         }
 

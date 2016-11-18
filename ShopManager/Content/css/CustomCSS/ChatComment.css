@@ -12,7 +12,7 @@
 
 .ibox-scroll {
     overflow: auto;
-    height: 70vh;
+    height: 65vh;
 }
 
 .ibox-content {
@@ -44,6 +44,8 @@
 
 .feed-element:hover {
     background-color: #eeecec;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .small-chat-bo {
@@ -84,7 +86,7 @@
 .small-chat-bo .content {
     padding: 5px 15px 15px 15px;
     overflow: auto;
-    height: 70vh;
+    height: 65vh;
     background-color: white;
 }
 
@@ -177,12 +179,64 @@
     padding-bottom: 0;
 }
 
+#feedback {
+    font-size: 1.4em;
+}
+
+#selectable .ui-selecting {
+    background: transparent;
+}
+
+.feed-element:hover {
+    background: #1ab394 !important;
+    color: white;
+}
+
+#selectable .ui-selected {
+    background: rgba(20,120,100,1) !important;
+    color: white;
+}
+
+#selectable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+    #selectable li {
+        margin: 0px;
+    }
+
+.feed-activity-list .feed-element {
+    border-bottom: 0px solid;
+}
+
+.media-body, .social-body {
+    font-size: 14px;
+}
+
+.feed-element:hover {
+    background-color: transparent;
+}
+
+.ibox-scroll {
+    height: 75vh;
+}
+
+.fbImage {
+    max-height: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 .unread {
     background-color: #ecf0f7;
 }
 
 .feed-activity-list .ui-selected {
-    background-color: #1ab394;
+    background-color: #1ab394 !important;
     color: white;
 }
 
@@ -209,3 +263,158 @@
         border-radius: 3px;
         float: left;
     }
+
+
+/* Tri's*/
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    color: mediumaquamarine;
+    opacity: 100;
+}
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200%;
+        height: 200%;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        /* Position the tooltip text */
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 200%;
+        margin-left: -60px;
+        /* Fade in tooltip */
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+        /* Tooltip arrow */
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+.fbImage {
+    margin-right: auto !important;
+}
+
+.new_comment {
+    border: 3px solid blue;
+}
+
+.commentImage {
+    width: 40% !important;
+    margin-right: 100% !important;
+}
+
+.postImage {
+    width: 40% !important;
+    height: auto !important;
+}
+
+.hided {
+    /*opacity: 0.6;*/
+    background: rgba(220,220,220,0.6) !important;
+}
+
+.unreadComment {
+    background: #5fa08b !important;
+    animation: glowing 1500ms infinite;
+}
+
+.unreadPost {
+    background: #5fa08b;
+    color: white;
+    animation: glowing 1500ms infinite;
+}
+
+.clickable {
+    z-index: 1000;
+}
+
+.deleted {
+    background: rgba(0,0,0,0.5) !important;
+    color: white;
+}
+
+.social-comment{
+    margin-top: 0px !important;
+}
+#commentSection{
+    margin-bottom:0px !important;
+}
+
+/*.ui-widget-content .ui-selectee .ui-selected {
+    background: rgba(0,0,0,0.5) !important;
+    color: red;
+}*/
+.ui-widget-content {
+    line-height: 200% !important;
+}
+
+/*Long's*/
+
+table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
+    background-color: #B0BED9;
+}
+
+.search-left {
+    float: left;
+}
+
+.noTitleStuff {
+    z-index: 2031;
+    max-height: 34% !important;
+    width: 500px !important;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+}
+
+    .noTitleStuff .ui-dialog-titlebar {
+        display: none;
+    }
+
+.dialog_resp {
+    z-index: 2031;
+    max-height: 34% !important;
+    width: 500px !important;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+}
+
+    .dialog_resp .ui-dialog-titlebar {
+        display: none;
+    }
+
+.response:hover {
+    background-color: #B0BED9;
+}
+
+#tbl_order {
+    height: 10%;
+    overflow: auto;
+    position: relative;
+    max-height: 40vh;
+}
+
+.center_content{
+    height : 68vh;
+}

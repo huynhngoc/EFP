@@ -354,6 +354,7 @@
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\img\ava_placeholder.png" />
     <Content Include="Content\img\profile.jpg" />
+    <Content Include="Content\img\comment.jpg" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\Customer_js\Customer_js.js" />
@@ -873,7 +874,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -922,6 +925,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\css\plugins\jQueryScrollbar\" />
+    <Folder Include="Content\js\plugins\jQueryScrollbar\" />
     <Folder Include="Views\Webhook\" />
   </ItemGroup>
   <ItemGroup>
