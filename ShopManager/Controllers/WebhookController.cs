@@ -226,6 +226,8 @@ namespace ShopManager.Controllers
                                         }
 
                                     }
+                                    System.Diagnostics.Debug.WriteLine("add comment:" + commentId + "," + customerId + "," + createTime + "," + intent + "," + status + "," + (parentId.Equals(postId) ? null : parentId) + "," + postId + "," + lastContent);
+                                        
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId.Equals(postId) ? null : parentId, postId, lastContent);
                                     flagCanHide = true;
                                     flagComment = commentId;

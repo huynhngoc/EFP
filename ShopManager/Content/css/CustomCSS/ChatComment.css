@@ -193,7 +193,7 @@
 }
 
 #selectable .ui-selected {
-    background-color: #365899;
+    background: rgba(20,120,100,1) !important;
     color: white;
 }
 
@@ -264,10 +264,6 @@
         float: left;
     }
 
-.feed-element {
-    padding: 10px !important;
-    margin: 0;
-}
 
 /* Tri's*/
 /* Tooltip container */
@@ -341,7 +337,7 @@
     background: rgba(220,220,220,0.6) !important;
 }
 
-.unread {
+.unreadComment {
     background: #5fa08b !important;
     animation: glowing 1500ms infinite;
 }
@@ -359,6 +355,21 @@
 .deleted {
     background: rgba(0,0,0,0.5) !important;
     color: white;
+}
+
+.social-comment{
+    margin-top: 0px !important;
+}
+#commentSection{
+    margin-bottom:0px !important;
+}
+
+/*.ui-widget-content .ui-selectee .ui-selected {
+    background: rgba(0,0,0,0.5) !important;
+    color: red;
+}*/
+.ui-widget-content {
+    line-height: 200% !important;
 }
 
 /*Long's*/

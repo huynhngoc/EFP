@@ -12,9 +12,9 @@ var oTable_Order;
 function validate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
-    var valid_name = 0;
-    var valid_email = 1;
-    var valid_phone = 1;
+    var valid_edit_name = 1;
+    var valid_edit_email = 1;
+    var valid_edit_phone = 1;
 
     //1 = email mode
     if (mode == 1) {
@@ -26,14 +26,16 @@ function validate(mode, value) {
         if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
 
             document.getElementById("mail_errorTxt").style.display = "block";
-            valid_email = 0;
+            valid_edit_email = 0;
             //alert("false");
         }
         else {
 
             document.getElementById("mail_errorTxt").style.display = "none";
-            valid_email = 1;
+            valid_edit_email = 1;
+            //alert(valid_edit_email);
             //alert("true");
+            //alert(valid_edit_email + "_" + valid_edit_phone + "_" + valid_edit_name);
         }
         //2 = phone mode
     }
@@ -41,23 +43,17 @@ function validate(mode, value) {
         var phoneno = /^[0-9]+$/;
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
             document.getElementById("phone_errorTxt").style.display = "none";
-            valid_phone = 1;
+            valid_edit_phone = 1;
         }
         else {
             document.getElementById("phone_errorTxt").style.display = "block";
-            valid_phone = 0;
+            valid_edit_phone = 0;
         }
     }
         // 3 = name mode
-    else if (mode == 3) {
-        if (!value.trim()) {
-            document.getElementById("name_errorTxt").style.display = "block";
-            valid_name = 0;
-        }
-        else valid_name = 1;
 
-    }
-    if (valid_phone == 1 && valid_email == 1 && valid_name == 1) document.getElementById("btnSave").disabled = false;
+
+    if (valid_edit_phone == 1 && valid_edit_email == 1 ) document.getElementById("btnSave").disabled = false;
     else document.getElementById("btnSave").disabled = true;
 }
 
@@ -67,7 +63,9 @@ function Addingvalidate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
 
-
+    var valid_name = 0;
+    var valid_email = 1;
+    var valid_phone = 1;
     //1 = email mode
     if (mode == 1) {
         var atpos = value.indexOf("@");
@@ -79,13 +77,13 @@ function Addingvalidate(mode, value) {
 
             document.getElementById("mail_errorTxt1").style.display = "block";
             //alert("false");
-            document.getElementById("btnSave1").disabled = true;
+            valid_email = 0;
         }
         else {
 
             document.getElementById("mail_errorTxt1").style.display = "none";
-            document.getElementById("btnSave1").disabled = false;
             //alert("true");
+            valid_email = 1;
         }
         //2 = phone mode
     }
@@ -94,15 +92,18 @@ function Addingvalidate(mode, value) {
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
 
             document.getElementById("phone_errorTxt1").style.display = "none";
-            document.getElementById("btnSave1").disabled = false;
+            valid_phone = 1;
         }
         else {
 
             document.getElementById("phone_errorTxt1").style.display = "block";
-            document.getElementById("btnSave1").disabled = true;
+            valid_phone = 0;
         }
     }
-
+   
+    //alert(valid_name + "_" + valid_phone + "_" + valid_email);
+    if (valid_phone == 1 && valid_email == 1 ) document.getElementById("btnSave1").disabled = false;
+    else document.getElementById("btnSave1").disabled = true;
 }
 
 
@@ -110,6 +111,12 @@ function clear_table() {
 
     document.getElementById("phone_errorTxt").style.display = "none";
     document.getElementById("mail_errorTxt").style.display = "none";
+    document.getElementById("name_errorTxt").style.display = "none";
+    document.getElementById("editName").value = "";
+    document.getElementById("editDes").value = "";
+    document.getElementById("editAddr").value = "";
+    document.getElementById("editPhone").value = "";
+    document.getElementById("editMail").value = "";
     $('#btnSave').prop('disabled', false);
 }
 
@@ -133,7 +140,7 @@ function addCustomer() {
     var _phone = document.getElementById("addPhoneTxt").value;
     var _mail = document.getElementById("addMailTxt").value;
 
-    if (_name != "") {
+    if (_name.trim() != "") {
         $.ajax({
             url: "/Customer/AddCustomer",
             cache: false,
@@ -190,8 +197,9 @@ function addCustomer() {
 }
 
 function editCustomerDetail() {
+    var cusName = document.getElementById("editName").value.trim();
     var _inputCusID = document.getElementById("cusEditID").value;
-    if (_inputCusID != null && _inputCusID != "") {
+    if (cusName!="") {
         $.ajax({
             url: "/Customer/EditCustomer",
             cache: true,
@@ -231,12 +239,14 @@ function editCustomerDetail() {
             }
         });
     }
+    else swal("Vui lòng nhập tên", "", "warning");
 }
 
 function clear_add() {
 
     document.getElementById("phone_errorTxt1").style.display = "none";
     document.getElementById("mail_errorTxt1").style.display = "none";
+    document.getElementById("name_errorTxt1").style.display = "none";
     document.getElementById("addNameTxt").value = "";
     document.getElementById("addAddrTxt").value = "";
     document.getElementById("addDescTxt").value = "";

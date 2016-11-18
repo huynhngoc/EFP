@@ -1,4 +1,5 @@
 ﻿using DataService.JqueryDataTable;
+using DataService.Service;
 using DataService.Utils;
 using DataService.ViewModel;
 using System;
@@ -12,31 +13,13 @@ namespace DataService.Repository
 {
     public class CommentRepository : BaseRepository<Comment>
     {
+        IntentService intentService = new IntentService();
+
         public CommentRepository() : base()
         {
 
         }
-        //public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
-        //{
-            
-        //    var result = dbSet.Where(q => (q.PostId.Contains(shopId)) && (q.Status!=5)).AsEnumerable().Select(q => new Comment()
-        //    {
-        //        PostId = q.PostId,
-        //        Id = q.Id,
-        //        IsRead = q.IsRead,
-        //        DateCreated = q.DateCreated
-        //    }).GroupBy(g => g.PostId).Select(g => new PostWithLastestComment()
-        //    {
-        //        Id = g.Key,
-        //        LastUpdate =  g.Max(x => x.DateCreated),
-        //        IsRead = g.All(x => x.IsRead == true),
-        //        commentCount = g.Count(),
-        //        //newestCommentId = g.Where(x=>x.DateCreated = g.Max((DateTime)x.DateCreated))
-        //    }).OrderByDescending(q => q.LastUpdate);
 
-        //    return result.AsQueryable();
-
-        //}
         public bool CheckUnreadRemain(string parentId)
         {
             return dbSet.Where(q => q.ParentId == parentId).Any(q => q.IsRead == false);
@@ -108,6 +91,7 @@ namespace DataService.Repository
                 var comment = dbSet.Where(q => q.Id == commentId).FirstOrDefault();
                 if (comment.IsRead == false)
                 {
+                    Debug.Write("this is unread so we'll set it as readed");
                     comment.IsRead = true;
                     return Update(comment);
                 }
@@ -158,6 +142,13 @@ namespace DataService.Repository
             }
 
         }
+
+        //ngochb
+        public int NewCommentCount(string shopId)
+        {
+            return dbSet.Where(q => q.Post.ShopId == shopId && q.IsRead == false).Count();
+        }
+
         // ANDND Get comment by condition
         public IQueryable<AnalysisCommentViewModel> GetCommentByShopAndCondition(JQueryDataTableParamModel param, string fbId, string shopId, int? intentId, int? status, bool? isRead, DateTime? startDate, DateTime? endDate)
         {

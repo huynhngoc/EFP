@@ -49,13 +49,14 @@ namespace ShopManager.Controllers
                 //Session["ShopAvatar"] = shopFBUser.picture.data.url;
 
                 dynamic postParam = new ExpandoObject();
-                
+
 
                 string accessToken = (shopService.GetShop(shopId)).FbToken;
                 postParam.access_token = accessToken;
                 postParam.fields = "message,from,full_picture,story";
+                postParam.locale = "vi_VI";
 
-                
+
 
                 Debug.WriteLine("service " + DateTime.Now + " " + shopId);
                 var rawPostList = postservice.GetAllPost(shopId);
@@ -109,9 +110,21 @@ namespace ShopManager.Controllers
                             if (fbPost.full_picture != null && fbPost.full_picture != "") postmodel.imageContent = fbPost.full_picture;
                         }
                         Debug.WriteLine("test post " + postmodel.message);
-                        //check all commments with post id;
-                        if (commentservice.CheckPostUnread(post.Id) == true) postservice.SetPostIsUnread(post.Id);
-                        else postservice.SetPostIsRead(post.Id);
+                           
+                            //check all commments with post id;
+
+                            //if (commentservice.CheckPostUnread(post.Id) == true)
+                            //{
+                            //    postservice.SetPostIsUnread(post.Id);
+                            //    postmodel.post.IsRead = false;
+                            //}
+                            //else
+                            //{
+                            //    postservice.SetPostIsRead(post.Id);
+                            //    postmodel.post.IsRead = true;
+                            //}
+
+
                         postviewlist.Add(postmodel);
                     }
                     postlistviewmodel.postviewlist = postviewlist;
@@ -144,6 +157,7 @@ namespace ShopManager.Controllers
                 //commentParam.access_token = accessToken;
                 postParam.fields = "full_picture,created_time,message,from{picture,name},story";
                 commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide";
+                postParam.locale = "vi_VI";
                 FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
                 Debug.WriteLine("a ccess tok " + accessToken);
                 //commentParam.field = "from";
@@ -167,7 +181,7 @@ namespace ShopManager.Controllers
                     postView.IntentId = selectedPost.IntentId;
 
                     if (postView.Status != 5)
-                    { 
+                    {
                         var fbPost = fbAppWithAccTok.Get(postId, postParam);
                         postView.from = fbPost.from.name;
                         if (postView.IntentId == null) postView.fromAvatar = "https://graph.facebook.com/" + (string)Session["ShopId"] + "/picture?type=square";
@@ -206,6 +220,7 @@ namespace ShopManager.Controllers
                             commentdetailmodel.IntentId = commentList[0][i].IntentId;
                             commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentList[0][i].Id);
                             commentservice.SetIsRead(commentList[0][i].Id);
+                            SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
 
                             commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[0][i].SenderFbId + "/picture?type=square";
                             //string commentText = @fbComment.message;
@@ -248,6 +263,7 @@ namespace ShopManager.Controllers
                             commentdetailmodel.IntentId = commentList[1][i].IntentId;
 
                             commentservice.SetIsRead(commentList[1][i].Id);
+                            SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
                             commentdetailmodel.isUnreadRepliesRemain = commentservice.CheckUnreadRemain(commentdetailmodel.parentId);
                             commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[1][i].SenderFbId + "/picture?type=square";
 
@@ -295,6 +311,7 @@ namespace ShopManager.Controllers
                         {
                             postservice.SetPostIsRead(selectedPost.Id);
                             postView.isRead = true;
+                            SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
                         }
                         Debug.WriteLine(postView.nestedComments.Count);
                         return Json(postView, JsonRequestBehavior.AllowGet);
@@ -302,10 +319,21 @@ namespace ShopManager.Controllers
                     else
                     {
                         postView.Comments = null;
+                        if (commentservice.CheckPostUnread(postView.Id) == true)
+                        {
+                            postservice.SetPostIsUnread(postView.Id);
+                            postView.isRead = false;
+                        }
+                        else
+                        {
+                            postservice.SetPostIsRead(postView.Id);
+                            postView.isRead = true;
+                        }
                         return Json(postView, JsonRequestBehavior.AllowGet);
                     }
 
                 }
+
                 else return null;
             }
             catch (Exception e)
@@ -314,29 +342,18 @@ namespace ShopManager.Controllers
             }
         }
 
-        public ActionResult GetUserFromDb(string userFbId)
-        {
-            string shopId = (string)Session["ShopId"];
-            Customer cust = custService.GetCustomerByFacebookId(userFbId, shopId);
-            if (cust == null)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-            return Json(cust, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult GetPost(string postId)
         {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
             dynamic postParam = new ExpandoObject();
             postParam.fields = "message,from,full_picture,story";
-
+            postParam.locale = "vi_VI";
             //dynamic userParam = new ExpandoObject();
             //userParam.access_token = accessToken;
             //userParam.fields = "name";
             try
             {
-                
+
                 FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
 
                 //commentParam.field = "from";
@@ -444,6 +461,7 @@ namespace ShopManager.Controllers
                             commentdetailmodel.commentContent = comment.LastContent;
                         }
                         commentservice.SetIsRead(comment.Id);
+                        SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
                         newcommentdetaillist.Add(commentdetailmodel);
                     }
                     Comment tmpcomment = commentservice.GetCommentById(parentId);
@@ -456,6 +474,7 @@ namespace ShopManager.Controllers
                     {
                         postservice.SetPostIsRead(tmpcomment.PostId);
                         postIsUnread = false;
+                        SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
                     }
                     isUnreadRemain = commentservice.CheckUnreadRemain(parentId);
                     return Json(new { newcommentdetaillist, isUnreadRemain = isUnreadRemain, postIsUnread = postIsUnread }, JsonRequestBehavior.AllowGet);
@@ -472,7 +491,10 @@ namespace ShopManager.Controllers
         {
             try
             {
+                Debug.WriteLine("id of new comment " + commentId);
                 var result = commentservice.SetIsRead(commentId);
+                Debug.WriteLine("and result " + result);
+                SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -950,13 +972,13 @@ namespace ShopManager.Controllers
             dynamic result = fbApp.Get(shopId + "/picture?type=normal&redirect=false", param);
             param = new ExpandoObject();
             param.access_token = accessToken;
-            dynamic r2= fbApp.Get(shopId, param);
-            return Json(new { avatar = result.data.url, name=r2.name }, JsonRequestBehavior.AllowGet);
+            dynamic r2 = fbApp.Get(shopId, param);
+            return Json(new { avatar = result.data.url, name = r2.name }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SetConversationRead(string conversationId)
         {
             var rs = conversationService.SetReadConversation(conversationId);
-
+            SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
@@ -984,7 +1006,7 @@ namespace ShopManager.Controllers
             }
             return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
-        
+
 
         public JsonResult GetAvailableResponses()
         {
@@ -1030,12 +1052,12 @@ namespace ShopManager.Controllers
 
 
         public JsonResult PrivateReplyComment(string commentId, string message)
-            {
+        {
 
             try
-        {
-            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
-            dynamic param = new ExpandoObject();
+            {
+                string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+                dynamic param = new ExpandoObject();
                 param.access_token = accessToken;
                 param.message = message;
                 var result = fbApp.Post(commentId + "/private_replies", param);
@@ -1051,8 +1073,8 @@ namespace ShopManager.Controllers
         {
             try
             {
-            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
-            dynamic param = new ExpandoObject();
+                string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+                dynamic param = new ExpandoObject();
                 Debug.WriteLine("photoooooooo " + photo);
                 param.access_token = accessToken;
                 param.message = message;
@@ -1066,5 +1088,7 @@ namespace ShopManager.Controllers
                 return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
     }
 }

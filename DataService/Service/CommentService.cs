@@ -49,13 +49,7 @@ namespace DataService.Service
                 return repository.Update(c);
             }
         }
-
-
-        //public IQueryable<PostWithLastestComment> GetAllPost(string shopId)
-        //{
-        //    return repository.GetAllPost(shopId);
-        //}
-
+        
         public bool CheckUnreadRemain(string parentId)
         {
            return repository.CheckUnreadRemain(parentId);
@@ -94,11 +88,6 @@ namespace DataService.Service
         public int GetParentCommentQuan(string postId)
         {
             return repository.GetParentCommentQuan(postId);
-        }
-
-        public bool SetIsRead(string commentId)
-        {
-            return repository.SetIsRead(commentId);
         }
 
         //ANDND Set intent
