@@ -414,3 +414,7 @@ table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
     position: relative;
     max-height: 40vh;
 }
+
+.center_content{
+    height : 68vh;
+}
