@@ -1611,43 +1611,48 @@
                 })
             }
         }
-        var oldText = "";
         //var newText = "";
         function EditComment(commentId){
             if ($('#hiddenEditId').val()){
                 $('#'+$('#hiddenEditId').val()+"_text").removeAttr("style");
                 $('#'+$('#hiddenEditId').val()+"_text").attr('contenteditable','false');
             }
+            
             var id = commentId.split('_')[0] + "_" + commentId.split('_')[1];
+            $('#'+id+'_text').addClass('form-control');
            // alert('#'+id+"_text");
             oldText = $('#'+id+"_text").text();
-            alert(oldText);
+            //alert(oldText);
             var newText ="";
-            
+            $('#'+id+"_text").data('old',$('#'+id+"_text").text());
+            //alert($(this).data('old'));
             $('#hiddenEditId').val(id);
-            var photo = null;
             ////($('#'+id).children('.clickable').children('.media-body').find('.fbImage').length);
-            if ($('#'+id).children('.clickable').children('.media-body').find('.fbImage').length){
-                ////("yes");
-                photo = $('#'+id).children('.clickable').children('.media-body').find('.fbImage').attr('src');
-            }
+            //if ($('#'+id).children('.clickable').children('.media-body').find('.fbImage').length){
+            //    ////("yes");
+            //    alert (photo +" nè");
+            //    photo = $('#'+id).children('.clickable').children('.media-body').find('.fbImage').attr('src');
+            //}
             console.log('#'+id+'_text');
             if($('#'+id+'_text').length){
                 ////("sdfsdf");
                 $('#'+id+"_text").attr('contenteditable','true');
                 $('#'+id+"_text").css('border','1px solid #bdc7d8');
                 $('#'+id+"_text").css('background','white');
-                $('#'+id+"_text").on('keyup', function(e,oldText) {
+                $('#'+id+"_text").on('keyup', function(e) {
                     if (e.which == 27){
                         $('#'+id+"_text").removeAttr("style");
                         $('#'+id+"_text").attr('contenteditable','false');
-                        $('#'+id+"_text").text(oldText);
+                        $('#'+id+'_text').removeClass('form-control');
+                        $('#'+id+"_text").text( $(this).data('old'));
                         //alert(oldText);
                     }    
                     if (e.which == 13 && ! e.shiftKey) {
                         $('#'+id+"_text").removeAttr("style");
                         $('#'+id+"_text").attr('contenteditable','false');
+                        $('#'+id+'_text').removeClass('form-control');
                         newText = $('#'+id+"_text").text().trim();
+                        if ($(this).parent().find('.fbImage').length) var photo = $(this).parent().find('.fbImage').attr('src');
                         $.ajax({
                             url: "/ChatComment/EditComment",
                             method: 'get',
@@ -1668,6 +1673,7 @@
                                 else
                                 {
                                     $('#'+id+"_text").text(newText);
+                                    
                                 }
                             }
 
