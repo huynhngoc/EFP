@@ -834,6 +834,8 @@
             else skip = $('#moreCommentsOption').data('skipnum');
             ////(skip + " dsfsdfsdf");
             var postId = postid;
+            $("#comment_div").append("<input type='hidden' value='"+postId+"' id='hiddenPostId'>");
+
             if (ajax) ajax.abort();
             ajax = $.ajax({
                 url: "/ChatComment/GetPostDetail",
@@ -871,8 +873,7 @@
                                                                         "<div class='sk-circle9 sk-circle'></div>"+
                                                                         "<div class='sk-circle10 sk-circle'></div>"+
                                                                         "<div class='sk-circle11 sk-circle'></div>"+
-                                                                        "<div class='sk-circle12 sk-circle'></div></div>"+
-                                                                       "<input type='hidden' value='"+postId+"' id='hiddenPostId'> <input type='hidden' value='' id='hiddenEditId'>");
+                                                                        "<div class='sk-circle12 sk-circle'></div></div> <input type='hidden' value='' id='hiddenEditId'>");
                         }
                         if (data != null) {
                             var html = "";
@@ -1219,7 +1220,7 @@
             var curElement = $($(div_ob).children(".media-body")[0]);
             var curImage = $($(div_ob).children(".pull-left")[0]);
             var userfbid = curElement.find("a").attr("id");
-            var cust = GetUserFromDb(userfbid);
+            //var cust = GetUserFromDb(userfbid);
             
             ////("sdfsdfs");
             SetFbIdToUserInfo();
