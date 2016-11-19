@@ -142,6 +142,7 @@ namespace ShopManager.Controllers
                         string postId = Convert.ToString(value.post_id);
                         //facebook change policy pageID_PostID ==> authorID_PostID
                         postId = shopId + "_" + postId.Split('_')[1];
+                        value.post_id = postId;
                         int? intent = (int)DefaultIntent.UNKNOWN;
                         int status = (int)CommentStatus.SHOWING;
                         string lastContent = null;
@@ -231,7 +232,8 @@ namespace ShopManager.Controllers
                                     System.Diagnostics.Debug.WriteLine("add comment:" + commentId + "," + customerId + "," + createTime + "," + intent + "," + status + "," + (parentId.Equals(postId) ? null : parentId) + "," + postId + "," + lastContent);
                                     //fb change policy
                                     if (parentId.Split('_')[1].Equals(postId.Split('_')[1]))
-                                    {
+                                    {                                        
+                                        value.parent_id = shopId + "_" + parentId.Split('_')[1];
                                         parentId = null;
                                     }
                                     commentService.AddComment(commentId, customerId, createTime, intent, status, parentId, postId, lastContent);
