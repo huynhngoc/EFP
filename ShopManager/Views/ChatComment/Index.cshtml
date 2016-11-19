@@ -400,21 +400,25 @@
                 console.log(date);
                 if(comment.verb == "add")
                 {
+                    //alert ($('#hiddenPostId').val() + " and " + comment.post_id);
                     //in current post
                     if ($('#hiddenPostId').val() == comment.post_id)
                     {
+                        //alert("1");
                         //is comment of post
                         //check if comment or reply
                         //is comment
+                        //alert("dfdfsdf");
                         if (comment.post_id == comment.parent_id)
                         {
                             //new comment
+                            //alert("its comment");
                             AddToComment(comment,date,intent);
                             //AddToComment(comment,date);
                         }
 
                             // is nested comment / reply
-                        else if (comment.parent_id != comment.post_id){
+                        else {
                             //AddToReply(comment,date,intent);
                             AddToReply(comment,date);
                         }
@@ -451,6 +455,7 @@
                         //not from current post
                     else
                     {
+                        //alert("2");
                         //AddToPostList(comment,date,curDate);
                         AddToPostList(comment,date);
                     }
@@ -502,23 +507,40 @@
                 }
                 else if (comment.verb == "remove"){
                     // in current post
-                    if ($('#hiddenPostId').val() == comment.post_id){
-                        //remove post
-                        if (!comment.comment_id){
-                            DeleteToPost(comment);
-                        }
-                            //remove comment
-                        else {
-                            DeleteToComment(comment);
-                        }
-                    }
-                        // not in current post
+                    //alert ($('#hiddenPostId').val() + "   and    "+  comment.post_id);
 
-                    if($('#'+comment.post_id+'_Post').length)
-                    {
-                        DeleteToPostList(comment);
-                    }
-                            
+                    //if ($('#hiddenPostId').val() == comment.post_id){
+                    //    //remove post
+                    //    if (!comment.comment_id){
+                    //        DeleteToPost(comment);
+                    //    }
+                    //        //remove comment
+                    //    else {
+                    //        DeleteToComment(comment);
+                    //    }
+                    //}
+                    //    // not in current post
+
+                    //if($('#'+comment.post_id+'_Post').length)
+                    //{
+                    //    DeleteToPostList(comment);
+                    //}
+                    
+                    removeComment = $("#"+comment.comment_id);
+                    if (removeComment.length >0){
+                        DeleteToComment(comment);
+                    } else {
+                            //delete post
+                        try{
+                            if (comment.item=="post")
+                            {
+                            DeleteToPostList(comment);
+                            DeleteToPost(comment);
+                            }
+                        }  catch(e) {}
+}
+                     
+               
 
                 }
                 else if (comment.verb == "edited"){
@@ -834,7 +856,8 @@
             else skip = $('#moreCommentsOption').data('skipnum');
             ////(skip + " dsfsdfsdf");
             var postId = postid;
-            $("#comment_div").append("<input type='hidden' value='"+postId+"' id='hiddenPostId'>");
+            //if ($('#hiddenPostId').length)$('#hiddenPostId').remove();
+            //$("#comment_div").append("<input type='hidden' value='"+postId+"' id='hiddenPostId'>");
 
             if (ajax) ajax.abort();
             ajax = $.ajax({
@@ -873,7 +896,7 @@
                                                                         "<div class='sk-circle9 sk-circle'></div>"+
                                                                         "<div class='sk-circle10 sk-circle'></div>"+
                                                                         "<div class='sk-circle11 sk-circle'></div>"+
-                                                                        "<div class='sk-circle12 sk-circle'></div></div> <input type='hidden' value='' id='hiddenEditId'>");
+                                                                        "<div class='sk-circle12 sk-circle'></div></div> <input type='hidden' value='"+postId+"' id='hiddenPostId'><input type='hidden' value='' id='hiddenEditId'>");
                         }
                         if (data != null) {
                             var html = "";
@@ -979,7 +1002,8 @@
                                                                         "<div class='sk-circle10 sk-circle'></div>"+
                                                                         "<div class='sk-circle11 sk-circle'></div>"+
                                                                         "<div class='sk-circle12 sk-circle'></div></div>"+
-                                                                       "<input type='hidden' value='"+postId+"' id='hiddenPostId'> <input type='hidden' value='' id='hiddenEditId'>");
+                                                                       " <input type='hidden' value='' id='hiddenEditId'>"+
+                                                                       "<input type='hidden' value='"+postId+"' id='hiddenPostId'>");
                                 if ($('#moreCommentsOption').data('skipnum') >= $('#moreCommentsOption').data('commentquan')) $('#moreCommentsOption').remove();
                                 gettingCommentInit = false;
                                 html="";
@@ -1587,14 +1611,19 @@
                 })
             }
         }
-
+        var oldText = "";
+        //var newText = "";
         function EditComment(commentId){
             if ($('#hiddenEditId').val()){
                 $('#'+$('#hiddenEditId').val()+"_text").removeAttr("style");
                 $('#'+$('#hiddenEditId').val()+"_text").attr('contenteditable','false');
             }
-
             var id = commentId.split('_')[0] + "_" + commentId.split('_')[1];
+           // alert('#'+id+"_text");
+            oldText = $('#'+id+"_text").text();
+            alert(oldText);
+            var newText ="";
+            
             $('#hiddenEditId').val(id);
             var photo = null;
             ////($('#'+id).children('.clickable').children('.media-body').find('.fbImage').length);
@@ -1608,14 +1637,17 @@
                 $('#'+id+"_text").attr('contenteditable','true');
                 $('#'+id+"_text").css('border','1px solid #bdc7d8');
                 $('#'+id+"_text").css('background','white');
-                $('#'+id+"_text").on('keyup', function(e) {
+                $('#'+id+"_text").on('keyup', function(e,oldText) {
                     if (e.which == 27){
                         $('#'+id+"_text").removeAttr("style");
-                        $('#'+id+"_text").attr('contenteditable','false');}
+                        $('#'+id+"_text").attr('contenteditable','false');
+                        $('#'+id+"_text").text(oldText);
+                        //alert(oldText);
+                    }    
                     if (e.which == 13 && ! e.shiftKey) {
                         $('#'+id+"_text").removeAttr("style");
                         $('#'+id+"_text").attr('contenteditable','false');
-                        $('#'+id+"_text").text($('#'+id+"_text").text().trim());
+                        newText = $('#'+id+"_text").text().trim();
                         $.ajax({
                             url: "/ChatComment/EditComment",
                             method: 'get',
@@ -1631,18 +1663,22 @@
                                 if (data.success == false)
                                 {
                                     swal("Chỉnh sửa thất bại!","", "error");
+                                    $('#'+id+"_text").text() = oldText;
                                 }
                                 else
                                 {
-
+                                    $('#'+id+"_text").text(newText);
                                 }
                             }
+
                         })
 
                     }
 
                 });
             }
+            oldText = "";
+            newText ="";
         }
 
         function clear_message()
@@ -1700,8 +1736,13 @@
                                                     }
                                                     else {
                                                         if($('#'+id).length) {
-                                                            $('#'+id).children('.clickable').addClass('deleted');
-                                                            $('#'+id).find(".btn").remove();
+                                                            //$('#'+id).children('.clickable').addClass('deleted');
+                                                            //$('#'+id).find(".btn").remove();
+                                                            //if ($('#reply_to_'+id).length){
+                                                            //    $('#reply_to_'+id).find('.clickable').removeClass('hided').addClass('deleted');
+                                                            //    $('#reply_to_'+id).find(".btn").remove();
+                                                            //}
+                                                            $('#'+id).remove();
                                                         }
                                                         swal("Xoá thành công!","","success");
                                                     }
@@ -1744,11 +1785,15 @@
                                                     else {
                                                         // delete whole post
                                                         if ($('#hiddenPostId').val() == id) {
-                                                            $("#comment_div").empty();
+                                                            //$("#comment_div").empty();
+                                                            //$('#postDetail').children('.social-avatar').removeClass('hided').addClass('deleted');
+                                                            //$('#postDetail').children('.social-footer').find('.clickable').removedClass('hided').addClass('deleted');
+                                                            //$('#postDetail').children('.social-footer').find('.btn').remove();
                                                             if($('#'+id+'_Post').length){
                                                                 $('#'+id+'_Post').removeClass('unreadPost');
                                                                 $('#'+id+'_Post').addClass('deleted');
                                                             }
+                                                            $('#comment_div').empty();
                                                             var tmp = "";
                                                             tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
                                                                     "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
@@ -2143,12 +2188,34 @@
 
         function DeleteToPost(comment){
             //$("#comment_div").empty();
-            if($('#'+comment.post_id+'_Post').length){
-                $('#'+comment.post_id+'_Post').removeClass('unreadPost').addClass('deleted');
-            }
-            $('#postDetail').children('.social-avatar').removeClass('hided').addClass('deleted');
-            $('#postDetail').children('.social-footer').find('.clickable').removedClass('hided').addClass('deleted');
-            $('#postDetail').children('.social-footer').find('.btn').remove();
+            if ($('#hiddenPostId').val() == comment.post_id){
+                    $('#comment_div').empty();
+                    var tmp = "";
+                    tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
+                            "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
+                                "<div class='panel-body' style='height:100%; text-align:center'>"+
+                                    "Xin chọn bài đăng"+
+                                "</div>"+
+                            "</div>"+
+                        "</div>"+
+                        "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
+                            "<div class='sk-circle1 sk-circle'></div>"+
+                            "<div class='sk-circle2 sk-circle'></div>"+
+                            "<div class='sk-circle3 sk-circle'></div>"+
+                            "<div class='sk-circle4 sk-circle'></div>"+
+                            "<div class='sk-circle5 sk-circle'></div>"+
+                            "<div class='sk-circle6 sk-circle'></div>"+
+                            "<div class='sk-circle7 sk-circle'></div>"+
+                            "<div class='sk-circle8 sk-circle'></div>"+
+                            "<div class='sk-circle9 sk-circle'></div>"+
+                            "<div class='sk-circle10 sk-circle'></div>"+
+                            "<div class='sk-circle11 sk-circle'></div>"+
+                            "<div class='sk-circle12 sk-circle'></div>"+
+                        "</div>";
+                    //        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
+                    //    "<img src='/Content/image/loader.gif' />"+
+                    //"</div>";
+                    $('#comment_div').append(tmp);}
         }
 
         function DeleteToComment(comment){
@@ -2156,8 +2223,7 @@
             ////("delete comment "+ comment.comment_id);
             if($('#'+comment.comment_id).length)
             {
-                $('#'+comment.comment_id).children('.clickable').removeClass('unreadComment').removeClass('hided').addClass('deleted');
-                $('#'+comment.comment_id).children('.clickable').find(".btn").remove();
+                $('#'+comment.comment_id).remove();
             }
         }
 
