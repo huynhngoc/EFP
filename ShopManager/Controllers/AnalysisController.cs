@@ -86,7 +86,7 @@ namespace ShopManager.Controllers
                                 dynamic paramFB = new ExpandoObject();
                                 paramFB.fields = "from,id,message";
                                 commentContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].Id, paramFB).ToString());
-                                if (commentContent!=null && !string.IsNullOrEmpty(commentContent.message))
+                                if (commentContent != null && !string.IsNullOrEmpty(commentContent.message))
                                 {
                                     data[i].CommentContent = TruncateLongString(commentContent.message, 40);
                                 }

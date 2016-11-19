@@ -26,8 +26,7 @@ namespace DataService
         public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public string ShopId { get; set; }
-    
-        public virtual Shop Shop { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

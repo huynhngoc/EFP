@@ -26,12 +26,12 @@ namespace DataService.Repository
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IEnumerable<Customer> GetCustomerById(int cusId)
+        public Customer GetCustomerById(int cusId, string shopId)
         {
             //Debug.WriteLine("-----id_in " + cusId);
             //Debug.WriteLine("asdasdasd" + dbSet.Where(q => q.Id == cusId).ToString());
             //Debug.WriteLine("fuk" + dbSet.Find(cusId).ToString());
-            return dbSet.Where(q => q.Id == cusId);
+            return dbSet.Where(q => (q.Id == cusId) && (q.ShopId == shopId)).FirstOrDefault();
         }
 
         public Customer GetCustomerByFbId(string customerFbId, string shopId)

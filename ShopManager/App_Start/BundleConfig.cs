@@ -188,6 +188,12 @@ namespace ShopManager
             bundles.Add(new ScriptBundle("~/C3Chart-JS").Include(
                 "~/Content/js/plugins/d3/d3.min.js",
                 "~/Content/js/plugins/c3/c3.min.js"));
+            //Jquery Scrollbar
+            bundles.Add(new ScriptBundle("~/jQueryScrollbar-JS").Include(
+                    "~/Content/js/plugins/jQueryScrollbar/jquery.scrollbar.js",
+                    "~/Content/js/plugins/jQueryScrollbar/jquery.scrollbar.min.js"));
+            bundles.Add(new StyleBundle("~/jQueryScrollbar-CSS").Include(
+                    "~/Content/css/plugins/jQueryScrollbar/jquery.scrollbar.css"));
         }
     }
 }
