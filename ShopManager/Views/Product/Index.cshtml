@@ -162,16 +162,16 @@
                                                     <label class="col-sm-2 control-label">Tình trạng:</label>
                                                     <div class="col-sm-10">
                                                         <input type="checkbox" name="status" class="js-switch" id="masterProStatus" checked />
-                                                        <span class="label label-primary" id="masterStatusOn">Bình thường</span>
-                                                        <span class="label label-danger" id="masterStatusOff" style="display:none">Ngưng bán</span>
+                                                        <span class="label label-primary masterStatusOn" id="masterStatusOn">Bình thường</span>
+                                                        <span class="label label-danger masterStatusOff" id="masterStatusOff" style="display:none">Ngưng bán</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Tình trạng hàng:</label>
                                                     <div class="col-sm-10">
                                                         <input type="checkbox" name="isInStock" class="js-switch" id="detailProStatus" checked />
-                                                        <span class="label label-primary" id="detailStatusOn">Còn hàng</span>
-                                                        <span class="label label-danger" id="detailStatusOff" style="display:none">Hết hàng</span>
+                                                        <span class="label label-primary detailStatusOn" id="detailStatusOn">Còn hàng</span>
+                                                        <span class="label label-danger detailStatusOff" id="detailStatusOff" style="display:none">Hết hàng</span>
                                                     </div>
                                                 </div>
 
@@ -317,17 +317,17 @@
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Tình trạng:</label>
                                                 <div class="col-sm-10">
-                                                    <input type="checkbox" checked name="status" class="js-switch" id="masterProStatus"  />
-                                                    <span class="label label-primary" id="masterStatusOn">Bình thường</span>
-                                                    <span class="label label-danger" id="masterStatusOff" style="display:none">Ngưng bán</span>
+                                                    <input type="checkbox" checked name="status" class="js-switch" id="masterProStatus2"  />
+                                                    <span class="label label-primary masterStatusOn" id="masterStatusOn2">Bình thường</span>
+                                                    <span class="label label-danger masterStatusOff" id="masterStatusOff2" style="display:none">Ngưng bán</span>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Tình trạng hàng:</label>
                                                 <div class="col-sm-10">
-                                                    <input type="checkbox" checked name="isInStock" class="js-switch" id="detailProStatus"  />
-                                                    <span class="label label-primary" id="detailStatusOn">Còn hàng</span>
-                                                    <span class="label label-danger" id="detailStatusOff" style="display:none">Hết hàng</span>
+                                                    <input type="checkbox" checked name="isInStock" class="js-switch" id="detailProStatus2"  />
+                                                    <span class="label label-primary" id="detailStatusOn2">Còn hàng</span>
+                                                    <span class="label label-danger" id="detailStatusOff2" style="display:none">Hết hàng</span>
                                                 </div>
                                             </div>
 
@@ -1287,6 +1287,26 @@
                 } else {
                     $("#detailStatusOn").hide();
                     $("#detailStatusOff").show();
+                }
+            });
+
+            $("#masterProStatus2").on("change", function () {
+                if ($("#masterProStatus2").is(":checked")) {
+                    $("#masterStatusOn2").show();
+                    $("#masterStatusOff2").hide();
+                } else {
+                    $("#masterStatusOn2").hide();
+                    $("#masterStatusOff2").show();
+                }
+            });
+
+            $("#detailProStatus2").on("change", function () {
+                if ($("#detailProStatus2").is(":checked")) {
+                    $("#detailStatusOn2").show();
+                    $("#detailStatusOff2").hide();
+                } else {
+                    $("#detailStatusOn2").hide();
+                    $("#detailStatusOff2").show();
                 }
             });
 
