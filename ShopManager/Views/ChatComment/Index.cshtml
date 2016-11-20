@@ -454,7 +454,7 @@
             if (ajax_searchsender) ajax_searchsender.abort();
             ajax_searchsender = $.ajax({
                 async: true,
-                method: 'GET',
+                method: 'POST',
                 url: '/ChatComment/SearchSender',
                 data: {
                     "search": txtsearch
@@ -482,42 +482,45 @@
         });
 
         $('#btn_sendmess').click(function (){
-            var tid=$('.ui-selected').attr('id');
             var mess= $('#txt_messreply').val();
-            console.log(mess);
+            if (mess.trim().length > 0){
+                var tid=$('.ui-selected').attr('id');
+                console.log(mess);
 
-            var sent_id="";
-            $.ajax({
-                async: false,
-                method: 'GET',
-                url: '/ChatComment/SendMessage',
-                data: {
-                    "threadId": tid,
-                    "message": mess
-                },
-                success: function (data) {
-                    console.log(data);
-                    if(data.success == true){
-                        $('#txt_messreply').val('');
-                        sent_id=data.id;
+                var sent_id="";
+                $.ajax({
+                    async: false,
+                    method: 'POST',
+                    url: '/ChatComment/SendMessage',
+                    data: {
+                        "threadId": tid,
+                        "message": mess
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if(data.success == true){
+                            $('#txt_messreply').val('');
+                            sent_id=data.id;
+                        }
+                        else{
+                            //alert("Có lỗi! Không gửi được");
+                        }
                     }
-                    else{
-                        //alert("Có lỗi! Không gửi được");
-                    }
-                }
-            });
-            console.log(sent_id);
-            $('#chat_box_content').append('<div id="'+sent_id+'" class="right">'+
-                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
-                                    '<div class="author-name">'+
-                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(new Date())+'</small>'+
-                                        page_name+
-                                    '</div>'+
-                                    '<div class="chat-message" style="word-wrap: break-word;">'+
-                                        mess+
-                                    '</div>'+
-                                '</div>');
-            ChatboxScrollToBottom();
+                });
+                console.log(sent_id);
+                $('#chat_box_content').append('<div id="'+sent_id+'" class="right">'+
+                                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
+                                        '<div class="author-name">'+
+                                            '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(new Date())+'</small>'+
+                                            page_name+
+                                        '</div>'+
+                                        '<div class="chat-message" style="word-wrap: break-word;">'+
+                                            mess+
+                                        '</div>'+
+                                    '</div>');
+                ChatboxScrollToBottom();
+            }
+            
         });
 
         function ChatboxScrollToBottom(){

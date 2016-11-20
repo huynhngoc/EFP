@@ -3,6 +3,7 @@ using DataService.JqueryDataTable;
 using DataService.Service;
 using DataService.ViewModel;
 using Facebook;
+using ShopManager.SignalRAlert;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -111,6 +112,7 @@ namespace ShopManager.Controllers
 
             dynamic param = new ExpandoObject();
             param.fields = "from,created_time,message,attachments";
+            param.locale = "vi-vn";
             fbApp.AccessToken = accessToken;
             dynamic result = fbApp.Get(conversationId + "/messages", param);
 
@@ -220,11 +222,16 @@ namespace ShopManager.Controllers
         }
         public ActionResult SetConversationRead(string conversationId)
         {
+            string shopId = (string)Session["ShopId"];
             var rs = conversationService.SetReadConversation(conversationId);
-
+            if (rs)
+            {
+                AlertHub.SendNotification(shopId);
+            }
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult SearchSender(string search)
         {
             string shopId = (string)Session["ShopId"];
@@ -300,6 +307,7 @@ namespace ShopManager.Controllers
             }
         }
 
+        [HttpPost]
         public JsonResult SendMessage(string threadId, string message)
         {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
@@ -370,7 +378,6 @@ namespace ShopManager.Controllers
                 return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         public JsonResult PrivateReplyComment(string commentId, string message)
         {
