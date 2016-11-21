@@ -1624,6 +1624,7 @@
     <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.ttf" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.woff" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfonte0a5.woff2" />
+    <None Include="Properties\PublishProfiles\AzureProductPage.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

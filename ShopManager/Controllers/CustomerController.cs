@@ -7,6 +7,8 @@ using System.Diagnostics;
 using DataService.Service;
 using DataService.JqueryDataTable;
 using DataService;
+using DataService.ViewModel;
+
 namespace ShopManager.Controllers
 {
     [SessionRequiredFilter]
@@ -16,15 +18,15 @@ namespace ShopManager.Controllers
         {
             return View();
         }
-
+        CustomerService cusService = new CustomerService();
+        OrderService orderService = new OrderService();
         /// <summary>
         /// get all customer
         /// </summary>
         /// <returns>json-list of customer</returns>
-        
+
         public JsonResult GetAllCustomer(JQueryDataTableParamModel param)
-        {            
-            CustomerService service = new CustomerService();
+        {
             string shopId = Session["ShopId"].ToString();
             try
             {
@@ -32,7 +34,7 @@ namespace ShopManager.Controllers
                 var whichOrder = Request["sSortDir_0"]; // asc or desc
 
 
-                var customers = service.GetAllCustomer(param, shopId);
+                var customers = cusService.GetAllCustomer(param, shopId);
                 Debug.WriteLine("----x " + customers.Count());
                 IQueryable<CustomerViewModel> data = customers.Skip(param.iDisplayStart).Take(param.iDisplayLength);
                 if (whichOrder == "asc")
@@ -69,6 +71,86 @@ namespace ShopManager.Controllers
             //return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAllOrderByCustomerId(int cusId, JQueryDataTableParamModel param)
+        {
+            string shopId = Session["ShopId"].ToString();
+            try
+            {
+                var whichCol = Convert.ToInt32(Request["iSortCol_0"]);// getcol
+                var whichOrder = Request["sSortDir_0"]; // asc or desc
+
+
+                var orders = orderService.GetOrderByShopIdAndCustomerId(shopId, cusId, param);
+                Debug.WriteLine("----x " + orders.Count());
+                IQueryable<OrderViewModel> data = orders.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+                //if (whichOrder == "asc")
+
+                //    data = data.OrderBy(q => whichCol == 0 ? q.Id : whichCol == 1 ? q.DateModified : q.Total);
+                //else
+                //    data = data.OrderByDescending(q => whichCol == 0 ? q.Id : whichCol == 1 ? q.DateModified : q.Total);
+
+
+                switch (whichCol)
+                {
+                    case 0:
+                        if (whichOrder == "asc")
+                        {
+                            data = data.OrderBy(q => q.Id);
+                        }
+                        else
+                        {
+                            data = data.OrderByDescending(q => q.Id);
+                        }
+                        break;
+
+                    case 1:
+                        if (whichOrder == "asc")
+                        {
+                            data = data.OrderBy(q => q.DateModified);
+                        }
+                        else
+                        {
+                            data = data.OrderByDescending(q => q.DateModified);
+                        }
+                        break;
+                    case 2:
+                        if (whichOrder == "asc")
+                        {
+                            data = data.OrderBy(q => q.Total);
+                        }
+                        else
+                        {
+                            data = data.OrderByDescending(q => q.Total);
+                        }
+                        break;
+                    default: data = data.OrderBy(q => q.DateModified); break;
+                }
+                var totalRecords = orders.Count();
+                //var data = customers;
+                Debug.WriteLine("display start " + param.iDisplayStart + "display length " + param.iDisplayLength);
+                Debug.WriteLine("-----data3 " + orders.ToString());
+                var displayRecords = data.Count();
+                Debug.WriteLine("-----l ");
+
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = totalRecords,
+                    iTotalDisplayRecords = orders.Count(),
+                    aaData = data
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+            //var data = service.Get();
+            //return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         /// <summary>
         /// add new customer
         /// </summary>
@@ -83,9 +165,8 @@ namespace ShopManager.Controllers
         public int AddCustomer(string Id, string Name, string Addr, string Desc, string Phone, string Email)
         {
             string shopId = (string)Session["ShopId"];
-            CustomerService service = new CustomerService();
             //var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
-            var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
+            var data = cusService.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
             return data;
             //1 = success / 2 = success but fail in creating / 3 = exception
         }
@@ -94,9 +175,8 @@ namespace ShopManager.Controllers
             ShopId = (string)Session["ShopId"];
             Debug.WriteLine("id: " + Id + "| name: " + Name + "|address: " + Addr + "|description: " + Desc + "|Phone: "
                 + Phone + "|Email: " + Email + "|ShopId: " + ShopId);
-            CustomerService service = new CustomerService();
 
-            return service.EditCustomer(Id,Name,Addr,Desc,Phone,Email,ShopId);
+            return cusService.EditCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
         }
 
         public JsonResult AddCustomerReturnId(string Id, string Name, string Addr, string Desc, string Phone, string Email)
@@ -104,7 +184,28 @@ namespace ShopManager.Controllers
             string shopId = (string)Session["ShopId"];
             CustomerService service = new CustomerService();
             var data = service.AddCustomerReturnCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
-            return Json( data, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetCustomerById(int id)
+        {
+            string shopId = (string)Session["ShopId"];
+            try
+            {
+                //string shopId = (string)Session["ShopId"];
+                Customer newCustomer = cusService.GetCustomerByCustomerId(id, shopId);
+                if (newCustomer != null)
+                    return Json(newCustomer, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    Debug.WriteLine("nullll");
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace DataService.Service
                     DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime(),
                     IntentId = intentId,
                     IsRead = isRead,
-                    Status = status,
+                    Status = status,                    
                     ShopId = shopId
                 };
                 return repository.Create(c);
@@ -57,6 +57,10 @@ namespace DataService.Service
                 return false;
             }
         }
+        public Post GetPost(string postId, string shopId)
+        {
+            return repository.GetPost(postId, shopId);
+        }
 
         public int NewPostCount(string shopId)
         {
@@ -67,6 +71,14 @@ namespace DataService.Service
         public bool SetPostIsRead(string postId)
         {
             return (repository.SetPostIsRead(postId));
+        }
+        public bool SetPostIsUnread(string postId)
+        {
+            return (repository.SetPostIsUnRead(postId));
+        }
+        public IQueryable<PostWithLastestComment> GetAllPost (string shopId)
+        {
+            return repository.GetAllPost(shopId);
         }
 
         //ANDND Get post by time

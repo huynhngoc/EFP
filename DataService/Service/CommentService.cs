@@ -34,11 +34,11 @@ namespace DataService.Service
                 return repository.Create(c);
             }
             else
-            {                
+            {
                 c.DateCreated = (new DateTime(1970, 1, 1) + TimeSpan.FromSeconds(date)).ToLocalTime();
                 if (c.IntentId != null)
                 {
-                    c.IntentId = intentId;
+                c.IntentId = intentId;
                     c.SenderFbId = SenderFbId;
                 }
                 c.PostId = postId;
@@ -49,7 +49,54 @@ namespace DataService.Service
                 return repository.Update(c);
             }
         }
+        
+        public bool CheckUnreadRemain(string parentId)
+        {
+           return repository.CheckUnreadRemain(parentId);
+        }
 
+        public IQueryable<Comment> GetCommentsOfPost(string postId)
+        {
+            return repository.GetCommentsContainPostId(postId);
+        }
+
+        public List<Comment>[] GetCommentsWithPostId(string postId, int skip, int take)
+        {
+            return repository.GetCommentsWithPostId(postId, skip, take);
+        }
+
+        public Comment GetLastestComment(string postId)
+        {
+            return repository.GetLastestComment(postId);
+        }
+
+        public Comment getCommentById(string commentId)
+        {
+            return repository.getCommentById(commentId);
+        }
+
+        public int GetNestedCommentQuan(string parentId)
+        {
+            return repository.GetNestedCommentQuan(parentId);
+        }
+
+        public List<Comment> GetNestedCommentOfParent(string parentId,int skip, int take)
+        {
+            return repository.GetNestedCommentOfParent(parentId, skip, take).ToList();
+        }
+
+        public int GetParentCommentQuan(string postId)
+        {
+            return repository.GetParentCommentQuan(postId);
+        }
+
+        //ANDND Set intent
+        public bool SetIntent(string commentId, int intentId)
+        {
+            return SetIntent(commentId, intentId);
+        }
+
+        //ANDND Set status
         public bool SetStatus(string commentId, int status)
         {
             Comment c = repository.FindByKey(commentId);
@@ -88,24 +135,28 @@ namespace DataService.Service
         {
             return repository.SetIsRead(commentId);
         }
-
-        // ANDND Set status
-        public bool SetCommentStatus(string commentId, int statusId)
-        {
-            return repository.SetStatus(commentId, statusId);
-        }
-
-        // ANDND Set intent
-        public bool SetIntent(string commentId, int intentId)
-        {
-            return repository.SetIntent(commentId, intentId);
-        }
-
         // ANDND Get Comment by comment id
         public Comment GetCommentById(string commentId)
         {
             Comment comment = repository.FindByKey(commentId);
             return comment;
+        }
+        public bool SetCommentStatus(string commentId, int statusId)
+        {
+            return repository.SetStatus(commentId, statusId);
+        }
+        public IEnumerable<Comment> GetAllCommentByParentId (string parentId)
+        {
+            return repository.GetAllCommentByParentId(parentId);
+        }
+
+        public bool CheckPostUnread(string postId)
+        {
+            return repository.CheckPostUnread(postId);
+        }
+        public bool CheckUnreadParentComment(string postId)
+        {
+            return repository.CheckUnreadParentComment(postId);
         }
 
         //ANDND Get Comment analysis data

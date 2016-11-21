@@ -1,4 +1,5 @@
-﻿using DataService.Repository;
+﻿using DataService.JqueryDataTable;
+using DataService.Repository;
 using DataService.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -158,6 +159,13 @@ namespace DataService.Service
         public List<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId)
         {
             var listOrders = orderRepo.GetOrderByShopIdAndCustomerId(shopId, customerId);
+
+            return listOrders;
+        }
+        // get order by shop and customer id and  fill into datatable
+        public IQueryable<OrderViewModel> GetOrderByShopIdAndCustomerId(string shopId, int customerId, JQueryDataTableParamModel param)
+        {
+            var listOrders = orderRepo.GetOrderByShopIdAndCustomerId(shopId, customerId, param);
 
             return listOrders;
         }

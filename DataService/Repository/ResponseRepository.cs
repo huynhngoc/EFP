@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataService.Repository
 {
-    public class ResponseRepository: BaseRepository<Respons>
+    public class ResponseRepository : BaseRepository<Respons>
     {
         public ResponseRepository() : base()
         {
@@ -19,7 +19,7 @@ namespace DataService.Repository
         {
             return dbSet.Where(q => q.ShopId == shopId && q.IntentId == intentId).ToList();
         }
-        
+
         public List<Respons> GetAll(string shopId)
         {
             return dbSet.Where(q => q.ShopId == shopId).ToList();

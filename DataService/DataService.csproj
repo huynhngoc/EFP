@@ -154,7 +154,6 @@
     <Compile Include="Service\ResponseService.cs" />
     <Compile Include="Service\ShopService.cs" />
     <Compile Include="Service\TemplateProductService.cs" />
-    <Compile Include="Utils\Utility.cs" />
     <Compile Include="Shop.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -164,6 +163,7 @@
     <Compile Include="TemplateProduct.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Utility.cs" />
     <Compile Include="Utils\DefaultEntity.cs" />
     <Compile Include="Utils\DefaultIntent.cs" />
     <Compile Include="Utils\StatusAndMode.cs" />
@@ -177,31 +177,37 @@
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\ConversationContentViewModel.cs" />
     <Compile Include="ViewModel\ConversationPreviewViewModel.cs" />
+    <Compile Include="ViewModel\CommentDetailModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="ViewModel\EntityViewModel.cs" />
     <Compile Include="ViewModel\OrderDetailViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
+    <Compile Include="ViewModel\PostDetailModel.cs" />
+    <Compile Include="ViewModel\PostListViewModel.cs" />
+    <Compile Include="ViewModel\PostViewModel.cs" />
+    <Compile Include="ViewModel\PostWithLastestComment.cs" />
     <Compile Include="ViewModel\ProductItemViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />
     <Compile Include="ViewModel\ShopViewModel.cs" />
     <Compile Include="ViewModel\TemplateProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="EFPModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>EFPModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="EFPModel.edmx.diagram">
       <DependentUpon>EFPModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EFPModel.Context.tt">
@@ -215,10 +221,6 @@
       <LastGenOutput>EFPModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -38,5 +38,5 @@ namespace DataService.Utils
         public const string Hide = "hide";
         public const string Unhide = "unhide";
     }
-    
+
 }
