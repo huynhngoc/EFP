@@ -23,5 +23,22 @@ namespace DataService.Service
             return intentName;
         }
 
+        public Intent AddIntent(string name)
+        {
+            return intentRepository.CreateNew(new Intent()
+            {
+                IntentName = name
+            });
+        }
+
+        public bool UpdateIntent(Intent intent)
+        {
+            return intentRepository.Update(intent);
+        }
+
+        public bool DeleteIntent(int id)
+        {
+            return intentRepository.Delete(id);
+        }
     }
 }

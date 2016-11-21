@@ -390,6 +390,7 @@ namespace ShopManager.Api.Ai.Custom
         }
         public AiIntent(string name)
         {
+            Name = name;
             Auto = true;
             Contexts = new List<AIContext>();
             Templates = new List<string>();

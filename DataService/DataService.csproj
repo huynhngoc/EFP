@@ -96,6 +96,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EFPModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="EFPModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EFPModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
@@ -220,7 +225,7 @@
     <Content Include="EFPModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>EFPModel.edmx</DependentUpon>
-      <LastGenOutput>EFPModel.cs</LastGenOutput>
+      <LastGenOutput>EFPModel1.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
