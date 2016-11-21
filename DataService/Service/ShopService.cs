@@ -9,10 +9,11 @@ namespace DataService.Service
 {
     public class ShopService
     {
-        ShopRepository repository = new ShopRepository();
+        ShopRepository shopRepository = new ShopRepository();
+        ShopUserRepository shopuserRepository = new ShopUserRepository();
         public List<ShopViewModel> GetShopByUserId(string userId)
         {
-            return repository.GetShopByUserId(userId).Select(q => new ShopViewModel()
+            return shopRepository.GetShopByUserId(userId).Select(q => new ShopViewModel()
             {
                 Id = q.Id,
                 ShopName = q.ShopName,
@@ -25,7 +26,7 @@ namespace DataService.Service
         {
             try
             {
-                return repository.CreateShop(shopId, name, token, userId, picture);
+                return shopRepository.CreateShop(shopId, name, token, userId, picture);
             }
             catch (Exception)
             {
@@ -37,7 +38,7 @@ namespace DataService.Service
         {
             try
             {
-                return repository.CreateConnection(shopId, userId);
+                return shopRepository.CreateConnection(shopId, userId);
             }
             catch
             {
@@ -46,7 +47,7 @@ namespace DataService.Service
         }
         public ShopViewModel GetShop(string shopId)
         {
-            Shop s = repository.FindByKey(shopId);
+            Shop s = shopRepository.FindByKey(shopId);
             if (s != null)
             {
                 return new ShopViewModel()
@@ -65,7 +66,7 @@ namespace DataService.Service
         {
             try
             {
-                return repository.FindByKey(shopId).ReplyMode;
+                return shopRepository.FindByKey(shopId).ReplyMode;
             }
             catch (Exception)
             {
@@ -79,9 +80,9 @@ namespace DataService.Service
         {
             try
             {
-                Shop s = repository.FindByKey(shopId);
+                Shop s = shopRepository.FindByKey(shopId);
                 s.ReplyMode = mode;
-                return repository.Update(s);
+                return shopRepository.Update(s);
             }
             catch (Exception)
             {
@@ -93,7 +94,7 @@ namespace DataService.Service
         {
             try
             {
-                return repository.FindByKey(shopId).CommentMode;
+                return shopRepository.FindByKey(shopId).CommentMode;
             }
             catch (Exception)
             {
@@ -107,9 +108,9 @@ namespace DataService.Service
         {
             try
             {
-                Shop s = repository.FindByKey(shopId);
+                Shop s = shopRepository.FindByKey(shopId);
                 s.CommentMode = mode;
-                return repository.Update(s);
+                return shopRepository.Update(s);
             }
             catch (Exception)
             {
@@ -119,7 +120,17 @@ namespace DataService.Service
 
         public bool CheckShopUser(string shopId, string userId)
         {
-            return repository.CheckShopUser(shopId, userId);
+            return shopRepository.CheckShopUser(shopId, userId);
+        }
+
+        public List<ShopUserViewModel> GetAll()
+        {
+            return shopRepository.GetAll().ToList();
+        }
+
+        public bool SetActive(string shopId, string userId, bool isActive)
+        {
+            return shopuserRepository.SetActive(shopId, userId, isActive);
         }
 
     }

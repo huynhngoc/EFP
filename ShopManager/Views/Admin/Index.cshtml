@@ -1,8 +1,24 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Quản lý chung";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Index</h2>
+@section CustomCSS {
+    @Styles.Render("~/Toastr-style")
+    @Styles.Render("~/SweetAlert-CSS")
+    
+}
+<div class="ibox-content">
+    
+</div>
+<!--modal-->
+
+@section CustomJS {
+    @Scripts.Render("~/Toastr")    
+    @Scripts.Render("~/SweetAlert-JS")
+    <script>        
+
+    </script>
+}
 

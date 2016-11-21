@@ -188,7 +188,7 @@
             // Set initial focus to message input box.
             //$('#message').focus();
             // Start the connection.
-            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
+            $.connection.hub.qs = { 'Name': '@User.Identity.GetUserId()' };
             $.connection.hub.start().done(function () {
 
             });

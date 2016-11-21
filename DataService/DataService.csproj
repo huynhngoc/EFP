@@ -191,6 +191,7 @@
     <Compile Include="ViewModel\PostWithLastestComment.cs" />
     <Compile Include="ViewModel\ProductItemViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />
+    <Compile Include="ViewModel\ShopUserViewModel.cs" />
     <Compile Include="ViewModel\ShopViewModel.cs" />
     <Compile Include="ViewModel\TemplateProductViewModel.cs" />
   </ItemGroup>
