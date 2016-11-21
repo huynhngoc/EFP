@@ -46,7 +46,7 @@ namespace DataService
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductPicture> ProductPictures { get; set; }
-        public virtual Shop Shop { get; set; }
         public virtual TemplateProduct TemplateProduct { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace DataService
     
     public partial class Post
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Post()
         {
             this.Comments = new HashSet<Comment>();
@@ -29,6 +30,7 @@ namespace DataService
         public Nullable<int> PromotionId { get; set; }
         public string LastContent { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual Intent Intent { get; set; }
         public virtual PromotionInfo PromotionInfo { get; set; }
