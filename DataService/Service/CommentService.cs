@@ -93,7 +93,7 @@ namespace DataService.Service
         //ANDND Set intent
         public bool SetIntent(string commentId, int intentId)
         {
-            return SetIntent(commentId, intentId);
+            return repository.SetIntent(commentId, intentId);
         }
 
         //ANDND Set status
