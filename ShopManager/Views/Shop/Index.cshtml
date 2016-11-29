@@ -20,12 +20,15 @@
                     <div class="row"                 >
                         <div class="col-xs-6 b-r">
                             <ul class="list-unstyled m-t-md">
-                                @if (!string.IsNullOrEmpty(ViewBag.Email))
+                                @if (ViewBag.Email != null )
                                 {
                                     <li>
                                         <span class="fa fa-envelope m-r-xs"></span>
                                         <label>Email:</label>
-                                        @ViewBag.Email
+                                        @foreach(var email in ViewBag.Email)
+                                        {
+                                            @email <br />
+                                        }
                                     </li>
                                 }
                                 @if (!string.IsNullOrEmpty(ViewBag.Address))
@@ -57,11 +60,15 @@
                                     <li>
                                         <span class="fa fa-info-circle m-r-xs"></span>
                                         <label>Mô tả:</label>
-                                        @if (string.IsNullOrEmpty(ViewBag.About))
+                                        @if (!string.IsNullOrEmpty(ViewBag.About))
                                         {
                                             @ViewBag.About<br />
                                         }
-                                         @ViewBag.Description
+                                        @if (!string.IsNullOrEmpty(ViewBag.Description))
+                                        {
+                                            @ViewBag.Description
+                                        }
+                                         
                                     </li>
                                 }
                                 

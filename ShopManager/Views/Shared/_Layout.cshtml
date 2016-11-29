@@ -30,7 +30,7 @@
                                     </span> <span class="text-muted text-xs block">@HttpContext.Current.Session["ShopName"]  <b class="caret"></b></span>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <ul class="dropdown-menu animated fadeInDown m-t-xs">
                                 <li><a href="../Manage/Index">Tài khoản của bạn</a></li>
                                 @*<li><a href="#">Liên hệ</a></li>*@
                                 <li><a href="../Home/ChooseShop">Đổi cửa hàng</a></li>
@@ -201,7 +201,7 @@
                 try {
                     ProcessCommentSignalR(comment,intent);
                 } catch (e) {
-                    if(intent>0){
+                    if(intent>0 && (comment.verb == "add" ||comment.verb == "edit" )){
                         if (comment.item == "@DataService.Utils.WebhookItem.Comment"){
                             toastr.info("Bạn có bình luận mới");
                         }
