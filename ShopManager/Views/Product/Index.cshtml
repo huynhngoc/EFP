@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ManageProduct";
+    ViewBag.Title = "Sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -664,6 +664,7 @@
             initCategory(null);
             $("#addProductModal").modal("show");
             $(".base-tab a").click();
+            $(".has-error").removeClass("has-error");
         }
 
         function initButtonAroundDataTable() {
@@ -760,6 +761,7 @@
         }
 
         function editForm(id) {
+            $(".has-error").removeClass("has-error");
             $.ajax({
                 url: '../Product/GetProductById',
                 type: 'POST',
@@ -839,12 +841,31 @@
 
         function initModalButton() {
             $(".save-changes-button").on("click", function () {
+                $(".has-error").removeClass("has-error");
+                error = false;
+
                 id = $("#viewProductModal").find('input[name="id"]').val();
                 name = $("#viewProductModal").find('input[name="name"]').val();
+                if (name == null || name == 'undefined' || name.trim().length == 0) {
+                    error = true;
+                    $($('#viewProductModal input[name="name"]').parent("div")).addClass("has-error");
+                }
                 description = $("#viewProductModal").find('textarea[name="desc"]').val();
                 categoryId = $("#viewProductModal").find('select.category-select').val();
+                if (categoryId == null || categoryId == 'undefined') {
+                    error = true;
+                    $($("#viewProductModal select.category-select").parent("div")).addClass("has-error");
+                }
                 price = $("#viewProductModal").find('input[name="price"]').val();
+                if (price == null || price == 'undefined' || price.trim().length == 0) {
+                    error = true;
+                    $($("#viewProductModal input[name='price']").parent("div")).addClass("has-error");
+                }
                 promotion = $("#viewProductModal").find('input[name="promotion"]').val();
+                if (promotion != null && promotion != "" && price != null && price != 'undefined' && price.trim().length != 0 && promotion >= price) {
+                    error = true;
+                    $($("#viewProductModal input[name='promotion']").parent("div")).addClass("has-error");
+                }
                 status = $("#viewProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#viewProductModal").find('input[name="isInStock"]').is(":checked");
                 templateId = $("#viewProductModal").find('input[name="templateId"]').val();
@@ -856,6 +877,11 @@
                 $("#viewProductModal input[name='attr']").each(function () {
                     attr.push($(this).val());
                 });
+
+                if (error == true) {
+                    $(".base-tab a").click();
+                    return;
+                }
                 
                 $.ajax({
                     url: '../Product/Update',
@@ -1040,28 +1066,29 @@
             });
 
             $(".add-save-button").on("click", function () {
+                $(".has-error").removeClass("has-error");
                 //id = $("#viewProductModal").find('input[name="id"]').val();
                 error = false;
                 name = $("#addProductModal").find('input[name="name"]').val();
                 if (name == null || name == 'undefined' || name.trim().length == 0) {
                     error = true;
-                    $($("#addProductModal"), find('input[name="name"]')).addClass("has-error");
+                    $($('#addProductModal input[name="name"]').parent("div")).addClass("has-error");
                 }
                 description = $("#addProductModal").find('textarea[name="desc"]').val();
                 categoryId = $("#addProductModal").find('select.category-select').val();
                 if (categoryId == null || categoryId == 'undefined') {
                     error = true;
-                    $("#addProductModal select.category-selec").addClass("has-error");
+                    $($("#addProductModal select.category-select").parent("div")).addClass("has-error");
                 }
                 price = $("#addProductModal").find('input[name="price"]').val();
-                if (price == null || price == 'undefined' || name.trim().length == 0) {
+                if (price == null || price == 'undefined' || price.trim().length == 0) {
                     error = true;
-                    $("#addProductModal input[name='price']").addClass("has-error");
+                    $($("#addProductModal input[name='price']").parent("div")).addClass("has-error");
                 }
                 promotion = $("#addProductModal").find('input[name="promotion"]').val();
-                if (promotion !=null && promotion <= price) {
+                if (promotion != null && promotion != "" && price != null && price != 'undefined' && price.trim().length != 0 && promotion >= price) {
                     error = true;
-                    $("#addProductModal input[name='promotion']").addClass("has-error");
+                    $($("#addProductModal input[name='promotion']").parent("div")).addClass("has-error");
                 }
                 status = $("#addProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#addProductModal").find('input[name="isInStock"]').is(":checked");
@@ -1071,6 +1098,7 @@
                     attr.push($(this).val());
                 });
                 if (error == true) {
+                    $(".base-tab a").click();
                     return;
                 }
                 $.ajax({
