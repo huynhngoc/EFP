@@ -1041,11 +1041,28 @@
 
             $(".add-save-button").on("click", function () {
                 //id = $("#viewProductModal").find('input[name="id"]').val();
+                error = false;
                 name = $("#addProductModal").find('input[name="name"]').val();
+                if (name == null || name == 'undefined' || name.trim().length == 0) {
+                    error = true;
+                    $($("#addProductModal"), find('input[name="name"]')).addClass("has-error");
+                }
                 description = $("#addProductModal").find('textarea[name="desc"]').val();
                 categoryId = $("#addProductModal").find('select.category-select').val();
+                if (categoryId == null || categoryId == 'undefined') {
+                    error = true;
+                    $("#addProductModal select.category-selec").addClass("has-error");
+                }
                 price = $("#addProductModal").find('input[name="price"]').val();
+                if (price == null || price == 'undefined' || name.trim().length == 0) {
+                    error = true;
+                    $("#addProductModal input[name='price']").addClass("has-error");
+                }
                 promotion = $("#addProductModal").find('input[name="promotion"]').val();
+                if (promotion !=null && promotion <= price) {
+                    error = true;
+                    $("#addProductModal input[name='promotion']").addClass("has-error");
+                }
                 status = $("#addProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#addProductModal").find('input[name="isInStock"]').is(":checked");
                 templateId = $("#addProductModal").find('input[name="templateId"]').val();
@@ -1053,7 +1070,9 @@
                 $("#addProductModal input[name='attr']").each(function () {
                     attr.push($(this).val());
                 });
-
+                if (error == true) {
+                    return;
+                }
                 $.ajax({
                     url: '../Product/Add',
                     type: 'POST',
