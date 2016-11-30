@@ -98,10 +98,10 @@
                                 <input type="radio" name="options" id="DELIVERING" autocomplete="off"> Đang giao hàng
                             </label>
                             <label class="btn btn-primary btn-outline">
-                                <input type="radio" name="options" id="COMPLETED" autocomplete="off"> Đã xong
+                                <input type="radio" name="options" id="COMPLETED" autocomplete="off"> <div>Xong</div>
                             </label>
                             <label class="btn btn-danger btn-outline">
-                                <input type="radio" name="options" id="CANCELED" autocomplete="off"> Đã hủy
+                                <input type="radio" name="options" id="CANCELED" autocomplete="off"> <div>Hủy</div>
                             </label>
                         </div>
                     </div>
@@ -149,7 +149,8 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Khách hàng: </label>
                         <div class="col-lg-10">
-                            <button class="btn btn-primary" id="btn_add_cust"><i class="fa fa-search"></i></button>
+                            <button type="button" class="btn btn-primary" id="btn_add_cust"><i class="fa fa-search"></i></button>
+                            <label id="" class="order_custid control-label"></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -231,6 +232,73 @@
     </div>
 </div>
 
+@*Choose customer*@
+<div class="modal inmodal fade" id="choose_cust_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="margin-top: 10px;">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px 5px">
+                <h5 class="modal-title" id="myModalLabel">Chọn khách hàng</h5>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Khách hàng: </label>
+                        <span class="col-lg-3">
+                            <label class="control-label" id="cust_name"></label>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Mã: </label>
+                        <span class="col-lg-3">
+                            <label class="control-label" id="cust_id"></label>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">SĐT: </label>
+                        <span class="col-lg-3">
+                            <label class="control-label" id="cust_phone"></label>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Địa chỉ: </label>
+                        <span class="col-lg-3">
+                            <label class="control-label" id="cust_addr"></label>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Email: </label>
+                        <span class="col-lg-3">
+                            <label class="control-label" id="cust_email"></label>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Mô tả: </label>
+                        <span class="col-lg-3">
+                            <label class="control-label" id="cust_desc"></label>
+                        </span>
+                    </div>
+                </form>
+                <div class="table-responsive col-md-12">
+                    <table class="table table-striped table-bordered table-hover" width="100%" cellspacing="10" style="text-align: center;" id="dt_choose_cust">
+                        <thead>
+                            <tr>
+                                <th class="col-md-2">Mã</th>
+                                <th class="col-md-3">Tên khách hàng</th>
+                                <th class="col-md-2">SĐT</th>
+                                <th class="col-md-5">Địa chỉ</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="" class="btn btn-default" data-dismiss="modal">Quay lại</button>
+                <button type="button" id="btn_choose_cust" class="btn btn-primary">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--end content-->
 @section CustomCSS{
@@ -374,6 +442,7 @@
                 "bProcessing": true
                     , "bServerSide": true
                     , "sAjaxSource": "/Order/GetOrderFromShopId"
+                    , "aaSorting": [[2,'desc']]
                     , "aoColumnDefs": [{ "aTargets": [0], "mData": "Id" }
                             , {
                                 "aTargets": [1], "mData": function (source) {
@@ -441,6 +510,11 @@
 
     @*Modal script*@
     <script>
+        $('.modal').on('hidden.bs.modal', function (e) {
+            if ($('.modal').hasClass('in')) {
+                $('body').addClass('modal-open');
+            }
+        });
         //Edit order
         //Chưa làm total footer
         function showOrderModal(id) {
@@ -481,6 +555,8 @@
 
             function GetOrderData() {
                 $.get('/Order/GetDetailModel', { orderId: id }, function (data) {
+                    $('#editOrderModal .modal-body').css("pointer-events","auto");
+                    $("#edit_save").prop("disabled",false);
                     //Date
                     $('#edit_created').text(FormatDateTimeVN(data.DateCreated));
                     $('#edit_modified').text(FormatDateTimeVN(data.DateModified));
@@ -507,8 +583,9 @@
 
                     //Status
                     ChangeStatus(data.Status);
-                    if (data.status == 4){
-
+                    if (data.Status == 4 || data.Status == 3){
+                        $('#editOrderModal .modal-body').css("pointer-events","none");
+                        $("#edit_save").prop("disabled",true);
                     }
 
                     $('#editOrderModal').modal('show');
@@ -518,15 +595,19 @@
             //Status
             function ChangeStatus(status) {
                 $('#edit_status').find('.active').removeClass('active');
+                $('#edit_status').find('.btn-primary').find('div').text('Xong');
+                $('#edit_status').find('.btn-danger').find('div').text('Hủy');
 
                 if (status == 2) {
                     $('#edit_status').find('.btn-success').addClass('active');
                 }
                 if (status == 3) {
                     $('#edit_status').find('.btn-primary').addClass('active');
+                    $('#edit_status').find('.btn-primary').find('div').text('Đã xong');
                 }
                 if (status == 4) {
                     $('#edit_status').find('.btn-danger').addClass('active');
+                    $('#edit_status').find('.btn-danger').find('div').text('Đã hủy');
                 }
                 if (status == 1) {
                     $('#edit_status').find('.btn-info').addClass('active');
@@ -537,9 +618,15 @@
 
         //Create order
         function createOrderModal() {
-            //$('[data-toggle=popover]').click(function () {
+            $('.order_custid').text("");
+            $('.order_custid').attr('id',"");
+            $('#add_status').find('.active').removeClass('active');
+            $('#add_receiver').val("");
+            $('#add_address').val("");
+            $('#add_phone').val("");
+            $('#add_note').val("");
+            $('#add_datatableproduct').DataTable().rows().remove();
 
-            //});
             var t = $('#add_datatableproduct').DataTable({
                 "paging": false
                 , "searching": false
@@ -681,13 +768,99 @@
             }
         }
 
-        //code sample
-        //$('#myFilter').on('keyup', function () {
-        //    table
-        //        .search(this.value)
-        //        .draw();
-        //});
+        //Choose customer
+        $('#btn_add_cust').click(function(){
+            createChooseModal();
+        });
 
+        function createChooseModal(){
+            $('#cust_name').text("");
+            $('#cust_id').text("");
+            $('#cust_desc').text("");
+            $('#cust_addr').text("");
+            $('#cust_phone').text("");
+            $('#cust_email').text("");
+
+            var table = $('#dt_choose_cust').DataTable({
+                "bProcessing": true
+                    , "bServerSide": true
+                    , "sServerMethod": "POST"
+                    , "sAjaxSource": "/Customer/GetAllCustomers"
+                    , "aoColumnDefs": [{ "aTargets": [0], "mData": "CustomerId" }
+                            , { "aTargets": [1], "mData": "Name" }
+                            , { "aTargets": [2], "mData": "Phone" }
+                            , { "aTargets": [3], "mData": "Address" }
+                    ]                    
+                    , "fnInitComplete": function () {
+                        $('div.dataTables_filter input').focus();
+                        //function row click
+                        $('#dt_choose_cust tbody').unbind("click");
+                        $('#dt_choose_cust tbody').on('click', 'tr', function () {
+                            if ($(this).hasClass('selected')) {
+
+                            }
+                            else {
+                                table.$('tr.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                            }
+
+                            var id = table.cell('.selected', 0).data();
+
+                            $.ajax({
+                                async: false,
+                                method: 'GET',
+                                url: '/Customer/GetCustomerById',
+                                data: {
+                                    "id": id
+                                },
+                                success: function (data) {
+                                    console.log(data);
+
+                                    $('#cust_name').text(data.Name);
+                                    $('#cust_id').text(data.Id);
+                                    $('#cust_desc').text(data.Description);
+                                    $('#cust_addr').text(data.Address);
+                                    $('#cust_phone').text(data.Phone);
+                                    $('#cust_email').text(data.Email);
+                                }
+                            });
+                        });
+
+                        $('#choose_cust_modal').modal('show');
+
+                    }
+                    , "paging": false
+                    , "searching": true
+                    , "ordering": false
+                //, "scrollY": "30vh"
+                //, "scrollX": "100%"
+                //, "scrollCollapse": true
+                    , "bLengthChange": false
+                    , "language": {
+                        "loadingRecords": "Đang tải ...",
+                        "processing": "Đang xử lý...",
+                        "search": "Tìm kiếm:",
+                        "searchPlaceholder": "Tên khách hàng...",
+                        "zeroRecords": "Không tìm thấy dữ liệu"
+                    }
+                    , "info": false
+                    , "destroy": true
+                    , "dom": "<'search-left'f>t"
+            });
+
+        }
+
+        $('#btn_choose_cust').click(function(){
+            var id=$('#cust_id').text().trim();
+            if (id.length > 0){
+                $('.order_custid').attr('id', id);
+                $('.order_custid').text($('#cust_name').text().trim());
+                $('#choose_cust_modal').modal('hide');
+            }
+            else {
+                alert('Chưa');
+            }
+        });
     </script>
 
 
@@ -713,7 +886,41 @@
             var address = $("#edit_address").val();
             var phone = $("#edit_phone").val();
             var note = $("#edit_note").text();
-            UpdateOrder(id, stat, receiver, address, phone, note);
+
+            if (stat ==3){
+                swal({
+                    title: "Bạn muốn hoàn thành đơn hàng này?",
+                    text: "Bạn sẽ không chỉnh sửa đơn hàng này được nữa!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#1ab394",
+                    confirmButtonText: "Đúng",
+                    cancelButtonText: "Không",
+                    closeOnConfirm: false
+                },
+                function(){
+                    UpdateOrder(id, stat, receiver, address, phone, note);
+                });
+            }
+            else if (stat ==4){
+                swal({
+                    title: "Bạn muốn hủy đơn hàng này?",
+                    text: "Bạn sẽ không chỉnh sửa đơn hàng này được nữa!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Hủy",
+                    cancelButtonText: "Không",
+                    closeOnConfirm: false
+                },
+                function(){
+                    UpdateOrder(id, stat, receiver, address, phone, note);
+                });
+            }
+            else {
+                UpdateOrder(id, stat, receiver, address, phone, note);
+            }
+            
         });
 
         function UpdateOrder(id, status, receiver, address, phone, note) {
@@ -774,15 +981,19 @@
                     }
                     }
                     else {
-                rs = "detail";
+                rs = "chi tiết";
                 //alert no detail
             }
-            var cid=1; //hard code
+            var cid=$('.order_custid').attr('id'); //hard code
+            if (cid.length <=0){
+                rs="khách hàng";
+            }
             var note = $('#add_note').val();
+
             var status = ($.trim($("#add_status").find(".active").find("input").attr("id")));
             var iStatus=0;
             if (status.length <= 0) {
-                rs = "status";
+                rs = "tình trạng";
                 //alert chưa chọn
             }
             else {
@@ -810,9 +1021,9 @@
                                 title: "Thêm thành công",
                                 animation: "slide-from-top",
                                 type: "success",
-                                timer: 1000,
-                                showConfirmButton: false
-                            })
+                                showConfirmButton: true
+                            });
+                            refreshPage();
                         }
                         else {
                             swal({
@@ -820,8 +1031,7 @@
                                 animation: "slide-from-top",
                                 text: "Thêm đơn hàng thất bại",
                                 type: "warning",
-                                timer: 1000,
-                                showConfirmButton: false
+                                showConfirmButton: true
                             });
                         }
                     }
@@ -831,10 +1041,9 @@
                 swal({
                     title: "Cảnh báo",
                     animation: "slide-from-top",
-                    text: "Nhập thiếu " + (rs == "status" ? "tình trạng" : "chi tiết") + " kìa",
+                    text: "Nhập thiếu " + rs+ " kìa",
                     type: "warning",
-                    timer: 1000,
-                    showConfirmButton: false
+                    showConfirmButton: true
                 });
             }
 

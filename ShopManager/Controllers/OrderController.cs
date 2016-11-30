@@ -14,16 +14,8 @@ namespace ShopManager.Controllers
     [SessionRequiredFilter]
     public class OrderController : Controller
     {
-        //public ActionResult GetOrderFromShopId(string shopId)
-        //{
-        //    OrderService service = new OrderService();
-        //    var data = service.GetAllOrders(shopId);
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
         public ActionResult Index()
         {
-            //Session["ShopId"] = "1";
-            //Session["CustId"] = "3";
             return View("All");
         }
 

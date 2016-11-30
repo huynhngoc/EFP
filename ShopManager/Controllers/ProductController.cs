@@ -34,10 +34,11 @@ namespace ShopManager.Controllers
 
         public JsonResult GetProductById(int id)
         {
+            string shopId = (string)Session["ShopId"];
             ProductService service = new ProductService();
             try
             {
-                return Json(service.GetProductById(id), JsonRequestBehavior.AllowGet);
+                return Json(service.GetProductById(id, shopId), JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

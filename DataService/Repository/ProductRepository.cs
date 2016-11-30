@@ -26,12 +26,16 @@ namespace DataService.Repository
             return data;
         }
 
-        public ProductViewModel GetProductById(int id)
+        public ProductViewModel GetProductById(int id, string shopId)
         {
             try
             {
                 entites.Configuration.ProxyCreationEnabled = true;
                 Product p = FindByKey(id);
+                if (!p.ShopId.Equals(shopId))
+                {
+                    return null;
+                }
                 return new ProductViewModel()
                 {
                     Id = p.Id,

@@ -8,6 +8,8 @@ using DataService.Service;
 using DataService.JqueryDataTable;
 using DataService;
 using DataService.ViewModel;
+using Facebook;
+using System.Dynamic;
 
 namespace ShopManager.Controllers
 {
@@ -200,6 +202,33 @@ namespace ShopManager.Controllers
                     Debug.WriteLine("nullll");
                     return null;
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Json(new { success = false, e }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        
+        //Long
+        public JsonResult GetAllCustomers(JQueryDataTableParamModel param)
+        {
+            ProductService service = new ProductService();
+            var shopId = (string)Session["ShopId"];
+            try
+            {
+                var customers = cusService.GetAllCustomer(param, shopId);
+
+                var totalRecords = customers.Count();
+                var data = customers;
+                Debug.WriteLine("-----l ");
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = totalRecords,
+                    iTotalDisplayRecords = totalRecords,//displayRecords,
+                    aaData = data
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

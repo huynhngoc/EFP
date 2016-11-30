@@ -17,15 +17,18 @@
                     </h2>
                 </div>
                 <div class="ibox-content">   
-                    <div class="row"                 >
+                    <div class="row" >
                         <div class="col-xs-6 b-r">
                             <ul class="list-unstyled m-t-md">
-                                @if (!string.IsNullOrEmpty(ViewBag.Email))
+                                @if (ViewBag.Email != null)
                                 {
                                     <li>
                                         <span class="fa fa-envelope m-r-xs"></span>
                                         <label>Email:</label>
-                                        @ViewBag.Email
+                                        @foreach (var email in ViewBag.Email)
+                                        {
+                                            @email <br />
+                                        }
                                     </li>
                                 }
                                 @if (!string.IsNullOrEmpty(ViewBag.Address))
@@ -61,7 +64,11 @@
                                         {
                                             @ViewBag.About<br />
                                         }
-                                         @ViewBag.Description
+                                        @if (string.IsNullOrEmpty(ViewBag.Description))
+                                        {
+                                            @ViewBag.Description
+                                        }
+                                         
                                     </li>
                                 }
                                 
