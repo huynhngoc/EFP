@@ -17,6 +17,11 @@
             white-space: nowrap;
             overflow: hidden;
         }
+        .truncate{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="fixed-sidebar fixed-nav fixed-nav-basic pace-done mini-navbar">
@@ -58,7 +63,7 @@
                             @foreach (var subItem in item.ChildCategory)
                             {
                                 <ul class="nav nav-second-level collapse">
-                                    <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.FBId,@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,9,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
+                                    <li><a href="#" id="childcate-@subItem.CategoryId" onclick="loadProductByShopAndCategory(@ViewBag.PageInfo.FBId,@ViewBag.PageInfo.ShopId,@subItem.CategoryId,0,12,'@subItem.CategoryName',0)">@subItem.CategoryName</a></li>
                                 </ul>
                             }
                         </li>
@@ -235,16 +240,16 @@
                                 </div>
                                 <div class="modal-body" style="padding:0px">
                                     <div style="display:none" id="cartDetailItem">
-                                        <div class="ibox-content" style="padding:5px 20px 5px 20px">
+                                        <div class="ibox-content">
                                             <div class="table-responsive">
                                                 <table class="table shoping-cart-table">
                                                     <tbody>
                                                         <tr>
                                                             <td class="col-sm-2" style="vertical-align:middle"><div class="cart-product-imitation"></div></td>
-                                                            <td class="desc col-sm-5" style="vertical-align:middle"><h3><a href="#" class="text-navy">Desktop publishing software</a></h3></td>
-                                                            <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
-                                                            <td class="col-sm-2" style="vertical-align:middle"><input type="number" class="form-control" min="1" max="100"></td>
-                                                            <td class="col-sm-1" style="vertical-align:middle"><h4></h4></td>
+                                                            <td class="desc col-sm-2" style="vertical-align:middle"><h3 style="width:220px" class="truncate"><a href="#" class="text-navy"></a></h3></td>
+                                                            <td class="col-sm-2" style="vertical-align:middle"><h4></h4></td>
+                                                            <td class="col-sm-1" style="vertical-align:middle"><input style="width:60px" type="number" class="form-control" min="1" max="100"></td>
+                                                            <td class="col-sm-2" style="vertical-align:middle"><h4></h4></td>
                                                             <td class="col-sm-1" style="vertical-align:middle"><a href="#" class="text-muted"><i class="fa fa-trash" style="font-size:20px"></i></a></td>
                                                         </tr>
                                                     </tbody>

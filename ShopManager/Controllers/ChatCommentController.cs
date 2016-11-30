@@ -3,6 +3,7 @@ using DataService.JqueryDataTable;
 using DataService.Service;
 using DataService.ViewModel;
 using Facebook;
+using ShopManager.SignalRAlert;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -798,7 +799,6 @@ namespace ShopManager.Controllers
 
             foreach (var c in listConversation)
             {
-
                 var preview = GetConversationPreviewFromFb(accessToken, c);
 
                 Console.WriteLine("Preview: " + preview.ThreadId + " - time: " + preview.CreatedTime + " - Avatar: " + preview.AvatarUrl);
@@ -838,6 +838,7 @@ namespace ShopManager.Controllers
             preview.UserFbId = detail.from.id;
             preview.CreatedTime = DateTime.Parse(first.created_time);
             preview.RecentMess = first.message;
+            preview.IntentId = c.IntentId;
 
             param = new ExpandoObject();
             param.access_token = accessToken;
@@ -868,6 +869,7 @@ namespace ShopManager.Controllers
 
             dynamic param = new ExpandoObject();
             param.fields = "from,created_time,message,attachments";
+            param.locale = "vi-vn";
             fbApp.AccessToken = accessToken;
             dynamic result = fbApp.Get(conversationId + "/messages", param);
 
@@ -977,11 +979,16 @@ namespace ShopManager.Controllers
         }
         public ActionResult SetConversationRead(string conversationId)
         {
+            string shopId = (string)Session["ShopId"];
             var rs = conversationService.SetReadConversation(conversationId);
-            SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
+            if (rs)
+            {
+                AlertHub.SendNotification(shopId);
+            }
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult SearchSender(string search)
         {
             string shopId = (string)Session["ShopId"];
@@ -1008,7 +1015,7 @@ namespace ShopManager.Controllers
         }
 
 
-        public JsonResult GetAvailableResponses()
+        public JsonResult GetAvailableResponses(int intentId)
         {
             string shopId = (string)Session["ShopId"];
             EntityService entityService = new EntityService();
@@ -1031,6 +1038,7 @@ namespace ShopManager.Controllers
             }
         }
 
+        [HttpPost]
         public JsonResult SendMessage(string threadId, string message)
         {
             string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
@@ -1049,15 +1057,12 @@ namespace ShopManager.Controllers
             }
         }
 
-
-
         public JsonResult PrivateReplyComment(string commentId, string message)
         {
-
+            string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+            dynamic param = new ExpandoObject();
             try
             {
-                string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
-                dynamic param = new ExpandoObject();
                 param.access_token = accessToken;
                 param.message = message;
                 var result = fbApp.Post(commentId + "/private_replies", param);
@@ -1069,6 +1074,7 @@ namespace ShopManager.Controllers
                 return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
         public JsonResult EditComment(string photo, string commentId, string message)
         {
             try
@@ -1088,7 +1094,5 @@ namespace ShopManager.Controllers
                 return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
-
     }
 }

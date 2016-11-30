@@ -111,12 +111,27 @@
                             $('#receiverDiv > label').text("Người nhận");
                             $('#userName').text('');
                             $('#userName').text(result.userName);
-                            $('#orderReceiver').val('');
+                            $('#orderReceiver').val(result.userName);
                         }else{
                             $('#userNameDiv').hide();
                             $('#receiverDiv > label').text("Tên khách hàng");
                             $('#orderReceiver').val("@Html.Raw(ViewBag.PageInfo.UserName)");
                         }
+
+                        if(result.phone != null){
+                            $('#orderPhone').val('');
+                            $('#orderPhone').val(result.phone);
+                        }else{
+                            $('#orderPhone').val('');
+                        }
+
+                        if(result.shippingAddress != null){
+                            $('#shippingAddress').val('');
+                            $('#shippingAddress').val(result.shippingAddress);
+                        }else{
+                            $('#shippingAddress').val('');
+                        }
+
                         $('#checkOutInfo').find("div.ibox-content.p-xl").removeAttr("style");
                         var total = 0;
                         for(var i=0;i<result.listCart.length;i++){
@@ -178,7 +193,7 @@
                     }
                 }
             }else{
-                if($('#orderPhone').val().length==0){
+                if($('#orderPhone').val().length==0||$('#orderPhone').val().length>11){
                     $('#phoneDiv').addClass('has-error');
                     $('#errorCustomerPhone').show();
                 }else{

@@ -21,31 +21,35 @@ namespace ProductPage.Controllers
         ShopService shopService = new ShopService();
         public ActionResult Index(string signed_request, string FBId, string shopId)
         {
-            FacebookPageViewModel pageInformation = null;
-            if (signed_request != null)
-            {
-                pageInformation = getInfoFromSignedRequest(signed_request);
-            }
-            else
-            {
-                if (FBId != null && shopId != null)
-                {
-                    pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
-                }
-            }
+            //FacebookPageViewModel pageInformation = null;
+            //if (signed_request != null)
+            //{
+            //    pageInformation = getInfoFromSignedRequest(signed_request);
+            //}
+            //else
+            //{
+            //    if (FBId != null && shopId != null)
+            //    {
+            //        pageInformation = (FacebookPageViewModel)Session["PageInfo" + FBId + shopId];
+            //    }
+            //}
 
-            if (pageInformation != null)
-            {
-                if (pageInformation.FBId == null || pageInformation.FBId == "")
-                {
-                    Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
-                }
-            }
-            else
-            {
-                Response.Redirect("/Home/NotAuhorize");
-            }
-            
+            //if (pageInformation != null)
+            //{
+            //    if (pageInformation.FBId == null || pageInformation.FBId == "")
+            //    {
+            //        Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
+            //    }
+            //}
+            //else
+            //{
+            //    Response.Redirect("/Home/NotAuhorize");
+            //}
+            //Create model of facebook page information
+            FacebookPageViewModel pageInformation = new FacebookPageViewModel();
+            pageInformation.UserName = "ABC";
+            pageInformation.ShopId = "1757870241147644";
+            pageInformation.FBId = "123";
 
             ViewBag.PageInfo = pageInformation;
 

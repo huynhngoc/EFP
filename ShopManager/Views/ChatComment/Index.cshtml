@@ -19,12 +19,12 @@
                 <div id="tab-inbox" class="tab-pane active">
                     <div class="panel-body" style="padding: 0px 15px 0 15px;">
                         <div class="row">
-                            <div class="ibox-scroll" style="padding:0px 0 0px 0">
-                                <div class="ibox" style="margin-bottom: 0">
+                            <div class="ibox" style="padding:0px 0 0px 0">
+                                <div class="ibox tab_wrapper" style="margin-bottom: 0">
                                     <div class="ibox-search">
                                         <span>
                                             @*<h3><i class="fa fa-envelope-o"></i> Tin nhắn</h3>*@
-                                            <input i d="txt_searchsender" type="text" class="form-control input-sm" placeholder="Tên người" style="width:90%" />
+                                            <input id="txt_searchsender" type="text" class="form-control input-sm" placeholder="Tên người" style="width:90%" />
                                             <button id="btn_searchsender" class="btn btn-default btn-xs" title="Search" place aria-label="Search"><span class="fa fa-search"></span></button>
                                         </span>
                                     </div>
@@ -43,7 +43,12 @@
                                             <div class="sk-circle11 sk-circle"></div>
                                             <div class="sk-circle12 sk-circle"></div>
                                         </div>
-                                        <div id="no_result" style="display:none">Không tìm thấy người này</div>
+                                        @*<div id="no_result" style="display:none">Không tìm thấy người này</div>*@
+                                        <div id="no_result" style="display:none;font-size:16px;">
+                                            <div class="panel-body" style="height:100%; text-align:center;border:none">
+                                                Không tìm thấy người này
+                                            </div>
+                                        </div>
                                         <ul id="list_conversation" class="list-group feed-activity-list" style="list-style-type: none;"></ul>
                                     </div>
                                 </div>
@@ -56,8 +61,8 @@
                 <div id="tab-comment" class="tab-pane">
                     <div class="panel-body" style="padding: 0px 15px 0 15px">
                         <div class="row">
-                            <div class="ibox-scroll" style="padding:0px 0 0px 0">
-                                <div class="ibox ibox-scroll" style="margin-bottom: 0">
+                            <div class="ibox" style="padding:0px 0 0px 0">
+                                <div class="ibox tab_wrapper" style="margin-bottom: 0">
                                     <div class="ibox-content ibox-heading">
                                         <h3>Bình luận</h3>
                                         <!--                                                    <small><i class="fa fa-tim"></i> B?n có <strong>22 tin nh?n m?i</strong></small>-->
@@ -479,11 +484,11 @@
                             }
                         }
                     }
-                        //685524511603937_727490264074028_Post
-                        if ($('#'+comment.post_id+'_Post').length) {
-                            //alert ($('#'+comment.post_id+'_Post').length);
-                            $('#'+comment.post_id+'_Post').addClass('hided');
-                        }
+                    //685524511603937_727490264074028_Post
+                    if ($('#'+comment.post_id+'_Post').length) {
+                        //alert ($('#'+comment.post_id+'_Post').length);
+                        $('#'+comment.post_id+'_Post').addClass('hided');
+                    }
 
                 }
                 else if (comment.verb == "unhide"){
@@ -530,15 +535,15 @@
                     if (removeComment.length >0){
                         DeleteToComment(comment);
                     } else {
-                            //delete post
+                        //delete post
                         try{
                             if (comment.item=="post")
                             {
-                            DeleteToPostList(comment);
-                            DeleteToPost(comment);
+                                DeleteToPostList(comment);
+                                DeleteToPost(comment);
                             }
                         }  catch(e) {}
-}
+                    }
 
 
 
@@ -834,7 +839,6 @@
                     if (data.success == false)
                     {
                         if (data.Message == "(OAuthException - #10900) (#10900) Activity already replied to") swal("Không thể nhắn quá 1 tin cho 1 comment","","warning");
-                        if (data.Message == "(OAuthException - #10903) (#10903) This user cant reply to this activity") swal("Không thể nhắn tin\n cho trang khác","","error");
                         else swal("Nhắn tin thất bại!","", "error");
                     }
                     else {swal("Nhắn tin thành công!","", "success");}
@@ -1253,11 +1257,12 @@
                 $('#cust_avatar').attr('src',curImage.find("img").attr('src'));
                 $('#cusName').val(curElement.find("a").html());
                 //$('#cusAvatar').val(curElement.find("img").attr('src'));
+                $('.cust_info').data('fbid', userfbid);
+                $('.cust_info').data('fbname', curElement.find("a").html());
                 ProcessUserInfo(userfbid);
                 event.stopPropagation();
             }
-            $('.cust_info').data('fbid', userfbid);
-            $('.cust_info').data('fbname', curElement.find("a").html());
+           
             ////( $('.cust_info').data('fbid'));
         }
 
@@ -1549,15 +1554,15 @@
                                         var optionList = $('#'+postId).parent();
                                         $('#'+postId).remove();
 
-                                            if ($('#'+id+'_Post').length) $('#'+id+'_Post').removeClass('hided');
-                                            var optionList = $('#'+postId).parent();
-                                            $('#'+postId).remove();
-                                            optionList.prepend("<li onclick='HidePost(this.id)' id ='"+id+"_hideBtn'><a>Ẩn</a></li>");
-                                            swal("Hiện thành công!","","success");
-                                     }
-
+                                        if ($('#'+id+'_Post').length) $('#'+id+'_Post').removeClass('hided');
+                                        var optionList = $('#'+postId).parent();
+                                        $('#'+postId).remove();
+                                        optionList.prepend("<li onclick='HidePost(this.id)' id ='"+id+"_hideBtn'><a>Ẩn</a></li>");
+                                        swal("Hiện thành công!","","success");
                                     }
-                                })
+
+                                }
+                            })
                         }
                     }
                 })
@@ -1620,7 +1625,7 @@
 
             var id = commentId.split('_')[0] + "_" + commentId.split('_')[1];
             $('#'+id+'_text').addClass('form-control');
-           // alert('#'+id+"_text");
+            // alert('#'+id+"_text");
             oldText = $('#'+id+"_text").text();
             //alert(oldText);
             var newText ="";
@@ -2195,33 +2200,33 @@
         function DeleteToPost(comment){
             //$("#comment_div").empty();
             if ($('#hiddenPostId').val() == comment.post_id){
-                    $('#comment_div').empty();
-                    var tmp = "";
-                    tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
-                            "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
-                                "<div class='panel-body' style='height:100%; text-align:center'>"+
-                                    "Xin chọn bài đăng"+
-                                "</div>"+
+                $('#comment_div').empty();
+                var tmp = "";
+                tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
+                        "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
+                            "<div class='panel-body' style='height:100%; text-align:center'>"+
+                                "Xin chọn bài đăng"+
                             "</div>"+
                         "</div>"+
-                        "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
-                            "<div class='sk-circle1 sk-circle'></div>"+
-                            "<div class='sk-circle2 sk-circle'></div>"+
-                            "<div class='sk-circle3 sk-circle'></div>"+
-                            "<div class='sk-circle4 sk-circle'></div>"+
-                            "<div class='sk-circle5 sk-circle'></div>"+
-                            "<div class='sk-circle6 sk-circle'></div>"+
-                            "<div class='sk-circle7 sk-circle'></div>"+
-                            "<div class='sk-circle8 sk-circle'></div>"+
-                            "<div class='sk-circle9 sk-circle'></div>"+
-                            "<div class='sk-circle10 sk-circle'></div>"+
-                            "<div class='sk-circle11 sk-circle'></div>"+
-                            "<div class='sk-circle12 sk-circle'></div>"+
-                        "</div>";
-                    //        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
-                    //    "<img src='/Content/image/loader.gif' />"+
-                    //"</div>";
-                    $('#comment_div').append(tmp);}
+                    "</div>"+
+                    "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
+                        "<div class='sk-circle1 sk-circle'></div>"+
+                        "<div class='sk-circle2 sk-circle'></div>"+
+                        "<div class='sk-circle3 sk-circle'></div>"+
+                        "<div class='sk-circle4 sk-circle'></div>"+
+                        "<div class='sk-circle5 sk-circle'></div>"+
+                        "<div class='sk-circle6 sk-circle'></div>"+
+                        "<div class='sk-circle7 sk-circle'></div>"+
+                        "<div class='sk-circle8 sk-circle'></div>"+
+                        "<div class='sk-circle9 sk-circle'></div>"+
+                        "<div class='sk-circle10 sk-circle'></div>"+
+                        "<div class='sk-circle11 sk-circle'></div>"+
+                        "<div class='sk-circle12 sk-circle'></div>"+
+                    "</div>";
+                //        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
+                //    "<img src='/Content/image/loader.gif' />"+
+                //"</div>";
+                $('#comment_div').append(tmp);}
         }
 
         function DeleteToComment(comment){
@@ -2409,10 +2414,11 @@
                 });
             }
         });
-        function ProcessIncomingMessage(data, threadId){
+        function ProcessIncomingMessage(data, threadId, intent){
             var thread=document.getElementById(threadId);
             var mess=data[0];
             if (thread !=null){
+                $(thread).data('intentid',intent);
                 $(thread).find('.mess_preview').text(mess.message);
                 $(thread).find('.mess_time').text(FormatChatDateRealtimeVN(Date.parse(mess.created_time)));
                 //check if new mess in current clicked conversation
@@ -2487,7 +2493,7 @@
                     }
                 });
 
-                $('#list_conversation').prepend('<div id="'+threadId+'" class="feed-element unread">'+
+                $('#list_conversation').prepend('<li id="'+threadId+'" class="feed-element unread" data-intentid="">'+
                     '<div style="float:left; margin-right: 7px">'+
                         '<div size="50" style="width: 50px; height: 50px;">'+
                             '<img id="'+mess.from.id+'" src="'+u_ava+'" width="50" height="50" alt="" class="img fb_avatar">'+
@@ -2498,7 +2504,10 @@
                         '<div class="mess_preview" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">'+mess.message+'</div>'+
                         '<small class="mess_time pull-left">'+FormatChatDateRealtimeVN(Date.parse(mess.created_time))+'</small>'+
                     '</div>'+
-                '</div>');
+                '</li>');
+
+                thread=document.getElementById(threadId);
+                $(thread).data('intentid',data[i].IntentId);
             }
         }
 
@@ -2523,7 +2532,7 @@
             if (ajax_searchsender) ajax_searchsender.abort();
             ajax_searchsender = $.ajax({
                 async: true,
-                method: 'GET',
+                method: 'POST',
                 url: '/ChatComment/SearchSender',
                 data: {
                     "search": txtsearch
@@ -2543,7 +2552,7 @@
 
         $('.small-chat-bo .content').scrollbar();
 
-        $('.ibox-scroll').scrollbar();
+        $('.tab_wrapper').scrollbar();
 
         $('#txt_messreply').keypress(function(e){
             if(e.keyCode==13)
@@ -2555,38 +2564,41 @@
             var mess= $('#txt_messreply').val();
             console.log(mess);
 
-            var sent_id="";
-            $.ajax({
-                async: false,
-                method: 'GET',
-                url: '/ChatComment/SendMessage',
-                data: {
-                    "threadId": tid,
-                    "message": mess
-                },
-                success: function (data) {
-                    console.log(data);
-                    if(data.success == true){
-                        $('#txt_messreply').val('');
-                        sent_id=data.id;
+            if (mess.trim().length >0){
+                var sent_id="";
+                $.ajax({
+                    async: false,
+                    method: 'POST',
+                    url: '/ChatComment/SendMessage',
+                    data: {
+                        "threadId": tid,
+                        "message": mess
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if(data.success == true){
+                            $('#txt_messreply').val('');
+                            sent_id=data.id;
+                        }
+                        else{
+                            ////("Có lỗi! Không gửi được");
+                        }
                     }
-                    else{
-                        ////("Có lỗi! Không gửi được");
-                    }
-                }
-            });
-            console.log(sent_id);
-            $('#chat_box_content').append('<div id="'+sent_id+'" class="right">'+
-                                    '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
-                                    '<div class="author-name">'+
-                                        '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(new Date())+'</small>'+
-                                        page_name+
-                                    '</div>'+
-                                    '<div class="chat-message" style="word-wrap: break-word;">'+
-                                        mess+
-                                    '</div>'+
-                                '</div>');
-            ChatboxScrollToBottom();
+                });
+                console.log(sent_id);
+                $('#chat_box_content').append('<div id="'+sent_id+'" class="right">'+
+                                        '<img alt="image" class="img-circle shop_ava" src="'+page_ava_url+'" style="float:right; margin-left:7px" width="40" height="40">'+
+                                        '<div class="author-name">'+
+                                            '<small class="chat-date" style="margin-right: 5px;">'+FormatChatDateRealtimeVN(new Date())+'</small>'+
+                                            page_name+
+                                        '</div>'+
+                                        '<div class="chat-message" style="word-wrap: break-word;">'+
+                                            mess+
+                                        '</div>'+
+                                    '</div>');
+                ChatboxScrollToBottom();
+            }
+            
         });
 
         function ChatboxScrollToBottom(){
@@ -2759,7 +2771,9 @@
 
         $('#list_conversation').selectable({
             selecting: function(event, ui) {
-                $('#list_conversation .ui-selected').removeClass('ui-selected');
+                if ($("#list_conversation .ui-selected, #list_conversation .ui-selecting").length > 1) {
+                    $(ui.selecting).removeClass("ui-selecting");
+                }
             },
             selected: function( event, ui ) {
                 ConversationSelect();
@@ -2768,6 +2782,9 @@
         function ConversationSelect(){
             $('#chatSection').css('pointer-events','auto');
 
+            if ($('#suggest_wrapper .btn').hasClass('active')){
+                $('#suggest_wrapper').click();
+            }
 
             var thread_id=$('#list_conversation .ui-selected').attr('id');
             var userfbid=$('#list_conversation .ui-selected .fb_avatar').attr('id');
@@ -2785,8 +2802,6 @@
                 if ($('#list_conversation .ui-selected').hasClass('unread')){
                     SetConversationRead(thread_id);
                 }
-
-
 
                 GetConversationContent(thread_id);
 
@@ -2834,7 +2849,7 @@
                     if (data[i].UserFbId == $('.receiver_name').attr('id')){
                         isSelecting=true;
                     }
-                    $('#list_conversation').append('<li id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(isSelecting? ' ui-selected':'')+'">'+
+                    $('#list_conversation').append('<li data-intentid="" id="'+data[i].ThreadId+'" class="feed-element'+(data[i].IsRead? '':' unread')+(isSelecting? ' ui-selected':'')+'">'+
                                     '<div style="float:left; margin-right: 7px">'+
                                         '<div size="50" style="width: 50px; height: 50px;">'+
                                             '<img id="'+data[i].UserFbId+'" src="'+data[i].AvatarUrl+'" width="50" height="50" alt="" class="img fb_avatar">'+
@@ -2846,6 +2861,9 @@
                                         '<small class="mess_time pull-left">'+FormatChatDateTimeVN(data[i].CreatedTime)+'</small>'+
                                     '</div>'+
                                 '</li>');
+
+                    var thread=document.getElementById(data[i].ThreadId);
+                    $(thread).data('intentid',data[i].IntentId);
                 }
             }
             else{
@@ -2895,11 +2913,12 @@
         function GetSuggestReply(){
             $( function() {
                 var availableReps=[];
-
+                var intentId=parseInt($(thread).data('intentid',intent));
                 $.ajax({
                     async: true,
                     method: 'GET',
                     url: '/ChatComment/GetAvailableResponses',
+                    data: {"intentId": intentId},
                     success: function (data) {
                         console.log(data);
                         for (var i=0;i<data.length;i++){
@@ -3368,7 +3387,7 @@
             console.log(custid);
             if (custid.length <= 0) {
                 rs = "customer";
-            }
+                    }
 
             if (rs == "true") {
                 $.post('/Order/CreateOrderReturnOrder'
