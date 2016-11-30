@@ -799,7 +799,6 @@ namespace ShopManager.Controllers
 
             foreach (var c in listConversation)
             {
-
                 var preview = GetConversationPreviewFromFb(accessToken, c);
 
                 Console.WriteLine("Preview: " + preview.ThreadId + " - time: " + preview.CreatedTime + " - Avatar: " + preview.AvatarUrl);
@@ -839,6 +838,7 @@ namespace ShopManager.Controllers
             preview.UserFbId = detail.from.id;
             preview.CreatedTime = DateTime.Parse(first.created_time);
             preview.RecentMess = first.message;
+            preview.IntentId = c.IntentId;
 
             param = new ExpandoObject();
             param.access_token = accessToken;
@@ -1015,7 +1015,7 @@ namespace ShopManager.Controllers
         }
 
 
-        public JsonResult GetAvailableResponses()
+        public JsonResult GetAvailableResponses(int intentId)
         {
             string shopId = (string)Session["ShopId"];
             EntityService entityService = new EntityService();

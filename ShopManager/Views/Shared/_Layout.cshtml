@@ -182,7 +182,7 @@
                 console.log(threadId);
                 console.log(data);
                 try {
-                    ProcessIncomingMessage(data, threadId);
+                    ProcessIncomingMessage(data, threadId, intent);
                 } catch (e) {
                     if(intent>0){
                         toastr.info("Bạn có tin nhắn mới");
