@@ -575,7 +575,7 @@ function loadNewestProductByShop(FBId, shopId, start, quantity, loadMore) {
                 // Add load more button
                 if (data.length >= quantity) {
                     $('#divLoadMore').empty();
-                    $('#divLoadMore').append("<button class='btn btn-primary' onclick='loadSearchResult(" + FBId + "," + shopId + "," + parseInt(start + quantity) + "," + quantity + ",1)'>Thêm sản phẩm</button>");
+                    $('#divLoadMore').append("<button class='btn btn-primary' onclick='loadNewestProductByShop(" + FBId + "," + shopId + "," + parseInt(start + quantity) + "," + quantity + ",1)'>Thêm sản phẩm</button>");
                 }
                 else {
                     if (data.length < quantity) {
