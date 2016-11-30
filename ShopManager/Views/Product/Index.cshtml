@@ -500,7 +500,7 @@
 
         function initCategory(parentId, selectVal) {
             $(".category-select").empty();
-            if (parentId == null || parentId =="") {                
+            if (parentId == null || parentId =="") {
                 $("#addProductModal .parentCategory-select option:first").prop("selected", true);
                 return;
             }
@@ -532,7 +532,7 @@
                 url: '../Category/Parent',
                 type: 'POST',
                 data: {
-                    
+
                 },
                 success: function (data, textStatus, xhr) {
                     $(".parentCategory-select").empty();
@@ -551,7 +551,7 @@
                     console.log("error");
                 }
             });
-            
+
         }
 
         function initAttr(templateId, attr) {
@@ -703,14 +703,14 @@
             });
 
             $("input.all-check").on("change", function () {
-                checkbox = $("input.row-check");                
+                checkbox = $("input.row-check");
                 if ($(this).is(":checked")) {
                     for (var i = 0; i < checkbox.length; i++) {
                         var row = $(checkbox[i]).closest("tr");
                         if (!$(row).hasClass("active")) {
                             $(checkbox[i]).click();
                         }
-                    }                    
+                    }
                 } else {
                     for (var i = 0; i < checkbox.length; i++) {
                         var row = $(checkbox[i]).closest("tr");
@@ -769,12 +769,16 @@
                     "id": id
                 },
                 success: function (data, textStatus, xhr) {
+                    if (data == null || data == 'undefined'){
+                        swal("Cảnh báo", "Không tìm thấy sản phẩm");
+                        return;
+                    }
                     $("#viewProductModal").find('input[name="id"]').val(data.Id);
                     $("#viewProductModal").find('input[name="name"]').val(data.Name);
                     $("#viewProductModal").find('textarea[name="desc"]').val(data.Description);
                     $("#viewProductModal").find('select.parentCategory-select').val(data.Category[0]);
                     //$("#viewProductModal").find('select[name="category"]').val(data.Category[1]);
-                    initCategory(data.Category[0], data.Category[1]);                    
+                    initCategory(data.Category[0], data.Category[1]);
 
                     if ($("#viewProductModal").find('input[name="status"]').is(":checked") != data.Status) {
                         $("#viewProductModal").find('input[name="status"]').click();
@@ -783,10 +787,10 @@
                     if ($("#viewProductModal").find('input[name="isInStock"]').is(":checked") != data.IsInStock) {
                         $("#viewProductModal").find('input[name="isInStock"]').click();
                     }
-                    
+
                     $("#viewProductModal").find('input[name="price"]').val(data.Price);
                     $("#viewProductModal").find('input[name="promotion"]').val(data.Promotion);
-                    
+
                     console.log(data.DateCreated);
                     console.log(data.DateModified);
                     console.log(FormatDateVN(data.DateCreated));
@@ -803,19 +807,19 @@
                     $(".base-tab a").click();
                 },
                 error: function () {
-
+                    swal("Cảnh báo", "Không tìm thấy sản phẩm");
                 }
             })
-            
+
         }
 
         function initButton() {
             $(".edit-button").unbind("click");
-            $(".edit-button").on("click", function () {                
+            $(".edit-button").on("click", function () {
                 var clickedRow = $(this).closest("tr");
                 var id = table.fnGetData($(clickedRow)).Id;
                 console.log(id);
-                editForm(id);                
+                editForm(id);
             })
 
             //$(".delete-button").on("click", function () {
@@ -882,11 +886,11 @@
                     $(".base-tab a").click();
                     return;
                 }
-                
+
                 $.ajax({
                     url: '../Product/Update',
                     type: 'POST',
-                    //processData: false,                    
+                    //processData: false,
                     data: //data,
                         {
                             "id": id,
@@ -956,7 +960,7 @@
                                     type: "success",
                                     timer: 2000,
                                     showConfirmButton: false
-                                });                                
+                                });
                                 $("#viewProductModal").modal("hide");
                             }
                         } else {
@@ -1001,7 +1005,7 @@
                             ,"aoColumnDefs": [
                                 { "bSortable": false
                                     , "aTargets": [0]
-                                    , "mData": "Id"  
+                                    , "mData": "Id"
                                     , "bVisible": false
                                 }
                                 , {
@@ -1104,7 +1108,7 @@
                 $.ajax({
                     url: '../Product/Add',
                     type: 'POST',
-                    //processData: false,                    
+                    //processData: false,
                     data: //data,
                         {
                             //"id": id,
@@ -1175,11 +1179,11 @@
                                     type: "success",
                                     timer: 2000,
                                     showConfirmButton: false
-                                });                                
+                                });
                                 $("#addProductModal").modal("hide");
                             }
 
-                            
+
                         } else {
                             swal({
                                 title: "Không thêm được sản phẩm",
@@ -1207,8 +1211,16 @@
         }
 
         $(document).ready(function () {
-            
-            var productTable;                        
+
+            try {
+                id = "@Request.QueryString["id"]";
+                if (id != "") {
+                    editForm(@Request.QueryString["id"]);
+                }
+            } catch(e){
+
+            }
+            var productTable;
 
             productTable = $(".product-master").dataTable({
                 "bProcessing": true
@@ -1216,7 +1228,7 @@
                 , "sAjaxSource": "../Product/GetProduct"
                 , "fnServerParams": function (aoData) {
                     aoData.push({ "name": "shopId", "value": "1" });
-                    sName = $("#sName").hasClass("active");                    
+                    sName = $("#sName").hasClass("active");
                     if ($("#sName").length == 0) sName = true;
                     sCate = $("#sCate").hasClass("active");
                     sDesc = $("#sDesc").hasClass("active");
@@ -1230,7 +1242,7 @@
                     initButton();
                     //$(".product-master tbody tr").addClass("success");
                     //productTable.DataTable({
-                        
+
                     //});
                 }
                 , "fnDrawCallback": function (oSettings, json) {
@@ -1254,7 +1266,7 @@
                             , "mData": "null"
                         }
                         , {
-                            "mData": function (source) {                                
+                            "mData": function (source) {
                                 var status = source.Status;
                                 if (status == true) {
                                     return '<span class="label label-primary">Bình thường</span>';
@@ -1289,16 +1301,16 @@
                 , "iDisplayLength": 10
                 //, "aLengthMenu": [5, 10, 25]
                 , "bLengthChange": false
-                , 'sDom': 'l<"toolbar"f>rtip'//'<"H"lf"toolbar"r>t<"F"ip>'//'<"toolbar">lTfgitp' //frtip'//'<"html5buttons"B>lTfgitp'                
-            
-            });            
+                , 'sDom': 'l<"toolbar"f>rtip'//'<"H"lf"toolbar"r>t<"F"ip>'//'<"toolbar">lTfgitp' //frtip'//'<"html5buttons"B>lTfgitp'
+
+            });
             initButtonAroundDataTable();
             table = productTable;
 
             initParentCategory();
             initModalButton();
 
-            
+
             /* touchspin*/
             $(".price-input").TouchSpin({
                 min: 0,
@@ -1309,7 +1321,7 @@
                 verticalbuttons: true,
                 buttondown_class: 'btn btn-white',
                 buttonup_class: 'btn btn-white'
-            });                       
+            });
 
             /* switcher*/
             var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -1325,7 +1337,7 @@
                     $("#masterStatusOn").hide();
                     $("#masterStatusOff").show();
                 }
-            });            
+            });
 
             $("#detailProStatus").on("change", function(){
                 if ($("#detailProStatus").is(":checked")){

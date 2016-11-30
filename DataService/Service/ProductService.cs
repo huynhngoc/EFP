@@ -432,9 +432,9 @@ namespace DataService.Service
             return rs;
         }
 
-        public ProductViewModel GetProductById(int id)
+        public ProductViewModel GetProductById(int id, string shopId)
         {
-            return productRepository.GetProductById(id);
+            return productRepository.GetProductById(id, shopId);
         }
 
         public bool SetStatus(int[] idList, bool status)
