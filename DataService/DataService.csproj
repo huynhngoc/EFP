@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -94,6 +95,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EFPModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EFPModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EFPModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity.cs">
       <DependentUpon>EFPModel.tt</DependentUpon>
@@ -191,6 +197,7 @@
     <Compile Include="ViewModel\Post_Comment.cs" />
     <Compile Include="ViewModel\ProductItemViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />
+    <Compile Include="ViewModel\ShopUserViewModel.cs" />
     <Compile Include="ViewModel\ShopViewModel.cs" />
     <Compile Include="ViewModel\TemplateProductViewModel.cs" />
   </ItemGroup>
@@ -219,7 +226,7 @@
     <Content Include="EFPModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>EFPModel.edmx</DependentUpon>
-      <LastGenOutput>EFPModel.cs</LastGenOutput>
+      <LastGenOutput>EFPModel1.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -19,7 +19,7 @@ namespace DataService
         public int IntentId { get; set; }
         public string RespondContent { get; set; }
     
-        public virtual Intent Intent { get; set; }
         public virtual Shop Shop { get; set; }
+        public virtual Intent Intent { get; set; }
     }
 }

@@ -121,6 +121,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IntentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ApiAiId" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -1384,6 +1385,7 @@
           <NavigationProperty Name="Responses" Relationship="EFPModel.FK_Responses_Intents" FromRole="Intent" ToRole="Respons" />
           <NavigationProperty Name="Comments" Relationship="EFPModel.FK_Comments_Intents" FromRole="Intent" ToRole="Comment" />
           <NavigationProperty Name="Posts" Relationship="EFPModel.FK_Posts_Intents" FromRole="Intent" ToRole="Post" />
+          <Property Name="ApiAiId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Conversations_Intents">
           <End Type="EFPModel.Intent" Role="Intent" Multiplicity="1" />
@@ -1764,6 +1766,7 @@
           <EntitySetMapping Name="Intents">
             <EntityTypeMapping TypeName="EFPModel.Intent">
               <MappingFragment StoreEntitySet="Intents">
+                <ScalarProperty Name="ApiAiId" ColumnName="ApiAiId" />
                 <ScalarProperty Name="IntentName" ColumnName="IntentName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

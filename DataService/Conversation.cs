@@ -20,7 +20,7 @@ namespace DataService
         public bool IsRead { get; set; }
         public System.DateTime LastUpdate { get; set; }
     
-        public virtual Intent Intent { get; set; }
         public virtual Shop Shop { get; set; }
+        public virtual Intent Intent { get; set; }
     }
 }
