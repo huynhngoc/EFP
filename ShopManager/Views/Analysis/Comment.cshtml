@@ -17,31 +17,34 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-2 m-b-xs">
-                        <label class="font-noraml">Mục đích</label>
-                        <select id="intentCommentTable" class="input-sm form-control input-s-sm inline"></select>
+                    <div class="col-md-6">
+                        <div class="col-md-5 m-b-xs">
+                            <label class="font-noraml">Mục đích</label>
+                            <select id="intentCommentTable" class="input-sm form-control input-s-sm inline"></select>
+                        </div>
+                        <div class="col-md-4 m-b-xs">
+                            <label class="font-noraml">Trạng thái</label>
+                            <select id="statusCommentTable" class="input-sm form-control input-s-sm inline">
+                                <option value="">Tất cả</option>
+                                <option value="1">Đang hiển thị</option>
+                                <option value="2">Đang cảnh báo</option>
+                                <option value="3">Đã ẩn</option>
+                                <option value="4">Đã duyệt</option>
+                                <option value="5">Đã xóa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 m-b-xs">
+                            <label class="font-noraml">Đã đọc</label>
+                            <select id="isReadCommentTable" class="input-sm form-control input-s-sm inline">
+                                <option value="">Tất cả</option>
+                                <option value="true">Đã đọc</option>
+                                <option value="false">Chưa đọc</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
-                        <label class="font-noraml">Trạng thái</label>
-                        <select id="statusCommentTable" class="input-sm form-control input-s-sm inline">
-                            <option value="">Tất cả</option>
-                            <option value="1">Đang hiển thị</option>
-                            <option value="2">Đang cảnh báo</option>
-                            <option value="3">Đã ẩn</option>
-                            <option value="4">Đã duyệt</option>
-                            <option value="5">Đã xóa</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-1 m-b-xs">
-                        <label class="font-noraml">Đã đọc</label>
-                        <select id="isReadCommentTable" class="input-sm form-control input-s-sm inline">
-                            <option value="">Tất cả</option>
-                            <option value="true">Đã đọc</option>
-                            <option value="false">Chưa đọc</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-3 m-b-xs">
-                        <div class="form-group" id="dateRange">
+                    
+                    <div class="col-md-6 m-b-xs">
+                        <div class="form-group col-sm-6" id="dateRange">
                             <label class="font-noraml">Thời gian</label>
                             <div class="input-daterange input-group" id="datepicker">
                                 <input type="text" id="startDateCommentTable" class="input-sm form-control" name="start" value="" readonly>
@@ -49,12 +52,10 @@
                                 <input type="text" id="endDateCommentTable" class="input-sm form-control" name="end" value="" readonly>
                             </div>
                         </div>
+                        <button class="col-sm-2 col-sm-offset-1 col-xs-5 btn btn-primary" style="margin-top:22px" onclick="filterCommentTable(true), GetPieChartData(), GetStackChartData()"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-2 col-xs-5 btn btn-success pull-right" style="margin-top:22px" onclick="filterCommentTable(false), GetPieChartData(), GetStackChartData()"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
-                    <div class="col-sm-2 m-b-xs pull-right">
-                        <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterCommentTable(true), GetPieChartData(), GetStackChartData()"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterCommentTable(false), GetPieChartData(), GetStackChartData()"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
-                    </div>
-
+                    
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
@@ -134,7 +135,7 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-3 m-b-xs">
+                    <div class="col-md-6 m-b-xs">
                         <div class="form-group" id="dateRange">
                             <label class="font-noraml">Thời gian</label>
                             <div class="input-daterange input-group" id="datepicker">
@@ -144,9 +145,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 col-sm-offset-7 m-b-xs">
-                        <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterUserTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterUserTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                    <div class="col-md-6 m-b-xs">
+                        <button class="col-sm-2 col-sm-offset-7 btn btn-primary" style="margin-top:22px" onclick="filterUserTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-2 btn btn-success pull-right" style="margin-top:22px" onclick="filterUserTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
 
                 </div>
@@ -197,7 +198,7 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-3 m-b-xs">
+                    <div class="col-md-6 m-b-xs">
                         <div class="form-group" id="dateRange">
                             <label class="font-noraml">Thời gian</label>
                             <div class="input-daterange input-group" id="datepicker">
@@ -207,9 +208,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 col-sm-offset-7 m-b-xs">
-                        <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterPostTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterPostTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                    <div class="col-md-6 m-b-xs">
+                        <button class="col-sm-2 col-sm-offset-7 btn btn-primary" style="margin-top:22px" onclick="filterPostTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-2 btn btn-success pull-right" style="margin-top:22px" onclick="filterPostTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
 
                 </div>
@@ -263,21 +264,22 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-md-2 m-b-xs">
                         <div class="btn-group" style="margin-top:22px">
                             <button id="selectAllButtonUserCommentDetail" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Đã chọn 0 bình luận &nbsp;<span class="caret"></span></button>
                             <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0)" onclick="approveAllCommentUserDetail()">Duyệt những bình luận đã chọn</a></li>
                                 <li><a href="javascript:void(0)" onclick="hideAllCommentDetail(true)">Ẩn những bình luận đã chọn</a></li>
                                 <li><a href="javascript:void(0)" onclick="hideAllCommentDetail(false)">Bỏ ẩn những bình luận đã chọn</a></li>
                                 <li><a href="javascript:void(0)" onclick="deleteAllCommentDetail()">Xóa những comment đã chọn</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-md-2 m-b-xs">
                         <label class="font-noraml">Mục đích</label>
                         <select id="userCommentDetailIntentDDL" class="input-sm form-control input-s-sm inline"></select>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-md-2 m-b-xs">
                         <label class="font-noraml">Trạng thái</label>
                         <select id="userCommentDetailStatusDDL" class="input-sm form-control input-s-sm inline">
                             <option value="">Tất cả</option>
@@ -288,7 +290,7 @@
                             <option value="5">Đã xóa</option>
                         </select>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-md-2 m-b-xs">
                         <label class="font-noraml">Đã đọc</label>
                         <select id="userCommentDetailIsReadDDL" class="input-sm form-control input-s-sm inline">
                             <option value="">Tất cả</option>
@@ -297,7 +299,7 @@
                         </select>
                     </div>
 
-                    <div class="col-sm-3 m-b-xs">
+                    <div class="col-md-3 m-b-xs">
                         <button class="col-sm-4 btn btn-primary" style="margin-top:22px" onclick="filterUserDetailTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
                         <button class="col-sm-6 btn btn-success pull-right" style="margin-top:22px" onclick="filterUserDetailTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
@@ -398,6 +400,8 @@
         today = yyyy + '/' + mm + '/' + dd;
         var firstDay = yyyy + '/' + mm + '/' + '01';
 
+        approveStatus = @((int)DataService.Utils.CommentStatus.APPROVED);
+
         //Set first day and current day to date picker
         //Comment table
         $('#startDateCommentTable').attr("value", firstDay);
@@ -486,7 +490,14 @@
                 },
                 "sDom": 'l<"CommentToolbar">rtip',
                 "aoColumnDefs": [
-                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='selectRowCommentTable(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
+                        { "mData": function (source) { 
+                            if(source.Status!=5){
+                                return "<input type='checkbox' value='" + source.Id + "' onchange='selectRowCommentTable(this)'>";
+                            }else{
+                                return null;
+                            }
+                            
+                        }, "aTargets": [0], "width": "1%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [2], "width": "15%" },
                         {
@@ -504,7 +515,7 @@
                                 var rs = "<select class='input-sm' onchange='setCommentIntent(\"" + source.Id + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
                                 for (var i = 0; i < listIntent.length; i++) {
                                     if (listIntent[i].Id != source.IntentId) {
-                                        rs = rs + "<option value='" + (i + 1) + "'>" + listIntent[i].IntentName + "</option>";
+                                        rs = rs + "<option value='" + listIntent[i].Id + "'>" + listIntent[i].IntentName + "</option>";
                                     }
                                 };
                                 rs = rs + "</select>";
@@ -518,13 +529,23 @@
                             "mData": function (source) {
                                 var rs = "<div class='btn-group' style='height:100%'>";
                                 if (source.Status == 1 || source.Status == 4) {
-                                    rs = rs + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
+                                    if (source.CanHide) {
+                                        rs = rs + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 2) {
-                                    rs = rs + "<button class='btn btn-sm btn-info' onclick='approveComment(\"" + source.Id + "\")'>Duyệt</button>" + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
+                                    rs = rs + "<button class='btn btn-sm btn-info' onclick='approveComment(\"" + source.Id + "\")'>Duyệt</button>";
+                                    if (source.CanHide) {
+                                        rs = rs + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 3) {
-                                    rs = rs + "<button class='btn btn-sm btn-success' onclick='hideComment(\"" + source.Id + "\",false)'>Bỏ ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
+                                    if (source.CanHide) {
+                                        rs = rs + "<button class='btn btn-sm btn-success' onclick='hideComment(\"" + source.Id + "\",false)'>Bỏ ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 5) {
                                     return null;
@@ -543,6 +564,7 @@
                         "<div class='btn-group'>" +
                             "<button id='selectAllCommentTable' data-toggle='dropdown' class='btn btn-default dropdown-toggle'>Đã chọn 0 bình luận&nbsp;<span class='caret'></span></button>" +
                             "<ul class='dropdown-menu'>" +
+                                "<li><a href='javascript:void(0)' onclick='approveAllComment()'>Duyệt những bình luận đã chọn</a></li>" +
                                 "<li><a href='javascript:void(0)' onclick='hideAllComment(true)'>Ẩn những bình luận đã chọn</a></li>" +
                                 "<li><a href='javascript:void(0)' onclick='hideAllComment(false)'>Bỏ ẩn những bình luận đã chọn</a></li>" +
                                 "<li><a href='javascript:void(0)' onclick='deleteAllComment()'>Xóa những bình luận đã chọn</a></li>" +
@@ -611,7 +633,7 @@
                 "aoColumnDefs": [
                         {
                             "mData": function (source) {
-                                if (source.IntentId != null) {
+                                if (source.IntentId != null&& source.Status!=5) {
                                     return "<input type='checkbox' value='" + source.PostId + "' onchange='checkBoxCheckedPostTbl(this)'>"
                                 } else {
                                     return null;
@@ -645,7 +667,7 @@
                                     var rs = "<select class='input-sm' onchange='setPostIntent(\"" + source.PostId + "\",this)'><option value='" + source.IntentId + "'>" + source.IntentName + "</option>";
                                     for (var i = 0; i < listIntent.length; i++) {
                                         if (listIntent[i].Id != source.IntentId) {
-                                            rs = rs + "<option value='" + (i + 1) + "'>" + listIntent[i].IntentName + "</option>";
+                                            rs = rs + "<option value='" + listIntent[i].Id + "'>" + listIntent[i].IntentName + "</option>";
                                         }
                                     };
                                     rs = rs + "</select>";
@@ -663,10 +685,16 @@
                             "mData": function (source) {
                                 var rs = "<div class='btn-group' style='height:100%'>";
                                 if (source.Status == 1 || source.Status == 4) {
-                                    rs = rs + "<button class='btn btn-sm btn-warning' onclick='hidePost(\"" + source.PostId + "\",true)'>Ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deletePost(\"" + source.PostId + "\")'>Xóa</button>";
+                                    if (source.IntentId != null) {
+                                        rs = rs + "<button class='btn btn-sm btn-warning' onclick='hidePost(\"" + source.PostId + "\",true)'>Ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deletePost(\"" + source.PostId + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 3) {
-                                    rs = rs + "<button class='btn btn-sm btn-success' onclick='hidePost(\"" + source.PostId + "\",false)'>Bỏ ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deletePost(\"" + source.PostId + "\")'>Xóa</button>";
+                                    if (source.IntentId != null) {
+                                        rs = rs + "<button class='btn btn-sm btn-success' onclick='hidePost(\"" + source.PostId + "\",false)'>Bỏ ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deletePost(\"" + source.PostId + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 5) {
                                     return null;
@@ -1177,10 +1205,52 @@
                 success: function (data) {
                     commentDataTable.ajax.reload(null, false);
                     userDataTable.ajax.reload(null, false);
-                    swal("Thành công!", "Đã chấp nhận bình luận", "success");
+                    swal({
+                        title: "Đã duyệt!",
+                        text: "Đã duyệt bình luận thành công",
+                        timer: 2000,
+                        type: "success"
+                    });
                 },
                 error: function () {
                     swal("Thất bại", "Chuyển trạng thái bình luận thất bại", "error");
+                }
+            })
+        }
+
+        //Approve all comment
+        function approveAllComment() {            
+            $.ajax({
+                url: "/Analysis/SetCommentStatus",
+                dataType: "json",
+                type: "post",
+                data: {
+                    commentId: listSelectedComment,
+                    statusId: approveStatus,
+                },
+                type: "post",
+                success: function (data) {
+                    commentDataTable.ajax.reload(null, false);
+                    userDataTable.ajax.reload(null, false);
+                    listSelectedComment=[];
+                    if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                        swal({
+                            title: "Thành công!",
+                            text: "Duyệt " + data.totalComment + " bình luận thành công",
+                            timer: 2000,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!",
+                            text: data.errorNumber + " bình luận chưa được duyệt",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    }
+                },
+                error: function () {
+                    swal("Thất bại", "Duyệt bình luận thất bại", "error");
                 }
             })
         }
@@ -1232,7 +1302,12 @@
                 },
                 "sDom": 'lrtip',
                 "aoColumnDefs": [
-                        { "mData": function (source) { return "<input type='checkbox' value='" + source.Id + "' onchange='selectRowUserCommentDetailTable(this)'>" }, "aTargets": [0], "width": "1%", "bSortable": false },
+                        { "mData": function (source) { 
+                            if(source.Status!=5){
+                                return "<input type='checkbox' value='" + source.Id + "' onchange='selectRowUserCommentDetailTable(this)'>";
+                            }else{
+                                return null;
+                            }}, "aTargets": [0], "width": "1%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.Id + "' target='_blank' onclick='setCommentIsRead(\"" + source.Id + "\")'>" + source.CommentContent + "</a>" }, "aTargets": [1], "width": "15%", "bSortable": false },
                         { "mData": function (source) { return "<a href='https://www.facebook.com/" + source.PostId + "' target='_blank' onclick='setPostIsRead(\"" + source.PostId + "\")'>" + source.PostContent + "</a>" }, "aTargets": [2], "width": "15%" },
                         {
@@ -1254,13 +1329,23 @@
                             "mData": function (source) {
                                 var rs = "<div class='btn-group' style='height:100%'>";
                                 if (source.Status == 1 || source.Status == 4) {
-                                    rs = rs + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
+                                    if (source.CanHide) {
+                                        rs = rs + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 2) {
-                                    rs = rs + "<button class='btn btn-sm btn-info' onclick='approveComment(\"" + source.Id + "\")'>Duyệt</button>" + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
+                                    rs = rs + "<button class='btn btn-sm btn-info' onclick='approveCommentUserDetail(\"" + source.Id + "\")'>Duyệt</button>";
+                                    if (source.CanHide) {
+                                        rs = rs + "<button class='btn btn-sm btn-warning' onclick='hideComment(\"" + source.Id + "\",true)'>Ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 3) {
-                                    rs = rs + "<button class='btn btn-sm btn-success' onclick='hideComment(\"" + source.Id + "\",false)'>Bỏ ẩn</button>" + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
+                                    if (source.CanHide) {
+                                        rs = rs + "<button class='btn btn-sm btn-success' onclick='hideComment(\"" + source.Id + "\",false)'>Bỏ ẩn</button>";
+                                    }
+                                    rs = rs + "<button class='btn btn-sm btn-danger' onclick='deleteComment(\"" + source.Id + "\")'>Xóa</button>";
                                 }
                                 if (source.Status == 5) {
                                     return null;
@@ -1486,6 +1571,76 @@
                             type: "error"
                         });
                     }
+                }
+            })
+        }
+
+        //Approve comment
+        function approveCommentUserDetail(commentId) {
+            $.ajax({
+                url: "/Analysis/SetCommentStatus",
+                dataType: "json",
+                type: "post",
+                data: {
+                    commentId: commentId,
+                    statusId: approveStatus,
+                },
+                type: "post",
+                success: function (data) {
+                    commentDataTable.ajax.reload(null, false);
+                    userDataTable.ajax.reload(null, false);
+                    if (userCommentDetailDataTable != null) {
+                        userCommentDetailDataTable.ajax.reload(null, false);
+                    }
+                    swal({
+                        title: "Đã duyệt!",
+                        text: "Đã duyệt bình luận thành công",
+                        timer: 2000,
+                        type: "success"
+                    });
+                },
+                error: function () {
+                    swal("Thất bại", "Chuyển trạng thái bình luận thất bại", "error");
+                }
+            })
+        }
+
+        //Approve all comment
+        function approveAllCommentUserDetail() {            
+            $.ajax({
+                url: "/Analysis/SetCommentStatus",
+                dataType: "json",
+                type: "post",
+                data: {
+                    commentId: listSelectedCommentDetailTable,
+                    statusId: approveStatus,
+                },
+                type: "post",
+                success: function (data) {
+                    commentDataTable.ajax.reload(null, false);
+                    userDataTable.ajax.reload(null, false);
+                    if (userCommentDetailDataTable != null) {
+                        userCommentDetailDataTable.ajax.reload(null, false);
+                    }
+                    listSelectedCommentDetailTable = [];
+                    if (data.errorNumber == 0 || data.errorNumber == "undefined") {
+                        swal({
+                            title: "Thành công!",
+                            text: "Duyệt " + data.totalComment + " bình luận thành công",
+                            timer: 2000,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Thất bại!",
+                            text: data.errorNumber + " bình luận chưa được duyệt",
+                            timer: 2000,
+                            type: "error"
+                        });
+                    }
+                },
+                error: function () {
+                    swal("Thất bại", "Duyệt bình luận thất bại", "error");
                 }
             })
         }
