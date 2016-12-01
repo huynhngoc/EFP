@@ -777,6 +777,7 @@ function viewDetail(FBId, shopId, categoryId, productId) {
         },
         dataType: "json",
         success: function (data) {
+            $('#viewDetailModal').modal('show');
             $('#divProductImage').empty();
             if (data.Urls.length != 0) {
                 $('#divProductImage').append("<div class='item active' style='height:546px;background: url(\""+data.Urls[0]+"\") center no-repeat;background-size: contain'></div>");
@@ -903,7 +904,6 @@ function viewDetail(FBId, shopId, categoryId, productId) {
                 $('#tblAttribute').append("Chưa có mô tả đặc tính cho sản phẩm này");
                 $('#hiddenValue').append("<input id='productDetailProperties' type='hidden' value='" + properties + "' />");
             }
-            $('#viewDetailModal').modal('show');
         },
         error: function () {
             toastr.error("Đã xảy ra lỗi", "Lỗi");
