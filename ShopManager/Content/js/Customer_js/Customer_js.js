@@ -8,34 +8,43 @@ var fail_Mes = "Lỗi hệ thống";
 var oTable;
 var oTable_Order;
 //var oTable_Order;
+var valid_edit_name = 1;
+var valid_edit_email = 1;
+var valid_edit_phone = 1;
 
+var valid_name = 0;
+var valid_email = 1;
+var valid_phone = 1;
+
+var email_pattern = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
 function validate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
-    var valid_edit_name = 1;
-    var valid_edit_email = 1;
-    var valid_edit_phone = 1;
+   
 
     //1 = email mode
     if (mode == 1) {
-        var atpos = value.indexOf("@");
-        var dotpos = value.lastIndexOf(".");
         //alert(atpos + " " + (dotpos ));
         //alert(value.length);
         //alert(value.length - dotpos);
-        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
+        if (value.length != 0) {
+            if (!value.match(email_pattern) || value.indexOf("..") != -1) {
+                document.getElementById("mail_errorTxt").style.display = "block";
+                //    //alert("false");
+                valid_edit_email = 0;
+            }
+            else {
 
-            document.getElementById("mail_errorTxt").style.display = "block";
-            valid_edit_email = 0;
-            //alert("false");
+                document.getElementById("mail_errorTxt").style.display = "none";
+                //alert("true");
+                valid_edit_email = 1;
+            }
         }
         else {
 
             document.getElementById("mail_errorTxt").style.display = "none";
-            valid_edit_email = 1;
-            //alert(valid_edit_email);
             //alert("true");
-            //alert(valid_edit_email + "_" + valid_edit_phone + "_" + valid_edit_name);
+            valid_edit_email = 1;
         }
         //2 = phone mode
     }
@@ -51,10 +60,15 @@ function validate(mode, value) {
         }
     }
         // 3 = name mode
+    else if (mode == 3) {
+        if (value) {
+            valid_edit_name = 1;
+        }
+        else valid_edit_name = 0;
+    }
 
-
-    if (valid_edit_phone == 1 && valid_edit_email == 1 ) document.getElementById("btnSave").disabled = false;
-    else document.getElementById("btnSave").disabled = true;
+    if (valid_edit_phone == 1 && valid_edit_email == 1 && valid_edit_name == 1) document.getElementById("btnSave_edit").disabled = false;
+    else document.getElementById("btnSave_edit").disabled = true;
 }
 
 
@@ -62,22 +76,29 @@ function validate(mode, value) {
 function Addingvalidate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
-
-    var valid_name = 0;
-    var valid_email = 1;
-    var valid_phone = 1;
+    value = value.trim();
+   
     //1 = email mode
     if (mode == 1) {
+        //var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        //var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        
         var atpos = value.indexOf("@");
         var dotpos = value.lastIndexOf(".");
-        //alert(atpos + " " + (dotpos ));
-        //alert(value.length);
-        //alert(value.length - dotpos);
-        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
 
-            document.getElementById("mail_errorTxt1").style.display = "block";
-            //alert("false");
-            valid_email = 0;
+        if (value.length != 0) {
+            if (!value.match(email_pattern) || value.indexOf("..") != -1)
+            {
+                document.getElementById("mail_errorTxt1").style.display = "block";
+                //    //alert("false");
+                valid_email = 0;
+            }
+            else {
+
+                document.getElementById("mail_errorTxt1").style.display = "none";
+                //alert("true");
+                valid_email = 1;
+            }
         }
         else {
 
@@ -100,10 +121,16 @@ function Addingvalidate(mode, value) {
             valid_phone = 0;
         }
     }
+    else if (mode == 3) {
+        if (value) {
+            valid_name = 1;
+        }
+        else valid_name = 0;
+    }
    
     //alert(valid_name + "_" + valid_phone + "_" + valid_email);
-    if (valid_phone == 1 && valid_email == 1 ) document.getElementById("btnSave1").disabled = false;
-    else document.getElementById("btnSave1").disabled = true;
+    if (valid_phone == 1 && valid_email == 1 && valid_name == 1 ) document.getElementById("btnSave_add").disabled = false;
+    else document.getElementById("btnSave_add").disabled = true;
 }
 
 
@@ -117,7 +144,8 @@ function clear_table() {
     document.getElementById("editAddr").value = "";
     document.getElementById("editPhone").value = "";
     document.getElementById("editMail").value = "";
-    $('#btnSave').prop('disabled', false);
+    document.getElementById("cusEditID").value == "";
+    $('#btnSave_edit').prop('disabled', false);
 }
 
 
@@ -194,6 +222,7 @@ function addCustomer() {
         });
     }
     else swal("Vui lòng nhập tên", "", "warning");
+    clear_add();
 }
 
 function editCustomerDetail() {
@@ -222,7 +251,7 @@ function editCustomerDetail() {
                     closeOnConfirm: true
                 },
             function (isConfirm) {
-                if (isConfirm) { oTable.fnDraw() }
+                if (isConfirm) { oTable.fnDraw(); $('#cusEditModal').modal('hide'); }
             });
 
             },
@@ -234,7 +263,7 @@ function editCustomerDetail() {
                     closeOnConfirm: true
                 },
                 function (isConfirm) {
-
+                    $('#cusEditModal').modal('hide');
                 });
             }
         });
@@ -252,7 +281,7 @@ function clear_add() {
     document.getElementById("addDescTxt").value = "";
     document.getElementById("addPhoneTxt").value = "";
     document.getElementById("addMailTxt").value = "";
-    $('#btnSave1').prop('disabled', false);
+    $('#btnSave_add').prop('disabled', false);
 }
 
 function getEditCustomer(e, cusEditID) {
@@ -263,14 +292,17 @@ function getEditCustomer(e, cusEditID) {
     document.getElementById("editAddr").value = tds.eq(2).text();
     document.getElementById("editPhone").value = tds.eq(3).text();
     document.getElementById("editMail").value = tds.eq(4).text();
+    getCustomerOrder(cusEditID);
+    $('#clickableH').find('th')[1].click();
+    $('#clickableH').find('th')[1].click();
     showCusEditModal(cusEditID);
 }
 
-function getCustomerOrder(e, cusId) {
+function getCustomerOrder(cusId) {
     var id = null;
     var languageConfig = {
         "oPaginate": {
-            "sNext": "Tiếp"
+            "sNext": "Sau"
             , "sLast": "Cuối"
             , "sPrevious": "Trước"
             , "sFirst": "Đầu"
@@ -286,19 +318,22 @@ function getCustomerOrder(e, cusId) {
                 , "searchPlaceholder": "Search records"
 
     }
-    var currentRow = $(e).closest('tr');
-    var tds = currentRow.find("td");
-    $('#orderOfCus').text(tds.eq(0).text());
-    $('#cusOrderList').modal('show');
+    //var currentRow = $(e).closest('tr');
+    //var tds = currentRow.find("td");
+    //$('#orderOfCus').text(tds.eq(0).text());
+    //$('#cusOrderList').modal('show');
 
     //(cusId);
     //oTable_Order.dataTable().fnDestroy();
+    //console.log(('#cusOrderTable').length);
     oTable_Order = $('#cusOrderTable').dataTable({
         "bProcessing": true,
         "bServerSide": true,
         "destroy": true,
         "sServerMethod": "POST",
         "oLanguage": languageConfig,
+        "scrollCollapse": true,
+        "scrollY": "200px",
         //'sDom': 'l<"toolbar"f>rtip',
         //'sDom': '<"right"Bflrtip>rt<"bottom"pi><"clear">',
         //'sDom':'ilftpr',
@@ -328,11 +363,19 @@ function getCustomerOrder(e, cusId) {
             }, "bSortable": false
         }
         ],
-
+        "fnInitComplete": function () {
+            //var table_header = $('.dataTables_scrollHeadInner')
+            //table_header.css("width", "100%");
+            //var new_table=table_header.find(".table");
+            //new_table.css("width", "100%");
+            $('#clickableH').find('th')[1].click();
+            $('#clickableH').find('th')[1].click();
+        }
 
 
     });
-    $('.dataTables_filter input').attr("placeholder", "Nhập mã đơn hàng");
+    $('#cusOrderTable_filter input').attr("placeholder", "Nhập mã đơn hàng");
+    
 }
 
 function refreshPage() {
@@ -344,6 +387,9 @@ function refreshPage() {
 /////// modal section
 
 function showCusEditModal(cuseditid) {
+    valid_edit_name = 1;
+    valid_edit_email = 1;
+    valid_edit_phone = 1;
     $('#cusEditModal').modal('show');
     document.getElementById("cusEditID").value = cuseditid;
 }
@@ -358,6 +404,9 @@ function showFailModal(fail_mes) {
 }
 
 function showCusAddModal() {
+    valid_name = 0;
+    valid_email = 1;
+    valid_phone = 1;
     $('#cusAddModal').modal('show');
 }
 

@@ -32,13 +32,19 @@
             color: red;
             border: 1px;
         }*/
+        /*.dataTables_scrollHead{
+            width:100%;
+        }*/
+        /*.table .table-striped .table-bordered .table-hover .dataTable .no-footer{
+             width:100% !important;
+        }*/
     </style>
 }
 <div class="row">
     <div class="col-xs-12" style="padding:0">
         <div class="mail-tools tooltip-demo m-t-md">
-            <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="load lai danh sách" onclick="reloadtable()"><i class="fa fa-refresh"></i>f5</button>
-            <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="them khach hang" onclick="showCusAddModal()">+</button>
+            <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lai danh sách" onclick="oTable.fnDraw(false);"><i class="fa fa-refresh"></i></button>
+            <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Thêm khách hàng" onclick="showCusAddModal()">+</button>
         </div>
 
             <div class="ibox float-e-margins">
@@ -49,7 +55,7 @@
                 <div class="ibox-content">
                     <table class="table table-striped table-bordered table-hover " id="cusDataTable" style="text-align:center; width:100%" data-plugin-options="{'searchPlaceholder': 'Tên khách hàng...'}">
                         <thead>
-                            <tr>
+                            <tr role="row" class="info">
                                 <th>Tên</th>
                                 <th>Miêu tả</th>
                                 <th>Địa chỉ</th>
@@ -67,57 +73,7 @@
 
 
 
-    <div class="modal fade" id="cusEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" style="margin-top: 10%;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="myModalLabel">Thông tin chi tiết</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Tên<a style="color:red">*</a></label>
-                        <div class="col-xs-10">
-                            <input value="" type="text" class="form-control" id="editName" onclick="validate(3,this.value)" onkeyup="validate(3,this.value)">
-                            <div><a id="name_errorTxt" style="color: red; display:none;">Xin nhập tên</a></div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Địa chỉ</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" value="" id="editAddr">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Miêu tả</label>
-                        <div class="col-xs-10">
-                            <textarea class="form-control" value="" id="editDes" style="resize:none"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Số điện thoại</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" onchange="validate(2,this.value)" onkeyup="validate(2,this.value)" onclick="validate(2,this.value)" type="text" value="" id="editPhone">
-                            <div><a id="phone_errorTxt" style="color: red; display:none;">Số điện thoại không hợp lệ</a></div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Email</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" onchange="validate(1,this.value)" onkeyup="validate(1,this.value)" onclick="validate(1,this.value)" type="text" value="" id="editMail">
-                            <div><a id="mail_errorTxt" style="color: red; display:none;">Email không hợp lệ</a></div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" id="cusEditID" value="" />
-                    <button type="button" id="btnSave" class="btn btn-primary" data-dismiss="modal" onclick="editCustomerDetail();  clear_table();">Lưu</button>
-                    <button type="button" id="btnCloseModal" class="btn btn-danger" data-dismiss="modal" onclick="clear_table();">Huỷ</button>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
 
     <div class="modal fade" id="cusDetailInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -215,14 +171,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave1" class="btn btn-primary" disabled onclick ="addCustomer(); " data-dismiss="modal">Tạo mới</button>
+                    <button type="button" id="btnSave_add" class="btn btn-primary" disabled onclick ="addCustomer()" data-dismiss="modal">Tạo mới</button>
                     <button type="button" id="btnCloseModal" class="btn btn-danger" data-dismiss="modal" onclick="clear_add()">Huỷ</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="cusOrderList" tabindex="-1" role="dialog" aria-labelledby="myModalLabe"
+    @*<div class="modal fade" id="cusOrderList" tabindex="-1" role="dialog" aria-labelledby="myModalLabe"
          aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" style="margin-top: 10%;">
             <div class="modal-content" style="width:120%">
@@ -254,7 +210,77 @@
                 </div>
             </div>
         </div>
+    </div>*@
+
+    <div class="modal inmodal fade" id="cusEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="margin-top: 10px; max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px 5px">
+                <h4 class="modal-title" id="myModalLabel">Thông tin chi tiết</h4>
+            </div>
+
+            <div class="modal-body" style="padding-bottom:10px">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Tên<a style="color:red">*</a></label>
+                        <div class="col-xs-10">
+                            <input value="" type="text" class="form-control" id="editName" onclick="validate(3,this.value)" onkeyup="validate(3,this.value)">
+                            <div><a id="name_errorTxt" style="color: red; display:none;">Xin nhập tên</a></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Địa chỉ</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" value="" id="editAddr">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Miêu tả</label>
+                        <div class="col-xs-10">
+                            <textarea class="form-control" value="" id="editDes" style="resize:none"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Số điện thoại</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" onchange="validate(2,this.value)" onkeyup="validate(2,this.value)" onclick="validate(2,this.value)" type="text" value="" id="editPhone">
+                            <div><a id="phone_errorTxt" style="color: red; display:none;">Số điện thoại không hợp lệ</a></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Email</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" onchange="validate(1,this.value)" onkeyup="validate(1,this.value)" onclick="validate(1,this.value)" type="text" value="" id="editMail">
+                            <div><a id="mail_errorTxt" style="color: red; display:none;">Email không hợp lệ</a></div>
+                        </div>
+                    </div>
+                  
+                </form>
+                <div style="max-height:45vh">
+                    <table id="cusOrderTable" class="table table-striped table-bordered table-hover" cellspacing="10" style="text-align: center; width:100%;" data-plugin-options="{'searchPlaceholder': 'Mã đơn hàng...'}">
+                        <thead>
+                            <tr role="row" class="info" id="clickableH">
+                                <th>Id</th>
+                                <th>Lần cuối chỉnh sửa</th>
+                                <th>Tổng giá</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 10px">
+                <input type="hidden" id="cusEditID" value="" />
+                <button type="button" id="" class="btn btn-default" data-dismiss="modal">Huỷ</button>
+                <button type="button" id="btnSave_edit" onclick="editCustomerDetail();  clear_table();" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
     </div>
+</div>
+
+
+
 </div>
 
     @section CustomJS {
@@ -263,6 +289,7 @@
         @Scripts.Render("~/Utility-JS")
         @Scripts.Render("~/Customer-JS")
         <script>
+            //var reloadTable;
             $(document).ready(function () {
                 @{string id="0";}
                 @if (Request.Params["id"] !=null)
@@ -294,13 +321,22 @@
                                 }
 
                                 else{
-                                    clear_detail_table();
-                                    document.getElementById("detailName").value = data.Name;
-                                    document.getElementById("detailDes").value = data.Description;
-                                    document.getElementById("detailAddr").value = data.Address;
-                                    document.getElementById("detailPhone").value = data.Phone;
-                                    document.getElementById("detailMail").value = data.Email;
-                                    $('#cusDetailInfo').modal('show');
+                                    //clear_detail_table();
+                                    //document.getElementById("detailName").value = data.Name;
+                                    //document.getElementById("detailDes").value = data.Description;
+                                    //document.getElementById("detailAddr").value = data.Address;
+                                    //document.getElementById("detailPhone").value = data.Phone;
+                                    //document.getElementById("detailMail").value = data.Email;
+                                    //$('#cusDetailInfo').modal('show');
+                                    clear_table();
+                                    document.getElementById("editName").value = data.Name;
+                                    document.getElementById("editDes").value = data.Description;
+                                    document.getElementById("editAddr").value = data.Address;
+                                    document.getElementById("editPhone").value = data.Phone;
+                                    document.getElementById("editMail").value = data.Email;
+                                    getCustomerOrder(id);
+                                    
+                                    showCusEditModal(id);
                                 }
                             }
                             else swal("Khách hàng không tồn tại","","error");
@@ -308,7 +344,7 @@
 
 
                     });
-
+                   
                 }
 
                 $("#saveID").hide();
@@ -317,7 +353,7 @@
 
                 var languageConfig = {
                     "oPaginate": {
-                        "sNext": "Tiếp"
+                        "sNext": "Sau"
                         , "sLast": "Cuối"
                         , "sPrevious": "Trước"
                         , "sFirst": "Đầu"
@@ -356,8 +392,8 @@
                     { "mData": "Email", "bSortable": true },
                     {
                         "mData": function (source) {
-                            return "<a id='" + source.CustomerId + "' onclick='getEditCustomer(this," + source.CustomerId + ")' class='btn btn-success search-dropdown' title='Sửa thông tin'><span class='fa fa-edit' aria-hidden='true'></span> </a>" +
-                                "<a id='" + source.CustomerId + "' onclick='getCustomerOrder(this," + source.CustomerId + ")' class='btn btn-success search-dropdown' title='Danh sách đơn hàng' style='margin-left:5%'><span class='fa fa-fax' aria-hidden='true'></span> </a>";
+                            return "<a id='" + source.CustomerId + "' onclick='getEditCustomer(this," + source.CustomerId + ")' class='btn btn-success search-dropdown'><span class='fa fa-edit' aria-hidden='true'></span> </a>";
+                                //"<a id='" + source.CustomerId + "' onclick='getCustomerOrder(this," + source.CustomerId + ")' class='btn btn-success search-dropdown' title='Danh sách đơn hàng' style='margin-left:5%'><span class='fa fa-fax' aria-hidden='true'></span> </a>";
                         }, "bSortable": false
                     }
                     ],
@@ -365,9 +401,10 @@
 
 
                 });
-
-
+                $('#cusDataTable_filter input').attr("placeholder", "Nhập tên khách hàng");
+               
             });
+            
         </script>
     }
 

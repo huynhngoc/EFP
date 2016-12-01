@@ -53,25 +53,33 @@ namespace ShopManager.Controllers
                     for (int i = 0; i < data.Count(); i++)
                     {
                         //Get Post Content infor
-                        try
+                        if (data[i].PostContent != null && data[i].PostContent.Length != 0)
                         {
-                            dynamic paramFB = new ExpandoObject();
-                            paramFB.locale = "vi_VI";
-                            postContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].PostId, paramFB).ToString());
-                            if (postContent.story == null || postContent.message == null)
+                            data[i].PostContent = TruncateLongString(data[i].PostContent, 40);
+                        }
+                        else
+                        {
+                            try
                             {
-                                data[i].PostContent = TruncateLongString(postContent.story + postContent.message, 40);
+                                dynamic paramFB = new ExpandoObject();
+                                paramFB.locale = "vi_VI";
+                                postContent = System.Web.Helpers.Json.Decode(fbApp.Get(data[i].PostId, paramFB).ToString());
+                                if (postContent.story == null || postContent.message == null)
+                                {
+                                    data[i].PostContent = TruncateLongString(postContent.story + postContent.message, 40);
+                                }
+                                else
+                                {
+                                    data[i].PostContent = TruncateLongString(postContent.story + ": " + postContent.message, 40);
+                                }
                             }
-                            else
+                            catch (Exception e)
                             {
-                                data[i].PostContent = TruncateLongString(postContent.story + ": " + postContent.message, 40);
+                                data[i].PostContent = "Bài đăng không tồn tại.";
+                                Debug.WriteLine(e.Message);
                             }
                         }
-                        catch (Exception e)
-                        {
-                            data[i].PostContent = "Bài đăng không tồn tại.";
-                            Debug.WriteLine(e.Message);
-                        }
+                            
 
                         //Get comment infor
 
@@ -354,9 +362,24 @@ namespace ShopManager.Controllers
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SetCommentStatus(string commentId, int statusId)
+        public JsonResult SetCommentStatus(string[] commentId, int statusId)
         {
-            return Json(commentService.SetCommentStatus(commentId, statusId), JsonRequestBehavior.AllowGet);
+            List<string> approveFailed = new List<string>();
+            for(int i=0;i< commentId.Length; i++)
+            {
+                var status = commentService.GetCommentById(commentId[i]).Status;
+                if (status == (int)CommentStatus.WARNING)
+                {
+                    if (!commentService.SetCommentStatus(commentId[i], statusId))
+                    {
+                        approveFailed.Add(commentId[i]);
+                    }
+                }else
+                {
+                    approveFailed.Add(commentId[i]);
+                }
+            }
+            return Json(new { totalComment = commentId.Length, errorNumber = approveFailed.Count() }, JsonRequestBehavior.AllowGet);
         }
 
         //Cut long string

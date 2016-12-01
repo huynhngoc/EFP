@@ -22,6 +22,6 @@ namespace DataService.ViewModel
         public string IntentName { get; set; }
         public DateTime DateCreated { get; set; }
         public string ParentId { get; set; }
-        
+        public bool CanHide { get; set; }
     }
 }
