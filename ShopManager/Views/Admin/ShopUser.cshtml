@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Các trang Facebook";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@section CustomCSS {
+    @Styles.Render("~/Toastr-style")
+    <style>
+        .dd-handle span.pull-right {
+            margin-top: -3px;
+        }
+    </style>
+}
+<div class="ibox-content">
+    <div class="nestable-menu">
+        <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Mở tất cả</button>
+        <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Đóng tất cả</button>        
+    </div>
+    <div class="dd" id="nestable2">
+        <ol class="dd-list">
+            @foreach (var shop in ViewBag.Shops)
+            {
+                <li class="dd-item ">
+                    <div class="dd-handle ">
+                        @*<span class="pull-right ">
+                            <button class="btn btn-success btn-sm edit-button"><i class="fa fa-edit"></i></button>
+                        </span>*@
+                        <span class="name">@shop.Name</span>&emsp;<cite class="desc"><a href="@string.Format("https://www.facebook.com/{0}",shop.Id)">Xem trang</a></cite>
+                    </div>
+                    <ol class="dd-list shop" id="@shop.Id">
+                        @foreach (var user in shop.Users)
+                        {
+                            <li class="dd-item ">
+                                <div class="dd-handle user" id="@user.Id">
+                                    <span class="pull-right ">                                        
+                                        @if (user.IsActive)
+                                        {
+                                            <button class="btn btn-danger btn-sm" onclick="setActive(event,@((!user.IsActive).ToString().ToLower()))">Vô hiệu hóa</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-success btn-sm" onclick="setActive(event,@((!user.IsActive).ToString().ToLower()))">Kích hoạt</button>
+                                        }
+                                    </span>
+                                    <span class="name">@user.Email</span>
+                                </div>
+                            </li>
+                        }
+                        
+                    </ol>
+                </li>
+            }            
+        </ol>
+    </div>
+</div>
+<!--modal-->
+
+@section CustomJS {
+    @Scripts.Render("~/Nestable-JS")
+    @Scripts.Render("~/Toastr")
+    <script>
+        function setActive(event, isActive) {
+            var clicked = event.target;
+            var userId = $(clicked).closest(".user").attr("id");
+            var shopId = $(clicked).closest(".shop").attr("id");
+            $.ajax({
+                url: "../Admin/SetActive",
+                method: "POST",
+                data:{
+                    "userId":userId,
+                    "shopId": shopId,
+                    "isActive": isActive
+                },
+                success:function(data){
+                    if (data){
+                        if (isActive){
+                            $(clicked).text("Vô hiệu hóa");
+                            $(clicked).addClass("btn-danger");
+                            $(clicked).removeClass("btn-success")                            
+                        } else {
+                            $(clicked).text("Kích hoạt");
+                            $(clicked).addClass("btn-success");
+                            $(clicked).removeClass("btn-danger")                            
+                        }
+                        $(clicked).attr("onclick","setActive(event,"+!isActive+")");
+                        toastr.success("Cập nhật thành công");
+                    } else {
+                        toastr.error("Cập nhật thất bại");
+                    }
+                    
+                },
+                error: function(){
+                    toastr.error("Cập nhật thất bại");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#nestable2').nestable({
+                group: 1,
+                handleClass: "d"
+            });
+
+            $('.nestable-menu').on('click', function (e) {
+                var target = $(e.target),
+                        action = target.data('action');
+                if (action === 'expand-all') {
+                    $('.dd').nestable('expandAll');
+                }
+                if (action === 'collapse-all') {
+                    $('.dd').nestable('collapseAll');
+                }
+            });            
+
+        
+        });
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": false,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "100",
+            "hideDuration": "100",
+            "timeOut": "3000",
+            "extendedTimeOut": "500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+    </script>
+}

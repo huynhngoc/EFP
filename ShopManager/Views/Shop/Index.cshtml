@@ -17,15 +17,18 @@
                     </h2>
                 </div>
                 <div class="ibox-content">   
-                    <div class="row"                 >
+                    <div class="row" >
                         <div class="col-xs-6 b-r">
                             <ul class="list-unstyled m-t-md">
-                                @if (!string.IsNullOrEmpty(ViewBag.Email))
+                                @if (ViewBag.Email != null)
                                 {
                                     <li>
                                         <span class="fa fa-envelope m-r-xs"></span>
                                         <label>Email:</label>
-                                        @ViewBag.Email
+                                        @foreach (var email in ViewBag.Email)
+                                        {
+                                            @email <br />
+                                        }
                                     </li>
                                 }
                                 @if (!string.IsNullOrEmpty(ViewBag.Address))
@@ -61,7 +64,11 @@
                                         {
                                             @ViewBag.About<br />
                                         }
-                                         @ViewBag.Description
+                                        @if (string.IsNullOrEmpty(ViewBag.Description))
+                                        {
+                                            @ViewBag.Description
+                                        }
+                                         
                                     </li>
                                 }
                                 
@@ -142,12 +149,12 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-lg-9">
+                        <div class="col-lg-12">
                             <div class="flot-chart">
                                 <div class="flot-chart-content" id="orderChart"></div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        @*<div class="col-lg-3">
                             <ul class="stat-list">
                                 <li>
                                     <h2 class="no-margins">2,346</h2> <small>Total orders in period</small>
@@ -171,7 +178,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -193,10 +200,10 @@
                 x: 'x',
                 columns: [
                     ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
-                  ['Đơn hàng hoàn thành', 30, 200, 100, 400, 150, 250],
-                  ['Đơn hàng chưa xong', 50, 20, 10, 40, 15, 25],
-                  ['Đơn hàng đã hủy', 51, 25, 30, 40, 10, 29],
-                  ['Doanh thu', 51, 25, 30, 40, 10, 29]
+                  ['Đơn hàng hoàn thành', 0, 0, 0, 0, 0, 0],
+                  ['Đơn hàng chưa xong', 0, 0, 0, 0, 0, 0],
+                  ['Đơn hàng đã hủy', 0, 0, 0, 0, 0, 0],
+                  ['Doanh thu', 0, 0, 0, 0, 0, 0]
                 ],
                 axes: {
                     'Đơn hàng hoàn thành': 'y2',
@@ -241,9 +248,11 @@
 
             }
         });
-
+        console.log("start");
+        console.log(new Date());
         getTodayOrder();
-
+        console.log("end");
+        console.log(new Date());
         //$.ajax({
         //    url: '../Shop/GetOrderAnalysis',
         //    type: 'POST',
@@ -270,19 +279,25 @@
     function getWeekOrder() {
         start = getMonday(new Date());
         end = new Date().getTime();
-        getAnalysis(start, end);
+        console.log("start");
+        console.log(new Date());
+        getAnalysis(start, end);        
     }
 
     function getMonthOrder() {
         start = new Date().setDate(1);
         end = new Date().getTime();
-        getAnalysis(start, end);
+        console.log("start");
+        console.log(new Date());
+        getAnalysis(start, end);        
     }
 
     function getYearOrder() {
         start = new Date(new Date().getFullYear(), 0, 1).getTime();
         end = new Date().getTime();
-        getAnalysis(start, end);
+        console.log("start");
+        console.log(new Date());
+        getAnalysis(start, end);        
     }
 
     function getAnalysis(start, end) {
@@ -298,6 +313,8 @@
                 'divide': 7
             },
             success: function (data) {
+                console.log("end");
+                console.log(new Date());
                 chart.load({
                     columns: data
                 });

@@ -14,6 +14,7 @@ namespace DataService
     
     public partial class PromotionInfo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PromotionInfo()
         {
             this.Posts = new HashSet<Post>();
@@ -26,7 +27,9 @@ namespace DataService
         public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public string ShopId { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+    
         public virtual Shop Shop { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

@@ -10,6 +10,10 @@
     font-size: 20px;
 }
 
+.ibox{
+    margin:0 !important;
+}
+
 .ibox-scroll {
     overflow: auto;
     height: 65vh;
@@ -219,10 +223,6 @@
     background-color: transparent;
 }
 
-.ibox-scroll {
-    height: 75vh;
-}
-
 .fbImage {
     max-height: 100%;
     max-width: 100%;
@@ -416,5 +416,5 @@ table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
 }
 
 .center_content{
-    height : 68vh;
+    height : 70vh;
 }

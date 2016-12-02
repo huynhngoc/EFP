@@ -15,6 +15,7 @@ namespace DataService.ViewModel
         public string RecentMess { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsRead { get; set; }
+        public int IntentId { get; set; }
 
         public ConversationPreviewViewModel()
         {

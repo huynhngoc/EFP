@@ -26,12 +26,16 @@ namespace DataService.Repository
             return data;
         }
 
-        public ProductViewModel GetProductById(int id)
+        public ProductViewModel GetProductById(int id, string shopId)
         {
             try
             {
                 entites.Configuration.ProxyCreationEnabled = true;
                 Product p = FindByKey(id);
+                if (!p.ShopId.Equals(shopId))
+                {
+                    return null;
+                }
                 return new ProductViewModel()
                 {
                     Id = p.Id,
@@ -285,13 +289,13 @@ namespace DataService.Repository
         //ANDND get newest product by shop
         public IQueryable<Product> GetNewestProductByShop(string shopId)
         {
-            return dbSet.Where(q => q.ShopId == shopId).OrderByDescending(q => q.DateCreated);
+            return dbSet.Where(q =>( q.ShopId == shopId) && (q.Status == true)).OrderByDescending(q => q.DateCreated);
         }
 
         //ANDND get sale product by shop
         public IQueryable<Product> GetSaleProductByShop(string shopId)
         {
-            return dbSet.Where(q => (q.ShopId == shopId) && (q.PromotionPrice != null) && (q.PromotionPrice <= q.Price)).OrderByDescending(q => q.DateCreated);
+            return dbSet.Where(q => (q.ShopId == shopId) && (q.Status == true) && (q.PromotionPrice != null) && (q.PromotionPrice <= q.Price)).OrderByDescending(q => q.DateCreated);
         }
     }
 }

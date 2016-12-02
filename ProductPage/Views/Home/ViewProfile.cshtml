@@ -33,13 +33,15 @@
                                         <input id="customerName" type="text" class="form-control" placeholder="Tên của bạn">
                                         <p id="errorCustomerName" style="color:red; display:none">Vui lòng điền tên của ban!</p>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="divInputPhone">
                                         <label>Điện thoại</label>
-                                        <input id="phone" type="tel" class="form-control" placeholder="Số điện thoại">
+                                        <input id="phone" type="number" class="form-control" placeholder="Số điện thoại">
+                                        <p id="errorCustomerPhone" style="color:red; display:none">Vui lòng điền số điện thoại đúng định dạng!</p>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="divInputEmail">
                                         <label>Email</label>
                                         <input id="email" type="email" class="form-control" placeholder="Email">
+                                        <p id="errorCustomerEmail" style="color:red; display:none">Vui lòng điền email đúng định dạng!</p>
                                     </div>
                                     <div class="form-group">
                                         <label><i class="fa fa-map-marker"></i> Địa chỉ</label>
@@ -253,14 +255,38 @@
             $('#viewOrderDetailModal').modal('show');
         }
 
+
         // Update Customer info
         function updateCustomer(){
+            var checkName = false;
+            var checkPhone = false;
+            var checkEmail = false;
             if($('#customerName').val().length==0){
                 $('#divInputName').addClass('has-error');
                 $('#errorCustomerName').show();
             }else{
                 $('#divInputName').removeClass('has-error');
                 $('#errorCustomerName').hide();
+                checkName=true;
+            }
+            if($('#phone').val().length==0||$('#phone').val().length>11){
+                $('#divInputPhone').addClass('has-error');
+                $('#errorCustomerPhone').show();
+            }else{
+                $('#divInputPhone').removeClass('has-error');
+                $('#errorCustomerPhone').hide();
+                checkPhone=true;
+            }
+            var re = new RegExp(/[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,3}$/);
+            if(!re.test($('#email').val())){
+                $('#divInputEmail').addClass('has-error');
+                $('#errorCustomerEmail').show();
+            }else{
+                $('#divInputEmail').removeClass('has-error');
+                $('#errorCustomerEmail').hide();
+                checkEmail = true;
+            }
+            if(checkName&&checkPhone&&checkEmail){
                 $.ajax({
                     url: "/GetData/UpdateCustomer",
                     type: "post",
@@ -279,13 +305,14 @@
                         }else{
                             toastr.error("Cập nhật thông tin thất bại", "Thất bại");
                         }
-                        
+
                     },
                     error: function(){
                         toastr.error("Cập nhật thông tin thất bại", "Thất bại");
                     }
                 })
             }
+            
 
         }
         $(document).ready(function(){
@@ -330,7 +357,7 @@
                 "columnDefs": [
                     {"data":"Id","targets": [ 0 ]},
                     {"data": function (source) { return FormatDateVN(source.DateCreated) },"targets": [ 1 ]},
-                    {"data": function (source) { 
+                    {"data": function (source) {
                         if(source.Status == 1){
                             return "Đang xử lý"
                         };

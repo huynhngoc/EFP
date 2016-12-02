@@ -25,7 +25,7 @@
                                 <span class="clear">
                                     <span class="block m-t-xs">
                                         <strong class="font-bold">@User.Identity.GetUserName()</strong>
-                                    </span> <span class="text-muted text-xs block">Quản trị viên <b class="caret"></b></span>
+                                    </span> <span class="text-muted text-xs block">Quản trị trang Facebook <b class="caret"></b></span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -203,7 +203,7 @@
                     } else {
                         console.log('User cancelled login or did not fully authorize.');
                     }
-                }, { scope: 'manage_pages,publish_pages,read_page_mailboxes,pages_manage_cta,pages_manage_instant_articles,user_posts,publish_actions,pages_messaging' });
+                }, { scope: 'manage_pages,publish_pages,read_page_mailboxes,pages_messaging' });//pages_manage_cta,pages_manage_instant_articles,user_posts,publish_actions,
             }
 
             var pageAccessToken = '';

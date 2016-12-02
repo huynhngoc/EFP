@@ -24,12 +24,12 @@ function loadProductOfParentCategory(FBId, shopId, parentId, start, quantity, ca
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198px",
+                            "height": "195px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
                     } else {
-                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
+                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh").css("height", "195px");
                     }
                     productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
@@ -131,14 +131,22 @@ function loadProductOfParentCategory(FBId, shopId, parentId, start, quantity, ca
                 $('#loadingSpinner').attr("style", {
                     "display": "none"
                 });
-                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                if (loadMore == 0) {
+                    $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                } else {
+                    $('#divLoadMore').empty();
+                }
             }
         },
         error: function () {
             $('#loadingSpinner').attr("style", {
                 "display": "none"
             });
-            $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            if (loadMore == 0) {
+                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            } else {
+                $('#divLoadMore').empty();
+            }
         }
     })
 }
@@ -169,12 +177,12 @@ function loadProductByShopAndCategory(FBId, shopId, categoryId, start, quantity,
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198px",
+                            "height": "195px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
                     } else {
-                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
+                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh").css("height", "195px");
                     }
                     productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
@@ -277,14 +285,22 @@ function loadProductByShopAndCategory(FBId, shopId, categoryId, start, quantity,
                 $('#loadingSpinner').attr("style", {
                     "display": "none"
                 });
-                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                if (loadMore == 0) {
+                    $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                } else {
+                    $('#divLoadMore').empty();
+                }
             }
         },
         error: function () {
             $('#loadingSpinner').attr("style", {
                 "display": "none"
             });
-            $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            if (loadMore == 0) {
+                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            } else {
+                $('#divLoadMore').empty();
+            }
         }
     })
 }
@@ -314,12 +330,12 @@ function loadSearchResult(FBId, shopId, productName, start, quantity, loadMore) 
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198px",
+                            "height": "195px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
                     } else {
-                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
+                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh").css("height", "195px");
                     }
                     productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
@@ -421,14 +437,22 @@ function loadSearchResult(FBId, shopId, productName, start, quantity, loadMore) 
                 $('#loadingSpinner').attr("style", {
                     "display": "none"
                 });
-                $('#divProductContent').append("<h2 class='text-center'>Không tìm thấy sản phẩm</h2>");
+                if (loadMore == 0) {
+                    $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                } else {
+                    $('#divLoadMore').empty();
+                }
             }
         },
         error: function () {
             $('#loadingSpinner').attr("style", {
                 "display": "none"
             });
-            $('#divProductContent').append("<h2 class='text-center'>Không tìm thấy sản phẩm</h2>");
+            if (loadMore == 0) {
+                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            } else {
+                $('#divLoadMore').empty();
+            }
         }
     })
 }
@@ -458,12 +482,12 @@ function loadNewestProductByShop(FBId, shopId, start, quantity, loadMore) {
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198px",
+                            "height": "195px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
                     } else {
-                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
+                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh").css("height", "195px");
                     }
                     productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
@@ -551,7 +575,7 @@ function loadNewestProductByShop(FBId, shopId, start, quantity, loadMore) {
                 // Add load more button
                 if (data.length >= quantity) {
                     $('#divLoadMore').empty();
-                    $('#divLoadMore').append("<button class='btn btn-primary' onclick='loadSearchResult(" + FBId + "," + shopId + "," + parseInt(start + quantity) + "," + quantity + ",1)'>Thêm sản phẩm</button>");
+                    $('#divLoadMore').append("<button class='btn btn-primary' onclick='loadNewestProductByShop(" + FBId + "," + shopId + "," + parseInt(start + quantity) + "," + quantity + ",1)'>Thêm sản phẩm</button>");
                 }
                 else {
                     if (data.length < quantity) {
@@ -565,14 +589,22 @@ function loadNewestProductByShop(FBId, shopId, start, quantity, loadMore) {
                 $('#loadingSpinner').attr("style", {
                     "display": "none"
                 });
-                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                if (loadMore == 0) {
+                    $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                } else {
+                    $('#divLoadMore').empty();
+                }
             }
         },
         error: function () {
             $('#loadingSpinner').attr("style", {
                 "display": "none"
             });
-            $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            if (loadMore == 0) {
+                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            } else {
+                $('#divLoadMore').empty();
+            }
         }
     })
 }
@@ -602,12 +634,12 @@ function loadSaleProductByShop(FBId, shopId, start, quantity, loadMore) {
                     //Set image for product
                     if (data[i].Urls.length != 0) {
                         productItemTemplate.find("div.product-imitation").css({
-                            "height": "198px",
+                            "height": "195px",
                             "background": "url('" + data[i].Urls[0] + "') center no-repeat",
                             "background-size": "contain"
                         });
                     } else {
-                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh");
+                        productItemTemplate.find("div.product-imitation").text("Chưa có hình ảnh").css("height", "195px");
                     }
                     productItemTemplate.find("div.ibox-content.product-box > a").attr("onclick", "viewDetail(" + FBId + "," + shopId + "," + data[i].CategoryId + "," + data[i].Id + ")");
                     // Set tag sale and price
@@ -709,14 +741,22 @@ function loadSaleProductByShop(FBId, shopId, start, quantity, loadMore) {
                 $('#loadingSpinner').attr("style", {
                     "display": "none"
                 });
-                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                if (loadMore == 0) {
+                    $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+                } else {
+                    $('#divLoadMore').empty();
+                }
             }
         },
         error: function () {
             $('#loadingSpinner').attr("style", {
                 "display": "none"
             });
-            $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            if (loadMore == 0) {
+                $('#divProductContent').append("<h2 class='text-center'>Chưa có sản phẩm</h2>");
+            } else {
+                $('#divLoadMore').empty();
+            }
         }
     })
 }
@@ -737,6 +777,7 @@ function viewDetail(FBId, shopId, categoryId, productId) {
         },
         dataType: "json",
         success: function (data) {
+            $('#viewDetailModal').modal('show');
             $('#divProductImage').empty();
             if (data.Urls.length != 0) {
                 $('#divProductImage').append("<div class='item active' style='height:546px;background: url(\""+data.Urls[0]+"\") center no-repeat;background-size: contain'></div>");
@@ -768,7 +809,7 @@ function viewDetail(FBId, shopId, categoryId, productId) {
                 $('#quantityAndAddToCart').show();
             }
             // Set description
-            if (data.Description != null) {
+            if (data.Description != null && data.Description.length > 0) {
                 $('#productDescription').append(data.Description);
             } else {
                 $('#productDescription').append("Chưa có mô tả cho sản phẩm này.");
@@ -863,7 +904,6 @@ function viewDetail(FBId, shopId, categoryId, productId) {
                 $('#tblAttribute').append("Chưa có mô tả đặc tính cho sản phẩm này");
                 $('#hiddenValue').append("<input id='productDetailProperties' type='hidden' value='" + properties + "' />");
             }
-            $('#viewDetailModal').modal('show');
         },
         error: function () {
             toastr.error("Đã xảy ra lỗi", "Lỗi");

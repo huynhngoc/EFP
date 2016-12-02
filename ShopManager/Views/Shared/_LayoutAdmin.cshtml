@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Header-CSS")
-    @Styles.Render("~/Toastr-style")
     @RenderSection("CustomCSS", required: false)
     @Styles.Render("~/Animate-and-style-CSS")
     @RenderSection("MyCSS", required: false)
@@ -21,21 +20,17 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                             <span>
-                                <img alt="image" class="img-circle" src="@HttpContext.Current.Session["ShopImg"] " />
+                                <img alt="image" class="img-circle" src="~/Content/img/profile.jpg" />
                             </span>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">                                
                                 <span class="clear">
                                     <span class="block m-t-xs">
                                         <strong class="font-bold">@User.Identity.GetUserName()</strong>
-                                    </span> <span class="text-muted text-xs block">@HttpContext.Current.Session["ShopName"]  <b class="caret"></b></span>
-                                </span>
+                                    </span> <span class="text-muted text-xs block">Quản trị viên <b class="caret"></b></span>
+                                </span>                                
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="../Manage/Index">Tài khoản của bạn</a></li>
-                                @*<li><a href="#">Liên hệ</a></li>*@
-                                <li><a href="../Home/ChooseShop">Đổi cửa hàng</a></li>
-                                @*<li class="divider"></li>
-                                    <li><a href="#">Thoát</a></li>*@
+                                <li><a href="../Manage/Index">Tài khoản của bạn</a></li>                                
                             </ul>
                         </div>
                         <div class="logo-element"> EFP </div>
@@ -45,8 +40,7 @@
                     <li>
                         <a href="../Shop/Index"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý chung</span></a>
                     </li>
-                    <!--./Dashboard-->
-                    <li> <a href="../ChatComment"><i class="fa fa-comments-o"></i> <span class="nav-label">Tin nhắn và bình luận</span> <span id="chatCommentCount" class="label label-danger pull-right">@(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )</span></a> </li>
+                    <!--./Dashboard-->                    
                     <li> <a href="../Order"><i class="fa fa-inbox"></i> <span class="nav-label">Đơn hàng</span> <span class="label label-danger pull-right">23</span></a> </li>
                     <li> <a href="../Product"><i class="fa fa-tags"></i> <span class="nav-label">Sản phẩm</span> </a> </li>
                     <li> <a href="../Category"><i class="fa fa-tags"></i> <span class="nav-label">Phân loại</span> </a> </li>
@@ -89,11 +83,11 @@
 
                         <li class="dropdown">
                             <!--Number of notification-->
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#"> 
-                            <i class="fa fa-bell"></i> 
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bell"></i>
                                 <span class="label label-danger" id="notiCount">
-                                @(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )
-                                </span> 
+                                    1
+                                </span>
                             </a>
                             <ul class="dropdown-menu dropdown-alerts">
                                 <li>
@@ -168,8 +162,7 @@
 
 
     @Scripts.Render("~/Mainly-scripts")
-    @Scripts.Render("~/Custom-and-plugin-javascript")
-    @Scripts.Render("~/Toastr")
+    @Scripts.Render("~/Custom-and-plugin-javascript")    
     @RenderSection("CustomJS", required: false)
     @Scripts.Render("~/SignalR-JS")
     @Scripts.Render("/signalr/hubs")
@@ -179,65 +172,15 @@
             var chat = $.connection.alertHub;
             // Create a function that the hub can call to broadcast messages.
             chat.client.sendMessageToPage = function (data, threadId, intent) {
-                console.log(threadId);
-                console.log(data);
-                try {
-                    ProcessIncomingMessage(data, threadId, intent);
-                } catch (e) {
-                    if(intent>0){
-                        toastr.info("Bạn có tin nhắn mới");
-                    }
-                } finally{
-                    //$("#conversationCount").text($("#conversationCount").text()+1);
-                    //$("#chatCommentCount").text($("#chatCommentCount").text()+1);
-                    //$("#notiCount").text($("#notiCount").text()+1);
-                }
 
             };
 
             chat.client.sendCommentToPage = function (comment, intent) {
-                console.log(comment);
-                console.log(intent);
-                try {
-                    ProcessCommentSignalR(comment,intent);
-                } catch (e) {
-                    if(intent>0){
-                        if (comment.item == "@DataService.Utils.WebhookItem.Comment"){
-                            toastr.info("Bạn có bình luận mới");
-                        }
-                        if (comment.item == "@DataService.Utils.WebhookItem.Post" || comment.item == "@DataService.Utils.WebhookItem.Photo"){
-                            toastr.info("Bạn có bài đăng mới");
-
-                        }
-                    }
-
-                } finally {
-                    @*if(intent>0){
-                        if (comment.item == "@DataService.Utils.WebhookItem.Comment"){
-                            $("#commentCount").text($("#commentCount").text()+1);
-                        }
-                        if (comment.item == "@DataService.Utils.WebhookItem.Post" || comment.item == "@DataService.Utils.WebhookItem.Photo"){
-                            $("#postCount").text($("#postCount").text()+1);
-                        }
-                        $("#chatCommentCount").text($("#chatCommentCount").text()+1);
-                        $("#notiCount").text($("#notiCount").text()+1);
-                    }*@
-                    
-                    
-                }
-
-
-
 
             };
 
             //update noti
             chat.client.sendNotification = function(conversation,post,comment){
-                $("#chatCommentCount").text(conversation+post+comment);
-                $("#notiCount").text(conversation+post+comment);
-                $("#postCount").text(post);
-                $("#commentCount").text(comment);
-                $("#conversationCount").text(conversation);
             };
 
             // Get the user name and store it to prepend to messages.
@@ -245,33 +188,12 @@
             // Set initial focus to message input box.
             //$('#message').focus();
             // Start the connection.
-            $.connection.hub.qs = { 'Name': @HttpContext.Current.Session["ShopId"] };
+            $.connection.hub.qs = { 'Name': '@User.Identity.GetUserId()' };
             $.connection.hub.start().done(function () {
-                //$('#sendmessage').click(function () {
-                //    // Call the Send method on the hub.
-                //    chat.server.send($('#displayname').val(), $('#message').val());
-                //    // Clear text box and reset focus for next comment.
-                //    $('#message').val('').focus();
-                //});
+
             });
         });
-
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "progressBar": false,
-            "preventDuplicates": false,
-            "positionClass": "toast-top-right",
-            "onclick": null,
-            "showDuration": "100",
-            "hideDuration": "100",
-            "timeOut": "3000",
-            "extendedTimeOut": "500",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-        </script>
+        
+    </script>
 </body>
 </html>

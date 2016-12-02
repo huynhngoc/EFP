@@ -1,0 +1,345 @@
+﻿
+@{
+    ViewBag.Title = "Cài đặt phân tích ngôn ngữ tự nhiên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@section CustomCSS {
+    @Styles.Render("~/Toastr-style")
+@Styles.Render("~/SweetAlert-CSS")
+    <style>
+        
+    </style>
+}
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <h2>Các Intent</h2>
+        <fieldset>
+            <div class=" pull-right"><button onclick="addIntent()" class="btn btn-primary"><i class="fa fa-plus"></i></button></div>
+        </fieldset>
+    </div>
+</div>
+@foreach (var intentTemplate in ViewBag.intents)
+{
+    <div class="ibox float-e-margins" id="@intentTemplate.Intent.Id">
+        <div class="ibox-title">
+            <div class="ibox-tools">
+                <h5><b>@intentTemplate.Intent.IntentName</b></h5>
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-down"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content" id="@intentTemplate.Intent.ApiAiId" style="display:none">
+            <fieldset class="form-horizontal">
+                @if (intentTemplate.Templates != null)
+                {
+                    foreach (var template in intentTemplate.Templates)
+                    {
+                        <div class="form-group">
+                            <div class="col-xs-9">
+                                <input class="form-control" readonly value="@template" />
+                            </div>
+                            <div class="col-xs-3">
+                                <button onclick="removeTemplate(event)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(intentTemplate.Intent.ApiAiId))
+                {
+                    <div class="form-group">
+                        <div class="col-xs-9">
+                            <input class="form-control" placeholder="Câu mới" />
+                        </div>
+                        <div class="col-xs-3">
+                            <button onclick="addTemplate(event)" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                } else
+                {
+                    <i>Không thể thêm câu vào intent này</i>
+                }
+
+
+            </fieldset>
+            <fieldset>
+                @if (intentTemplate.Intent.Id > 9)
+                {
+                    <div class=" pull-right"><button onclick="deleteIntent(event)" class="btn btn-danger">Xóa intent này</button></div>
+                }
+
+            </fieldset>
+        </div>
+    </div>
+}
+
+
+
+@section CustomJS {
+    @Scripts.Render("~/Toastr")
+    @Scripts.Render("~/SweetAlert-JS")
+    <script>
+        function removeTemplate(event) {
+            var clicked = event.target;
+            var apiAiId = $(clicked).closest(".ibox-content").attr("id");
+            var content = $($(clicked).closest(".form-group").find("input")[0]).val();
+            console.log(apiAiId + content);
+            swal({
+                title: "Xác nhận"
+                    , text: "Bạn có chắc chắn muốn xóa"
+                    , type: "warning"
+                    , showCancelButton: true
+                    , closeOnConfirm: true
+                    , showLoaderOnConfirm: true,
+            }, function () {
+                $.ajax({
+                    url: '../Admin/RemoveTemplate',
+                    type: 'POST',
+                    data: {
+                        'apiAiId': apiAiId,
+                        'content': content
+                    },
+                    //contentType: 'application/json; charset=utf-8',
+                    success: function (data, textStatus, xhr) {
+                        if (data.success == false) {
+                            swal("Không xóa được", "Đã có lỗi xảy ra", "warning")
+                        }
+                        else {
+                            swal({
+                                title: "Xóa thành công!"
+                                //, text: "I will close in 2 seconds."
+                            , timer: 500
+                            , type: "success"
+                            , showConfirmButton: false
+                            });
+                            $(clicked).closest(".form-group").remove();
+                        }
+                    },
+                    error: function () {
+                        console.log("error");
+                        swal({
+                            title: "Không thể xóa được!"
+                            //, text: "I will close in 2 seconds."
+                            , timer: 1000
+                            , type: "warning"
+                            , showConfirmButton: false
+                        });
+                    }
+                });
+            });
+        }
+
+        function addTemplate(event){
+            var clicked = event.target;
+            var apiAiId = $(clicked).closest(".ibox-content").attr("id");
+            var content = $($(clicked).closest(".form-group").find("input")[0]).val();
+            console.log(apiAiId + content);
+            $.ajax({
+                url: '../Admin/AddTemplate',
+                type: 'POST',
+                data: {
+                    'apiAiId': apiAiId,
+                    'content': content
+                },
+                //contentType: 'application/json; charset=utf-8',
+                success: function (data, textStatus, xhr) {
+                    if (data.success == false) {
+                        swal("Không thêm được", "Đã có lỗi xảy ra", "warning")
+                    }
+                    else {
+                        swal({
+                            title: "Thêm thành công!"
+                            //, text: "I will close in 2 seconds."
+                        , timer: 500
+                        , type: "success"
+                        , showConfirmButton: false
+                        });
+                        $(clicked).closest(".form-group")
+                            .before('<div class="form-group">'
+                            +'<div class="col-xs-9">'
+                                +'<input class="form-control" readonly value="'+content+'" />'
+                            +'</div>'
+                            +'<div class="col-xs-3">'
+                              +'  <button onclick="removeTemplate(event)" class="btn btn-danger"><i class="fa fa-trash"></i></button>'
+                            +'</div>'
+                        + '</div>');
+                        $($(clicked).closest(".form-group").find("input")[0]).val("");
+                    }
+                },
+                error: function () {
+                    console.log("error");
+                    swal({
+                        title: "Không thể thêm được!"
+                        //, text: "I will close in 2 seconds."
+                        , timer: 1000
+                        , type: "warning"
+                        , showConfirmButton: false
+                    });
+                }
+            });
+        }
+
+        function deleteIntent(event) {
+            var clicked = event.target;
+            var apiAiId = $(clicked).closest(".ibox-content").attr("id");
+            var id = $(clicked).closest(".ibox").attr("id");
+            console.log(apiAiId + id);
+            swal({
+                title: "Xác nhận"
+                    , text: "Bạn có chắc chắn muốn xóa"
+                    , type: "warning"
+                    , showCancelButton: true
+                    , closeOnConfirm: true
+                    , showLoaderOnConfirm: true,
+            }, function () {
+                $.ajax({
+                    url: '../Admin/DeleteIntent',
+                    type: 'POST',
+                    data: {
+                        'apiAiId': apiAiId,
+                        'id': id
+                    },
+                    //contentType: 'application/json; charset=utf-8',
+                    success: function (data, textStatus, xhr) {
+                        if (data.success == false) {
+                            swal("Không xóa được", "Đã có lỗi xảy ra", "warning")
+                        }
+                        else {
+                            swal({
+                                title: "Xóa thành công!"
+                                //, text: "I will close in 2 seconds."
+                            , timer: 500
+                            , type: "success"
+                            , showConfirmButton: false
+                            });
+                            $(clicked).closest(".ibox").remove();
+                        }
+                    },
+                    error: function () {
+                        console.log("error");
+                        swal({
+                            title: "Không thể xóa được!"
+                            //, text: "I will close in 2 seconds."
+                            , timer: 1000
+                            , type: "warning"
+                            , showConfirmButton: false
+                        });
+                    }
+                });
+            });
+        }
+
+        function addIntent() {
+            swal({
+                title: "Thêm intent!",
+                //text: "Write something interesting:",
+                type: "input", showCancelButton: true,
+                closeOnConfirm: false,
+                animation: "slide-from-top",
+                inputPlaceholder: "Tên intent mới"
+            }, function (inputValue) {
+                if (inputValue === false)
+                    return false;
+                if (inputValue === "")
+                {
+                    //swal.showInputError("You need to write something!");
+                    return false;
+                }
+                $.ajax({
+                    url: '../Admin/AddIntent',
+                    type: 'POST',
+                    data: {
+                        'name': inputValue
+                    },
+                    //contentType: 'application/json; charset=utf-8',
+                    success: function (data, textStatus, xhr) {
+                        if (data.success == false) {
+                            swal("Không thêm được", "Đã có lỗi xảy ra", "warning")
+                        }
+                        else {
+                            swal({
+                                title: "Thêm thành công!"
+                                //, text: "I will close in 2 seconds."
+                            , timer: 500
+                            , type: "success"
+                            , showConfirmButton: false
+                            });
+                            $(".wrapper-content")
+                                .append('<div class="ibox float-e-margins" id="'+data.id+'">'
+        + '<div class="ibox-title">'
+        +'    <div class="ibox-tools">'
+          +'      <h5><b>'+inputValue+'</b></h5>'
+            +'    <a class="collapse-link">'
+              +'      <i class="fa fa-chevron-down"></i>'
+                +'</a>'
+            +'</div>'
+        +'</div>'
+        +'<div class="ibox-content" id="'+data.apiAiId+'" style="display:none">'
+            +'<fieldset class="form-horizontal">'
+                    +'<div class="form-group">'
+                        +'<div class="col-xs-9">'
+                            +'<input class="form-control" placeholder="Câu mới" />'
+                        +'</div>'
+                        +'<div class="col-xs-3">'
+                            +'<button onclick="addTemplate(event)" class="btn btn-success"><i class="fa fa-plus"></i></button>'
+                        +'</div>'
+                    +'</div>'        
+            +'</fieldset>'
+            +'<fieldset>'
+                    +'<div class=" pull-right"><button onclick="deleteIntent(event)" class="btn btn-danger">Xóa intent này</button></div>'
+            +'</fieldset>'
+        + '</div>');
+            // Collapse ibox function
+            $('.collapse-link').click(function () {
+                var ibox = $(this).closest('div.ibox');
+                var button = $(this).find('i');
+                var content = ibox.find('div.ibox-content');
+                content.slideToggle(200);
+                button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+                ibox.toggleClass('').toggleClass('border-bottom');
+                setTimeout(function () {
+                    ibox.resize();
+                    ibox.find('[id^=map-]').resize();
+                }, 50);
+            });
+                        }
+                    },
+                    error: function () {
+                        console.log("error");
+                        swal({
+                            title: "Không thể thêm được!"
+                            //, text: "I will close in 2 seconds."
+                            , timer: 1000
+                            , type: "warning"
+                            , showConfirmButton: false
+                        });
+                    }
+                });
+                
+            });
+        }
+
+        $(document).ready(function () {
+
+        });
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": false,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "100",
+            "hideDuration": "100",
+            "timeOut": "3000",
+            "extendedTimeOut": "500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+    </script>
+}

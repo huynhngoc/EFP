@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Text;
 using Newtonsoft.Json;
 using Facebook;
+using System.Configuration;
 
 namespace ProductPage.Controllers
 {
@@ -37,14 +38,13 @@ namespace ProductPage.Controllers
             {
                 if (pageInformation.FBId == null || pageInformation.FBId == "")
                 {
-                    Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
+                    Response.Redirect("/Home/NotAuhorize?shopId=" + pageInformation.ShopId);
                 }
             }
             else
             {
-                Response.Redirect("/Home/NotAuhorize?shopId="+ pageInformation.ShopId);
+                Response.Redirect("/Home/NotAuhorize");
             }
-            
 
             ViewBag.PageInfo = pageInformation;
 
@@ -126,7 +126,7 @@ namespace ProductPage.Controllers
                 // JSON object
                 string data = Encoding.UTF8.GetString(dataBuffer);
 
-                byte[] appSecretBytes = Encoding.UTF8.GetBytes("40d95140ed2f41994dffa498bf62bb4c");
+                byte[] appSecretBytes = Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["FbAppSecret"]);
                 System.Security.Cryptography.HMAC hmac = new System.Security.Cryptography.HMACSHA256(appSecretBytes);
                 byte[] expectedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(split[1]));
                 if (expectedHash.SequenceEqual(signature))

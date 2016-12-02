@@ -81,6 +81,10 @@ namespace ShopManager.Controllers
             {
                 case SignInStatus.Success:
                     //return RedirectToLocal(returnUrl);
+                    if (UserManager.IsInRole(SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId(),"Admin"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
                     return RedirectToAction("ChooseShop", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -88,7 +92,7 @@ namespace ShopManager.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Sai tên đăng nhập hoặc mật khẩu.");
                     return View(model);
             }
         }
@@ -347,7 +351,7 @@ namespace ShopManager.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    //return RedirectToLocal(returnUrl);
+                    //return RedirectToLocal(returnUrl);                    
                     return RedirectToAction("ChooseShop", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");

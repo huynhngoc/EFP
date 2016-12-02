@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using DataService.Utils;
@@ -12,6 +10,9 @@ using Facebook;
 using System.Configuration;
 using System.Text;
 using ApiAiSDK;
+using ApiAiSDK.Model;
+using ShopManager.Api.Ai.Custom;
+using System.Diagnostics;
 
 namespace ShopManager.Controllers
 {
@@ -527,6 +528,25 @@ namespace ShopManager.Controllers
                 return str;
             }
 
+        }
+
+        public JsonResult SendIntent(string str)
+        {
+            AIDataServiceCustom apiService = new AIDataServiceCustom(
+                new AIConfigurationCustom(ConfigurationManager.AppSettings["ApiAiDeveloper"], SupportedLanguage.English, "intents"));
+            try
+            {
+                var intent = apiService.RequestIntentGet(str);
+                intent.SetMoreTemplates("Bạn có thể gọi điện với mình qua số @sys.phone-number:phone-number");
+                var result = apiService.RequestIntentPut(intent, str);
+                return Json(result,JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
+
+            }                        
         }
     }
 }

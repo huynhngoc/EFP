@@ -221,7 +221,9 @@ namespace DataService.Repository
                 IntentId = q.IntentId.Value,
                 DateCreated = q.DateCreated,
                 ParentId = q.ParentId,
-                LastContent =  q.LastContent
+                LastContent =  q.LastContent,
+                PostContent = q.Post.LastContent,
+                CanHide = q.CanHide
             });
             return data;
 
@@ -258,7 +260,7 @@ namespace DataService.Repository
             for (int i = 0; i < userList.Count(); i++)
             {
                 var SenderFbId = userList[i].UserFBId;
-                var commentList = dbSet.Where(q => (q.SenderFbId == SenderFbId) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null)).ToList();
+                var commentList = dbSet.Where(q => (q.SenderFbId == SenderFbId) && (q.Post.ShopId == shopId) && (q.DateCreated >= startDate || startDate == null) && (q.DateCreated <= endDate || endDate == null)).ToList();
                 userList[i].TotalComment = commentList.Count();
                 userList[i].UnreadComment = 0;
 
