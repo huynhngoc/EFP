@@ -149,9 +149,6 @@ namespace DataService.Repository
             this.Save();
             return result;
         }
-        public IQueryable<Customer> CheckCustomerExistByEmail (string email,string shopId)
-        {
-            return dbSet.Where(q => q.Email == email && q.ShopId == shopId);
-        }
+        
     }
 }

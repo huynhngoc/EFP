@@ -81,10 +81,6 @@ namespace DataService.Service
             return customer;
         }
         
-        public List<Customer> CheckCustomerExistByEmail (string email, string shopId)
-        {
-            return repository.CheckCustomerExistByEmail(email, shopId).ToList();
-        }
     }
        
         

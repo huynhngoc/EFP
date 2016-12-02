@@ -85,7 +85,7 @@ namespace ShopManager.Controllers
 
                 var orders = orderService.GetOrderByShopIdAndCustomerId(shopId, cusId, param);
                 Debug.WriteLine("----x " + orders.Count());
-                IQueryable<OrderViewModel> data = orders.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+                
                 //if (whichOrder == "asc")
 
                 //    data = data.OrderBy(q => whichCol == 0 ? q.Id : whichCol == 1 ? q.DateModified : q.Total);
@@ -98,36 +98,37 @@ namespace ShopManager.Controllers
                     case 0:
                         if (whichOrder == "asc")
                         {
-                            data = data.OrderBy(q => q.Id);
+                            orders = orders.OrderBy(q => q.Id);
                         }
                         else
                         {
-                            data = data.OrderByDescending(q => q.Id);
+                            orders = orders.OrderByDescending(q => q.Id);
                         }
                         break;
 
                     case 1:
                         if (whichOrder == "asc")
                         {
-                            data = data.OrderBy(q => q.DateModified);
+                            orders = orders.OrderBy(q => q.DateModified);
                         }
                         else
                         {
-                            data = data.OrderByDescending(q => q.DateModified);
+                            orders = orders.OrderByDescending(q => q.DateModified);
                         }
                         break;
                     case 2:
                         if (whichOrder == "asc")
                         {
-                            data = data.OrderBy(q => q.Total);
+                            orders = orders.OrderBy(q => q.Total);
                         }
                         else
                         {
-                            data = data.OrderByDescending(q => q.Total);
+                            orders = orders.OrderByDescending(q => q.Total);
                         }
                         break;
-                    default: data = data.OrderBy(q => q.DateModified); break;
+                    default: orders = orders.OrderBy(q => q.DateModified); break;
                 }
+                IQueryable<OrderViewModel> data = orders.Skip(param.iDisplayStart).Take(param.iDisplayLength);
                 var totalRecords = orders.Count();
                 //var data = customers;
                 Debug.WriteLine("display start " + param.iDisplayStart + "display length " + param.iDisplayLength);
@@ -169,14 +170,9 @@ namespace ShopManager.Controllers
         {
             string shopId = (string)Session["ShopId"];
             //var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
-            List<Customer> tmp_cus = cusService.CheckCustomerExistByEmail(Email, shopId);
             //Debug.WriteLine("counttttttttttttttttt " + tmp_cus.Count);
-            if (tmp_cus.Count != 0 && Email.Trim()!="") return 2;
-            else
-            {
-                var data = cusService.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
-                return data;
-            }
+            var data = cusService.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
+            return data;
             //1 = success / 2 = success but fail in creating / 3 = exception
         }
         public bool EditCustomer(int Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
@@ -184,8 +180,6 @@ namespace ShopManager.Controllers
             ShopId = (string)Session["ShopId"];
             Debug.WriteLine("id: " + Id + "| name: " + Name + "|address: " + Addr + "|description: " + Desc + "|Phone: "
                 + Phone + "|Email: " + Email + "|ShopId: " + ShopId);
-            List<Customer> tmp_cus = cusService.CheckCustomerExistByEmail(Email, ShopId);
-            if (tmp_cus.Count >1 && Email.Trim() != "") return false;
             return cusService.EditCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
         }
 

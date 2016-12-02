@@ -1,10 +1,4 @@
 ﻿
-var createSuc_Mes = "Tạo mới khách hàng thành công!";
-var createFail_Mes = "Tạo mới khách hàng thất bại";
-var createFaildup_Mes = "Khách hàng này đã tồn tại";
-var editFail_Mes = "Chỉnh sửa thông tin thất bại";
-var editSuc_Mes = "Chỉnh sửa thông tin thành công";
-var fail_Mes = "Lỗi hệ thống";
 var oTable;
 var oTable_Order;
 //var oTable_Order;
@@ -295,7 +289,6 @@ function editCustomerDetail() {
 }
 
 function clear_add() {
-
     document.getElementById("phone_errorTxt1").style.visibility = "hidden";
     document.getElementById("mail_errorTxt1").style.visibility = "hidden";
     document.getElementById("name_errorTxt1").style.visibility = "hidden";
