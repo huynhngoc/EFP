@@ -233,13 +233,16 @@
                         </div>
                     </div>
                     <div class="col-xs-5" style="padding-right:0">
-                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly>
+                        <i class="fa fa-user"></i> Tên <input id="cus_name" class="form-control" value="" readonly onclick="validate(3,this.value)" onkeyup="validate(3,this.value)">
+                        <div><a id="name_errorTxt" style="color: red; visibility:hidden;">Xin nhập tên</a></div>
                     </div>
                     <div class="col-xs-5">
-                        <i class="fa fa-phone"></i> SĐT <input id="cus_phone" class="form-control" value="" readonly>
+                        <i class="fa fa-phone"></i> SĐT <input id="cus_phone" class="form-control" value="" readonly onchange="validate(2,this.value)" onkeyup="validate(2,this.value)" onclick="validate(2,this.value)">
+                        <div><a id="phone_errorTxt" style="color: red; visibility:hidden;">SĐT không hợp lệ</a></div>
                     </div>
                     <div class="col-xs-12">
-                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly>
+                        <i class="fa fa-envelope"></i> Email <input class="form-control" id="cus_mail" value="" readonly onchange="validate(1,this.value)" onkeyup="validate(1,this.value)" onclick="validate(1,this.value)">
+                        <div><a id="mail_errorTxt" style="color: red; visibility:hidden;">Email không hợp lệ</a></div>
                     </div>
                     <div class="col-xs-12">
                         <i class="fa fa-home"></i> Địa chỉ <textarea class="form-control" style="resize:none" id="cus_addr" readonly></textarea>
@@ -387,6 +390,13 @@
         ];
         var shopId_text = @Session["shopId"].ToString();
         var shopName_text = '@Session["shopOwner"].ToString()';
+
+        var valid_edit_name = 1;
+        var valid_edit_email = 1;
+        var valid_edit_phone = 1;
+        var customer_mode = 0;
+        //1 = add, 2=edit
+        var email_pattern = /^[\w._-]+[+]?[\w._-]+@@[\w.-]+\.[a-zA-Z]{2,6}$/;
 
         function ProcessCommentSignalR(comment,intent){
             console.log(comment);
@@ -1245,9 +1255,11 @@
 
         function ShowUserInfo(div_ob)
         {
+            
             var curElement = $($(div_ob).children(".media-body")[0]);
             var curImage = $($(div_ob).children(".pull-left")[0]);
             var userfbid = curElement.find("a").attr("id");
+            CheckCusMode(0);
             //var cust = GetUserFromDb(userfbid);
 
             ////("sdfsdfs");
@@ -1262,7 +1274,7 @@
                 ProcessUserInfo(userfbid);
                 event.stopPropagation();
             }
-           
+
             ////( $('.cust_info').data('fbid'));
         }
 
@@ -2780,6 +2792,7 @@
             }
         });
         function ConversationSelect(){
+            CheckCusMode(0);
             $('#chatSection').css('pointer-events','auto');
 
             if ($('#suggest_wrapper .btn').hasClass('active')){
@@ -3209,7 +3222,7 @@
             $("#cus_phone").prop('readonly', false);
             $("#cus_mail").prop('readonly', false);
             $("#cus_addr").prop('readonly', false);
-
+            CheckCusMode(1);
             if(pagemode == "chat") $('#cus_name').val($('.ui-selected .fb_name').html());
             else if (pagemode == "comment") $('#cus_name').val($('.cust_info').data('fbname'));
             $('#cus_phone').val('');
@@ -3228,7 +3241,7 @@
             $("#cus_phone").prop('readonly', false);
             $("#cus_mail").prop('readonly', false);
             $("#cus_addr").prop('readonly', false);
-
+            CheckCusMode(2);
             $('#btn_add').hide();
             $('#btn_edit').hide();
             $('#btn_ok_add').hide();
@@ -3267,6 +3280,7 @@
                     $('#btn_ok_add').hide();
                     $('#btn_ok_edit').hide();
                     $('#btn_cancel').hide();
+                    CheckCusMode(0);
                 }
                 else {
                     toastr.error("Xin điền đầy đủ các ô bắt buộc", "Thất bại");
@@ -3303,6 +3317,7 @@
                     $('#btn_ok_add').hide();
                     $('#btn_ok_edit').hide();
                     $('#btn_cancel').hide();
+                    CheckCusMode(0);
                 }
                 else {
                     toastr.error("Có lỗi xảy ra", "Thất bại");
@@ -3315,6 +3330,7 @@
             $("#cus_phone").prop('readonly', true);
             $("#cus_mail").prop('readonly', true);
             $("#cus_addr").prop('readonly', true);
+            CheckCusMode(0);
 
             $('#cus_name').val($('#cus_name').attr('value'));
             $('#cus_phone').val($('#cus_phone').attr('value'));
@@ -3443,5 +3459,77 @@
         }
 
 
+        function CheckCusMode(cusMode){
+            valid_edit_name = 1;
+            valid_edit_email = 1;
+            valid_edit_phone = 1;
+            customer_mode = cusMode;
+            if (cusMode == 0){
+                document.getElementById("mail_errorTxt").style.visibility = "hidden";
+                document.getElementById("phone_errorTxt").style.visibility = "hidden";
+                document.getElementById("name_errorTxt").style.visibility = "hidden";
+            }
+        }
+
+        function validate(mode, value) {
+
+            //1 = email mode
+            if (mode == 1) {
+                //alert(atpos + " " + (dotpos ));
+                //alert(value.length);
+                //alert(value.length - dotpos);
+                if (value.length != 0) {
+                    if (!value.match(email_pattern) || value.indexOf("..") != -1) {
+                        document.getElementById("mail_errorTxt").style.visibility = "visible";
+                        //    //alert("false");
+                        valid_edit_email = 0;
+                    }
+                    else {
+
+                        document.getElementById("mail_errorTxt").style.visibility = "hidden";
+                        //alert("true");
+                        valid_edit_email = 1;
+                    }
+                }
+                else {
+
+                    document.getElementById("mail_errorTxt").style.visibility = "hidden";
+                    //alert("true");
+                    valid_edit_email = 1;
+                }
+                //2 = phone mode
+            }
+            else if (mode == 2) {
+                var phoneno = /^[0-9]+$/;
+                if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
+                    document.getElementById("phone_errorTxt").style.visibility = "hidden";
+                    valid_edit_phone = 1;
+                }
+                else {
+                    document.getElementById("phone_errorTxt").style.visibility = "visible";
+                    valid_edit_phone = 0;
+                }
+            }
+                // 3 = name mode
+            else if (mode == 3) {
+                if (value) {
+                    valid_edit_name = 1;
+                    document.getElementById("name_errorTxt").style.visibility = "hidden";
+                }
+                else {
+                    valid_edit_name = 0;
+                    document.getElementById("name_errorTxt").style.visibility = "visible";
+                }
+            }
+
+            if (valid_edit_phone == 1 && valid_edit_email == 1 && valid_edit_name == 1) {
+                if(customer_mode == 2) $('#btn_ok_edit').show();
+                else if (customer_mode == 1) $('#btn_ok_add').show();
+            }
+            else {
+                if(customer_mode == 2) $('#btn_ok_edit').hide();
+                else if (customer_mode == 1) $('#btn_ok_add').hide();
+            }
+        }
     </script>
 }
