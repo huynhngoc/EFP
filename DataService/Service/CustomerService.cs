@@ -80,7 +80,11 @@ namespace DataService.Service
             Customer customer = repository.GetCustomerByFbId(customerFbId,shopId);
             return customer;
         }
-
+        
+        public List<Customer> CheckCustomerExistByEmail (string email, string shopId)
+        {
+            return repository.CheckCustomerExistByEmail(email, shopId).ToList();
+        }
     }
        
         

@@ -44,7 +44,7 @@
     <div class="col-xs-12" style="padding:0">
         <div class="mail-tools tooltip-demo m-t-md">
             <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lai danh sách" onclick="oTable.fnDraw(false);"><i class="fa fa-refresh"></i></button>
-            <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Thêm khách hàng" onclick="showCusAddModal()">+</button>
+            <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Thêm khách hàng" onclick="clear_add(); showCusAddModal();">+</button>
         </div>
 
             <div class="ibox float-e-margins">
@@ -137,7 +137,7 @@
                         <label class="col-xs-2 col-form-label" style="text-align:right;">Tên <a style="color:red">*</a></label>
                         <div class="col-xs-10">
                             <input class="form-control" value="" id="addNameTxt" onclick="Addingvalidate(3,this.value)" onkeyup="Addingvalidate(3,this.value)" onchange="Addingvalidate(3,this.value)">
-                            <div><a id="name_errorTxt1" style="color: red; display:none;">Xin nhập tên</a></div>
+                            <div><a id="name_errorTxt1" style="color: red; visibility:hidden;">Xin nhập tên</a></div>
                         </div>
                     </div>
 
@@ -157,7 +157,7 @@
                         <label class="col-xs-2 col-form-label" style="text-align:right;">Số điện thoại</label>
                         <div class="col-xs-10">
                             <input value="" class="form-control" id="addPhoneTxt" onclick="Addingvalidate(2,this.value)" onkeyup="Addingvalidate(2,this.value)" onchange="Addingvalidate(2,this.value)">
-                            <div><a id="phone_errorTxt1" style="color: red; display:none;">Số điện thoại không hợp lệ</a></div>
+                            <div><a id="phone_errorTxt1" style="color: red; visibility:hidden;">Số điện thoại không hợp lệ</a></div>
                         </div>
 
                     </div>
@@ -166,13 +166,13 @@
                         <label class="col-xs-2 col-form-label" style="text-align:right;">Email</label>
                         <div class="col-xs-10">
                             <input value="" id="addMailTxt" class="form-control" onclick="Addingvalidate(1, this.value)" onkeyup="Addingvalidate(1, this.value)" onchange="Addingvalidate(1, this.value)">
-                            <div><a id="mail_errorTxt1" style="color: red; display:none;">Email không hợp lệ</a></div>
+                            <div><a id="mail_errorTxt1" style="color: red; visibility:hidden;">Email không hợp lệ</a></div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave_add" class="btn btn-primary" disabled onclick ="addCustomer()" data-dismiss="modal">Tạo mới</button>
                     <button type="button" id="btnCloseModal" class="btn btn-danger" data-dismiss="modal" onclick="clear_add()">Huỷ</button>
+                    <button type="button" id="btnSave_add" class="btn btn-primary" disabled onclick="addCustomer()" data-dismiss="modal">Tạo mới</button>
                 </div>
             </div>
         </div>
@@ -225,7 +225,7 @@
                         <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Tên<a style="color:red">*</a></label>
                         <div class="col-xs-10">
                             <input value="" type="text" class="form-control" id="editName" onclick="validate(3,this.value)" onkeyup="validate(3,this.value)">
-                            <div><a id="name_errorTxt" style="color: red; display:none;">Xin nhập tên</a></div>
+                            <div><a id="name_errorTxt" style="color: red; visibility:hidden;">Xin nhập tên</a></div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -244,14 +244,14 @@
                         <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Số điện thoại</label>
                         <div class="col-xs-10">
                             <input class="form-control" onchange="validate(2,this.value)" onkeyup="validate(2,this.value)" onclick="validate(2,this.value)" type="text" value="" id="editPhone">
-                            <div><a id="phone_errorTxt" style="color: red; display:none;">Số điện thoại không hợp lệ</a></div>
+                            <div><a id="phone_errorTxt" style="color: red; visibility:hidden;">Số điện thoại không hợp lệ</a></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="example-text-input" class="col-xs-2 col-form-label" style="text-align:right;">Email</label>
                         <div class="col-xs-10">
                             <input class="form-control" onchange="validate(1,this.value)" onkeyup="validate(1,this.value)" onclick="validate(1,this.value)" type="text" value="" id="editMail">
-                            <div><a id="mail_errorTxt" style="color: red; display:none;">Email không hợp lệ</a></div>
+                            <div><a id="mail_errorTxt" style="color: red; visibility:hidden;">Email không hợp lệ</a></div>
                         </div>
                     </div>
                   
@@ -272,7 +272,7 @@
             </div>
             <div class="modal-footer" style="padding: 10px">
                 <input type="hidden" id="cusEditID" value="" />
-                <button type="button" id="" class="btn btn-default" data-dismiss="modal">Huỷ</button>
+                <button type="button" id="" onclick="clear_table();" class="btn btn-danger" data-dismiss="modal">Huỷ</button>
                 <button type="button" id="btnSave_edit" onclick="editCustomerDetail();  clear_table();" class="btn btn-primary">Lưu</button>
             </div>
         </div>

@@ -38,19 +38,20 @@ namespace ShopManager.Controllers
 
                 var customers = cusService.GetAllCustomer(param, shopId);
                 Debug.WriteLine("----x " + customers.Count());
-                IQueryable<CustomerViewModel> data = customers.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+                
                 if (whichOrder == "asc")
-                    data = data.OrderBy(q => whichCol == 0 ? q.Name :
+                    customers = customers.OrderBy(q => whichCol == 0 ? q.Name :
                                                             whichCol == 1 ? q.Description :
                                                             whichCol == 2 ? q.Address :
                                                             whichCol == 3 ? q.Phone : q.Email);
                 else
-                    data = data.OrderByDescending(q => whichCol == 0 ? q.Name :
+                    customers = customers.OrderByDescending(q => whichCol == 0 ? q.Name :
                                                             whichCol == 1 ? q.Description :
                                                             whichCol == 2 ? q.Address :
                                                             whichCol == 3 ? q.Phone : q.Email);
                 var totalRecords = customers.Count();
                 //var data = customers;
+                IQueryable<CustomerViewModel> data = customers.Skip(param.iDisplayStart).Take(param.iDisplayLength);
                 Debug.WriteLine("display start " + param.iDisplayStart + "display length " + param.iDisplayLength);
                 Debug.WriteLine("-----data2 " + customers.ToString());
                 var displayRecords = data.Count();
@@ -168,8 +169,14 @@ namespace ShopManager.Controllers
         {
             string shopId = (string)Session["ShopId"];
             //var data = service.AddCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
-            var data = cusService.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
-            return data;
+            List<Customer> tmp_cus = cusService.CheckCustomerExistByEmail(Email, shopId);
+            //Debug.WriteLine("counttttttttttttttttt " + tmp_cus.Count);
+            if (tmp_cus.Count != 0 && Email.Trim()!="") return 2;
+            else
+            {
+                var data = cusService.AddCustomer(Id, Name, Addr, Desc, Phone, Email, shopId);
+                return data;
+            }
             //1 = success / 2 = success but fail in creating / 3 = exception
         }
         public bool EditCustomer(int Id, string Name, string Addr, string Desc, string Phone, string Email, string ShopId)
@@ -177,7 +184,8 @@ namespace ShopManager.Controllers
             ShopId = (string)Session["ShopId"];
             Debug.WriteLine("id: " + Id + "| name: " + Name + "|address: " + Addr + "|description: " + Desc + "|Phone: "
                 + Phone + "|Email: " + Email + "|ShopId: " + ShopId);
-
+            List<Customer> tmp_cus = cusService.CheckCustomerExistByEmail(Email, ShopId);
+            if (tmp_cus.Count >1 && Email.Trim() != "") return false;
             return cusService.EditCustomer(Id, Name, Addr, Desc, Phone, Email, ShopId);
         }
 
