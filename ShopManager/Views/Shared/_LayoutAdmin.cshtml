@@ -41,23 +41,8 @@
                         <a href="../Shop/Index"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý chung</span></a>
                     </li>
                     <!--./Dashboard-->                    
-                    <li> <a href="../Order"><i class="fa fa-inbox"></i> <span class="nav-label">Đơn hàng</span> <span class="label label-danger pull-right">23</span></a> </li>
-                    <li> <a href="../Product"><i class="fa fa-tags"></i> <span class="nav-label">Sản phẩm</span> </a> </li>
-                    <li> <a href="../Category"><i class="fa fa-tags"></i> <span class="nav-label">Phân loại</span> </a> </li>
-                    <li> <a href="../Template"><i class="fa fa-tags"></i> <span class="nav-label">Mẫu sản phẩm</span> </a> </li>
-                    <li> <a href="../Customer"><i class="fa fa-users"></i> <span class="nav-label">Khách hàng</span> </a> </li>
-                    <li> <a href="../Analysis/Comment"><i class="fa fa-line-chart"></i> <span class="nav-label">Thống kê</span> </a> </li>
-                    <li>
-                        <a href="../Shop/Setting"><i class="fa fa-edit"></i> <span class="nav-label">Cài đặt</span>@*<span class="fa arrow"></span>*@</a>
-                        @*<ul class="nav nav-second-level collapse">
-                                <li><a href="">Basic form</a></li>
-                                <li><a href="form_advanced.html">Advanced Plugins</a></li>
-                                <li><a href="form_wizard.html">Wizard</a></li>
-                                <li><a href="form_file_upload.html">File Upload</a></li>
-                                <li><a href="form_editors.html">Text Editor</a></li>
-                                <li><a href="form_markdown.html">Markdown</a></li>
-                            </ul>*@
-                    </li>
+                    <li> <a href="../Admin/ShopUser"><i class="fa fa-users"></i> <span class="nav-label">Các trang đã đăng ký</span></a> </li>
+                    <li> <a href="../Admin/ApiAiSetting"><i class="fa fa-twitch"></i> <span class="nav-label">Ngôn ngữ tự nhiên</span> </a> </li>                    
                 </ul>
             </div>
         </nav>
@@ -68,54 +53,13 @@
             <div class="row border-bottom">
                 <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
-                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                        @*<form role="search" class="navbar-form-custom" action="search_results.html">
-                                <div class="form-group">
-                                    <input type="text" placeholder="Tìm kiếm" class="form-control" name="top-search" id="top-search">
-                                </div>
-                            </form>*@
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>                        
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <!--<li>
                             <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
                         </li>-->
-                        <!--Notification icon-->
-
-                        <li class="dropdown">
-                            <!--Number of notification-->
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                <i class="fa fa-bell"></i>
-                                <span class="label label-danger" id="notiCount">
-                                    1
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-alerts">
-                                <li>
-                                    <a href="../ChatComment">
-                                        <div> <i class="fa fa-envelope fa-fw"></i> Bạn có <span id="conversationCount">@ViewBag.NewConversationCount</span> đoạn hội thoại mới @*<span class="pull-right text-muted small">4 minutes ago</span>*@ </div>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="../ChatComment">
-                                        <div> <i class="fa fa-comments fa-fw"></i> Bạn có <span id="postCount">@ViewBag.NewPostCount</span> bài viết trên trang mới @*<span class="pull-right text-muted small">12 minutes ago</span>*@ </div>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="../ChatComment">
-                                        <div> <i class="fa fa-comment fa-fw"></i> Bạn có <span id="commentCount">@ViewBag.NewCommentCount</span> bình luận mới @*<span class="pull-right text-muted small">12 minutes ago</span>*@ </div>
-                                    </a>
-                                </li>
-                                <!--See all alert-->
-                                <li class="divider"></li>
-                                <li>
-                                    <div class="text-center link-block">
-                                        <a href="../ChatComment"> <strong>Xem tất cả</strong> <i class="fa fa-angle-right"></i> </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                        
                         <!--./Notification icon-->
                         <!--Log out-->
                         <li>
@@ -164,10 +108,10 @@
     @Scripts.Render("~/Mainly-scripts")
     @Scripts.Render("~/Custom-and-plugin-javascript")    
     @RenderSection("CustomJS", required: false)
-    @Scripts.Render("~/SignalR-JS")
-    @Scripts.Render("/signalr/hubs")
+    @*@Scripts.Render("~/SignalR-JS")
+    @Scripts.Render("/signalr/hubs")*@
     <script type="text/javascript">
-        $(function () {
+        @*$(function () {
             // Declare a proxy to reference the hub.
             var chat = $.connection.alertHub;
             // Create a function that the hub can call to broadcast messages.
@@ -192,7 +136,7 @@
             $.connection.hub.start().done(function () {
 
             });
-        });
+        });*@
         
     </script>
 </body>
