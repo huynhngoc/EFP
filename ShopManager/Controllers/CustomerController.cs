@@ -126,6 +126,16 @@ namespace ShopManager.Controllers
                             orders = orders.OrderByDescending(q => q.Total);
                         }
                         break;
+                    case 3:
+                        if (whichOrder == "asc")
+                        {
+                            orders = orders.OrderBy(q => q.Status);
+                        }
+                        else
+                        {
+                            orders = orders.OrderByDescending(q => q.Status);
+                        }
+                        break;
                     default: orders = orders.OrderBy(q => q.DateModified); break;
                 }
                 IQueryable<OrderViewModel> data = orders.Skip(param.iDisplayStart).Take(param.iDisplayLength);

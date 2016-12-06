@@ -22,5 +22,6 @@ namespace DataService.ViewModel
         public int nestedCommentQuan { get; set; }
         public bool canHide { get; set; }
         public bool isUnreadRepliesRemain { get; set; }
+        public bool canReply { get; set; }
     }
 }

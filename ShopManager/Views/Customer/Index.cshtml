@@ -6,6 +6,9 @@
     @Styles.Render("~/DataTable-CSS")
     @Styles.Render("~/SweetAlert-CSS")
     <style>
+        span.label-info {
+            background-color: #c88c23;
+        }
         /*.dataTables_filter {
             width: 50%;
             float: right;
@@ -43,7 +46,7 @@
 <div class="row">
     <div class="col-xs-12" style="padding:0">
         <div class="mail-tools tooltip-demo m-t-md">
-            <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lai danh sách" onclick="oTable.fnDraw(false);"><i class="fa fa-refresh"></i></button>
+            <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lại danh sách" onclick="oTable.fnDraw(false);"><i class="fa fa-refresh"></i></button>
             <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Thêm khách hàng" onclick="clear_add(); showCusAddModal();">+</button>
         </div>
 
@@ -256,13 +259,17 @@
                     </div>
                   
                 </form>
+                <div class="mail-tools tooltip-demo m-t-md">
+                    <button class="btn btn-white" data-toggle="tooltip" data-placement="top" title="Load lại danh sách" onclick="oTable_Order.fnDraw(false);"><i class="fa fa-refresh"></i></button>
+                </div>
                 <div style="max-height:45vh">
                     <table id="cusOrderTable" class="table table-striped table-bordered table-hover" cellspacing="10" style="text-align: center; width:100%;" data-plugin-options="{'searchPlaceholder': 'Mã đơn hàng...'}">
                         <thead>
                             <tr role="row" class="info" id="clickableH">
-                                <th>Id</th>
+                                <th>Mã</th>
                                 <th>Lần cuối chỉnh sửa</th>
                                 <th>Tổng giá</th>
+                                <th>Tình trạng</th>
                                 <th></th>
                             </tr>
                         </thead>

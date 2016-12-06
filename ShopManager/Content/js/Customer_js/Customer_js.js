@@ -197,7 +197,7 @@ function addCustomer() {
                 }
                 if (data == 2) {
                     swal({
-                        title: "Khách hàng này đã có!",
+                        title: "Email đã được sử dụng!",
                         type: "warning",
                         confirmButtonText: "Đóng",
                         closeOnConfirm: true
@@ -354,6 +354,8 @@ function getCustomerOrder(cusId) {
         //'sDom': '<"right"Bflrtip>rt<"bottom"pi><"clear">',
         //'sDom':'ilftpr',
         //'sDom': 'B<"top"l>frt<"bottom"i>p<"clear">',
+        "iDisplayLength": 10,
+        "bLengthChange": false,
         "sjquery": true,
         "sAjaxSource": "/Customer/GetAllOrderByCustomerId",
         "fnServerParams": function (data) {
@@ -372,10 +374,29 @@ function getCustomerOrder(cusId) {
                 return FormatDateVN(source.DateModified);
             }, "bSortable": true
         },
+       
         { "mData": "Total", "bSortable": true },
+         {
+             "mData": function (source) {
+                 var status = source.Status;
+                 console.log(source);
+                 if (status == 2) {
+                     return '<span class="label label-success">Đang giao hàng</span>';
+                 }
+                 if (status == 3) {
+                     return '<span class="label label-primary">Đã xong</span>';
+                 }
+                 if (status == 4) {
+                     return '<span class="label label-danger">Đã huỷ</span>';
+                 }
+                 if (status == 1) {
+                     return '<span class="label label-info">Chờ xử lý</span>';
+                 }
+             }
+         },
         {
             "mData": function (source) {
-                return "<a href='/Order?Id=" + id + "' target='_blank' class='btn btn-success search-dropdown'>chi tiết </a>";
+                return "<a href='/Order?Id=" + id + "' class='btn btn-success search-dropdown' target ='_blank'><span class='fa fa-edit' aria-hidden='true'></span> </a>";
             }, "bSortable": false
         }
         ],

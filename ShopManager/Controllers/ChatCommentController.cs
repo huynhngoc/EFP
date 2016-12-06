@@ -157,7 +157,7 @@ namespace ShopManager.Controllers
                 //postParam.access_token = accessToken;
                 //commentParam.access_token = accessToken;
                 postParam.fields = "full_picture,created_time,message,from{picture,name},story";
-                commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide";
+                commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide,can_reply_privately";
                 postParam.locale = "vi_VI";
                 FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
                 Debug.WriteLine("a ccess tok " + accessToken);
@@ -221,6 +221,7 @@ namespace ShopManager.Controllers
                             commentdetailmodel.IntentId = commentList[0][i].IntentId;
                             commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentList[0][i].Id);
                             commentservice.SetIsRead(commentList[0][i].Id);
+                            
                             SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
 
                             commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[0][i].SenderFbId + "/picture?type=square";
@@ -229,17 +230,18 @@ namespace ShopManager.Controllers
 
                             if (commentdetailmodel.Status != 5)
                             {
-                                Debug.WriteLine("status of comment is not 5: " + commentdetailmodel.Status);
+                                //Debug.WriteLine("status of comment is not 5: " + commentdetailmodel.Status);
                                 var fbComment = fbAppWithAccTok.Get(commentList[0][i].Id, commentParam);
                                 if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
                                 else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
                                 commentdetailmodel.from = fbComment.from.name;
                                 commentdetailmodel.commentContent = fbComment.message;
                                 commentdetailmodel.canHide = fbComment.can_hide;
+                                commentdetailmodel.canReply = fbComment.can_reply_privately;
                             }
                             else
                             {
-                                Debug.WriteLine("status of comment is 5: " + commentdetailmodel.Status);
+                                //Debug.WriteLine("status of comment is 5: " + commentdetailmodel.Status);
                                 userParam.access_token = accessToken;
                                 var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
                                 commentdetailmodel.commentImageContent = null;
@@ -277,6 +279,7 @@ namespace ShopManager.Controllers
                                 if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
                                 else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
                                 commentdetailmodel.canHide = fbComment.can_hide;
+                                commentdetailmodel.canReply = fbComment.can_reply_privately;
                             }
                             else
                             {
@@ -437,7 +440,7 @@ namespace ShopManager.Controllers
                         commentdetailmodel.Status = comment.Status;
                         commentdetailmodel.IsRead = comment.IsRead;
                         commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentdetailmodel.SenderFbId + "/picture?type=square";
-
+                        commentdetailmodel.IntentId = comment.IntentId;
 
                         Debug.WriteLine("time  " + commentdetailmodel.datacreated);
 
@@ -451,6 +454,7 @@ namespace ShopManager.Controllers
                             else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
                             commentdetailmodel.commentContent = fbComment.message;
                             commentdetailmodel.canHide = fbComment.can_hide;
+                            commentdetailmodel.canReply = fbComment.can_reply_privately;
                         }
                         else
                         {
@@ -694,27 +698,10 @@ namespace ShopManager.Controllers
                 if (commentId.Split('_')[0] != (string)Session["ShopId"])
                 {
                     commentservice.SetStatus(commentId, 3);
-                    List<Comment> commentList = commentservice.GetAllCommentByParentId(commentId).ToList();
-                    Debug.WriteLine(commentList.Count + "  commentttttt nummmmmmmmmm");
-                    if (commentList != null)
-                    {
-                        foreach (Comment c in commentList)
-                        {
-                            result = commentservice.SetStatus(c.Id, 3);
-                            if (result == false) return Json(result, JsonRequestBehavior.AllowGet);
-                        }
-                    }
                 }
                 else //hide a post
                 {
                     postservice.SetStatus(commentId, 3);
-                    List<Comment> commentList = commentservice.GetCommentsOfPost(commentId).ToList();
-                    Debug.WriteLine(commentList.Count + "  commentttttt");
-                    foreach (Comment c in commentList)
-                    {
-                        result = commentservice.SetStatus(c.Id, 3);
-                        if (result == false) return Json(result, JsonRequestBehavior.AllowGet);
-                    }
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -754,28 +741,10 @@ namespace ShopManager.Controllers
                 if (commentId.Split('_')[0] != (string)Session["ShopId"])
                 {
                     commentservice.SetStatus(commentId, 1);
-                    List<Comment> commentList = commentservice.GetAllCommentByParentId(commentId).ToList();
-                    if (commentList != null)
-                    {
-                        foreach (Comment c in commentList)
-                        {
-                            result = commentservice.SetStatus(c.Id, 1);
-                            if (result == false) return Json(result, JsonRequestBehavior.AllowGet);
-                        }
-                    }
                 }
                 else //unhide a post
                 {
                     postservice.SetStatus(commentId, 1);
-                    List<Comment> commentList = commentservice.GetCommentsOfPost(commentId).ToList();
-                    if (commentList != null)
-                    {
-                        foreach (Comment c in commentList)
-                        {
-                            result = commentservice.SetStatus(c.Id, 1);
-                            if (result == false) return Json(result, JsonRequestBehavior.AllowGet);
-                        }
-                    }
                 }
 
                 return Json(result, JsonRequestBehavior.AllowGet);
