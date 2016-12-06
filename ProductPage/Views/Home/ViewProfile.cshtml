@@ -373,7 +373,7 @@
                     },"targets": [ 2 ]},
                     {"data":"Receiver","targets": [ 3 ]},
                     {"targets": [ 4 ],"data": function(source){
-                        return "<button class='btn btn-xs btn-outline btn-success' onclick='showOrderDetail("+source.Id+",\""+source.Receiver+"\",\""+source.Phone+"\",\""+source.ShippingAddress+"\",\""+source.Note+"\")'>Chi tiết</button>"
+                        return "<button class='btn btn-xs btn-outline btn-success' onclick='showOrderDetail("+source.Id+",\""+(source.Receiver?source.Receiver:"")+"\",\""+(source.Phone?source.Phone:"")+"\",\""+(source.ShippingAddress?source.ShippingAddress:"")+"\",\""+(source.Note?source.Note:"")+"\")'>Chi tiết</button>"
                     }
                     },
                     {"data":"DateCreated","visible":false,"targets": [ 5 ]},

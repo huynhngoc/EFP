@@ -67,6 +67,15 @@ namespace ShopManager.Controllers
                 var fbToken = fbApp.Get("oauth/access_token", getAccessParam);
                 string longToken = fbToken["access_token"];
 
+                fbApp.AccessToken = longToken;
+                dynamic getAccessParam2 = new ExpandoObject();
+                getAccessParam2.grant_type = "fb_exchange_token";
+                getAccessParam2.client_id = ConfigurationManager.AppSettings["FbAppId"];
+                getAccessParam2.client_secret = ConfigurationManager.AppSettings["FbAppSecret"];
+                getAccessParam2.fb_exchange_token = longToken;
+                fbToken = fbApp.Get("oauth/access_token", getAccessParam2);
+                longToken = fbToken["access_token"];
+
                 //get name
                 dynamic nameParam = new ExpandoObject();
                 nameParam.fields = "name,picture";
@@ -85,7 +94,7 @@ namespace ShopManager.Controllers
                 }
 
 
-                return Json(new { addTab = fbResult, subscribe = fbWebhook, longtoken = longToken, name = name, result = result });
+                return Json(new { addTab = fbResult, subscribe = fbWebhook, longtoken = longToken, name = name, result = result, fbRes = fbToken });
             } else
             {
                 var result = shopService.CreateConnection(id, User.Identity.GetUserId());
