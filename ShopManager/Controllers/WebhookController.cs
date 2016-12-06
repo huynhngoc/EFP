@@ -166,7 +166,7 @@ namespace ShopManager.Controllers
                                             {
                                                 lastContent = TruncateLongString(message, 240);
                                             }
-                                        }                                       
+                                        }
                                     }
                                     else
                                     {
