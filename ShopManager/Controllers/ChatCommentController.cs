@@ -28,6 +28,7 @@ namespace ShopManager.Controllers
         CommentService commentservice = new CommentService();
         FacebookClient fbApp = new FacebookClient();
         PostService postservice = new PostService();
+        ResponseService respService = new ResponseService();
         public ActionResult Index()
         {
             Session["shopOwner"] = shopService.GetShop((string)Session["ShopId"]).ShopName;
@@ -988,16 +989,36 @@ namespace ShopManager.Controllers
         {
             string shopId = (string)Session["ShopId"];
             EntityService entityService = new EntityService();
+            var arrReps = new List<EntityViewModel>();
 
             try
             {
-                var reps = entityService.GetAvailableEntities(shopId);
-                var arrReps = new List<EntityViewModel>();
+                //Get reps by Intent
+                if (intentId != 1)
+                {
+                    IntentService intService = new IntentService();
+                    var intName = intService.GetIntentNameById(intentId);
+
+                    var repss = respService.GetAllResponseByIntent(shopId, intentId);
+                    foreach (var en in repss)
+                    {
+                        if (en.RespondContent.Trim().Length > 0) {
+                            var e = new EntityViewModel();
+                            e.Name = intName;
+                            e.Value = en.RespondContent;
+                            arrReps.Add(e);
+                        }
+                    }
+                }
+
+                //Get reps by sample reps
+                var reps = entityService.GetAvailableEntities(shopId);                
 
                 foreach (var en in reps.ToList())
                 {
                     if (en.Value.Trim().Length > 0) arrReps.Add(en);
                 }
+                         
                 return Json(arrReps.ToList(), JsonRequestBehavior.AllowGet); ;
             }
             catch (Exception e)
