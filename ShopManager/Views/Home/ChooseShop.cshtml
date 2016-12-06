@@ -213,7 +213,10 @@
                             '<input type="hidden" name="id" />' +
                             '<input type="hidden" name="token" />' +
                             '<b></b>'+
-                            '<span class="pull-right"><button class="btn btn-primary choose-page"></button></span>' +
+                            '<span class="pull-right">' +
+                            '<span class="pull-right">' +
+                            '<a target="_blank" href="https://' + "www.facebook.com/" + data.id + '">Xem trang</a>&nbsp;&nbsp;&nbsp;' +
+                            '<button class="btn btn-primary choose-page"></button></span>' +
                         '</div>');
                 var div = $("#" + data.id);
                 console.log(div);
@@ -262,7 +265,9 @@
                 $(".shop-list").append('<div class="ibox-content">' +
                             '<form action="../Home/GoToShop"><input type="hidden" name="shopId" value="'+data.Id+'"/>' +                            
                             '<b>'+ data.ShopName +'</b>' +
-                            '<span class="pull-right"><button type="submit" class="btn btn-primary choose-page">Vào</button></span>' +
+                            '<span class="pull-right">' +
+                            '<a target="_blank" href="https://' + "www.facebook.com/" + data.Id + '">Xem trang</a>&nbsp;&nbsp;&nbsp;' +
+                            '<button type="submit" class="btn btn-primary choose-page">Truy cập</button></span>' +
                         '</form></div>');
             }
 

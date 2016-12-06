@@ -14,11 +14,6 @@
 
         <!-- toolbar -->
         <div class="" tooltip-demo m-t-md">
-            <div class="btn-group pull-right">
-                <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i></button>
-                <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
-
-            </div>
             <button onclick="refreshPage()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Load lại trang"><i class="fa fa-refresh"></i> F5</button>
             <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Thêm đơn hàng" onclick="createOrderModal()">+</button>
 
@@ -326,32 +321,26 @@
         }
 
         .btn-info.btn-outline {
-            color: #c88c23;
+            color: #c88c23 !important;
         }
 
         .btn-outline {
-            color: inherit;
-            background-color: transparent;
-            transition: all .5s;
+            color: inherit ;
+            background-color: transparent ;
+            transition: all .5s ;
         }
 
         .btn-info {
             background-color: #c88c23;
-            border-color: #c88c23;
-            color: #FFFFFF;
+            border-color: #c88c23 !important;
+            color: #FFFFFF !important;
         }
 
             .btn-info:hover, .btn-info:focus, .btn-info.active, .btn-info.active:hover {
-                background-color: #c88c23;
-                border-color: #c88c23;
-                color: #FFFFFF;
+                background-color: #c88c23 !important;
+                border-color: #c88c23 !important;
+                color: #FFFFFF !important;
             }
-
-        .btn-outline {
-            color: inherit;
-            background-color: transparent;
-            transition: all .5s;
-        }
 
         .popover {
             z-index: 5000; /* A value higher than 1010 that solves the problem */

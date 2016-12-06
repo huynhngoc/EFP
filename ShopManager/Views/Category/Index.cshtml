@@ -10,12 +10,15 @@
         .dd-handle span.pull-right {
             margin-top: -3px;
         }
+        textarea {            
+            resize:none;
+        }
     </style>
 }
 <div class="ibox-content">
     <div class="nestable-menu">
-        <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Expand All</button>
-        <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Collapse All</button>
+        <button type="button" data-action="expand-all" class="btn btn-white btn-sm">Mở tất cả</button>
+        <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">Đóng tất cả</button>
         <button type="button" class="btn btn-primary pull-right add-base-button">Thêm</button>
     </div>    
    
@@ -47,6 +50,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Tên:</label>
                                 <div class="col-sm-10"><input required type="text" name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
+                                <p id="errorCateName" style="color:red; display:none; text-align:center">Vui lòng điền tên loại sản phẩm!</p>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Mô tả:</label>
@@ -80,6 +84,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Tên:</label>
                                 <div class="col-sm-10"><input type="text" required name="name" class="form-control" placeholder="Tên loại sản phẩm" /></div>
+                                <p id="errorEditCateName" style="color:red; display:none; text-align:center">Vui lòng điền tên loại sản phẩm!</p>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Mô tả:</label>
@@ -105,9 +110,16 @@
         /*public param*/
         var initNestableFinished = false;
         function addCate() {
+            $(".has-error").removeClass("has-error");
+            $("#errorCateName").hide();
             var form = $('#categoryModal form');
             var id = $(form).find("input[name='parentId']").val();
             var name = $(form).find("input[name='name']").val();
+            if (name == null || name == 'undefined' || name == "") {
+                $($("#categoryModal input[name='name']").parent("div")).addClass("has-error");
+                $("#errorCateName").show();
+                return;
+            }
             var desc = $(form).find("textarea[name='description']").val();
             var parentId = "";
             if (isNaN(id) == false) {
@@ -160,7 +172,9 @@
             });
         }
 
-        function saveChangeCate() {            
+        function saveChangeCate() {
+            $(".has-error").removeClass("has-error");
+            $("#errorEditCateName").hide();
             var form = $('#categoryEditModal form');
             //$(form).validate();
             //if (!$(form).valid()) {
@@ -168,6 +182,11 @@
             //}
             var id = $(form).find("input[name='id']").val();
             var name = $(form).find("input[name='name']").val();
+            if (name == null || name == 'undefined' || name == "") {
+                $($("#categoryEditModal input[name='name']").parent("div")).addClass("has-error");
+                $("#errorEditCateName").show();
+                return;
+            }
             var desc = $(form).find("textarea[name='description']").val();
             $.ajax({
                 url: '../Category/Edit',
@@ -199,6 +218,8 @@
         }
 
         function editForm(id, name, desc) {
+            $(".has-error").removeClass("has-error");
+            $("#errorEditCateName").hide();
             var form = $('#categoryEditModal form');
             $(form).find("input[name='id']").val(id);
             $(form).find("input[name='name']").val(name);
@@ -206,8 +227,10 @@
         }
 
         function addForm(id, name, desc) {
+            $(".has-error").removeClass("has-error");
+            $("#errorCateName").hide();
             var form = $('#categoryModal form');
-            console.log("pareent id "+id);
+            console.log("parent id "+id);
             $(form).find("input[name='parentId']").val(id);
             //$(form).find("input[name='name']").val(name);
             //$(form).find("textarea[name='description']").val(desc);
@@ -258,7 +281,9 @@
                     , type: "warning"
                     , showCancelButton: true
                     , closeOnConfirm: true
-                    , showLoaderOnConfirm: true,
+                    , showLoaderOnConfirm: true
+                    , confirmButtonText: "Xóa"
+                    , cancelButtonText: "Hủy"
                             }, function () {
                                 $.ajax({
                                     url: '../Category/Delete',

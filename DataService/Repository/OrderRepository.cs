@@ -108,6 +108,7 @@ namespace DataService.Repository
                 //id dung de edit nen lay int id
                 Id = q.Id,
                 DateModified = q.DateModified,
+                Status = q.Status,
                 Total = q.OrderDetails.Sum(d => d.Price * d.Quantity),
             });
             //Debug.WriteLine("---------data " + data.Count());

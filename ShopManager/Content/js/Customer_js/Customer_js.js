@@ -1,60 +1,72 @@
 ﻿
-var createSuc_Mes = "Tạo mới khách hàng thành công!";
-var createFail_Mes = "Tạo mới khách hàng thất bại";
-var createFaildup_Mes = "Khách hàng này đã tồn tại";
-var editFail_Mes = "Chỉnh sửa thông tin thất bại";
-var editSuc_Mes = "Chỉnh sửa thông tin thành công";
-var fail_Mes = "Lỗi hệ thống";
 var oTable;
 var oTable_Order;
 //var oTable_Order;
+var valid_edit_name = 1;
+var valid_edit_email = 1;
+var valid_edit_phone = 1;
 
+var valid_name = 0;
+var valid_email = 1;
+var valid_phone = 1;
+
+var email_pattern = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
 function validate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
-    var valid_edit_name = 1;
-    var valid_edit_email = 1;
-    var valid_edit_phone = 1;
+   
 
     //1 = email mode
     if (mode == 1) {
-        var atpos = value.indexOf("@");
-        var dotpos = value.lastIndexOf(".");
         //alert(atpos + " " + (dotpos ));
         //alert(value.length);
         //alert(value.length - dotpos);
-        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
+        if (value.length != 0) {
+            if (!value.match(email_pattern) || value.indexOf("..") != -1) {
+                document.getElementById("mail_errorTxt").style.visibility = "visible";
+                //    //alert("false");
+                valid_edit_email = 0;
+            }
+            else {
 
-            document.getElementById("mail_errorTxt").style.display = "block";
-            valid_edit_email = 0;
-            //alert("false");
+                document.getElementById("mail_errorTxt").style.visibility = "hidden";
+                //alert("true");
+                valid_edit_email = 1;
+            }
         }
         else {
 
-            document.getElementById("mail_errorTxt").style.display = "none";
-            valid_edit_email = 1;
-            //alert(valid_edit_email);
+            document.getElementById("mail_errorTxt").style.visibility = "hidden";
             //alert("true");
-            //alert(valid_edit_email + "_" + valid_edit_phone + "_" + valid_edit_name);
+            valid_edit_email = 1;
         }
         //2 = phone mode
     }
     else if (mode == 2) {
         var phoneno = /^[0-9]+$/;
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
-            document.getElementById("phone_errorTxt").style.display = "none";
+            document.getElementById("phone_errorTxt").style.visibility = "hidden";
             valid_edit_phone = 1;
         }
         else {
-            document.getElementById("phone_errorTxt").style.display = "block";
+            document.getElementById("phone_errorTxt").style.visibility = "visible";
             valid_edit_phone = 0;
         }
     }
         // 3 = name mode
+    else if (mode == 3) {
+        if (value) {
+            valid_edit_name = 1;
+            document.getElementById("name_errorTxt").style.visibility = "hidden";
+        }
+        else {
+            valid_edit_name = 0;
+            document.getElementById("name_errorTxt").style.visibility = "visible";
+        }
+    }
 
-
-    if (valid_edit_phone == 1 && valid_edit_email == 1 ) document.getElementById("btnSave").disabled = false;
-    else document.getElementById("btnSave").disabled = true;
+    if (valid_edit_phone == 1 && valid_edit_email == 1 && valid_edit_name == 1) document.getElementById("btnSave_edit").disabled = false;
+    else document.getElementById("btnSave_edit").disabled = true;
 }
 
 
@@ -62,26 +74,32 @@ function validate(mode, value) {
 function Addingvalidate(mode, value) {
 
     //var hidden_warning = document.getElementById("mail_errorTxt");
+    value = value.trim();
 
-    var valid_name = 0;
-    var valid_email = 1;
-    var valid_phone = 1;
     //1 = email mode
     if (mode == 1) {
+        //var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        //var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
         var atpos = value.indexOf("@");
         var dotpos = value.lastIndexOf(".");
-        //alert(atpos + " " + (dotpos ));
-        //alert(value.length);
-        //alert(value.length - dotpos);
-        if ((atpos < 1 || dotpos < atpos + 2 || dotpos + 4 < value.length || value.length - dotpos <= 2 || atpos == -1 || dotpos == -1) && value.length != 0) {
 
-            document.getElementById("mail_errorTxt1").style.display = "block";
-            //alert("false");
-            valid_email = 0;
+        if (value.length != 0) {
+            if (!value.match(email_pattern) || value.indexOf("..") != -1) {
+                document.getElementById("mail_errorTxt1").style.visibility = "visible";
+                //    //alert("false");
+                valid_email = 0;
+            }
+            else {
+
+                document.getElementById("mail_errorTxt1").style.visibility = "hidden";
+                //alert("true");
+                valid_email = 1;
+            }
         }
         else {
 
-            document.getElementById("mail_errorTxt1").style.display = "none";
+            document.getElementById("mail_errorTxt1").style.visibility = "hidden";
             //alert("true");
             valid_email = 1;
         }
@@ -91,33 +109,44 @@ function Addingvalidate(mode, value) {
         var phoneno = /^[0-9]+$/;
         if (value.match(phoneno) && value.length < 12 && value.length > 9 || value.length == 0) {
 
-            document.getElementById("phone_errorTxt1").style.display = "none";
+            document.getElementById("phone_errorTxt1").style.visibility = "hidden";
             valid_phone = 1;
         }
         else {
 
-            document.getElementById("phone_errorTxt1").style.display = "block";
+            document.getElementById("phone_errorTxt1").style.visibility = "visible";
             valid_phone = 0;
         }
     }
-   
+    else if (mode == 3) {
+        if (value) {
+            document.getElementById("name_errorTxt1").style.visibility = "hidden";
+            valid_name = 1;
+        }
+        else {
+            document.getElementById("name_errorTxt1").style.visibility = "visible";
+            valid_name = 0;
+    }
+}
+
     //alert(valid_name + "_" + valid_phone + "_" + valid_email);
-    if (valid_phone == 1 && valid_email == 1 ) document.getElementById("btnSave1").disabled = false;
-    else document.getElementById("btnSave1").disabled = true;
+    if (valid_phone == 1 && valid_email == 1 && valid_name == 1) document.getElementById("btnSave_add").disabled = false;
+    else document.getElementById("btnSave_add").disabled = true;
 }
 
 
 function clear_table() {
 
-    document.getElementById("phone_errorTxt").style.display = "none";
-    document.getElementById("mail_errorTxt").style.display = "none";
-    document.getElementById("name_errorTxt").style.display = "none";
+    document.getElementById("phone_errorTxt").style.visibility = "hidden";
+    document.getElementById("mail_errorTxt").style.visibility = "hidden";
+    document.getElementById("name_errorTxt").style.visibility = "hidden";
     document.getElementById("editName").value = "";
     document.getElementById("editDes").value = "";
     document.getElementById("editAddr").value = "";
     document.getElementById("editPhone").value = "";
     document.getElementById("editMail").value = "";
-    $('#btnSave').prop('disabled', false);
+    document.getElementById("cusEditID").value == "";
+    $('#btnSave_edit').prop('disabled', false);
 }
 
 
@@ -163,18 +192,18 @@ function addCustomer() {
                         closeOnConfirm: true
                     },
                     function (isConfirm) {
-                        if (isConfirm) { oTable.fnDraw() }
+                        if (isConfirm) { oTable.fnDraw(); clear_add();}
                     });
                 }
                 if (data == 2) {
                     swal({
-                        title: "Khách hàng này đã có!",
+                        title: "Email đã được sử dụng!",
                         type: "warning",
-                        confirmButtonText: "OK",
+                        confirmButtonText: "Đóng",
                         closeOnConfirm: true
                     },
                        function (isConfirm) {
-                           if (isConfirm) { oTable.fnDraw() }
+                           if (isConfirm) { clear_add(); }
                        });
                 }
                 if (data == 3) {
@@ -185,7 +214,8 @@ function addCustomer() {
                         closeOnConfirm: true
                     },
                         function (isConfirm) {
-                            if (isConfirm) { oTable.fnDraw() }
+                            if (isConfirm) { clear_add();
+                        }
                         });
                 }
             }
@@ -194,6 +224,7 @@ function addCustomer() {
         });
     }
     else swal("Vui lòng nhập tên", "", "warning");
+    
 }
 
 function editCustomerDetail() {
@@ -214,7 +245,10 @@ function editCustomerDetail() {
             }),
 
             success: function (data) {
+                //alert(data);
                 //showSucModal(editSuc_Mes);
+                if (data=="True")
+                    {
                 swal({
                     title: "Chỉnh sửa thành công!",
                     type: "success",
@@ -222,8 +256,20 @@ function editCustomerDetail() {
                     closeOnConfirm: true
                 },
             function (isConfirm) {
-                if (isConfirm) { oTable.fnDraw() }
+                if (isConfirm) { oTable.fnDraw(); $('#cusEditModal').modal('hide'); }
             });
+                }
+                else {
+                swal({
+                        title: "Chỉnh sửa thất bại!",
+                            type: "error",
+                            confirmButtonText: "Đóng",
+                            closeOnConfirm: true
+                        },
+                function (isConfirm) {
+                        $('#cusEditModal').modal('hide');
+                        });
+            }
 
             },
             error: function () {
@@ -234,7 +280,7 @@ function editCustomerDetail() {
                     closeOnConfirm: true
                 },
                 function (isConfirm) {
-
+                    $('#cusEditModal').modal('hide');
                 });
             }
         });
@@ -243,16 +289,15 @@ function editCustomerDetail() {
 }
 
 function clear_add() {
-
-    document.getElementById("phone_errorTxt1").style.display = "none";
-    document.getElementById("mail_errorTxt1").style.display = "none";
-    document.getElementById("name_errorTxt1").style.display = "none";
+    document.getElementById("phone_errorTxt1").style.visibility = "hidden";
+    document.getElementById("mail_errorTxt1").style.visibility = "hidden";
+    document.getElementById("name_errorTxt1").style.visibility = "hidden";
     document.getElementById("addNameTxt").value = "";
     document.getElementById("addAddrTxt").value = "";
     document.getElementById("addDescTxt").value = "";
     document.getElementById("addPhoneTxt").value = "";
     document.getElementById("addMailTxt").value = "";
-    $('#btnSave1').prop('disabled', false);
+    $('#btnSave_add').prop('disabled', true);
 }
 
 function getEditCustomer(e, cusEditID) {
@@ -263,14 +308,17 @@ function getEditCustomer(e, cusEditID) {
     document.getElementById("editAddr").value = tds.eq(2).text();
     document.getElementById("editPhone").value = tds.eq(3).text();
     document.getElementById("editMail").value = tds.eq(4).text();
+    getCustomerOrder(cusEditID);
+    $('#clickableH').find('th')[1].click();
+    $('#clickableH').find('th')[1].click();
     showCusEditModal(cusEditID);
 }
 
-function getCustomerOrder(e, cusId) {
+function getCustomerOrder(cusId) {
     var id = null;
     var languageConfig = {
         "oPaginate": {
-            "sNext": "Tiếp"
+            "sNext": "Sau"
             , "sLast": "Cuối"
             , "sPrevious": "Trước"
             , "sFirst": "Đầu"
@@ -286,23 +334,28 @@ function getCustomerOrder(e, cusId) {
                 , "searchPlaceholder": "Search records"
 
     }
-    var currentRow = $(e).closest('tr');
-    var tds = currentRow.find("td");
-    $('#orderOfCus').text(tds.eq(0).text());
-    $('#cusOrderList').modal('show');
+    //var currentRow = $(e).closest('tr');
+    //var tds = currentRow.find("td");
+    //$('#orderOfCus').text(tds.eq(0).text());
+    //$('#cusOrderList').modal('show');
 
     //(cusId);
     //oTable_Order.dataTable().fnDestroy();
+    //console.log(('#cusOrderTable').length);
     oTable_Order = $('#cusOrderTable').dataTable({
         "bProcessing": true,
         "bServerSide": true,
         "destroy": true,
         "sServerMethod": "POST",
         "oLanguage": languageConfig,
+        "scrollCollapse": true,
+        "scrollY": "200px",
         //'sDom': 'l<"toolbar"f>rtip',
         //'sDom': '<"right"Bflrtip>rt<"bottom"pi><"clear">',
         //'sDom':'ilftpr',
         //'sDom': 'B<"top"l>frt<"bottom"i>p<"clear">',
+        "iDisplayLength": 10,
+        "bLengthChange": false,
         "sjquery": true,
         "sAjaxSource": "/Customer/GetAllOrderByCustomerId",
         "fnServerParams": function (data) {
@@ -321,18 +374,45 @@ function getCustomerOrder(e, cusId) {
                 return FormatDateVN(source.DateModified);
             }, "bSortable": true
         },
+       
         { "mData": "Total", "bSortable": true },
+         {
+             "mData": function (source) {
+                 var status = source.Status;
+                 console.log(source);
+                 if (status == 2) {
+                     return '<span class="label label-success">Đang giao hàng</span>';
+                 }
+                 if (status == 3) {
+                     return '<span class="label label-primary">Đã xong</span>';
+                 }
+                 if (status == 4) {
+                     return '<span class="label label-danger">Đã huỷ</span>';
+                 }
+                 if (status == 1) {
+                     return '<span class="label label-info">Chờ xử lý</span>';
+                 }
+             }
+         },
         {
             "mData": function (source) {
-                return "<a href='/Order?Id=" + id + "' target='_blank' class='btn btn-success search-dropdown'>chi tiết </a>";
+                return "<a href='/Order?Id=" + id + "' class='btn btn-success search-dropdown' target ='_blank'><span class='fa fa-edit' aria-hidden='true'></span> </a>";
             }, "bSortable": false
         }
         ],
-
+        "fnInitComplete": function () {
+            //var table_header = $('.dataTables_scrollHeadInner')
+            //table_header.css("width", "100%");
+            //var new_table=table_header.find(".table");
+            //new_table.css("width", "100%");
+            $('#clickableH').find('th')[1].click();
+            $('#clickableH').find('th')[1].click();
+        }
 
 
     });
-    $('.dataTables_filter input').attr("placeholder", "Nhập mã đơn hàng");
+    $('#cusOrderTable_filter input').attr("placeholder", "Nhập mã đơn hàng");
+    
 }
 
 function refreshPage() {
@@ -344,6 +424,9 @@ function refreshPage() {
 /////// modal section
 
 function showCusEditModal(cuseditid) {
+    valid_edit_name = 1;
+    valid_edit_email = 1;
+    valid_edit_phone = 1;
     $('#cusEditModal').modal('show');
     document.getElementById("cusEditID").value = cuseditid;
 }
@@ -358,6 +441,9 @@ function showFailModal(fail_mes) {
 }
 
 function showCusAddModal() {
+    valid_name = 0;
+    valid_email = 1;
+    valid_phone = 1;
     $('#cusAddModal').modal('show');
 }
 
