@@ -40,5 +40,10 @@ namespace DataService.Service
         {
             return intentRepository.Delete(id);
         }
+
+        public Intent GetIntent(int id)
+        {
+            return intentRepository.FindByKey(id);
+        }
     }
 }
