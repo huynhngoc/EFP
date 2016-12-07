@@ -395,13 +395,13 @@ namespace ShopManager.Controllers
                     param.message = res;
                     try
                     {
-                        if (parentId != null)
+                        if (parentId == null)
                         {
-                            fbApp.Post(commentId, param);
+                            fbApp.Post(commentId + "/comments", param);
                         } else
                         {
                             //comment trực tiếp?
-                            fbApp.Post(parentId, param);
+                            fbApp.Post(parentId + "/comments", param);
                             //comment qua message
                             //fbApp.Post(commentId + "/private_replies", param);
                         }
