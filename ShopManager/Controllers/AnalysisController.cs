@@ -12,6 +12,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ShopManager.SignalRAlert;
+using ShopManager.Api.Ai.Custom;
+using System.Configuration;
+using ApiAiSDK;
 
 namespace ShopManager.Controllers
 {
@@ -23,7 +26,8 @@ namespace ShopManager.Controllers
         ShopService shopService = new ShopService();
         CustomerService customerService = new CustomerService();
         PostService postService = new PostService();
-        // GET: Analysis
+        AIDataServiceCustom apiService = new AIDataServiceCustom(
+                new AIConfigurationCustom(ConfigurationManager.AppSettings["ApiAiDeveloper"], SupportedLanguage.English, "intents"));        // GET: Analysis
         public ActionResult Comment()
         {
             return View();
@@ -234,13 +238,53 @@ namespace ShopManager.Controllers
         //ANDND Set comment Intent
         public JsonResult SetCommentIntent(string commentId, int intentId)
         {
-            return Json(commentService.SetIntent(commentId, intentId), JsonRequestBehavior.AllowGet);
+            bool result = commentService.SetIntent(commentId, intentId);
+            if (result == true)
+            {
+                try
+                {
+                    string content = commentService.getCommentById(commentId).LastContent;
+                    string apiai = intentService.GetIntent(intentId).ApiAiId;
+                    if (intentId != (int)DefaultIntent.INFO && apiai != null && apiai != "")
+                    {
+                        var intent = apiService.RequestIntentGet(apiai);
+                        intent.SetMoreTemplates(content);
+                        apiService.RequestIntentPut(intent, apiai);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+                     
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         //ANDND Set comment Intent
         public JsonResult SetPostIntent(string postId, int intentId)
         {
-            return Json(postService.SetIntent(postId, intentId), JsonRequestBehavior.AllowGet);
+
+            var result = postService.SetIntent(postId, intentId);
+            if (result == true)
+            {
+                try
+                {
+                    string content = postService.GetPostById(postId).LastContent;
+                    string apiai = intentService.GetIntent(intentId).ApiAiId;
+                    if (intentId != (int)DefaultIntent.INFO && apiai != null && apiai != "")
+                    {
+                        var intent = apiService.RequestIntentGet(apiai);
+                        intent.SetMoreTemplates(content);
+                        apiService.RequestIntentPut(intent, apiai);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         //Delete a comment
