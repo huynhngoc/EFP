@@ -130,11 +130,12 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Tên:</label>
                                                     <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên sản phẩm" /></div>
+                                                    <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Vui lòng điền tên sản phẩm</div>
                                                 </div>
                                                 <div class="form-group select-container">
                                                     <label class="col-sm-2 control-label">Phân loại:</label>
                                                     <div class="col-sm-5">
-                                                        <select class="form-control parentCategory-select">
+                                                        <select class="form-control parentCategory-select" onfocus="initParentCategory()">
                                                             <option></option>                                                            
                                                         </select>
                                                     </div>
@@ -142,6 +143,7 @@
                                                         <select name="category" class="form-control category-select">                                                                                                                      
                                                         </select>
                                                     </div> 
+                                                    <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Vui lòng chọn loại sản phẩm</div>
                                                     <div class="col-sm-10 pull-right"><a target="_blank" href="../Category/Index">Thêm phân loại sản phẩm</a></div>                                                   
                                                 </div>
                                                 <div class="form-group">
@@ -153,10 +155,12 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Giá:</label>
                                                     <div class="col-sm-10"><input class="price-input" name="price" placeholder="Giá" min="0" step="1000"/></div>                                                    
+                                                    <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Vui lòng điền giá!</div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Giá khuyến mãi:</label>
                                                     <div class="col-sm-10"><input class="price-input" name="promotion" placeholder="Giá khuyến mãi" min="0" step="1000" /></div>
+                                                    <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Giá khuyến mãi không cao hơn giá gốc</div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Tình trạng:</label>
@@ -180,12 +184,13 @@
                                     </div>
                                     <div id="tab-2" class="tab-pane">
                                         <fieldset class="form-horizontal">
-                                            <div class="panel-body">
+                                            <p class="panel-body">
                                                 <input name="templateId" type="hidden" />
                                                 <div class="form-group">
                                                     <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
                                                     <button class="btn btn-primary remove-template">Không dùng mẫu <span class="template-name"></span> nữa</button>
                                                 </div>
+                                                <p><a target="_blank" href="../Template/Index">Thêm mẫu sản phẩm</a></p>                                                   
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label"></label>
                                                     <div class="col-sm-10">
@@ -287,17 +292,19 @@
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Tên:</label>
                                                 <div class="col-sm-10"><input type="text" name="name" class="form-control" placeholder="Tên sản phẩm" /></div>
+                                                <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Vui lòng điền tên sản phẩm</div>
                                             </div>
                                             <div class="form-group select-container">
                                                 <label class="col-sm-2 control-label">Phân loại:</label>
                                                 <div class="col-sm-5">
-                                                    <select class="form-control parentCategory-select">
+                                                    <select class="form-control parentCategory-select" onfocus="initParentCategory()">
                                                         <option></option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-5">
                                                     <select name="category" class="form-control category-select"></select>
                                                 </div>
+                                                <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Vui lòng chọn loại sản phẩm</div>
                                                 <div class="col-sm-10 pull-right"><a target="_blank" href="../Category/Index">Thêm phân loại sản phẩm</a></div>
                                             </div>
                                             <div class="form-group">
@@ -309,10 +316,12 @@
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Giá:</label>
                                                 <div class="col-sm-10"><input class="price-input" name="price" placeholder="Giá" min="0" step="1000" /></div>
+                                                <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Vui lòng điền giá!</div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Giá khuyến mãi:</label>
                                                 <div class="col-sm-10"><input class="price-input" name="promotion" placeholder="Giá khuyến mãi" min="0" step="1000" /></div>
+                                                <div class="col-sm-10 pull-right error-note" style="color:red; display:none; ">Giá khuyến mãi không cao hơn giá gốc</div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">Tình trạng:</label>
@@ -342,6 +351,7 @@
                                                 <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
                                                 <button class="btn btn-primary remove-template">Không dùng mẫu <span class="template-name"></span> nữa</button>
                                             </div>
+                                            <p><a target="_blank" href="../Template/Index">Thêm mẫu sản phẩm</a></p>                                                   
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label"></label>
                                                 <div class="col-sm-10">
@@ -484,7 +494,9 @@
                 , "sFirst": "Đầu"
             }
                         , "sInfo": "Kết quả từ _START_ đến _END_ trong số _TOTAL_"
+                        , "sInfoEmpty": "Đang hiển thị 0 đến 0 trong 0 kết quả"                
                         , "sInfoThousands": "."
+                        , "sLengthMenu":"Hiển thị  _MENU_ kết quả"
                         , "sLoadingRecords": "Đang tải ..."
                         , "sProcessing": "Đang xử lý ..."
                         , "sSearch": "Tìm kiếm:"
@@ -542,6 +554,7 @@
                             + data[i].Name
                             +"</option>");
                     }
+                    $(".parentCategory-select").unbind("change");
                     $(".parentCategory-select").on("change", function () {
                         var parentId = $(this).val();
                         initCategory(parentId);
@@ -663,8 +676,16 @@
             initAttr(null, "______");
             initCategory(null);
             $("#addProductModal").modal("show");
+            if ($("#addProductModal").find('input[name="status"]').is(":checked") == false) {
+                $("#addProductModal").find('input[name="status"]').click();
+            }
+
+            if ($("#addProductModal").find('input[name="isInStock"]').is(":checked") ==false) {
+                $("#addProductModal").find('input[name="isInStock"]').click();
+            }
             $(".base-tab a").click();
             $(".has-error").removeClass("has-error");
+            $(".error-note").hide();
         }
 
         function initButtonAroundDataTable() {
@@ -762,6 +783,7 @@
 
         function editForm(id) {
             $(".has-error").removeClass("has-error");
+            $(".error-note").hide();
             $.ajax({
                 url: '../Product/GetProductById',
                 type: 'POST',
@@ -846,6 +868,7 @@
         function initModalButton() {
             $(".save-changes-button").on("click", function () {
                 $(".has-error").removeClass("has-error");
+                $(".error-note").hide();
                 error = false;
 
                 id = $("#viewProductModal").find('input[name="id"]').val();
@@ -853,22 +876,26 @@
                 if (name == null || name == 'undefined' || name.trim().length == 0) {
                     error = true;
                     $($('#viewProductModal input[name="name"]').parent("div")).addClass("has-error");
+                    $('#viewProductModal input[name="name"]').closest(".form-group").find(".error-note").show();
                 }
                 description = $("#viewProductModal").find('textarea[name="desc"]').val();
                 categoryId = $("#viewProductModal").find('select.category-select').val();
                 if (categoryId == null || categoryId == 'undefined') {
                     error = true;
                     $($("#viewProductModal select.category-select").parent("div")).addClass("has-error");
+                    $('#viewProductModal select.category-select').closest(".form-group").find(".error-note").show();
                 }
                 price = $("#viewProductModal").find('input[name="price"]').val();
                 if (price == null || price == 'undefined' || price.trim().length == 0) {
                     error = true;
                     $($("#viewProductModal input[name='price']").parent("div")).addClass("has-error");
+                    $('#viewProductModal input[name="price"]').closest(".form-group").find(".error-note").show();
                 }
                 promotion = $("#viewProductModal").find('input[name="promotion"]').val();
                 if (promotion != null && promotion != "" && price != null && price != 'undefined' && price.trim().length != 0 && promotion >= price) {
                     error = true;
                     $($("#viewProductModal input[name='promotion']").parent("div")).addClass("has-error");
+                    $('#viewProductModal input[name="promotion"]').closest(".form-group").find(".error-note").show();
                 }
                 status = $("#viewProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#viewProductModal").find('input[name="isInStock"]').is(":checked");
@@ -1077,22 +1104,26 @@
                 if (name == null || name == 'undefined' || name.trim().length == 0) {
                     error = true;
                     $($('#addProductModal input[name="name"]').parent("div")).addClass("has-error");
+                    $('#addProductModal input[name="name"]').closest(".form-group").find(".error-note").show();
                 }
                 description = $("#addProductModal").find('textarea[name="desc"]').val();
                 categoryId = $("#addProductModal").find('select.category-select').val();
                 if (categoryId == null || categoryId == 'undefined') {
                     error = true;
                     $($("#addProductModal select.category-select").parent("div")).addClass("has-error");
+                    $('#addProductModal select.category-select').closest(".form-group").find(".error-note").show();
                 }
                 price = $("#addProductModal").find('input[name="price"]').val();
                 if (price == null || price == 'undefined' || price.trim().length == 0) {
                     error = true;
                     $($("#addProductModal input[name='price']").parent("div")).addClass("has-error");
+                    $('#addProductModal input[name="price"]').closest(".form-group").find(".error-note").show();
                 }
                 promotion = $("#addProductModal").find('input[name="promotion"]').val();
                 if (promotion != null && promotion != "" && price != null && price != 'undefined' && price.trim().length != 0 && promotion >= price) {
                     error = true;
                     $($("#addProductModal input[name='promotion']").parent("div")).addClass("has-error");
+                    $('#addProductModal input[name="promotion"]').closest(".form-group").find(".error-note").show();
                 }
                 status = $("#addProductModal").find('input[name="status"]').is(":checked");
                 isInStock = $("#addProductModal").find('input[name="isInStock"]').is(":checked");

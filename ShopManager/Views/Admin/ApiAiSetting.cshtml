@@ -135,6 +135,9 @@
             var clicked = event.target;
             var apiAiId = $(clicked).closest(".ibox-content").attr("id");
             var content = $($(clicked).closest(".form-group").find("input")[0]).val();
+            if (content == null || content == 'undefined' || content.trim().length == 0) {
+                return;
+            }
             console.log(apiAiId + content);
             $.ajax({
                 url: '../Admin/AddTemplate',

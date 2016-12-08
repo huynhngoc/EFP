@@ -27,7 +27,7 @@
                         @*<span class="pull-right ">
                             <button class="btn btn-success btn-sm edit-button"><i class="fa fa-edit"></i></button>
                         </span>*@
-                        <span class="name">@shop.Name</span>&emsp;<cite class="desc"><a href="@string.Format("https://www.facebook.com/{0}",shop.Id)">Xem trang</a></cite>
+                        <span class="name">@shop.Name</span>&emsp;<cite class="desc"><a target="_blank" href="@string.Format("https://www.facebook.com/{0}",shop.Id)">Xem trang</a></cite>
                     </div>
                     <ol class="dd-list shop" id="@shop.Id">
                         @foreach (var user in shop.Users)

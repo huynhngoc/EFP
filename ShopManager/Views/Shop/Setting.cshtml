@@ -55,6 +55,7 @@
                                     <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
                                     <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
                                 </div>
+                                <div class="col-sm-12 error-note" style="color:red; display:none; "></div>
                             }
                             
                         </div>
@@ -158,7 +159,7 @@
                                 <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)"><i class="fa fa-trash"></i></button>
                                 <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)" style="display:none"><i class="fa fa-check"></i></button>
                                 <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)" style="display:none"><i class="fa fa-times"></i></button>
-                            </div>
+                            </div>                            
                         </div>
                     }                    
                 </fieldset>                    
@@ -205,6 +206,7 @@
                 <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)"><i class="fa fa-check"></i></button>
                 <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)"><i class="fa fa-times"></i></button>
             </div>
+            <div class="col-sm-12 error-note" style="color:red; display:none; "></div>
         </div>
     </div>
 
@@ -267,7 +269,8 @@
                     , type: "warning"
                     , showCancelButton: true
                     , closeOnConfirm: true
-                    , showLoaderOnConfirm: true,
+                    , showLoaderOnConfirm: true
+                    , cancelButtonText: "Không"
             }, function () {
                 $.ajax({                
                     url: '../Shop/DeleteEntity',
@@ -293,12 +296,55 @@
         }
 
         function saveEntity(event){
+            $(".has-error").removeClass("has-error");
+            $(".error-note").hide();
             var clicked = event.target;
             var div = $(clicked).closest(".entity-group");
             var id = $($(div).find("input[name='id']")[0]).val();            
             var name = $($(div).find("input[name='name']")[0]).val();
             var value = $($(div).find("input[name='value']")[0]).val();
             var des = $($(div).find("input[name='des']")[0]).val();
+
+            var error = false;
+            var errorMsg = "Xin điền"
+
+            if (des==null || des == undefined || des.trim().length==0){
+                $($($(div).find("input[name='des']")[0]).parent("div")).addClass("has-error");
+                errorMsg = errorMsg + " tên";
+                error = true;
+            }
+
+            if (name==null || name == undefined || name.trim().length==0){
+                $($($(div).find("input[name='name']")[0]).parent("div")).addClass("has-error");
+                errorMsg = errorMsg + (error?", ":" ")+"cụm viết tắt";
+                error = true;
+            }
+
+            if (name!=null && name != undefined & name.trim().length!=0){
+                if (name[0] != '@@'){
+                    $($($(div).find("input[name='name']")[0]).parent("div")).addClass("has-error");
+                    errorMsg = errorMsg + (error?", ":" ")+"cụm viết tắt bắt đầu bằng @@";
+                    error = true;
+                }
+                var repeat = 0;                
+                $("input[name='name']").each(function (index) {
+                    if ($(this).val() != null && $(this).val().length!=0 && $(this).val()===name) {
+                        repeat = repeat + 1;
+                    }
+                });
+                if (repeat > 1){
+                    $($($(div).find("input[name='name']")[0]).parent("div")).addClass("has-error");
+                    errorMsg = errorMsg + (error?", ":" ")+"cụm viết tắt khác với các cụm còn lại";
+                    error = true;
+                }
+                
+            }
+
+            if (error) {
+                $($(div).find(".error-note")[0]).text(errorMsg);
+                $(div).find(".error-note").show();
+                return;
+            }
 
             if (id!="undefined" && id!=""){
                 $.ajax({                
@@ -422,7 +468,8 @@
                     , type: "warning"
                     , showCancelButton: true
                     , closeOnConfirm: true
-                    , showLoaderOnConfirm: true,
+                    , showLoaderOnConfirm: true
+                    , cancelButtonText: "Không"
             }, function () {
                 $.ajax({                
                     url: '../Shop/DeleteResponse',

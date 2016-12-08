@@ -151,6 +151,7 @@ namespace ShopManager.Controllers
                         {
                             long createTime = value.created_time;
                             string commentId = value.comment_id;
+                            bool dbResult = true;
                             switch (verb)
                             {
                                 case WebhookVerb.Add:
@@ -237,20 +238,38 @@ namespace ShopManager.Controllers
                                         value.parent_id = shopId + "_" + parentId.Split('_')[1];
                                         parentId = null;
                                     }
-                                    commentService.AddComment(commentId, customerId, createTime, intent, status, parentId, postId, lastContent);
+                                    dbResult = commentService.AddComment(commentId, customerId, createTime, intent, status, parentId, postId, lastContent);
+                                    if (dbResult == false)
+                                    {
+                                        GetParentToDb(shopId, commentId, postId, parentId);
+                                        commentService.AddComment(commentId, customerId, createTime, intent, status, parentId, postId, lastContent);
+                                        dbResult = true;
+                                    }
                                     flagCanHide = true;
                                     flagComment = commentId;
+                                    if (verb.Equals(WebhookVerb.Add) && intent!=null && intent!=(int) DefaultIntent.UNKNOWN 
+                                        && intent!= (int) DefaultIntent.VANDAL && intent!= (int) DefaultIntent.GREETING
+                                        && (shopService.GetReplyMode(shopId) == (int)ReplyMode.AUTO || shopService.GetReplyMode(shopId) == (int)ReplyMode.COMMENT_ONLY))
+                                    {
+                                        AutoComment(commentId, shopId, parentId, intent.Value);
+                                    }
                                     break;
                                 case WebhookVerb.Hide:
-                                    commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);
+                                    dbResult = commentService.SetStatus(commentId, (int)CommentStatus.HIDDEN);                                    
                                     break;
                                 case WebhookVerb.Unhide:
-                                    commentService.SetStatus(commentId, (int)CommentStatus.SHOWING);
-                                    break;
+                                    dbResult = commentService.SetStatus(commentId, (int)CommentStatus.SHOWING);                                    
+                                        break;
                                 case WebhookVerb.Remove:
                                     commentService.SetStatus(commentId, (int)CommentStatus.DELETED);
                                     break;
-                                default: break;
+                                default:
+                                    dbResult = true;
+                                    break;
+                            }
+                            if (dbResult == false)
+                            {
+                                GetParentToDb(shopId, commentId, postId, parentId);                             
                             }
                         }
                         else if (item.Equals(WebhookItem.Post) || item.Equals(WebhookItem.Photo))
@@ -357,6 +376,110 @@ namespace ShopManager.Controllers
             }
 
 
+        }
+
+        private void AutoComment(string commentId, string shopId, string parentId, int intent)
+        {
+            string accessToken = shopService.GetShop(shopId).FbToken;
+            fbApp.AccessToken = accessToken;          
+            dynamic param = new ExpandoObject();
+            var response = responseService.GetResponse(shopId, intent);
+            if (!string.IsNullOrEmpty(response))
+            {
+                //respond message
+                string res = responseService.GetResponse(shopId, intent);
+                if (!string.IsNullOrEmpty(res))
+                {
+                    dynamic replyParam = new ExpandoObject();
+                    param.access_token = accessToken;
+                    param.message = res;
+                    try
+                    {
+                        if (parentId == null)
+                        {
+                            fbApp.Post(commentId + "/comments", param);
+                        } else
+                        {
+                            //comment trực tiếp?
+                            fbApp.Post(parentId + "/comments", param);
+                            //comment qua message
+                            //fbApp.Post(commentId + "/private_replies", param);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+        }
+
+        private void GetParentToDb(string shopId, string commentId, string postId, string parentId)
+        {
+            string accessToken = shopService.GetShop(shopId).FbToken;
+            fbApp.AccessToken = accessToken;
+            dynamic param = new ExpandoObject();
+            param.fields = "story,message,created_time,from,is_hidden";
+            param.locale = "vi_VI";
+            string lastContent = null;
+            dynamic result;
+            string sender;
+            int? intent;
+            try
+            {
+                if (postService.GetPostById(postId) == null)
+                {
+                    result = fbApp.Get(postId, param);
+                    if (HasProperty(result, "story") && HasProperty(result, "message"))
+                    {
+                        lastContent = TruncateLongString(result.story + ":" + result.message, 240);
+                    }
+                    else
+                    {
+                        lastContent = TruncateLongString(result.story + result.message, 240);
+                    }
+                    sender = result.from.id;
+                    intent = null;
+                    DateTime dateO = (DateTime.Parse(result.created_time));
+                    long dateCreateO = dateO.Subtract(new DateTime(1970,1,1)).Ticks / 10000000;
+                    if (sender.Equals(shopId) == false) intent = (int)DefaultIntent.UNKNOWN;
+                    postService.AddPost(postId, sender, dateCreateO, intent, false, result.is_hidden? (int)CommentStatus.HIDDEN: (int)CommentStatus.SHOWING, shopId);
+                    if (!string.IsNullOrEmpty(lastContent))
+                    {
+                        postService.SetLastContent(postId, lastContent);
+                    }
+                }                
+
+                if (parentId != null)
+                {
+                    param = new ExpandoObject();
+                    param.fields = "created_time,from,message,is_hidden";
+                    result = fbApp.Get(parentId, param);
+                    sender = result.from.id;
+                    intent = null;
+                    DateTime dateP = (DateTime.Parse(result.created_time));
+                    long dateCreateP = dateP.Subtract(new DateTime(1970, 1, 1)).Ticks / 10000000;
+                    if (sender.Equals(shopId) == false) intent = (int)DefaultIntent.UNKNOWN;
+                    commentService.AddComment(parentId, sender, dateCreateP, intent, result.is_hidden ? (int)CommentStatus.HIDDEN : (int)CommentStatus.SHOWING, null, postId, result.message);
+                }
+
+                param = new ExpandoObject();
+                param.fields = "created_time,from,message,is_hidden,parent";
+                result = fbApp.Get(commentId, param);
+                sender = result.from.id;
+                intent = null;
+                string parent = HasProperty(result, "parent") ? result.parent.id : null;
+                if (sender.Equals(shopId) == false) intent = (int)DefaultIntent.UNKNOWN;
+                DateTime date = (DateTime.Parse(result.created_time));
+                long dateCreate = date.Subtract(new DateTime(1970, 1, 1)).Ticks / 10000000;
+                commentService = new CommentService();
+                commentService.AddComment(commentId, sender, dateCreate , intent, result.is_hidden ? (int)CommentStatus.HIDDEN : (int)CommentStatus.SHOWING, parent, postId, result.message);
+            }
+            catch (Exception)
+            {
+
+                
+            }            
         }
 
         private void checkLast(string threadId, string shopId, long time)

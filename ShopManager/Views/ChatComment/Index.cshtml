@@ -2817,7 +2817,7 @@
             }
         });
         function ConversationSelect(){
-            
+
             $('#chatSection').css('pointer-events','auto');
 
             if ($('#suggest_wrapper .btn').hasClass('active')){
@@ -2956,7 +2956,7 @@
         function GetSuggestReply(){
             $( function() {
                 var availableReps=[];
-                var intentId=parseInt($(thread).data('intentid',intent));
+                var intentId=parseInt($('#list_conversation li.ui-selected').data('intentid'));
                 $.ajax({
                     async: true,
                     method: 'GET',
@@ -3160,10 +3160,13 @@
 
         function CreateResponseDT(){
             var availableReps=[];
+            var intentId=parseInt($('#list_conversation li.ui-selected').data('intentid'));
+
             $.ajax({
                 async: false,
                 method: 'GET',
                 url: '/ChatComment/GetAvailableResponses',
+                data: {"intentId": intentId},
                 success: function (data) {
                     availableReps=data;
                 }
