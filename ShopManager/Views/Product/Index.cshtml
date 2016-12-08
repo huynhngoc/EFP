@@ -187,9 +187,15 @@
                                             <div class="panel-body">
                                                 <input name="templateId" type="hidden" />
                                                 <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Mẫu đặc điểm</label>
+                                                    <div class="col-sm-10">
+                                                        <select class="select-template form-control"><option>Chọn mẫu đặc điểm</option></select>
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
                                                     <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
                                                     <button class="btn btn-primary remove-template">Không dùng mẫu <span class="template-name"></span> nữa</button>
-                                                </div>
+                                                </div>*@
                                                 <p><a target="_blank" href="../Template/Index">Thêm mẫu sản phẩm</a></p>                                                   
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label"></label>
@@ -348,9 +354,15 @@
                                         <div class="panel-body">
                                             <input name="templateId" type="hidden" />
                                             <div class="form-group">
+                                                <label class="col-sm-2 control-label">Mẫu đặc điểm</label>
+                                                <div class="col-sm-10">
+                                                    <select class="select-template form-control"><option>Chọn mẫu đặc điểm</option></select>
+                                                </div>
+                                            </div>                                            
+                                            @*<div class="form-group">
                                                 <button class="btn btn-success choose-template">Thay đổi mẫu các đặc điểm</button>
                                                 <button class="btn btn-primary remove-template">Không dùng mẫu <span class="template-name"></span> nữa</button>
-                                            </div>
+                                            </div>*@
                                             <p><a target="_blank" href="../Template/Index">Thêm mẫu sản phẩm</a></p>                                                   
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label"></label>
@@ -481,6 +493,7 @@
     <!-- sweetalert -->
     @Scripts.Render("~/SweetAlert-JS")
     <script>
+        var attrTemplateList = {};
         var testData;
         var editDropzone;
         var addDropzone;
@@ -821,7 +834,34 @@
                     $(".date-modified").text(FormatDateVN(data.DateModified));
 
                     $("#viewProductModal").find("input[name='templateId']").val(data.TemplateId);
+                    $("#viewProductModal .select-template").empty();
+                    $.ajax({
+                        url: '../Template/All',
+                        type: "POST",
+                        data: {
+                            "shopId": 1
+                        },
+                        success: function (data, textStatus, xhr) {
+                            attrTemplateList = {};
+                            var templateList = data.aaData;
+                            $("#viewProductModal .select-template").append("<option >Chọn mẫu đặc điểm</option>");
+                            for (var i = 0; i < templateList.length; i++) {
+                                id = templateList[i].Id;
+                                attrTemplateList["" + id] = list = templateList[i].Attr;
+                                name = templateList[i].Name;
+                                list = templateList[i].Attr.replace("_", "; ");
+                                list = list.replace("__", "");
+                                list = list.replace("__", ""); list = list.replace("__", ""); list = list.replace("_", "");
+                                $(".select-template").append("<option value='" + id + "'>" + name + ": " + list + "</option>");
 
+                            }
+                            $("#viewProductModal .select-template").val(""+data.TemplateId);
+                        },
+                        error: function () {
+                            console.log('error');
+                        }
+                    });
+                    
                     initAttr(data.TemplateId, data.Attr);
                     initPicture(data.Id);
                     $("#viewProductModal input[name='deleteImg']").val("");
@@ -866,6 +906,52 @@
         }
 
         function initModalButton() {
+            $(".select-template").on("change", function () {
+                id = $(this).val();
+                if (id == null || id=='undefined' ||id == "") {
+                    id = null;
+                    attr = "_______"
+                    $($(this).closest(".modal").find("input[name='templateId']")).val("");
+                } else {
+                    attr = attrTemplateList["" + id];
+                    $($(this).closest(".modal").find("input[name='templateId']")).val(id);
+                }
+                
+                initAttr(id, attr);
+            });
+
+
+            $(".select-template").on("focus", function () {
+                $(this).empty();
+                $.ajax({
+                    url: '../Template/All',
+                    type: "POST",
+                    data: {
+                        "shopId": 1
+                    },
+                    success: function (data, textStatus, xhr) {
+                        attrTemplateList = {};                        
+                        var templateList = data.aaData;
+                        $(".select-template").append("<option >Chọn mẫu đặc điểm</option>");
+                        for (var i = 0; i < templateList.length; i++) {
+                            id = templateList[i].Id;
+                            attrTemplateList["" + id] = list = templateList[i].Attr;
+                            name = templateList[i].Name;                            
+                            list = templateList[i].Attr.replace("_", "; ");
+                            list = list.replace("__", "");
+                            list = list.replace("__", ""); list = list.replace("__", ""); list = list.replace("_", "");
+                            $(".select-template").append("<option value='"+id+"'>"+name+": "+list+"</option>");
+                            
+                        }                        
+
+                    },
+                    error: function () {
+                        console.log('error');
+                    }
+                });
+            })
+
+
             $(".save-changes-button").on("click", function () {
                 $(".has-error").removeClass("has-error");
                 $(".error-note").hide();
@@ -1015,86 +1101,86 @@
                 });
             });
 
-            $(".choose-template").on("click", function () {
-                $.ajax({
-                    url:'../Template/All',
-                    type: "POST",
-                    data: {
-                        "shopId": 1
-                    },
-                    success: function (data, textStatus, xhr) {
-                        var templateTable = $('.template-table').dataTable({
-                            //"bProcessing": true,
-                            //"sAjaxSource": "../Template/All"
-                            "aaData": data.aaData
-                            , "oLanguage": languageConfig
-                            , "bDestroy": true
-                            ,"aoColumnDefs": [
-                                { "bSortable": false
-                                    , "aTargets": [0]
-                                    , "mData": "Id"
-                                    , "bVisible": false
-                                }
-                                , {
-                                    "bSortable": true
-                                    , "aTargets": [1]
-                                    , "mData": "Name"
-                                }
-                                , { "bSortable": true
-                                    , "aTargets": [2]
-                                    , "mData": function (source) {
-                                        var listAttr = source.Attr.split("_");
-                                        var content = "";
-                                        for (var i = 0; i < listAttr.length; i++) {
-                                            content += ("<span class='badge badge-success'>" + listAttr[i] + "</span>");
-                                        }
-                                        return content;
-                                    }
-                                }
-                                , {
-                                    "bSortable": false
-                                    , "bSearchable": false
-                                    , "aTargets": [3]
-                                    , "mData": null
-                                    , "sDefaultContent": "<button class='btn btn-primary change-template-button'>Chọn</button>"
-                                }
-                            ]
-                            , "fnInitComplete": function (oSetting, json) {
-                                $('.template-table').removeAttr("style");
-                                $(".change-template-button").on("click", function () {
-                                    var clickedRow = $(this).closest("tr");
-                                    var id = templateTable.fnGetData($(clickedRow)).Id;
-                                    var attrList = "";
-                                    if ($("#viewProductModal").hasClass('in')) {
-                                        $("#viewProductModal input[name='templateId']").val(id);
-                                        $("#viewProductModal input[name='attr']").each(function () {
-                                            attrList += $(this).val() + "_";
-                                        });
-                                    } else {
-                                        $("#addProductModal input[name='templateId']").val(id);
-                                        $("#addProductModal input[name='attr']").each(function () {
-                                            attrList += $(this).val() + "_";
-                                        });
-                                    }
-                                    initAttr(id, attrList);
-                                    $("#templateChoser").modal("hide");
-                                });
-                            }
+            //$(".choose-template").on("click", function () {
+            //    $.ajax({
+            //        url:'../Template/All',
+            //        type: "POST",
+            //        data: {
+            //            "shopId": 1
+            //        },
+            //        success: function (data, textStatus, xhr) {
+            //            var templateTable = $('.template-table').dataTable({
+            //                //"bProcessing": true,
+            //                //"sAjaxSource": "../Template/All"
+            //                "aaData": data.aaData
+            //                , "oLanguage": languageConfig
+            //                , "bDestroy": true
+            //                ,"aoColumnDefs": [
+            //                    { "bSortable": false
+            //                        , "aTargets": [0]
+            //                        , "mData": "Id"
+            //                        , "bVisible": false
+            //                    }
+            //                    , {
+            //                        "bSortable": true
+            //                        , "aTargets": [1]
+            //                        , "mData": "Name"
+            //                    }
+            //                    , { "bSortable": true
+            //                        , "aTargets": [2]
+            //                        , "mData": function (source) {
+            //                            var listAttr = source.Attr.split("_");
+            //                            var content = "";
+            //                            for (var i = 0; i < listAttr.length; i++) {
+            //                                content += ("<span class='badge badge-success'>" + listAttr[i] + "</span>");
+            //                            }
+            //                            return content;
+            //                        }
+            //                    }
+            //                    , {
+            //                        "bSortable": false
+            //                        , "bSearchable": false
+            //                        , "aTargets": [3]
+            //                        , "mData": null
+            //                        , "sDefaultContent": "<button class='btn btn-primary change-template-button'>Chọn</button>"
+            //                    }
+            //                ]
+            //                , "fnInitComplete": function (oSetting, json) {
+            //                    $('.template-table').removeAttr("style");
+            //                    $(".change-template-button").on("click", function () {
+            //                        var clickedRow = $(this).closest("tr");
+            //                        var id = templateTable.fnGetData($(clickedRow)).Id;
+            //                        var attrList = "";
+            //                        if ($("#viewProductModal").hasClass('in')) {
+            //                            $("#viewProductModal input[name='templateId']").val(id);
+            //                            $("#viewProductModal input[name='attr']").each(function () {
+            //                                attrList += $(this).val() + "_";
+            //                            });
+            //                        } else {
+            //                            $("#addProductModal input[name='templateId']").val(id);
+            //                            $("#addProductModal input[name='attr']").each(function () {
+            //                                attrList += $(this).val() + "_";
+            //                            });
+            //                        }
+            //                        initAttr(id, attrList);
+            //                        $("#templateChoser").modal("hide");
+            //                    });
+            //                }
 
-                        })
-                        $("#templateChoser").modal("show");
+            //            })
+            //            $("#templateChoser").modal("show");
 
-                    },
-                    error: function () {
-                        console.log('error');
-                    }
-                });
-            });
+            //        },
+            //        error: function () {
+            //            console.log('error');
+            //        }
+            //    });
+            //});
 
-            $(".remove-template").on("click", function () {
-                $("#viewProductModal input[name='templateId']").val(null);
-                initAttr(null);
-            });
+            //$(".remove-template").on("click", function () {
+            //    $("#viewProductModal input[name='templateId']").val(null);
+            //    initAttr(null);
+            //});
 
             $(".add-save-button").on("click", function () {
                 $(".has-error").removeClass("has-error");
