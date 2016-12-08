@@ -29,10 +29,10 @@ namespace DataService.Service
                     EntityIntroduction.Description, shopId);
                 AddEntity(EntityBankAccount.Name, EntityBankAccount.Value, EntityBankAccount.IsDynamic,
                     EntityBankAccount.Description, shopId);
-                AddEntity(EntityProductPrice.Name, EntityProductPrice.Value, EntityProductPrice.IsDynamic,
-                    EntityProductPrice.Description, shopId);
-                AddEntity(EntityProductInStock.Name, EntityProductInStock.Value, EntityProductInStock.IsDynamic,
-                    EntityProductInStock.Description, shopId);
+                //AddEntity(EntityProductPrice.Name, EntityProductPrice.Value, EntityProductPrice.IsDynamic,
+                //    EntityProductPrice.Description, shopId);
+                //AddEntity(EntityProductInStock.Name, EntityProductInStock.Value, EntityProductInStock.IsDynamic,
+                //    EntityProductInStock.Description, shopId);
                 return true;
             }
             catch (Exception)
