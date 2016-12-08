@@ -398,10 +398,12 @@ table.dataTable tbody tr.selected, table.dataTable tbody tr.selected:hover {
     max-height: 34% !important;
     width: 500px !important;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+    overflow-y: auto;
 }
 
     .dialog_resp .ui-dialog-titlebar {
         display: none;
+
     }
 
 .response:hover {
