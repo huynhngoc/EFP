@@ -86,6 +86,42 @@
             </div>
         </div>
     </div>
+    <!--Cart Modal-->
+    <div class="modal inmodal fade" id="failModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Đóng</span></button>
+                    <h4 class="modal-title">Đặt hàng không thành công</h4>
+                    <small>Những sản phẩm dưới đây hiện không thể tiến hành đặt hàng</small><br />
+                    <small>Vui lòng quay lại trang chủ để xem lại giỏ hàng hoặc tiếp tục đặt hàng những sản phẩm còn lại.</small>
+                </div>
+                <div class="modal-body" style="padding:0px">
+                    
+                    <div style="display:none" id="listFailItem">
+                        <div class="ibox-content">
+                            <div class="table-responsive">
+                                <table class="table shoping-cart-table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="desc col-sm-4" style="vertical-align:middle"><h3 style="width:220px" class="truncate"><a href="#" class="text-navy"></a></h3></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox" id="listFail"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId" class="btn btn-white pull-left"><i class="fa fa-arrow-left"></i> Về trang chủ</a>
+                    <a href="/Home/CheckOut?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Tiếp tục đặt hàng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--./Cart Modal-->
     <!-- Mainly scripts -->
     @Scripts.Render("~/Mainly-scripts")
     @Scripts.Render("~/Sweet-Alert-JS")
@@ -214,7 +250,7 @@
                     phone: phone
                 },
                 success: function(data){
-                    if(data=="True"){
+                    if(data.success==true){
                         swal({
                             title: "Thành công",
                             text: "Bạn đã tạo đơn hàng thành công",
@@ -226,12 +262,30 @@
                             }
                         }
                         );
-                    }else{
-                        alert("failed");
+                    };
+                    if(data.success==false){
+                        if(data.listFail!=null || data.listFail!='undefined'){
+                            $('#listFail').empty();
+                            for(var i=0; i<data.listFail.length;i++){
+                                var item = $('#listFailItem > div.ibox-content').clone();
+                                item.find("td > h3 > a").text(data.listFail[i].Properties);
+                                $('#listFail').append(item);
+                            }
+                            $('#failModal').modal('show');
+                        }
                     }
                 },
                 error: function(){
-                    alert("Failed");
+                    swal({
+                        title: "Thất bại",
+                        text: "Tạo đơn hàng thất bại",
+                        type: "error"
+                    },
+                        function (isConfirm) {
+                            if(isConfirm){
+                                window.location.href = "/Home/Index?FBId=@ViewBag.PageInfo.FBId&shopId=@ViewBag.PageInfo.ShopId";
+                            }
+                        })
                 }
             })
         }

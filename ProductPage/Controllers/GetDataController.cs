@@ -136,21 +136,43 @@ namespace ProductPage.Controllers
         }
 
         // Add an order
-        public bool AddOrder(string shopId, string note, string fbId, string address, string receiver, string phone)
+        public JsonResult AddOrder(string shopId, string note, string fbId, string address, string receiver, string phone)
         {
             if (Session["Cart" + fbId + shopId] != null)
             {
                 List<CartModel> listCart = (List<CartModel>)Session["Cart" + fbId + shopId];
                 OrderDetailViewModel orderDetailModel;
                 List<OrderDetailViewModel> listOrderDetail = new List<OrderDetailViewModel>();
+                List<OrderDetailViewModel> listFailToAddOrder = new List<OrderDetailViewModel>();
+                List<CartModel> listCartNew = new List<CartModel>();
                 for (int i = 0; i < listCart.Count(); i++)
                 {
-                    orderDetailModel = new OrderDetailViewModel();
-                    orderDetailModel.ProductId = listCart[i].productId;
-                    orderDetailModel.Properties = listCart[i].properties;
-                    orderDetailModel.Price = listCart[i].price;
-                    orderDetailModel.Quantity = listCart[i].quantity;
-                    listOrderDetail.Add(orderDetailModel);
+                    Product product = productService.GetAvailableProductById(listCart[i].productId);
+                    if (product != null)
+                    {
+                        orderDetailModel = new OrderDetailViewModel();
+                        orderDetailModel.ProductId = listCart[i].productId;
+                        orderDetailModel.Properties = listCart[i].properties;
+                        orderDetailModel.Price = listCart[i].price;
+                        orderDetailModel.Quantity = listCart[i].quantity;
+                        listOrderDetail.Add(orderDetailModel);
+                        listCartNew.Add(listCart[i]);
+                    }
+                    else
+                    {
+                        orderDetailModel = new OrderDetailViewModel();
+                        orderDetailModel.ProductId = listCart[i].productId;
+                        orderDetailModel.Properties = listCart[i].properties;
+                        orderDetailModel.Price = listCart[i].price;
+                        orderDetailModel.Quantity = listCart[i].quantity;
+                        listFailToAddOrder.Add(orderDetailModel);
+                    }
+                    
+                }
+                if (listFailToAddOrder.Count() != 0)
+                {
+                    Session["Cart" + fbId + shopId] = listCartNew;
+                    return Json(new { success = false, listFail = listFailToAddOrder }, JsonRequestBehavior.AllowGet);
                 }
                 int status = (int)OrderStatus.PROCESSING;
                 bool result;
@@ -167,16 +189,16 @@ namespace ProductPage.Controllers
                 if (result)
                 {
                     Session["Cart" + fbId + shopId] = null;
-                    return true;
+                    return Json(new { success = true, listFail = listFailToAddOrder }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return false;
+                    return Json(new { success = false, listFail = listFailToAddOrder }, JsonRequestBehavior.AllowGet);
                 }
             }
             else
             {
-                return false;
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
         }
 

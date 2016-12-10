@@ -274,6 +274,12 @@ namespace DataService.Repository
             return dbSet.Where(q => q.ShopId == shopId && q.CategoryId == categoryId && q.Id == Id && q.Status == true);
         }
 
+        //ANDND get product by product id
+        public IEnumerable<Product> GetAvailableProductByProductId(int Id)
+        {
+            return dbSet.Where(q => q.Id == Id && q.Status == true && q.IsInStock == true);
+        }
+
         //ANDND get list product name
         public string[] GetAllProductNameByShopId(string shopId)
         {
@@ -289,7 +295,7 @@ namespace DataService.Repository
         //ANDND get newest product by shop
         public IQueryable<Product> GetNewestProductByShop(string shopId)
         {
-            return dbSet.Where(q =>( q.ShopId == shopId) && (q.Status == true)).OrderByDescending(q => q.DateCreated);
+            return dbSet.Where(q => (q.ShopId == shopId) && (q.Status == true)).OrderByDescending(q => q.DateCreated);
         }
 
         //ANDND get sale product by shop
