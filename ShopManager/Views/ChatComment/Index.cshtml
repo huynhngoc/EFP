@@ -315,19 +315,19 @@
     @*Private mess*@
     <div class="modal fade" id="cusPrivateMes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" style="margin-top: 15%;">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #1ab394">
+                <div class="modal-header" style="background-color: #1ab394; padding: 8px">
                     <h2 style="color: white;">Tin nhắn mới</h2>@*<span class="close" data-dismiss="modal">x</span>*@
                 </div>
                 <div class="modal-body">
                     <div>Tới: <div style="display:inline-block" id="receiverName"></div></div></br>
-                    <textarea class="form-control" id="private_mes" placeholder="Nhắn tin với tu cách là chủ shop..."></textarea>
+                    <textarea class="form-control" id="private_mes" placeholder="Nhắn tin với tư cách là chủ shop..."></textarea>
                     </br><div>Tại comment: <div id="comment_id_to_reply"></div></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnCloseModal" class="btn btn-danger" data-dismiss="modal" onclick="clear_message();">Huỷ</button>
-                    <button type="button" id="btnSave" class="btn btn-success" data-dismiss="modal" onclick="SendPrivateMessage($('#private_mes').val(),$('#comment_id_to_reply').data('id'))">Gởi</button>
+                    <button type="button" id="btnSave" class="btn btn-success" data-dismiss="modal" onclick="SendPrivateMessage($('#private_mes').val(),$('#comment_id_to_reply').data('id'))">Gửi</button>
 
 
                 </div>
@@ -443,6 +443,10 @@
                             //new comment
                             //alert("its comment");
                             AddToComment(comment,date,intent);
+                            if ($('#suggest_wrapper_comment .btn').hasClass('active')){
+                                $('#suggest_wrapper_comment .btn').removeClass('active');
+                                $('#suggest_wrapper_comment').click();
+                            }
                             //AddToComment(comment,date);
                         }
 
@@ -450,6 +454,10 @@
                         else {
                             //AddToReply(comment,date,intent);
                             AddToReply(comment,date,intent);
+                            if ($('#suggest_wrapper_comment .btn').hasClass('active')){
+                                $('#suggest_wrapper_comment .btn').removeClass('active');
+                                $('#suggest_wrapper_comment').click();
+                            }
                         }
                         //move post in post list
                         var tmpPost =  $('#'+comment.post_id+'_Post').wrap('<p/>').parent().html();
@@ -662,26 +670,31 @@
                         }
                     },
                     stop: function () {
-                        console.log("select the post");
+                        //console.log("select the post");
                         var result = $("#select-result").empty();
-                        $(".ui-selected", this).each(function () {
-                            ////("test");
-                            var index = $("#selectable li").index(this);
-                            result.append(" #" + (index + 1));
-                            gettingCommentInit = true;
-                            nextIsRead = null;
-                            nextReplyIsRead = null;
-                            document.getElementById("replyInputTxt").disabled = true;
-                            $('#btn_response_comment').prop('disabled',true);
-                            if ($('#suggest_wrapper_comment .btn').hasClass('active')){
-                                $('#suggest_wrapper_comment .btn').removeClass('active'); 
-                                }
+                        if (!$(this).hasClass('.ui-selected'))
+                        {
+                            //alert($('#hiddenPostId').val());
+                                $(".ui-selected", this).each(function () {
+                                    ////("test");
+                                    if ($('#hiddenPostId').val()!=(this.id.split('_')[0]+"_"+this.id.split('_')[1])){
+                                        var index = $("#selectable li").index(this);
+                                        result.append(" #" + (index + 1));
+                                        gettingCommentInit = true;
+                                        nextIsRead = null;
+                                        nextReplyIsRead = null;
+                                        document.getElementById("replyInputTxt").disabled = true;
+                                        document.getElementById("replyInputTxt").value="";
+                                        $('#btn_response_comment').prop('disabled',true);
+                            
 
-                            appendMode=false;
-                            ////(this.id.split('_')[0]+"_"+this.id.split('_')[1]);
-                            loadPostDetail(this.id.split('_')[0]+"_"+this.id.split('_')[1]);
-                            ////(gettingCommentInit);
-                        });
+                                        appendMode=false;
+                                        ////(this.id.split('_')[0]+"_"+this.id.split('_')[1]);
+                                        loadPostDetail(this.id.split('_')[0]+"_"+this.id.split('_')[1]);
+                                        ////(gettingCommentInit);
+                                    }
+                                });
+                        }
                     }
                 });
             });
@@ -968,7 +981,14 @@
                         if (data != null) {
 
                             if (data.success == false){
-                                swal("Không thể truy cập bài đăng!","", "error");
+                                swal("Không thể truy cập bài đăng!","", "warning");
+                                $('#comment_div').append("<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
+                                                         "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
+                                                         "<div class='panel-body' style='height:100%; text-align:center'>"+
+                                                         "Xin chọn bài đăng"+
+                                                        "</div>"+
+                                                        "</div>"+
+                                                        "</div>");
                                 $("#comment_div").append("<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
                                                                             "<div class='sk-circle1 sk-circle'></div>"+
                                                                             "<div class='sk-circle2 sk-circle'></div>"+
@@ -987,9 +1007,7 @@
                             }
                             else
                             {
-                                if ($('#suggest_wrapper_comment .btn').hasClass('active')){
-                                    $('#suggest_wrapper_comment').click();
-                                }
+                                
                                 var html = "";
                                 //init mode
                                 console.log(data);
@@ -1105,7 +1123,7 @@
                                         if ($('#'+data.Comments[i].Id).length){}
                                         else
                                         {
-                                            html += "<div class='social-comment' id='" + data.Comments[i].Id + "'> \n"; console.log(data.Comments[i].Status)
+                                            html += "<div class='social-comment' id='" + data.Comments[i].Id + "' style='margin-bottom:1%'> \n"; console.log(data.Comments[i].Status)
 
                                             if (data.Comments[i].Status != 5){
                                                 html+="<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
@@ -1191,7 +1209,7 @@
                                         if(!$('#'+data.nestedComments[i].Id).length)
                                         {
                                             //$('#reply_' + data.nestedComments[i].parentId).remove();
-                                            html1 = "<div class='social-comment' id='" + data.nestedComments[i].Id + "'> \n";
+                                            html1 = "<div class='social-comment' id='" + data.nestedComments[i].Id + "' style='margin-bottom:1%'> \n";
                                             if (data.nestedComments[i].Status != 5){
                                                 html1+="<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
                                                                      "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
@@ -1268,10 +1286,22 @@
                                 //bind onclick event
                                 //bindFunctions();
                                 //bindShowMoreComments();
+                                if ($('#suggest_wrapper_comment .btn').hasClass('active')){
+                                    $('#suggest_wrapper_comment .btn').removeClass('active');
+                                    $('#suggest_wrapper_comment').click();
+                                }
+
                             }
                         }
                         else {
-                            swal("Không thể truy cập bài đăng!","", "error");
+                            swal("Không thể truy cập bài đăng!","", "warning");
+                            $('#comment_div').append("<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
+                                                         "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
+                                                         "<div class='panel-body' style='height:100%; text-align:center'>"+
+                                                         "Xin chọn bài đăng"+
+                                                        "</div>"+
+                                                        "</div>"+
+                                                        "</div>");
                             $("#comment_div").append("<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
                                                                         "<div class='sk-circle1 sk-circle'></div>"+
                                                                         "<div class='sk-circle2 sk-circle'></div>"+
@@ -1286,6 +1316,7 @@
                                                                         "<div class='sk-circle11 sk-circle'></div>"+
                                                                         "<div class='sk-circle12 sk-circle'></div></div> <input type='hidden' value='"+postId+"' id='hiddenPostId'><input type='hidden' value='' id='hiddenEditId'>");
                             $('#btn_response_comment').prop('disabled',true);
+                            document.getElementById("replyInputTxt").disabled = true;
                         }
                     }
                 },
@@ -1420,7 +1451,7 @@
                                 var tmphtml = '';
                                 if ($('#'+data.newcommentdetaillist[i].Id).length){}
                                 else{
-                                    tmphtml +="</div><div class='social-comment' id='" + data.newcommentdetaillist[i].Id + "'> \n";
+                                    tmphtml +="</div><div class='social-comment' id='" + data.newcommentdetaillist[i].Id + "' style='margin-bottom:1%'> \n";
                                     if(data.newcommentdetaillist[i].Status != 5){
                                         tmphtml+= "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
                                                                 "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
@@ -1479,7 +1510,12 @@
                                 }
                                 else $('#'+$('#hiddenPostId').val()+'_Post').removeClass('unreadPost');
                                 //bindNestedFunctionEvent();
-                            }}
+                            }
+                            if ($('#suggest_wrapper_comment .btn').hasClass('active')){
+                                $('#suggest_wrapper_comment .btn').removeClass('active');
+                                $('#suggest_wrapper_comment').click();
+                            }
+                        }
                         $('#nested_loader').hide();
                     }
                 },
@@ -1880,7 +1916,16 @@
                                                 //    $('#reply_to_'+id).find('.clickable').removeClass('hided').addClass('deleted');
                                                 //    $('#reply_to_'+id).find(".btn").remove();
                                                 //}
-                                                $('#'+id).remove();
+
+                                                //remove comment
+                                                //$('#'+id).remove();
+                                                $('#'+id).find('.btn.btn-white').remove();
+                                                $('#'+id).find('.pull-right.social-action.dropdown').remove();
+                                                $('#'+id).find('.replyComment').parent().parent().remove();
+                                                $('#'+id).find('.clickable').removeClass('deleted'); 
+                                                $('#'+id).find('.clickable').addClass('deleted'); 
+
+
                                             }
 
                                             $.ajax({
@@ -1923,6 +1968,31 @@
                                             swal("Xoá thất bại!","", "error");
                                         }
                                         else {
+                                            // delete whole post
+                                            if ($('#hiddenPostId').val() == id) {
+                                                //$("#comment_div").empty();
+                                                //$('#postDetail').children('.social-avatar').removeClass('hided').addClass('deleted');
+                                                //$('#postDetail').children('.social-footer').find('.clickable').removedClass('hided').addClass('deleted');
+                                                //$('#postDetail').children('.social-footer').find('.btn').remove();
+                                                if($('#'+id+'_Post').length){
+                                                    $('#'+id+'_Post').removeClass('unreadPost');
+                                                    $('#'+id+'_Post').addClass('deleted');
+                                                }
+
+
+                                                $('#postDetail').find('.btn.btn-white').remove();
+                                                $('#postDetail').find('.pull-right.social-action.dropdown').remove();
+                                                $(".replyComment").parent().parent().remove();
+                                                $('#postDetail').addClass('deleted');
+                                                $('.social-footer').find('.btn.btn-white').remove();
+                                                $('.social-footer').find('.clickable').removeClass('deleted');
+                                                $('.social-footer').find('.clickable').addClass('deleted');
+
+                                                document.getElementById("replyInputTxt").disabled = true;
+                                                $('#btn_response_comment').prop('disabled',true);
+                                            }
+
+
                                             $.ajax({
                                                 url: "/ChatComment/SetDeleteComment",
                                                 method: 'get',
@@ -1936,47 +2006,7 @@
                                                         swal("Xoá thất bại!","", "error");
                                                     }
                                                     else {
-                                                        // delete whole post
-                                                        if ($('#hiddenPostId').val() == id) {
-                                                            //$("#comment_div").empty();
-                                                            //$('#postDetail').children('.social-avatar').removeClass('hided').addClass('deleted');
-                                                            //$('#postDetail').children('.social-footer').find('.clickable').removedClass('hided').addClass('deleted');
-                                                            //$('#postDetail').children('.social-footer').find('.btn').remove();
-                                                            if($('#'+id+'_Post').length){
-                                                                $('#'+id+'_Post').removeClass('unreadPost');
-                                                                $('#'+id+'_Post').addClass('deleted');
-                                                            }
-                                                            $('#comment_div').empty();
-                                                            var tmp = "";
-                                                            tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
-                                                                    "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
-                                                                        "<div class='panel-body' style='height:100%; text-align:center'>"+
-                                                                            "Xin chọn bài đăng"+
-                                                                        "</div>"+
-                                                                    "</div>"+
-                                                                "</div>"+
-                                                                "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
-                                                                    "<div class='sk-circle1 sk-circle'></div>"+
-                                                                    "<div class='sk-circle2 sk-circle'></div>"+
-                                                                    "<div class='sk-circle3 sk-circle'></div>"+
-                                                                    "<div class='sk-circle4 sk-circle'></div>"+
-                                                                    "<div class='sk-circle5 sk-circle'></div>"+
-                                                                    "<div class='sk-circle6 sk-circle'></div>"+
-                                                                    "<div class='sk-circle7 sk-circle'></div>"+
-                                                                    "<div class='sk-circle8 sk-circle'></div>"+
-                                                                    "<div class='sk-circle9 sk-circle'></div>"+
-                                                                    "<div class='sk-circle10 sk-circle'></div>"+
-                                                                    "<div class='sk-circle11 sk-circle'></div>"+
-                                                                    "<div class='sk-circle12 sk-circle'></div>"+
-                                                                "</div>";
-                                                            //        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
-                                                            //    "<img src='/Content/image/loader.gif' />"+
-                                                            //"</div>";
-                                                            $('#comment_div').append(tmp);
-                                                            if($('#'+id+".ui-widget-content.ui-selectee").length) console.log("sdfsdfsdf");
-                                                            document.getElementById("replyInputTxt").disabled = true;
-                                                            $('#btn_response_comment').prop('disabled',true);
-                                                        }
+                                                        
                                                         swal("Xoá thành công!","","success");
                                                     }
                                                 }
@@ -2086,7 +2116,7 @@
                     html += "<img src='" + comment.photo + "' class='img-responsive fbImage commentImage'>";
                 }
                 html+="</div>";
-                html = html + "<br>" +
+                html+= "<br>" +
                               "<a class='btn btn-white btn-xs' id= '" + comment.comment_id + "_Reply' onclick='ShowDiv(this)' data-mode='comment'><i class='fa fa-comments'></i> Trả lời</label></a>\n";
                 if (intent!=null) html+= "<a class='btn btn-white btn-xs' data-name= '"+comment.sender_name+"' data-commentid='" + comment.comment_id + "' id= '" + comment.sender_id + "_Private' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
                 html+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+comment.comment_id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
@@ -2110,7 +2140,7 @@
             ////(postId);
             //$('#replyInputTxt').val('');
             var html = "";
-            html = html + "<div class='social-comment' id='"+id+"'> \n" +
+            html = html + "<div class='social-comment' id='"+id+"' style='margin-bottom:1%'> \n" +
                                        "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
                                                                 "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                     "<i class='fa fa-chevron-down'></i>\n" +
@@ -2160,7 +2190,7 @@
                 var postId = $('#hiddenPostId').val();
                 var html1 = "";
                 //new reply div
-                html1 = html1 + "<div class='social-comment' id='"+comment.comment_id+"'> \n" +
+                html1 = html1 + "<div class='social-comment' id='"+comment.comment_id+"' style='margin-bottom:1%'> \n" +
                                            "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
                                                                     "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                         "<i class='fa fa-chevron-down'></i>\n" +
@@ -2181,7 +2211,7 @@
                 //var date = GetCurrentDateTime();
                 if(comment.message)html1+=  "<span id='"+comment.comment_id+"_text'>"+comment.message+"</span>";
                 if(comment.photo){html1 += "<img src='" + comment.photo + "' class='img-responsive fbImage commentImage'>"; }
-                html1+= "</div></div><br>" +
+                html1+= "</div><br>" +
                        "<a class='btn btn-white btn-xs' id= '" + comment.parent_id + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
                 if (intent!=null) html1+= "<a class='btn btn-white btn-xs' data-name= '"+comment.sender_name+"' data-commentid='" + comment.comment_id + "' id= '" + comment.sender_id + "' onclick='PrivateMes(this)'><i class='fa fa-comments'></i>Nhắn tin</a>\n";
                 html1+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+comment.comment_id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
@@ -2222,7 +2252,7 @@
                                 {
                                     ////("sdfsdfsd");
                                     html2= "";
-                                    html2 = html2 + "<div class='social-comment' id='" + data.Id + "'> \n" +
+                                    html2 = html2 + "<div class='social-comment' id='" + data.Id + "' style='margin-bottom:1%'> \n" +
                                            "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
                                                                     "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                         "<i class='fa fa-chevron-down'></i>\n" +
@@ -2305,7 +2335,7 @@
             var postId = $('#hiddenPostId').val();
             var html1 = "";
             //new reply div
-            html1 = html1 + "<div class='social-comment' id='"+id+"'> \n" +
+            html1 = html1 + "<div class='social-comment' id='"+id+"' style='margin-bottom:1%'> \n" +
                                        "<div class='pull-right social-action dropdown' style='padding-left: 10px;'>\n" +
                                                                 "<a data-toggle='dropdown' class='dropdown-toggle'>\n" +
                                                                     "<i class='fa fa-chevron-down'></i>\n" +
@@ -2324,7 +2354,7 @@
                 "</a>\n";
             //var date = GetCurrentDateTime();
             html1+=  "<span id='"+id+"_text'>"+TextReplacedToChat(message)+"</span>";
-            html1+= "</div></div><br>" +
+            html1+= "</div><br>" +
                    "<a class='btn btn-white btn-xs' id= '" + parentId + "_Reply' onclick='ShowDiv(this)'><i class='fa fa-comments'></i> Trả lời</a>\n";
             html1+="<small class='text-muted'> <a href='"+"https://www.facebook.com/"+id+"' target='_blank' style='display:inline'>"+date+"</a></small>\n" +
             "</div></div>";
@@ -2343,34 +2373,43 @@
 
         function DeleteToPost(comment){
             //$("#comment_div").empty();
-            if ($('#hiddenPostId').val() == comment.post_id){
-                $('#comment_div').empty();
-                var tmp = "";
-                tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
-                        "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
-                            "<div class='panel-body' style='height:100%; text-align:center'>"+
-                                "Xin chọn bài đăng"+
-                            "</div>"+
-                        "</div>"+
-                    "</div>"+
-                    "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
-                        "<div class='sk-circle1 sk-circle'></div>"+
-                        "<div class='sk-circle2 sk-circle'></div>"+
-                        "<div class='sk-circle3 sk-circle'></div>"+
-                        "<div class='sk-circle4 sk-circle'></div>"+
-                        "<div class='sk-circle5 sk-circle'></div>"+
-                        "<div class='sk-circle6 sk-circle'></div>"+
-                        "<div class='sk-circle7 sk-circle'></div>"+
-                        "<div class='sk-circle8 sk-circle'></div>"+
-                        "<div class='sk-circle9 sk-circle'></div>"+
-                        "<div class='sk-circle10 sk-circle'></div>"+
-                        "<div class='sk-circle11 sk-circle'></div>"+
-                        "<div class='sk-circle12 sk-circle'></div>"+
-                    "</div>";
-                //        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
-                //    "<img src='/Content/image/loader.gif' />"+
-                //"</div>";
-                $('#comment_div').append(tmp);}
+            if ($('#hiddenPostId').length && $('#hiddenPostId').val() == comment.post_id){
+                
+                //clear div
+                //$('#comment_div').empty();
+                //var tmp = "";
+                //tmp = "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto;' id='commentSelect'>"+
+                //        "<div class='panel panel-primary' style='height:70%; background-color: lightblue; color:white; font-size:20px;'>"+
+                //            "<div class='panel-body' style='height:100%; text-align:center'>"+
+                //                "Xin chọn bài đăng"+
+                //            "</div>"+
+                //        "</div>"+
+                //    "</div>"+
+                //    "<div id='commentLoader' class='sk-spinner sk-spinner-fading-circle' style='display:none; height:100px;width:100px;z-index:1000; vertical-align:central;  margin: 40% auto;'>"+
+                //        "<div class='sk-circle1 sk-circle'></div>"+
+                //        "<div class='sk-circle2 sk-circle'></div>"+
+                //        "<div class='sk-circle3 sk-circle'></div>"+
+                //        "<div class='sk-circle4 sk-circle'></div>"+
+                //        "<div class='sk-circle5 sk-circle'></div>"+
+                //        "<div class='sk-circle6 sk-circle'></div>"+
+                //        "<div class='sk-circle7 sk-circle'></div>"+
+                //        "<div class='sk-circle8 sk-circle'></div>"+
+                //        "<div class='sk-circle9 sk-circle'></div>"+
+                //        "<div class='sk-circle10 sk-circle'></div>"+
+                //        "<div class='sk-circle11 sk-circle'></div>"+
+                //        "<div class='sk-circle12 sk-circle'></div>"+
+                //    "</div>";
+                ////        "<div style='text-align:center; vertical-align:central; line-height:100%; width:70%; height:20%; margin: 25% auto; display:none;' id='commentLoader'>"+
+                ////    "<img src='/Content/image/loader.gif' />"+
+                ////"</div>";
+                //$('#comment_div').append(tmp);
+                $('#postDetail').find('.btn.btn-white').remove();
+                $('#postDetail').find('.pull-right.social-action.dropdown').remove();
+                $('.replyComment').parent().parent().remove();
+                $('#postDetail').addClass('deleted');
+                $('.social-footer').find('.clickable').addClass('deleted');
+
+            }
         }
 
         function DeleteToComment(comment){
@@ -2378,7 +2417,11 @@
             ////("delete comment "+ comment.comment_id);
             if($('#'+comment.comment_id).length)
             {
-                $('#'+comment.comment_id).remove();
+                //$('#'+comment.comment_id).remove();
+                $('#'+comment.comment_id).find('.btn.btn-white').remove();
+                $('#'+comment.comment_id).find('.pull-right.social-action.dropdown').remove();
+                $('#'+comment.comment_id).find('.replyComment').parent().parent().remove();
+                $('#'+comment.comment_id).find('.clickable').addClass('deleted');
             }
         }
 
@@ -3399,20 +3442,24 @@
 
 
         $('#suggest_wrapper_comment').click(function(){
-            if (!$('#replyInputTxt').prop('disabled'))
-            {
+
                 if ($('#suggest_wrapper_comment .btn').hasClass('active')){
                     $('#suggest_wrapper_comment .btn').removeClass('active');
                     $("#replyInputTxt").unbind('keydown');
                     $("#replyInputTxt").autocomplete("destroy");
-                    $(".replyComment").unbind('keydown');
-                    $(".replyComment").autocomplete("destroy");
+                    if ($(".replyComment").length){
+                        $(".replyComment").unbind('keydown');
+                        $(".replyComment").autocomplete("destroy");
+                    }
+                    $("#private_mes").unbind('keydown');
+                    $("#private_mes").autocomplete("destroy");
+                    
                 }
                 else{
                     $('#suggest_wrapper_comment .btn').addClass('active');
                     GetSuggestReplyForComment();
                 }
-            }
+
         });
 
         function GetSuggestReplyForComment(){
@@ -3514,6 +3561,50 @@
                          at: "left top"
                      }
                  });
+
+                $("#private_mes")
+                         // don't navigate away from the field on tab when selecting an item
+                         .on( "keydown", function( event ) {
+                             if ( event.keyCode === $.ui.keyCode.TAB &&
+                                 $( this ).autocomplete( "instance" ).menu.active ) {
+                                 event.preventDefault();
+                             }
+                         })
+                         .autocomplete({
+                             
+                             minLength: 0,
+                             //appendTo: $("#private_mes"),
+
+                             open: function(){
+                                 setTimeout(function () {
+                                     $('.ui-autocomplete').css('z-index', 99999999999999);
+                                 }, 0);},
+
+                             source: function( request, response ) {
+                                 // delegate back to autocomplete, but extract the last term
+                                 response( $.ui.autocomplete.filter(
+                                   availableReps, extractLast( request.term ) ) );
+                             },
+                             focus: function() {
+                                 // prevent value inserted on focus
+                                 return false;
+                             },
+                             select: function( event, ui ) {
+                                 var terms = split( this.value );
+                                 // remove the current input
+                                 terms.pop();
+                                 // add the selected item
+                                 terms.push( ui.item.value );
+                                 // add placeholder to get the comma-and-space at the end
+                                 terms.push( "" );
+                                 this.value = terms.join( " " );
+                                 return false;
+                             },
+                             position: {
+                                 my: "left bottom",
+                                 at: "left top"
+                             }
+                         });
 
 
             } );

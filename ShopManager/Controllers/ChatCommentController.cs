@@ -222,7 +222,15 @@ namespace ShopManager.Controllers
                             commentdetailmodel.IntentId = commentList[0][i].IntentId;
                             commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentList[0][i].Id);
                             commentservice.SetIsRead(commentList[0][i].Id);
-                            
+
+                            //Debug.WriteLine("status of comment is 5: " + commentdetailmodel.Status);
+                            userParam.access_token = accessToken;
+                            var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                            commentdetailmodel.commentImageContent = null;
+                            //commentdetailmodel.from = fbComment.from.name;
+                            commentdetailmodel.commentContent = commentList[0][i].LastContent;
+                            commentdetailmodel.from = fbUser.name;
+
                             SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
 
                             commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[0][i].SenderFbId + "/picture?type=square";
@@ -239,16 +247,6 @@ namespace ShopManager.Controllers
                                 commentdetailmodel.commentContent = fbComment.message;
                                 commentdetailmodel.canHide = fbComment.can_hide;
                                 commentdetailmodel.canReply = fbComment.can_reply_privately;
-                            }
-                            else
-                            {
-                                //Debug.WriteLine("status of comment is 5: " + commentdetailmodel.Status);
-                                userParam.access_token = accessToken;
-                                var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
-                                commentdetailmodel.commentImageContent = null;
-                                //commentdetailmodel.from = fbComment.from.name;
-                                commentdetailmodel.commentContent = commentList[0][i].LastContent;
-                                commentdetailmodel.from = fbUser.name;
                             }
 
                             commentviewlist.Add(commentdetailmodel);
@@ -271,6 +269,12 @@ namespace ShopManager.Controllers
                             commentdetailmodel.isUnreadRepliesRemain = commentservice.CheckUnreadRemain(commentdetailmodel.parentId);
                             commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[1][i].SenderFbId + "/picture?type=square";
 
+                            userParam.access_token = accessToken;
+                            var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                            commentdetailmodel.commentContent = commentList[1][i].LastContent;
+                            commentdetailmodel.commentImageContent = null;
+                            commentdetailmodel.from = fbUser.name;
+
                             if (commentList[1][i].Status != 5)
                             {
                                 var fbComment = fbAppWithAccTok.Get(commentList[1][i].Id, commentParam);
@@ -282,16 +286,7 @@ namespace ShopManager.Controllers
                                 commentdetailmodel.canHide = fbComment.can_hide;
                                 commentdetailmodel.canReply = fbComment.can_reply_privately;
                             }
-                            else
-                            {
-                                userParam.access_token = accessToken;
-                                var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
-                                commentdetailmodel.commentContent = commentList[1][i].LastContent;
-                                commentdetailmodel.commentImageContent = null;
-                                commentdetailmodel.from = fbUser.name;
 
-                                //commentdetailmodel.from = fbComment.from.name;
-                            }
 
                             nestedcommentlist.Add(commentdetailmodel);
                             //if (comment.ParentId != null && comment.ParentId != "")
