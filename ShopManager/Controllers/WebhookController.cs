@@ -496,6 +496,7 @@ namespace ShopManager.Controllers
             if (shopId.Equals(detail.from.id))
             {
                 SignalRAlert.AlertHub.SendMessage(shopId, result.data, threadId, 0);
+                conversationService.AddConversation(threadId, 1, time, shopId);
                 conversationService.SetReadConversation(threadId, time);
             }
             else

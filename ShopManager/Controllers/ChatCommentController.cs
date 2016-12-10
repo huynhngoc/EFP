@@ -428,7 +428,7 @@ namespace ShopManager.Controllers
                     List<CommentDetailModel> newcommentdetaillist = new List<CommentDetailModel>();
                     CommentDetailModel commentdetailmodel;
                     dynamic commentParam = new ExpandoObject();
-                    commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide";
+                    commentParam.fields = "attachment,from{picture,name,id},message,created_time,can_hide,can_reply_privately";
 
                     foreach (Comment comment in newcommentlist)
                     {
@@ -791,21 +791,26 @@ namespace ShopManager.Controllers
             param.fields = "from,created_time,message";
             dynamic result = fbApp.Get(c.Id + "/messages", param);
 
-            int i = 0;
-            dynamic first = result.data[0];
-            dynamic detail;
-            while (true)
+            var first = result.data[0];
+
+            param = new ExpandoObject();
+            param.access_token = accessToken;
+            param.fields = "participants";
+            var r = fbApp.Get(c.Id, param);
+
+            var id = "";
+            var name = "";
+            foreach (var p in r.participants.data)
             {
-                if (result.data[i].from.id != shopId)
+                if (p.id != shopId)
                 {
-                    detail = result.data[i];
-                    break;
+                    id = p.id;
+                    name = p.name;
                 }
-                i++;
             }
 
-            preview.UserName = detail.from.name;
-            preview.UserFbId = detail.from.id;
+            preview.UserName = name;
+            preview.UserFbId = id;
             preview.CreatedTime = DateTime.Parse(first.created_time);
             preview.RecentMess = first.message;
             preview.IntentId = c.IntentId;
@@ -1077,6 +1082,37 @@ namespace ShopManager.Controllers
                 if (photo != null) param.photo = photo;
                 var result = fbApp.Post(commentId, param);
                 return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                return Json(new { success = false, e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult GetConversationUser(string threadId)
+        {
+            try
+            {
+                string shopId = (string)Session["ShopId"];
+                string accessToken = (shopService.GetShop((string)Session["ShopId"])).FbToken;
+                dynamic param = new ExpandoObject();
+                param.access_token = accessToken;
+                param.fields = "participants";
+                var result = fbApp.Get(threadId, param);
+
+                var id = "";
+                var name = "";
+                foreach (var p in result.participants.data)
+                {
+                    if (p.id != shopId)
+                    {
+                        id = p.id;
+                        name = p.name;
+                    }
+                }
+
+                return Json(new { id = id, name = name }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
