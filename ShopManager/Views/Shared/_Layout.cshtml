@@ -41,29 +41,92 @@
                         <div class="logo-element"> EFP </div>
                     </li>
                     <!--./User information-->
-                    <!--Dashboard-->
-                    <li>
-                        <a href="../Shop/Index"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý chung</span></a>
-                    </li>
-                    <!--./Dashboard-->
-                    <li> <a href="../ChatComment"><i class="fa fa-comments-o"></i> <span class="nav-label">Tin nhắn và bình luận</span> <span id="chatCommentCount" class="label label-danger pull-right">@(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )</span></a> </li>
-                    <li> <a href="../Order"><i class="fa fa-inbox"></i> <span class="nav-label">Đơn hàng</span> @*<span class="label label-danger pull-right">23</span>*@</a> </li>
-                    <li> <a href="../Product"><i class="fa fa-tags"></i> <span class="nav-label">Sản phẩm</span> </a> </li>
-                    <li> <a href="../Category"><i class="fa fa-tags"></i> <span class="nav-label">Phân loại</span> </a> </li>   
-                    <li> <a href="../Template"><i class="fa fa-tags"></i> <span class="nav-label">Mẫu sản phẩm</span> </a> </li>
-                    <li> <a href="../Customer"><i class="fa fa-users"></i> <span class="nav-label">Khách hàng</span> </a> </li>
-                    <li> <a href="../Analysis/Comment"><i class="fa fa-line-chart"></i> <span class="nav-label">Thống kê</span> </a> </li>
-                    <li>
-                        <a href="../Shop/Setting"><i class="fa fa-edit"></i> <span class="nav-label">Cài đặt</span>@*<span class="fa arrow"></span>*@</a>
-                        @*<ul class="nav nav-second-level collapse">
-                                <li><a href="">Basic form</a></li>
-                                <li><a href="form_advanced.html">Advanced Plugins</a></li>
-                                <li><a href="form_wizard.html">Wizard</a></li>
-                                <li><a href="form_file_upload.html">File Upload</a></li>
-                                <li><a href="form_editors.html">Text Editor</a></li>
-                                <li><a href="form_markdown.html">Markdown</a></li>
-                            </ul>*@
-                    </li>
+                    @if (@ViewBag.Title == "Trang chủ")
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                    @if (@ViewBag.Title == "Trang chủ")
+                    {
+                        <!--Dashboard-->
+                        <li class="active">
+                            <a href="../Shop/Index"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý chung</span></a>
+                        </li>
+                        <!--./Dashboard-->
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="../Shop/Index"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý chung</span></a>
+                        </li>
+                    }
+                    @if (@ViewBag.Title == "Tin nhắn và Bình luận")
+                    {
+                        <li class="active"> <a href="../ChatComment"><i class="fa fa-comments-o"></i> <span class="nav-label">Tin nhắn và bình luận</span> <span id="chatCommentCount" class="label label-danger pull-right">@(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )</span></a> </li>
+                    }
+                    else
+                    {
+                        <li> <a href="../ChatComment"><i class="fa fa-comments-o"></i> <span class="nav-label">Tin nhắn và bình luận</span> <span id="chatCommentCount" class="label label-danger pull-right">@(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )</span></a> </li>
+                    }
+                    @if (@ViewBag.Title == "Quản lý đơn hàng")
+                    {
+                        <li class="active"> <a href="../Order"><i class="fa fa-inbox"></i> <span class="nav-label">Đơn hàng</span></a></li>
+                    }
+                    else
+                    {
+                        <li> <a href="../Order"><i class="fa fa-inbox"></i> <span class="nav-label">Đơn hàng</span></a></li>
+                    }
+                    @if (@ViewBag.Title == "Sản phẩm")
+                    {
+                        <li class="active"> <a href="../Product"><i class="fa fa-tags"></i> <span class="nav-label">Sản phẩm</span> </a></li>
+                    }
+                    else
+                    {
+                        <li> <a href="../Product"><i class="fa fa-tags"></i> <span class="nav-label">Sản phẩm</span> </a></li>
+                    }
+                    @if (@ViewBag.Title == "Phân loại")
+                    {
+                        <li class="active"> <a href="../Category"><i class="fa fa-tags"></i> <span class="nav-label">Phân loại</span></a></li>
+                    }
+                    else
+                    {
+                        <li> <a href="../Category"><i class="fa fa-tags"></i> <span class="nav-label">Phân loại</span></a></li>
+                    }
+                    @if (@ViewBag.Title == "Mẫu đặc điểm sản phẩm")
+                    {
+                        <li class="active"> <a href="../Template"><i class="fa fa-tags"></i> <span class="nav-label">Mẫu đặc điểm sản phẩm</span></a></li>
+                    }
+                    else
+                    {
+                        <li> <a href="../Template"><i class="fa fa-tags"></i> <span class="nav-label">Mẫu đặc điểm sản phẩm</span></a></li>
+                    }
+                    @if (@ViewBag.Title == "Quản lý khách hàng")
+                    {
+                        <li class="active"> <a href="../Customer"><i class="fa fa-users"></i> <span class="nav-label">Khách hàng</span></a></li>
+                    }
+                    else
+                    {
+                        <li> <a href="../Customer"><i class="fa fa-users"></i> <span class="nav-label">Khách hàng</span></a></li>
+                    }
+                    @if (@ViewBag.Title == "Thống kê")
+                    {
+                        <li class="active"> <a href="../Analysis/Comment"><i class="fa fa-line-chart"></i> <span class="nav-label">Thống kê</span></a></li>
+                    }
+                    else
+                    {
+                        <li> <a href="../Analysis/Comment"><i class="fa fa-line-chart"></i> <span class="nav-label">Thống kê</span></a></li>
+                    }
+                    @if (@ViewBag.Title == "Cài đặt")
+                    {
+                        <li class="active"><a href="../Shop/Setting"><i class="fa fa-edit"></i> <span class="nav-label">Cài đặt</span></a></li>
+                    }
+                    else
+                    {
+                        <li><a href="../Shop/Setting"><i class="fa fa-edit"></i> <span class="nav-label">Cài đặt</span></a></li>
+                    }
                 </ul>
             </div>
         </nav>
@@ -89,11 +152,11 @@
 
                         <li class="dropdown">
                             <!--Number of notification-->
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#"> 
-                            <i class="fa fa-bell"></i> 
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bell"></i>
                                 <span class="label label-danger" id="notiCount">
-                                @(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )
-                                </span> 
+                                    @(ViewBag.NewPostCount + ViewBag.NewCommentCount + ViewBag.NewConversationCount )
+                                </span>
                             </a>
                             <ul class="dropdown-menu dropdown-alerts">
                                 <li>
@@ -222,8 +285,8 @@
                         $("#chatCommentCount").text($("#chatCommentCount").text()+1);
                         $("#notiCount").text($("#notiCount").text()+1);
                     }*@
-                    
-                    
+
+
                 }
 
 
@@ -272,6 +335,6 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-        </script>
+    </script>
 </body>
 </html>

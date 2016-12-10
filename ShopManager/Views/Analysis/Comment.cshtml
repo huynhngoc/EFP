@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Comment";
+    ViewBag.Title = "Thống kê";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!--Table Analysis comment-->
@@ -52,8 +52,8 @@
                                 <input type="text" id="endDateCommentTable" class="input-sm form-control" name="end" value="" readonly>
                             </div>
                         </div>
-                        <button class="col-sm-2 col-sm-offset-1 col-xs-5 btn btn-primary" style="margin-top:22px" onclick="filterCommentTable(true), GetPieChartData(), GetStackChartData()"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-2 col-xs-5 btn btn-success pull-right" style="margin-top:22px" onclick="filterCommentTable(false), GetPieChartData(), GetStackChartData()"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                        <button class="col-sm-2 col-xs-5 btn btn-primary" style="margin-top:22px" onclick="filterCommentTable(true), GetPieChartData(), GetStackChartData()"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-3 col-xs-5 btn btn-success pull-right" style="margin-top:22px" onclick="filterCommentTable(false), GetPieChartData(), GetStackChartData()"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
                     
                 </div>
@@ -146,8 +146,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 m-b-xs">
-                        <button class="col-sm-2 col-sm-offset-7 btn btn-primary" style="margin-top:22px" onclick="filterUserTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-2 btn btn-success pull-right" style="margin-top:22px" onclick="filterUserTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                        <button class="col-sm-2 col-xs-5 col-sm-offset-6 btn btn-primary" style="margin-top:22px" onclick="filterUserTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-3 col-xs-5 btn btn-success pull-right" style="margin-top:22px" onclick="filterUserTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
 
                 </div>
@@ -209,8 +209,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 m-b-xs">
-                        <button class="col-sm-2 col-sm-offset-7 btn btn-primary" style="margin-top:22px" onclick="filterPostTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
-                        <button class="col-sm-2 btn btn-success pull-right" style="margin-top:22px" onclick="filterPostTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
+                        <button class="col-sm-2 col-xs-5 col-sm-offset-6 btn btn-primary" style="margin-top:22px" onclick="filterPostTable(true)"><i class="fa fa-filter"></i>&nbsp;Lọc</button>
+                        <button class="col-sm-3 col-xs-5 btn btn-success pull-right" style="margin-top:22px" onclick="filterPostTable(false)"><i class="fa fa-refresh"></i>&nbsp;Làm mới</button>
                     </div>
 
                 </div>
@@ -777,7 +777,7 @@
                     isRead: $('#isReadCommentTable').val(),
                     startDate: $('#startDateCommentTable').val(),
                     endDate: $('#endDateCommentTable').val().concat(" 23:59:59.000"),
-                    divideNumber: 8
+                    divideNumber: 6
                 },
                 dataType: "json",
                 type: "post",
@@ -2020,7 +2020,7 @@
         function FormatDateVN(date) {
             var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
             var d = new Date(parseInt(milli));
-            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
         }
 
     </script>

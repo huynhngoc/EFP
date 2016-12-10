@@ -379,7 +379,7 @@ namespace ShopManager.Controllers
                                 if (result.success)
                                 {
                                     bool rs;
-                                    rs = commentService.SetCommentStatus(commentId[i], (int)CommentStatus.APPROVED);
+                                    rs = commentService.SetCommentStatus(commentId[i], (int)CommentStatus.SHOWING);
                                     if (!rs)
                                     {
                                         hideFailed.Add(commentId[i]);
@@ -646,7 +646,7 @@ namespace ShopManager.Controllers
                                 if (result.success)
                                 {
                                     bool rs;
-                                    rs = postService.SetStatus(PostId[i], (int)CommentStatus.APPROVED);
+                                    rs = postService.SetStatus(PostId[i], (int)CommentStatus.SHOWING);
                                     if (!rs)
                                     {
                                         hideFailed.Add(PostId[i]);

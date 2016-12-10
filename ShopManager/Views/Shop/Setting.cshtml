@@ -6,226 +6,228 @@
 
 
 @section CustomCSS {
-@Styles.Render("~/Awesome-bootstrap-checkbox-CSS")
-@Styles.Render("~/Toastr-style")
-@Styles.Render("~/SweetAlert-CSS")
+    @Styles.Render("~/Awesome-bootstrap-checkbox-CSS")
+    @Styles.Render("~/Toastr-style")
+    @Styles.Render("~/SweetAlert-CSS")
 }
 
 
-    
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <div class="ibox-tools">
-                    <h5>Những mẫu câu cơ bản</h5>
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
+
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <div class="ibox-tools">
+            <h5>Cài đặt trả lời</h5>
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <fieldset class="form-horizontal">
+            <div class=" form-group">
+                <label class="col-sm-4 control-label">Chế độ ẩn bình luận khi phát hiện chống phá:</label>
+                <div class="col-sm-8">
+                    <div class="radio radio-info radio-inline col-sm-4">
+                        <input type="radio" id="commentMode1" value="1" name="comment">
+                        <label for="commentMode1"> Chỉ cảnh báo </label>
+                    </div>
+                    <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
+                        <input type="radio" id="commentMode2" value="2" name="comment">
+                        <label for="commentMode2"> Ẩn bình luận </label>
+                    </div>
                 </div>
             </div>
-            <div class="ibox-content">
-                <fieldset class="entity-form form-horizontal">
-                    <div class="form-group">
-                        <div class="col-sm-2"><label>Tên</label></div>
-                        <div class="col-sm-2"><label>Viết tắt</label></div>
-                        <div class="col-sm-6"><label>Nội dung</label></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Chế độ trả lời tin nhắn:</label>
+                <div class="col-sm-8">
+                    <div class="radio radio-info radio-inline  col-sm-4">
+                        <input type="radio" id="replyMode1" value="@((int)DataService.Utils.ReplyMode.MANUAL)" name="reply">
+                        <label for="replyMode1"> Thủ công </label>
                     </div>
-                    @foreach (var entity in ViewBag.Entities)
+                    <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
+                        <input type="radio" id="replyMode2" value="@((int)DataService.Utils.ReplyMode.AUTO)" name="reply">
+                        <label for="replyMode2"> Trả lời tự động</label>
+                    </div>
+                    <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
+                        <input type="radio" id="replyMode3" value="@((int)DataService.Utils.ReplyMode.COMMENT_ONLY)" name="reply">
+                        <label for="replyMode3"> Chỉ trả lời tự động bình luận</label>
+                    </div>
+                    <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
+                        <input type="radio" id="replyMode4" value="@((int)DataService.Utils.ReplyMode.MESSAGE_ONLY)" name="reply">
+                        <label for="replyMode4"> Chỉ trả lời tự động tin nhắn</label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset></fieldset>
+    </div>
+</div>
+
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <div class="ibox-tools">
+            <h5>Các câu trả lời tự động</h5>
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <fieldset class="res-form form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-4"><label>Mục đích</label></div>
+                <div class="col-sm-7">Nội dung</div>
+            </div>
+            @foreach (var response in ViewBag.Responses)
                     {
-                        <div class="entity-group form-group">
-                            <input type="hidden" name="id" value="@entity.Id" />
-                            @if (entity.IsDynamic == false)
-                            {
-                                <div class="col-sm-2"><input name="des" type="text" readonly class="form-control" placeholder="Tên" value="@entity.Description"/></div>
-                                <div class="col-sm-2"><input name="name" type="text" readonly  class="form-control" placeholder="Viết tắt" value="@entity.EntityName" /></div>
-                                <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" value="@entity.Value" /></div>
-
-                                <div class="col-sm-2 btn-group">                                    
-                                    <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
-                                    <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" value="@entity.Description" /></div>
-                                <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" value="@entity.EntityName" /></div>
-                                <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" value="@entity.Value"/></div>
-
-                                <div class="col-sm-2 btn-group">
-                                    <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)"><i class="fa fa-trash"></i></button>
-                                    <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
-                                    <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
-                                </div>
-                                <div class="col-sm-12 error-note" style="color:red; display:none; "></div>
-                            }
-                            
-                        </div>
-                    }
-                    
-                    
-                </fieldset>
-                <fieldset>
-                    <div class=" pull-right"><button class="btn-add-entity btn btn-primary"><i class="fa fa-plus"></i></button></div>
-</fieldset>
-            </div>
-        </div>
-
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <div class="ibox-tools">
-                    <h5>Cài đặt trả lời</h5>
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="ibox-content">
-                <fieldset class="form-horizontal">                    
-                    <div class=" form-group">
-                        <label class="col-sm-4 control-label">Chế độ ẩn bình luận khi phát hiện chống phá:</label>
-                        <div class="col-sm-8">
-                            <div class="radio radio-info radio-inline col-sm-4">
-                                <input type="radio" id="commentMode1" value="1" name="comment">
-                                <label for="commentMode1"> Chỉ cảnh báo </label>
-                            </div>
-                            <div class="radio radio-info radio-inline col-sm-4"  style="margin-left:0px">
-                                <input type="radio" id="commentMode2" value="2" name="comment">
-                                <label for="commentMode2"> Ẩn bình luận </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Chế độ trả lời tin nhắn:</label>
-                        <div class="col-sm-8">
-                            <div class="radio radio-info radio-inline  col-sm-4">
-                                <input type="radio" id="replyMode1" value="@((int)DataService.Utils.ReplyMode.MANUAL)" name="reply">
-                                <label for="replyMode1"> Thủ công </label>
-                            </div>
-                            <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
-                                <input type="radio" id="replyMode2" value="@((int)DataService.Utils.ReplyMode.AUTO)" name="reply">
-                                <label for="replyMode2"> Trả lời tự động</label>
-                            </div>
-                            <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
-                                <input type="radio" id="replyMode3" value="@((int)DataService.Utils.ReplyMode.COMMENT_ONLY)" name="reply">
-                                <label for="replyMode3"> Chỉ trả lời tự động bình luận</label>
-                            </div>
-                            <div class="radio radio-info radio-inline col-sm-4" style="margin-left:0px">
-                                <input type="radio" id="replyMode4" value="@((int)DataService.Utils.ReplyMode.MESSAGE_ONLY)" name="reply">
-                                <label for="replyMode4"> Chỉ trả lời tự động tin nhắn</label>
-                            </div>
-                            </div>
-                        </div>
-                </fieldset>
-                <fieldset></fieldset>
-            </div>
-        </div>
-
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <div class="ibox-tools">
-                    <h5>Các câu trả lời tự động</h5>
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="ibox-content">                
-                <fieldset class="res-form form-horizontal">
-                    <div class="form-group">
-                        <div class="col-sm-4"><label>Mục đích</label></div>
-                        <div class="col-sm-7">Nội dung</div>
-                    </div>
-                    @foreach (var response in ViewBag.Responses)
-                    {                        
-                        <div class="intent-group form-group">
-                            <input type="hidden" name="id" value="@response.Id"/>
-                            <div class="col-sm-4">
-                                <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
-                                    <option>Chọn một mục đích khách hàng</option>
-                                    @foreach (var intent in ViewBag.Intents)
+            <div class="intent-group form-group">
+                <input type="hidden" name="id" value="@response.Id" />
+                <div class="col-sm-4">
+                    <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
+                        <option>Chọn một mục đích khách hàng</option>
+                        @foreach (var intent in ViewBag.Intents)
                                     {
                                         if (response.IntentId == intent.Id)
                                         {
-                                            <option value="@intent.Id" selected>@intent.IntentName</option>
+                                <option value="@intent.Id" selected>@intent.IntentName</option>
                                         }
                                         else
                                         {
-                                            <option value="@intent.Id">@intent.IntentName</option>
+                                <option value="@intent.Id">@intent.IntentName</option>
                                         }
                                     }
-                                </select>
-                            </div>
-                            <div class="col-sm-6"><input name="content" onkeydown="changeIntent(event)" type="text" class="form-control" value="@response.RespondContent" placeholder="" /></div>
-                            <div class="col-sm-2 btn-group">                            
-                                <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)"><i class="fa fa-trash"></i></button>
-                                <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)" style="display:none"><i class="fa fa-check"></i></button>
-                                <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)" style="display:none"><i class="fa fa-times"></i></button>
-                            </div>                            
-                        </div>
-                    }                    
-                </fieldset>                    
-                <fieldset>
-                    <div class=" pull-right"><button class="btn-add-res btn btn-primary"><i class="fa fa-plus"></i></button>
-                    @*<button class="btn btn-success">Lưu</button>*@
-                    </div>                                   
-                </fieldset>
+                    </select>
+                </div>
+                <div class="col-sm-6"><input name="content" onkeydown="changeIntent(event)" type="text" class="form-control" value="@response.RespondContent" placeholder="" /></div>
+                <div class="col-sm-2 btn-group">
+                    <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)"><i class="fa fa-trash"></i></button>
+                    <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)" style="display:none"><i class="fa fa-check"></i></button>
+                    <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)" style="display:none"><i class="fa fa-times"></i></button>
+                </div>
             </div>
-        </div>
-    
-
-    <!-- template div area-->
-    <div id="intentGroup" style="display:none">
-        <div class="intent-group form-group">
-            <input type="hidden" name="id" />
-            <div class="col-sm-4">
-                <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
-                    <option>Chọn một mục đích khách hàng</option>
-                    @foreach (var intent in ViewBag.Intents)
-                    {
-                        <option value="@intent.Id">@intent.IntentName</option>
                     }
-                </select>
+        </fieldset>
+        <fieldset>
+            <div class=" pull-right">
+                <button class="btn-add-res btn btn-primary"><i class="fa fa-plus"></i></button>
+                @*<button class="btn btn-success">Lưu</button>*@
             </div>
-            <div class="col-sm-6"><input name="content" onkeydowm="changeIntent(event)" type="text" class="form-control" placeholder="" /></div>
-            <div class="col-sm-2 btn-group">
-                <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)" style="display:none"><i class="fa fa-trash"></i></button>
-                <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)"><i class="fa fa-check"></i></button>
-                <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)"><i class="fa fa-times"></i></button>
-            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <div class="ibox-tools">
+            <h5>Các câu trả lời mẫu</h5>
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
         </div>
     </div>
-
-    <div id="entityGroup" style="display:none">
-        <div class="entity-group form-group">
-            <input type="hidden" name="id" />
-            <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" /></div>
-            <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" /></div>
-            <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" /></div>
-
-            <div class="col-sm-2 btn-group">
-                <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)" style="display:none"><i class="fa fa-trash"></i></button>
-                <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)"><i class="fa fa-check"></i></button>
-                <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)"><i class="fa fa-times"></i></button>
+    <div class="ibox-content">
+        <fieldset class="entity-form form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2"><label>Tên</label></div>
+                <div class="col-sm-2"><label>Viết tắt</label></div>
+                <div class="col-sm-6"><label>Nội dung</label></div>
             </div>
-            <div class="col-sm-12 error-note" style="color:red; display:none; "></div>
+            @foreach (var entity in ViewBag.Entities)
+            {
+            <div class="entity-group form-group">
+                <input type="hidden" name="id" value="@entity.Id" />
+                @if (entity.IsDynamic == false)
+                    {
+                <div class="col-sm-2"><input name="des" type="text" readonly class="form-control" placeholder="Tên" value="@entity.Description" /></div>
+                <div class="col-sm-2"><input name="name" type="text" readonly class="form-control" placeholder="Viết tắt" value="@entity.EntityName" /></div>
+                <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" value="@entity.Value" /></div>
+
+                <div class="col-sm-2 btn-group">
+                    <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
+                    <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
+                </div>
+                    }
+                    else
+                    {
+                <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" value="@entity.Description" /></div>
+                <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" value="@entity.EntityName" /></div>
+                <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" value="@entity.Value" /></div>
+
+                <div class="col-sm-2 btn-group">
+                    <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)"><i class="fa fa-trash"></i></button>
+                    <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)" style="display:none"><i class="fa fa-check"></i></button>
+                    <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)" style="display:none"><i class="fa fa-times"></i></button>
+                </div>
+                <div class="col-sm-12 error-note" style="color:red; display:none; "></div>
+                    }
+
+            </div>
+            }
+
+
+        </fieldset>
+        <fieldset>
+            <div class=" pull-right"><button class="btn-add-entity btn btn-primary"><i class="fa fa-plus"></i></button></div>
+        </fieldset>
+    </div>
+</div>
+
+
+
+<!-- template div area-->
+<div id="intentGroup" style="display:none">
+    <div class="intent-group form-group">
+        <input type="hidden" name="id" />
+        <div class="col-sm-4">
+            <select name="intent" onchange="changeIntent(event)" class="form-control" placeholder="">
+                <option>Chọn một mục đích khách hàng</option>
+                @foreach (var intent in ViewBag.Intents)
+                {
+                    <option value="@intent.Id">@intent.IntentName</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-6"><input name="content" onkeydowm="changeIntent(event)" type="text" class="form-control" placeholder="" /></div>
+        <div class="col-sm-2 btn-group">
+            <button class="btn btn-danger pull-right btn-remove-intent" onclick="deleteIntent(event)" style="display:none"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-primary pull-right btn-save-intent" onclick="saveIntent(event)"><i class="fa fa-check"></i></button>
+            <button class="btn btn-warning pull-right btn-cancel-intent" onclick="cancelIntent(event)"><i class="fa fa-times"></i></button>
         </div>
     </div>
+</div>
+
+<div id="entityGroup" style="display:none">
+    <div class="entity-group form-group">
+        <input type="hidden" name="id" />
+        <div class="col-sm-2"><input name="des" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Tên" /></div>
+        <div class="col-sm-2"><input name="name" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Viết tắt" /></div>
+        <div class="col-sm-6"><input name="value" type="text" onkeydown="changeEntity(event)" class="form-control" placeholder="Nội dung" /></div>
+
+        <div class="col-sm-2 btn-group">
+            <button class="btn btn-danger pull-right btn-remove-entity" onclick="deleteEntity(event)" style="display:none"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-primary pull-right btn-save-entity" onclick="saveEntity(event)"><i class="fa fa-check"></i></button>
+            <button class="btn btn-warning pull-right btn-cancel-entity" onclick="cancelEntity(event)"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="col-sm-12 error-note" style="color:red; display:none; "></div>
+    </div>
+</div>
 
 
 
 
 @section CustomJS {
-@Scripts.Render("~/Toastr")
-@Scripts.Render("~/SweetAlert-JS")
+    @Scripts.Render("~/Toastr")
+    @Scripts.Render("~/SweetAlert-JS")
     <script>
         var listEntity = {};
         var list = {};
 
         function changeEntity(event){
-            console.log(event);            
+            console.log(event);
             var remove = $(event.target).closest(".entity-group").find(".btn-remove-entity");
             var clicked = event.target;
             var div = $(clicked).closest(".entity-group");
-            var id = $($(div).find("input[name='id']")[0]).val();            
+            var id = $($(div).find("input[name='id']")[0]).val();
             var name = $($(div).find("input[name='name']")[0]).val();
             var value = $($(div).find("input[name='value']")[0]).val();
             var des = $($(div).find("input[name='des']")[0]).val();
@@ -238,8 +240,8 @@
                         des: des
                     };
                     console.log(listEntity);
-                }            
-                        
+                }
+
                 $(remove).hide();
             } else if (!$($(event.target).closest(".entity-group").find(".btn-save-entity")).is(":visible") && id!="undefined"){
                 console.log(list);
@@ -250,11 +252,11 @@
                 };
                 console.log(listEntity);
             }
-            
+
             var save = $(event.target).closest(".entity-group").find(".btn-save-entity");
             $(save).show();
             var cancel = $(event.target).closest(".entity-group").find(".btn-cancel-entity");
-            $(cancel).show();            
+            $(cancel).show();
         }
 
         function deleteEntity(event){
@@ -272,7 +274,7 @@
                     , showLoaderOnConfirm: true
                     , cancelButtonText: "Không"
             }, function () {
-                $.ajax({                
+                $.ajax({
                     url: '../Shop/DeleteEntity',
                     type: 'POST',
                     data: {
@@ -283,13 +285,13 @@
                             $(div).remove();
                             toastr.success("Cập nhật thành công");
                         } else {
-                            toastr.error("Cập nhật thất bại");   
+                            toastr.error("Cập nhật thất bại");
                         }
                     },
                     error: function(){
-                        toastr.error("Cập nhật thất bại");   
+                        toastr.error("Cập nhật thất bại");
                     }
-                    
+
                 });
             });
 
@@ -300,7 +302,7 @@
             $(".error-note").hide();
             var clicked = event.target;
             var div = $(clicked).closest(".entity-group");
-            var id = $($(div).find("input[name='id']")[0]).val();            
+            var id = $($(div).find("input[name='id']")[0]).val();
             var name = $($(div).find("input[name='name']")[0]).val();
             var value = $($(div).find("input[name='value']")[0]).val();
             var des = $($(div).find("input[name='des']")[0]).val();
@@ -326,7 +328,7 @@
                     errorMsg = errorMsg + (error?", ":" ")+"cụm viết tắt bắt đầu bằng @@";
                     error = true;
                 }
-                var repeat = 0;                
+                var repeat = 0;
                 $("input[name='name']").each(function (index) {
                     if ($(this).val() != null && $(this).val().length!=0 && $(this).val()===name) {
                         repeat = repeat + 1;
@@ -337,7 +339,7 @@
                     errorMsg = errorMsg + (error?", ":" ")+"cụm viết tắt khác với các cụm còn lại";
                     error = true;
                 }
-                
+
             }
 
             if (error) {
@@ -347,7 +349,7 @@
             }
 
             if (id!="undefined" && id!=""){
-                $.ajax({                
+                $.ajax({
                     url: '../Shop/SetEntity',
                     type: 'POST',
                     data: {
@@ -357,19 +359,19 @@
                         'description':  des
                     },
                     success: function (data){
-                        if (data.success){                            
+                        if (data.success){
                             toastr.success("Cập nhật thành công");
                         } else {
-                            toastr.error("Cập nhật thất bại");   
+                            toastr.error("Cập nhật thất bại");
                         }
                     },
                     error: function(){
-                        toastr.error("Cập nhật thất bại");   
+                        toastr.error("Cập nhật thất bại");
                     }
-                    
+
                 });
             } else {
-                $.ajax({                
+                $.ajax({
                     url: '../Shop/AddEntity',
                     type: 'POST',
                     data: {
@@ -383,14 +385,14 @@
                             toastr.success("Cập nhật thành công");
                         } else {
                             $(div).remove();
-                            toastr.error("Cập nhật thất bại");   
+                            toastr.error("Cập nhật thất bại");
                         }
                     },
                     error: function(){
                         $(div).remove();
-                        toastr.error("Cập nhật thất bại");   
+                        toastr.error("Cập nhật thất bại");
                     }
-                    
+
                 });
             }
 
@@ -427,15 +429,15 @@
             else {
                 $(div).remove();
             }
-            
+
         }
 
         function changeIntent(event){
-            console.log(event);            
+            console.log(event);
             var remove = $(event.target).closest(".intent-group").find(".btn-remove-intent");
             var clicked = event.target;
             var div = $(clicked).closest(".intent-group");
-            var id = $($(div).find("input[name='id']")[0]).val();            
+            var id = $($(div).find("input[name='id']")[0]).val();
             var intent = $($(div).find("select[name='intent']")[0]).val();
             var content = $($(div).find("input[name='content']")[0]).val();
             if ($(remove).is(":visible") && id!="undefined"){
@@ -445,9 +447,9 @@
                     content: content
                 };
                 console.log(list);
-            }            
-            
-            
+            }
+
+
             $(remove).hide();
             var save = $(event.target).closest(".intent-group").find(".btn-save-intent");
             $(save).show();
@@ -471,7 +473,7 @@
                     , showLoaderOnConfirm: true
                     , cancelButtonText: "Không"
             }, function () {
-                $.ajax({                
+                $.ajax({
                     url: '../Shop/DeleteResponse',
                     type: 'POST',
                     data: {
@@ -482,13 +484,13 @@
                             $(div).remove();
                             toastr.success("Cập nhật thành công");
                         } else {
-                            toastr.error("Cập nhật thất bại");   
+                            toastr.error("Cập nhật thất bại");
                         }
                     },
                     error: function(){
-                        toastr.error("Cập nhật thất bại");   
+                        toastr.error("Cập nhật thất bại");
                     }
-                    
+
                 });
             });
 
@@ -502,7 +504,7 @@
             var content = $($(div).find("input[name='content']")[0]).val();
 
             if (id!="undefined" && id!=""){
-                $.ajax({                
+                $.ajax({
                     url: '../Shop/EditResponse',
                     type: 'POST',
                     data: {
@@ -511,19 +513,19 @@
                         'content': content
                     },
                     success: function (data){
-                        if (data.success){                            
+                        if (data.success){
                             toastr.success("Cập nhật thành công");
                         } else {
-                            toastr.error("Cập nhật thất bại");   
+                            toastr.error("Cập nhật thất bại");
                         }
                     },
                     error: function(){
-                        toastr.error("Cập nhật thất bại");   
+                        toastr.error("Cập nhật thất bại");
                     }
-                    
+
                 });
             } else {
-                $.ajax({                
+                $.ajax({
                     url: '../Shop/AddResponse',
                     type: 'POST',
                     data: {
@@ -536,14 +538,14 @@
                             toastr.success("Cập nhật thành công");
                         } else {
                             $(div).remove();
-                            toastr.error("Cập nhật thất bại");   
+                            toastr.error("Cập nhật thất bại");
                         }
                     },
                     error: function(){
                         $(div).remove();
-                        toastr.error("Cập nhật thất bại");   
+                        toastr.error("Cập nhật thất bại");
                     }
-                    
+
                 });
             }
 
@@ -575,7 +577,7 @@
             else {
                 $(div).remove();
             }
-            
+
         }
 
         function InitRespondBtn(){
