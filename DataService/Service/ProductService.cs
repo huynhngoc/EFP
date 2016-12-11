@@ -526,5 +526,13 @@ namespace DataService.Service
             string[] listProductName = productRepository.GetAllProductNameByShopId(shopId);
             return listProductName;
         }
+
+        //ANDND Get available product by id
+        public Product GetAvailableProductById(int id)
+        {
+            //Get product  by product id
+            Product product = productRepository.GetAvailableProductByProductId(id).FirstOrDefault();
+            return product;
+        }
     }
 }
