@@ -1,6 +1,7 @@
 ﻿using DataService;
 using DataService.JqueryDataTable;
 using DataService.Service;
+using DataService.Utils;
 using DataService.ViewModel;
 using Facebook;
 using ShopManager.SignalRAlert;
@@ -81,50 +82,65 @@ namespace ShopManager.Controllers
                         Debug.WriteLine("read of unread? " + post.IsRead);
                         Debug.WriteLine(post.Id + " start  fb " + DateTime.Now);
                         //post deleted
-                        if (post.status == 5)
+
+                        Debug.WriteLine("status = 5" + "__" + post.SenderFbId);
+                        
+                        //priority: message (attachment) > story (attachment) > attachment
+                        postmodel.message = post.LastContent;
+
+                        if (post.status != (int)CommentStatus.DELETED)
                         {
-                            Debug.WriteLine("status = 5" + "__" + post.SenderFbId);
-                            dynamic userParam = new ExpandoObject();
-                            userParam.access_token = accessToken;
-                            userParam.fields = "name";
-                            dynamic fbUser = fbApp.Get(post.SenderFbId, userParam);
-                            postmodel.from = fbUser.name;
-                            //priority: message (attachment) > story (attachment) > attachment
-                            postmodel.message = post.LastContent;
+                            try
+                            {
+                                dynamic fbPost = fbApp.Get(post.Id, postParam);
+
+                                postmodel.from = fbPost.from.name;
+                                //priority: message (attachment) > story (attachment) > attachment
+                                if (fbPost.message != null && fbPost.message != "") postmodel.message = fbPost.message;
+                                //message = null => picture or activity
+                                else
+                                {
+
+                                    postmodel.message = fbPost.story;
+                                    Debug.WriteLine("story post " + postmodel.message);
+                                }
+                                if (fbPost.full_picture != null && fbPost.full_picture != "") postmodel.imageContent = fbPost.full_picture;
+                            }
+                            catch (FacebookApiException)
+                            {
+                                postservice.SetStatus(postmodel.post.Id, (int)CommentStatus.DELETED);
+                                dynamic userParam = new ExpandoObject();
+                                userParam.access_token = accessToken;
+                                userParam.fields = "name";
+                                dynamic fbUser = fbApp.Get(post.SenderFbId, userParam);
+                                postmodel.from = fbUser.name;
+                                postmodel.post.status = (int)CommentStatus.DELETED;
+                            }
                         }
                         else
                         {
-                            dynamic fbPost = fbApp.Get(post.Id, postParam);
-
-                            Debug.WriteLine(post.Id + DateTime.Now);
-                            //string test = fbPost.sdfsdfds;
-                            Debug.WriteLine("PostWithLastestComment " + post.Id);
-                            postmodel.from = fbPost.from.name;
-                            //priority: message (attachment) > story (attachment) > attachment
-                            if (fbPost.message != null && fbPost.message != "") postmodel.message = fbPost.message;
-                            //message = null => picture or activity
-                            else
-                            {
-
-                                postmodel.message = fbPost.story;
-                                Debug.WriteLine("story post " + postmodel.message);
-                            }
-                            if (fbPost.full_picture != null && fbPost.full_picture != "") postmodel.imageContent = fbPost.full_picture;
+                            FacebookClient fbAppWithAccTok = new FacebookClient(accessToken);
+                            dynamic userParam = new ExpandoObject();
+                            userParam.access_token = accessToken;
+                            userParam.fields = "name";
+                            var fbUser = fbAppWithAccTok.Get(post.SenderFbId, userParam);
+                            postmodel.from = fbUser.name;
                         }
-                        Debug.WriteLine("test post " + postmodel.message);
-                           
-                            //check all commments with post id;
 
-                            //if (commentservice.CheckPostUnread(post.Id) == true)
-                            //{
-                            //    postservice.SetPostIsUnread(post.Id);
-                            //    postmodel.post.IsRead = false;
-                            //}
-                            //else
-                            //{
-                            //    postservice.SetPostIsRead(post.Id);
-                            //    postmodel.post.IsRead = true;
-                            //}
+                        Debug.WriteLine("test post " + postmodel.message);
+
+                        //check all commments with post id;
+
+                        //if (commentservice.CheckPostUnread(post.Id) == true)
+                        //{
+                        //    postservice.SetPostIsUnread(post.Id);
+                        //    postmodel.post.IsRead = false;
+                        //}
+                        //else
+                        //{
+                        //    postservice.SetPostIsRead(post.Id);
+                        //    postmodel.post.IsRead = true;
+                        //}
 
 
                         postviewlist.Add(postmodel);
@@ -182,16 +198,31 @@ namespace ShopManager.Controllers
                     postView.Status = selectedPost.Status;
                     postView.IntentId = selectedPost.IntentId;
 
-                    if (postView.Status != 5)
+                    if (postView.Status != (int)CommentStatus.DELETED)
                     {
-                        var fbPost = fbAppWithAccTok.Get(postId, postParam);
-                        postView.from = fbPost.from.name;
-                        if (postView.IntentId == null) postView.fromAvatar = "https://graph.facebook.com/" + (string)Session["ShopId"] + "/picture?type=square";
-                        else postView.fromAvatar = "https://graph.facebook.com/" + postView.SenderFbId + "/picture?type=square";
-                        postView.postContent = fbPost.message;
-                        postView.storyContent = fbPost.story;
-                        //posted photo
-                        postView.postImageContent = fbPost.full_picture;
+                        try
+                        {
+                            var fbPost = fbAppWithAccTok.Get(postId, postParam);
+                            postView.from = fbPost.from.name;
+                            if (postView.IntentId == null) postView.fromAvatar = "https://graph.facebook.com/" + (string)Session["ShopId"] + "/picture?type=square";
+                            else postView.fromAvatar = "https://graph.facebook.com/" + postView.SenderFbId + "/picture?type=square";
+                            postView.postContent = fbPost.message;
+                            postView.storyContent = fbPost.story;
+                            //posted photo
+                            postView.postImageContent = fbPost.full_picture;
+                        }
+                        catch (FacebookApiException)
+                        {
+                            postservice.SetStatus(postId, (int)CommentStatus.DELETED);
+                            postView.fromAvatar = "https://graph.facebook.com/" + postView.SenderFbId + "/picture?type=square";
+                            postView.postContent = selectedPost.LastContent;
+                            postView.storyContent = null;
+                            var fbUser = fbAppWithAccTok.Get(selectedPost.SenderFbId, userParam);
+                            postView.from = fbUser.name;
+                            postView.postImageContent = null;
+                            postView.Status = (int)CommentStatus.DELETED;
+                        }
+
                     }
                     else
                     {
@@ -225,11 +256,12 @@ namespace ShopManager.Controllers
 
                             //Debug.WriteLine("status of comment is 5: " + commentdetailmodel.Status);
                             userParam.access_token = accessToken;
-                            var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                            
+
                             commentdetailmodel.commentImageContent = null;
                             //commentdetailmodel.from = fbComment.from.name;
                             commentdetailmodel.commentContent = commentList[0][i].LastContent;
-                            commentdetailmodel.from = fbUser.name;
+                            
 
                             SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
 
@@ -237,18 +269,33 @@ namespace ShopManager.Controllers
                             //string commentText = @fbComment.message;
                             //commentdetailmodel.commentContent = commentText;commentdetailmodel.IntentId = commentList[0][i].IntentId;
 
-                            if (commentdetailmodel.Status != 5)
+                            if (commentdetailmodel.Status != (int)CommentStatus.DELETED)
                             {
-                                //Debug.WriteLine("status of comment is not 5: " + commentdetailmodel.Status);
-                                var fbComment = fbAppWithAccTok.Get(commentList[0][i].Id, commentParam);
-                                if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
-                                else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
-                                commentdetailmodel.from = fbComment.from.name;
-                                commentdetailmodel.commentContent = fbComment.message;
-                                commentdetailmodel.canHide = fbComment.can_hide;
-                                commentdetailmodel.canReply = fbComment.can_reply_privately;
-                            }
+                                try
+                                {
+                                    //Debug.WriteLine("status of comment is not 5: " + commentdetailmodel.Status);
+                                    var fbComment = fbAppWithAccTok.Get(commentList[0][i].Id, commentParam);
+                                    if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
+                                    else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                                    commentdetailmodel.from = fbComment.from.name;
+                                    commentdetailmodel.commentContent = fbComment.message;
+                                    commentdetailmodel.canHide = fbComment.can_hide;
+                                    commentdetailmodel.canReply = fbComment.can_reply_privately;
+                                }
+                                catch (FacebookApiException)
+                                {
+                                    commentservice.SetStatus(commentdetailmodel.Id, (int)CommentStatus.DELETED);
+                                    var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                                    commentdetailmodel.from = fbUser.name;
+                                    commentdetailmodel.Status = (int)CommentStatus.DELETED;
+                                }
 
+                            }
+                            else
+                            {
+                                var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                                commentdetailmodel.from = fbUser.name;
+                            }
                             commentviewlist.Add(commentdetailmodel);
                         }
                         //get replies
@@ -270,21 +317,38 @@ namespace ShopManager.Controllers
                             commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentList[1][i].SenderFbId + "/picture?type=square";
 
                             userParam.access_token = accessToken;
-                            var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                            
+
                             commentdetailmodel.commentContent = commentList[1][i].LastContent;
                             commentdetailmodel.commentImageContent = null;
-                            commentdetailmodel.from = fbUser.name;
+                            
 
-                            if (commentList[1][i].Status != 5)
+                            if (commentList[1][i].Status != (int)CommentStatus.DELETED)
                             {
-                                var fbComment = fbAppWithAccTok.Get(commentList[1][i].Id, commentParam);
-                                Debug.WriteLine("time  " + commentdetailmodel.datacreated);
-                                commentdetailmodel.from = fbComment.from.name;
-                                commentdetailmodel.commentContent = fbComment.message;
-                                if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
-                                else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
-                                commentdetailmodel.canHide = fbComment.can_hide;
-                                commentdetailmodel.canReply = fbComment.can_reply_privately;
+                                try
+                                {
+                                    var fbComment = fbAppWithAccTok.Get(commentList[1][i].Id, commentParam);
+                                    Debug.WriteLine("time  " + commentdetailmodel.datacreated);
+                                    commentdetailmodel.from = fbComment.from.name;
+                                    commentdetailmodel.commentContent = fbComment.message;
+                                    if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
+                                    else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                                    commentdetailmodel.canHide = fbComment.can_hide;
+                                    commentdetailmodel.canReply = fbComment.can_reply_privately;
+                                }
+                                catch (FacebookApiException)
+                                {
+                                    commentservice.SetStatus(commentdetailmodel.Id, (int)CommentStatus.DELETED);
+                                    var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                                    commentdetailmodel.from = fbUser.name;
+                                    commentdetailmodel.Status = (int)CommentStatus.DELETED;
+                                }
+
+                            }
+                            else
+                            {
+                                var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                                commentdetailmodel.from = fbUser.name;
                             }
 
 
@@ -438,29 +502,43 @@ namespace ShopManager.Controllers
                         commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentdetailmodel.SenderFbId + "/picture?type=square";
                         commentdetailmodel.IntentId = comment.IntentId;
 
+
+                        dynamic userParam = new ExpandoObject();
+                        userParam.access_token = accessToken;
+                        userParam.fields = "name";
+                        //dynamic fbUser = fbApp.Get(comment.SenderFbId, userParam);
+                        //commentdetailmodel.from = fbUser.name;
+                        commentdetailmodel.commentContent = comment.LastContent;
                         Debug.WriteLine("time  " + commentdetailmodel.datacreated);
 
 
-                        if (comment.Status != 5)
+                        if (comment.Status != (int)CommentStatus.DELETED)
                         {
-                            var fbComment = fbAppWithAccTok.Get(comment.Id, commentParam);
-                            commentdetailmodel.from = fbComment.from.name;
+                            try
+                            {
+                                var fbComment = fbAppWithAccTok.Get(comment.Id, commentParam);
+                                commentdetailmodel.from = fbComment.from.name;
 
-                            if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
-                            else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
-                            commentdetailmodel.commentContent = fbComment.message;
-                            commentdetailmodel.canHide = fbComment.can_hide;
-                            commentdetailmodel.canReply = fbComment.can_reply_privately;
+                                if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
+                                else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                                commentdetailmodel.commentContent = fbComment.message;
+                                commentdetailmodel.canHide = fbComment.can_hide;
+                                commentdetailmodel.canReply = fbComment.can_reply_privately;
+                            }
+                            catch (FacebookApiException)
+                            {
+                                commentservice.SetStatus(commentdetailmodel.Id, (int)CommentStatus.DELETED);
+                                var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                                commentdetailmodel.from = fbUser.name;
+                                commentdetailmodel.Status = (int)CommentStatus.DELETED;
+                            }
                         }
                         else
                         {
-                            dynamic userParam = new ExpandoObject();
-                            userParam.access_token = accessToken;
-                            userParam.fields = "name";
-                            dynamic fbUser = fbApp.Get(comment.SenderFbId, userParam);
+                            var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
                             commentdetailmodel.from = fbUser.name;
-                            commentdetailmodel.commentContent = comment.LastContent;
                         }
+
                         commentservice.SetIsRead(comment.Id);
                         SignalRAlert.AlertHub.SendNotification((string)Session["ShopId"]);
                         newcommentdetaillist.Add(commentdetailmodel);
@@ -522,33 +600,50 @@ namespace ShopManager.Controllers
             commentdetailmodel.Id = tmpComment.Id;
             commentdetailmodel.parentId = tmpComment.ParentId;
             commentdetailmodel.Status = tmpComment.Status;
-
+            commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentId);
+            commentdetailmodel.commentContent = tmpComment.LastContent;
+            commentdetailmodel.datacreated = tmpComment.DateCreated;
+            commentdetailmodel.SenderFbId = tmpComment.SenderFbId;
 
             try
             {
-                var fbComment = fbAppWithAccTok.Get(tmpComment.Id, commentParam);
 
-                commentdetailmodel.datacreated = tmpComment.DateCreated;
-                Debug.WriteLine("time  " + commentdetailmodel.datacreated);
-                commentdetailmodel.commentContent = fbComment.message;
-                commentdetailmodel.from = fbComment.from.name;
 
-                //string commentText = @fbComment.message;
-                //commentdetailmodel.commentContent = commentText;
-                if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
-                else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
-                commentdetailmodel.nestedCommentQuan = commentservice.GetNestedCommentQuan(commentId);
-                //Debug.WriteLine("commentdetailmodel.commentImageContent      " + commentdetailmodel.commentImageContent);
-                commentdetailmodel.SenderFbId = fbComment.from.id;
-
-                if (tmpComment.Status != 5)
+                if (tmpComment.Status != (int)CommentStatus.DELETED)
                 {
-                    commentdetailmodel.commentContent = fbComment.message;
+                    try
+                    {
+                        var fbComment = fbAppWithAccTok.Get(tmpComment.Id, commentParam);
+
+
+                        Debug.WriteLine("time  " + commentdetailmodel.datacreated);
+                        commentdetailmodel.commentContent = fbComment.message;
+                        commentdetailmodel.from = fbComment.from.name;
+
+                        if (fbComment.attachment == null) commentdetailmodel.commentImageContent = null;
+                        else commentdetailmodel.commentImageContent = fbComment.attachment.media.image.src;
+                        commentdetailmodel.commentContent = fbComment.message;
+                    }
+                    catch (FacebookApiException)
+                    {
+                        commentservice.SetStatus(commentdetailmodel.Id, (int)CommentStatus.DELETED);
+                        dynamic userParam = new ExpandoObject();
+                        userParam.access_token = accessToken;
+                        userParam.fields = "name";
+                        var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                        commentdetailmodel.from = fbUser.name;
+                        commentdetailmodel.Status = (int)CommentStatus.DELETED;
+                    }
                 }
                 else
                 {
-                    commentdetailmodel.commentContent = tmpComment.LastContent;
+                    dynamic userParam = new ExpandoObject();
+                    userParam.access_token = accessToken;
+                    userParam.fields = "name";
+                    var fbUser = fbAppWithAccTok.Get(commentdetailmodel.SenderFbId, userParam);
+                    commentdetailmodel.from = fbUser.name;
                 }
+
                 commentdetailmodel.avatarUrl = "https://graph.facebook.com/" + commentdetailmodel.SenderFbId + "/picture?type=square";
                 return Json(commentdetailmodel, JsonRequestBehavior.AllowGet);
             }
@@ -604,7 +699,7 @@ namespace ShopManager.Controllers
                 {
                     foreach (Comment c in commentList)
                     {
-                        commentservice.SetStatus(c.Id, 5);
+                        commentservice.SetStatus(c.Id, (int)CommentStatus.DELETED);
                     }
                 }
             }
@@ -616,7 +711,7 @@ namespace ShopManager.Controllers
                 {
                     foreach (Comment c in commentList)
                     {
-                        commentservice.SetStatus(c.Id, 5);
+                        commentservice.SetStatus(c.Id, (int)CommentStatus.DELETED);
                     }
                 }
             }
@@ -1002,7 +1097,8 @@ namespace ShopManager.Controllers
                     var repss = respService.GetAllResponseByIntent(shopId, intentId);
                     foreach (var en in repss)
                     {
-                        if (en.RespondContent.Trim().Length > 0) {
+                        if (en.RespondContent.Trim().Length > 0)
+                        {
                             var e = new EntityViewModel();
                             e.Name = intName;
                             e.Value = en.RespondContent;
@@ -1012,13 +1108,13 @@ namespace ShopManager.Controllers
                 }
 
                 //Get reps by sample reps
-                var reps = entityService.GetAvailableEntities(shopId);                
+                var reps = entityService.GetAvailableEntities(shopId);
 
                 foreach (var en in reps.ToList())
                 {
                     if (en.Value.Trim().Length > 0) arrReps.Add(en);
                 }
-                         
+
                 return Json(arrReps.ToList(), JsonRequestBehavior.AllowGet); ;
             }
             catch (Exception e)
